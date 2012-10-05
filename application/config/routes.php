@@ -41,6 +41,20 @@
 $route['default_controller'] = "controlador";
 $route['404_override'] = '';
 
+//Internationalization (go to http://maestric.com/doc/php/codeigniter_i18n to see how to use)
+
+$route['^fr/(.+)$'] = "$1";
+$route['^en/(.+)$'] = "$1";
+$route['^ge/(.+)$'] = "$1";
+$route['^ru/(.+)$'] = "$1";
+$route['^es/(.+)$'] = "$1";
+
+$route['^fr$'] = $route['default_controller'];
+$route['^en$'] = $route['default_controller'];
+$route['^ge$'] = $route['default_controller'];
+$route['^ru$'] = $route['default_controller'];
+$route['^es$'] = $route['default_controller'];
+
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
