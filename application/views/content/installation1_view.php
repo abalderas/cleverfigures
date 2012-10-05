@@ -1,10 +1,10 @@
 <!--
-	INPUT: i18n_select_language_intro, i18n_spanish, i18n_english, i18n_french, i18n_german, i18n_russian, i18n_save_conf
-	OUTPUT: configuration_form(select_language, save_conf, [1])
+	INPUT: i18n_spanish, i18n_english, i18n_french, i18n_german, i18n_russian, i18n_save_conf
+	OUTPUT: select_language_form(select_language, next)
 -->
 
 <?
-echo $i18n_select_language_intro
+echo "Select language for the installation process: ";
 
 $languages = array(
            	'spanish'  => $i18n_spanish,
@@ -13,10 +13,10 @@ $languages = array(
                 'russian' => $i18n_russian,
                 'german' => $i18n_german,
              );
-                
+            
+echo form_open('select_language_form');
 echo form_dropdown('select_language', $languages, 'english');
 echo '<br>';
-	
 echo form_submit('next', $i18n_next);
-	
+echo form_close();
 ?>
