@@ -16,6 +16,9 @@ class Databases_model extends CI_Model{
    	   	/*[1]*/
    	   	/*[2]*/
    	}
+   	
+   	//low level functions
+   	function get_query($database, $query){}
    
    	// user functions
    	function new_user($username, $password, $realname, $email){}
@@ -29,9 +32,6 @@ class Databases_model extends CI_Model{
    	//analisis functions
    	function save_analisis(){}
    	function view_analisis($id){}
-   	
-   	//database configuration functions
-   	function set_color_database_type($database_type){}
    
    	/*[3]*/
 }
