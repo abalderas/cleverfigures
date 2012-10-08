@@ -29,6 +29,7 @@ class Databases_model extends CI_Model{
 	//constructor
    	function Database_model(){
    	   	parent::__construct();
+   	   	
 		$database_server = 'default';
    	   	$database_name = 'default';
 		$database_user = 'default';
@@ -38,14 +39,14 @@ class Databases_model extends CI_Model{
 		$database_link = 0;
    	}
    	
-   	//reading functions
+   	//reading methods
    	function name(){return $this->database_name;}
    	function server(){return $this->database_server;}
    	function user(){return $this->database_user;}
    	function password(){return $this->database_password;}
    	function type(){return $this->database_type;}
    	
-   	//writing functions
+   	//writing methods
    	function set_connection_data($server, $name, $user, $password, $type){
    		$this->database_server=$server;
    		$this->database_name=$name;
@@ -55,7 +56,7 @@ class Databases_model extends CI_Model{
    		$this->database_complete=TRUE;
    	}
    	
-   	//connection functions
+   	//connection methods
    	function connect(){
    		if($this->database_complete){
    			$dba['hostname'] = $this->database_server;
@@ -89,7 +90,7 @@ class Databases_model extends CI_Model{
    			return FALSE;
    	}
    	
-   	//loading, adding and deleting databases
+   	//loading, adding and deleting databases methods
    	function load_database_connection_data($name, $server){
    		$query = $this->db->query("select * from Database where database_name == $name and database_server == $server");
    		if($query->result()->num_rows() != 0)
