@@ -45,24 +45,24 @@
 | the active record class
 */
 
-$active_group = 'default';
+$active_group = 'main_db';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'root';
-$db['default']['password'] = 'Ornitorrinco1?!';
-$db['default']['database'] = 'prueba-login';
-$db['default']['dbdriver'] = 'mysql';
-$db['default']['dbprefix'] = '';
-$db['default']['pconnect'] = TRUE;
-$db['default']['db_debug'] = TRUE;
-$db['default']['cache_on'] = FALSE;
-$db['default']['cachedir'] = '';
-$db['default']['char_set'] = 'utf8';
-$db['default']['dbcollat'] = 'utf8_general_ci';
-$db['default']['swap_pre'] = '';
-$db['default']['autoinit'] = TRUE;
-$db['default']['stricton'] = FALSE;
+$db['main_db']['hostname'] = '';
+$db['main_db']['username'] = '';
+$db['main_db']['password'] = '';
+$db['main_db']['database'] = '';
+$db['main_db']['dbdriver'] = 'mysql';
+$db['main_db']['dbprefix'] = '';
+$db['main_db']['pconnect'] = FALSE;
+$db['main_db']['db_debug'] = TRUE;
+$db['main_db']['cache_on'] = FALSE;
+$db['main_db']['cachedir'] = '';
+$db['main_db']['char_set'] = 'utf8';
+$db['main_db']['dbcollat'] = 'utf8_general_ci';
+$db['main_db']['swap_pre'] = '';
+$db['main_db']['autoinit'] = TRUE;
+$db['main_db']['stricton'] = FALSE;
 
 
 /* End of file database.php */
