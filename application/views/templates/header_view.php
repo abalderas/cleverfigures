@@ -13,12 +13,11 @@
 	<tr>
 		<? 
 			if($this->session->userdata('user_username')){
-				echo "<td>$this->session->userdata('user_username')</td>";
+				echo "<td>$this->session->userdata('user_realname')</td>";
 				echo "<td>$i18n_configuration</td>";
 				echo "<td>$i18n_view_results</td>";
 				echo "<td>$i18n_analise</td>";
 				echo "<td>$i18n_about</td>";
-				echo "<td><h1>CleverFigures : <?=$actual_wikiname?> </h1></td>";
 			}
 			else{
 				echo "<td>$i18n_login</td>";
