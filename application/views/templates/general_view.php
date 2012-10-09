@@ -6,6 +6,7 @@
 <head>
 	<!--Title structure: CleverFigures | PageName-->
 	<title> CleverFigures | <?=$i18n_title?> </title>
+	<link rel="shortcut icon" type="image/x-icon" href="images/icons/favicon.ico">
 	<? 
 		if($this->session->userdata('user_language' == 'russian')) 
 			echo '<link rel="stylesheet" type="text/css" href="css/russianstyles.css" media="screen" />';
