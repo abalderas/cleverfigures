@@ -96,22 +96,21 @@ class User_model extends CI_Model{
 		$this->db->update('User', $data); 
    	}
    	
-   	function add_database($dbserver, $dbname){
-   		$query = $this->db->query("select * from Database where database_name == $dbname and database_server == $dbserver");
+   	function add_database($dbid){
+   		$query = $this->db->query("select * from Database where database_id == $dbid");
    		if($query->result()->num_rows() != 0){
    			$sql = array('user_username' => "$this->user_username",
-   					'database_name' => "$dbname",
-   					'database_server' => "$dbserver"
+   					'database_id' => "$dbid"
    				);
 	
 			$this->db->insert('User-Database', $sql);
 		
 			if($this->db->affected_rows() != 1) 
-				die("add_database($dbserver, $dbname): Error relating database $dbname from server $dbserver to user $this->user_username.");
+				die("add_database($dbid): Error relating database $dbid to user $this->user_username.");
 			else return TRUE;
 		}
    		else
-   			die("add_database($dbserver, $dbname): Database $dbname from server $dbserver not found.");
+   			die("add_database($dbid): Database $dbid not found.");
    	}
    	
    	function add_analisis($a_id){
@@ -145,7 +144,9 @@ class User_model extends CI_Model{
       		if($query -> num_rows() == 1){
       			foreach($query->result() as $row) 
         			$sess_array = array('user_username' => $row -> user_username,
-        						'user_language' => $row->user_language); 
+        						'user_language' => $row->user_language, 
+        						'user_active_wiki' => $row -> user_active_wiki,
+        						'user_active_color' => $row -> user_active_color); 
             		$this -> session -> set_userdata('logged_in', $sess_array);
             		return true;
       		}

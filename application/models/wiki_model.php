@@ -14,44 +14,35 @@
 //    	delete_database()
    	
    	
-class Databases_model extends CI_Model{
+class Wiki_model extends CI_Model{
 	
 	//ATTRIBUTES
-	private $database_name;
-	private $database_server;
-	private $database_user;
-	private $database_password;
-	private $database_type;
-	private $database_complete;
-	private $database_link;
+	private $wiki_name;
+	private $wiki_database_name;
+	private $wiki_database_server;
+	private $wiki_link;
 	
 	//METHODS
 	//constructor
-   	function Database_model(){
+   	function Wiki_model(){
    	   	parent::__construct();
    	   	
-		$database_server = 'default';
-   	   	$database_name = 'default';
-		$database_user = 'default';
-		$database_password = 'default';
-		$database_type = 'default';
-		$database_complete = FALSE;
-		$database_link = 0;
+		$wiki_name = 'default';
+		$wiki_database_id = '';
+		$wiki_link = 0;
    	}
    	
    	//reading methods
-   	function name(){return $this->database_name;}
-   	function server(){return $this->database_server;}
-   	function user(){return $this->database_user;}
-   	function password(){return $this->database_password;}
-   	function type(){return $this->database_type;}
+   	function name(){return $this->wiki_name;}
+   	function db_server(){return $this->wiki_database_server;}
+   	function db_name(){return $this->wiki_database_name;}
    	
    	//writing methods
-   	function set_connection_data($server, $name, $user, $password, $type){
+   	function set_wiki_data($server, $name, $user, $password, $type){
    		$this->database_server=$server;
    		$this->database_name=$name;
-   		$this->database_user$user;
-   		$this->database_user$password;
+   		$this->database_user=$user;
+   		$this->database_user=$password;
    		$this->database_type=$type;
    		$this->database_complete=TRUE;
    	}
@@ -130,4 +121,4 @@ class Databases_model extends CI_Model{
    	}
 }
 
-?>
+?> 
