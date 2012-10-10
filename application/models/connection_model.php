@@ -8,7 +8,6 @@
 //    	get_query($query_string)
 //    	delete_connection()
    	
-   	
 class Connection_model extends CI_Model{
 	
 	//ATTRIBUTES
