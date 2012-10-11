@@ -1,0 +1,26 @@
+OBTENER CATEGORÍAS
+SELECT cl_from, cl_to FROM %scategorylinks WHERE cl_from IN (SELECT DISTINCT rev_page FROM %srevision WHERE rev_timestamp>='%s' and rev_timestamp<='%s') 
+
+OBTENER CATEGORÍAS QUE NO TIENEN PÁGINAS AÚN
+"SELECT page_title FROM %spage WHERE page_namespace=14 AND page_id IN (SELECT DISTINCT rev_page FROM %srevision WHERE rev_timestamp>='%s' and rev_timestamp<='%s')"
+
+RANGOS DE FECHAS
+"SELECT rev_timestamp FROM %srevision ORDER BY rev_timestamp ASC LIMIT 1"
+
+IMÁGENES
+"SELECT img_name, img_user, img_user_text, img_timestamp, img_size FROM %simage WHERE img_timestamp>='%s' AND img_timestamp<='%s'"
+
+PÁGINAS
+"SELECT page_id, page_namespace, page_title, page_is_redirect, page_counter FROM %spage WHERE page_id IN (SELECT DISTINCT rev_page FROM %srevision WHERE rev_timestamp>='%s' and rev_timestamp<='%s')"
+
+REVISIONES
+"SELECT rev_id, rev_page, rev_user, rev_user_text, rev_timestamp, rev_comment, rev_parent_id, old_text FROM %srevision, %stext WHERE old_id=rev_text_id"
+
+USUARIOS
+"SELECT DISTINCT rev_user, rev_user_text FROM %srevision WHERE rev_timestamp>='%s' AND rev_timestamp<='%s'"
+"SELECT user_id, user_name FROM %suser WHERE user_registration>='%s' AND user_registration<='%s'"
+"SELECT img_user, img_user_text FROM %simage WHERE img_timestamp>='%s' AND img_timestamp<='%s'"
+
+ACTIVIDAD
+"SELECT %s(rev_timestamp) AS time, COUNT(rev_id) AS count FROM %srevision, %spage WHERE rev_page=page_id and rev_timestamp>='%s' and rev_timestamp<='%s' AND %s GROUP BY time ORDER BY time"
+
