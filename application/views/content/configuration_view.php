@@ -1,6 +1,6 @@
 <!--
 	INPUT: i18n_language, i18n_spanish, i18n_english, i18n_french, i18n_german, i18n_russian, i18n_save_conf
-	OUTPUT: configuration_form(select_language, save_conf, [1])
+	OUTPUT: configuration_form(select_language, save_conf, select_color, select_wiki)
 -->
 
 <!--Main form. Lets you choose what to do-->
@@ -16,8 +16,17 @@ echo form_open('configuration_form');
                   'russian' => $i18n_russian,
                   'german' => $i18n_german,
                 );
-                
+   
 	echo form_dropdown('select_language', $languages, 'english');
+	echo '<br>';
+	
+	echo "<h3>$i18n_data_origin</h3><br>";
+	echo form_label('Wiki', 'select_wiki');
+	echo form_dropdown('select_wiki', $languages);
+	echo '<br>';
+	
+	echo form_label($i18n_qualitative_data_origin, 'select_color');
+	echo form_dropdown('select_color', $languages);
 	echo '<br>';
 	
 	echo form_submit('save_conf', $i18n_save_conf);

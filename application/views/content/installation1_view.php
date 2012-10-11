@@ -17,6 +17,6 @@ $languages = array(
 echo form_open('select_language_form');
 echo form_dropdown('select_language', $languages, 'english');
 echo '<br>';
-echo form_submit('next', $i18n_next);
+echo form_submit('next', 'Next');
 echo form_close();
 ?>
