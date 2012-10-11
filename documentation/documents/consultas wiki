@@ -4,7 +4,7 @@ SELECT cl_from, cl_to FROM %scategorylinks WHERE cl_from IN (SELECT DISTINCT rev
 OBTENER CATEGORÍAS QUE NO TIENEN PÁGINAS AÚN
 "SELECT page_title FROM %spage WHERE page_namespace=14 AND page_id IN (SELECT DISTINCT rev_page FROM %srevision WHERE rev_timestamp>='%s' and rev_timestamp<='%s')"
 
-RANGOS DE FECHAS
+FECHA DE PRIMERA EDICIÓN
 "SELECT rev_timestamp FROM %srevision ORDER BY rev_timestamp ASC LIMIT 1"
 
 IMÁGENES
