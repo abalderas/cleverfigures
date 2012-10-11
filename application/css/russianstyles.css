@@ -3,12 +3,11 @@ body
 background-color:white;
 font-family:"Trebuchet MS";
 }
-h2
+h1
 {
-color:black;
+color:#8258FA;
 text-align:left;
 font-family:"Trebuchet MS";
-font-size:20px;
 }
 p
 {
@@ -16,18 +15,67 @@ font-family:"Trebuchet MS";
 font-size:20px;
 }
 
+img{
+  display:block;
+  margin:0 auto 0 auto;
+}
+
+a:link {
+  color:#8258FA;
+  font-weight:bold;
+  text-decoration:none;
+}
+a:visited {
+  color:#8258FA;
+  font-weight:bold;
+  text-decoration:none;
+}
+a:hover {
+  color:white;
+  font-weight:bold;
+  text-decoration:none;
+}
+a:active {
+  color:white;
+  text-decoration:none;
+}
+
 #menu
 {
+position:fixed;
+left:0px;
+top:0px;
+z-index:1;
 font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
 width:100%;
+height:30px;
+table-layout: fixed;
 border-collapse:collapse;
 text-align:center;
+}
+
+a.menulink:link {
+  color:white;
+  text-decoration:none;
+}
+a.menulink:visited {
+  color:lightpurple;
+  text-decoration:none;
+}
+a.menulink:hover {
+  color:white;
+  font-size:110%;
+  text-decoration:none;
+}
+a.menulink:active {
+  color:white;
+  text-decoration:none;
 }
 
 #menu td, #menu th 
 {
 font-size:1em;
-border:1px solid white;
+border:0px solid black;
 padding:3px 7px 2px 7px;
 }
 
@@ -37,32 +85,33 @@ font-size:1em;
 text-align:center;
 padding-top:5px;
 padding-bottom:4px;
-background-color:#8258FA;
+background-color:#424242;
 color:#ffffff;
 }
 
 #menu td 
 {
 color:#000000;
-background-color:#BCA9F5;
+background-color:#EAF2D3;
 }
 
-#content
+#bodytable
 {
 font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
 width:100%;
 border-collapse:collapse;
-text-align:center;
+text-align:left;
+table-layout: fixed;
 }
 
-#content td, #content th 
+#bodytable td, #bodytable th 
 {
 font-size:1em;
 border:1px solid #8258FA;
 padding:3px 7px 2px 7px;
 }
 
-#content th 
+#bodytable th 
 {
 font-size:1em;
 text-align:center;
@@ -72,10 +121,11 @@ background-color:#8258FA;
 color:#ffffff;
 }
 
-#content td 
+#bodytable td 
 {
-color:#FFFFFF;
-background-color:#BCA9F5;
+color:#000000;
+background-color:#BCAFFF;
+height:29px;
 }
 
 #footer
@@ -84,12 +134,13 @@ font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
 width:100%;
 border-collapse:collapse;
 text-align:center;
+table-layout: fixed;
 }
 
 #footer td, #footer th 
 {
 font-size:1em;
-border:1px solid white;
+border:1px solid #8258FA;
 padding:3px 7px 2px 7px;
 }
 
@@ -101,6 +152,7 @@ padding-top:5px;
 padding-bottom:4px;
 background-color:#8258FA;
 color:#ffffff;
+height:35px;
 }
 
 #footer td 
@@ -109,9 +161,28 @@ color:#000000;
 background-color:#BCA9F5;
 }
 
+a.footer:link {
+  color:white;
+  text-decoration:none;
+}
+a.footer:visited {
+  color:lightpurple;
+  text-decoration:none;
+}
+a.footer:hover {
+  color:white;
+  font-size:110%;
+  text-decoration:none;
+}
+a.footer:active {
+  color:white;
+  text-decoration:none;
+}
+
 ul {list-style-type:square;}
 
-a:link {color:black;}
-a:visited {color:red;}
-a:hover {color:black;}
-a:active {color:red;}
+#progress{
+  font-size:130%;
+  font-weight:bold;
+  text-align:center;
+}
