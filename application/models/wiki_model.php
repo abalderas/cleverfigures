@@ -48,7 +48,7 @@ class Wiki_model extends CI_Model{
    		return $this->connection()->get_query("SELECT ss_total_views, ss_total_edits, ss_good_articles, ss_total_pages, ss_users, ss_active_users, ss_admins, ss_images FROM site_stats LIMIT 1");
    	}
    	
-   	function fetch_linked_categories($date_range_a => 'default', $date_range_b => 'default'){
+   	function fetch_linked_categories($date_range_a => 'default', $date_range_b => 'default', $page => 'default'){
    		if($date_range_a == 'default'){
    			$initial_date = $this->connection()->get_query("SELECT rev_timestamp FROM revision ORDER BY rev_timestamp ASC LIMIT 1");
    			if($initial_date->num_rows() != 0)
@@ -86,6 +86,42 @@ class Wiki_model extends CI_Model{
    			$date_range_b = date('Y-m-d H:i:s', now());
    		
    		$result = $this->connection()->get_query("SELECT page_title FROM page WHERE page_namespace=14 AND page_id IN (SELECT DISTINCT rev_page FROM revision WHERE rev_timestamp>=$date_range_a and rev_timestamp<=$date_range_b)");
+   		
+   		$counter = 0;
+   		foreach ($result as $row){
+   			$array[$counter] = $row->page_title;
+   			$counter++;
+   		}
+   		
+   		return $array; //$[index] = page title
+   	}
+   	
+   	function fetch_first_date(){
+   		$result = $this->connection()->get_query("SELECT rev_timestamp FROM revision ORDER BY rev_timestamp ASC LIMIT 1");
+   		
+   		$counter = 0;
+   		foreach ($result as $row){
+   			$array[$counter] = $row->rev_timestamp;
+   			$counter++;
+   		}
+   		
+   		return $array; //$[index] = rev_timestamp
+   	}
+   	
+   	function fetch_image_info($date_range_a => 'default', $date_range_b => 'default'){
+   		if($date_range_a == 'default'){
+   			$initial_date = $this->connection()->get_query("SELECT rev_timestamp FROM revision ORDER BY rev_timestamp ASC LIMIT 1");
+   			if($initial_date->num_rows() != 0)
+   				foreach ($initial_date as $row)
+   					$date_range_a = $row -> rev_timestamp;
+   			else
+   				return false;
+   		}
+   		
+   		if($date_range_b == 'default')
+   			$date_range_b = date('Y-m-d H:i:s', now());
+   		
+   		$result = $this->connection()->get_query("SELECT img_name, img_user, img_user_text, img_timestamp, img_size FROM image WHERE img_timestamp>=$date_range_a AND img_timestamp<=$date_range_b");
    		
    		$counter = 0;
    		foreach ($result as $row){
