@@ -12,6 +12,7 @@
 include("libraries/charts/pChart/class/pData.class.php");
 include("libraries/charts/pChart/class/pDraw.class.php");
 include("libraries/charts/pChart/class/pImage.class.php");
+include("classes/tagcloud.php");
 
 class Charts_model extends CI_Model{
    function Charts_model(){
@@ -120,7 +121,9 @@ function draw_stacked_bar_chart($points_matrix, $line_labels, $axis_label, $absc
 	$myPicture->stroke();
 }
 
-function draw_users($rows, $th_titles){
+function draw_users($rows, $th_titles, $totals){
+	if(count($rows) != count($th_titles) || count($rows) != count($totals) || count($totals) != count($th_titles)) 
+		die("draw_users(): Bad arguments.");
 	echo "<table>";
 	echo "<tr>"
 	for($i = 0; $i < count($th_titles); $i++)
@@ -128,20 +131,64 @@ function draw_users($rows, $th_titles){
 	echo "</tr>";
 	
 	foreach($rows as $row){
-		echo "<tr><td>".$row->us_name."</td><td>".$row->us_page_edits."</td><td>".$row->us_page_edits_percentage."</td><td>".$row->us_article_edits."</td><td>".$row->us_article_edits_percentage."</td><td>".$row->us_page_bytes."</td><td>".$row->us_page_bytes_percentage."</td><td>".$us_article_bytes."</td><td>".$row->us_article_bytes_percentage."</td><td>".$row->us_uploads."</td><td>".$row->us_uploads_percentage."</td><td>".$row->us_eval_average_mark."</td><td>".$row->us_eval_possitive_comments."</td><td>".$row->us_eval_neutral_comments."</td><td>".$row->us_eval_negative_comments."</td></tr>";
+		echo "<tr><td>".$row->us_name."</td><td>".$row->us_page_edits."</td><td>".$row->us_page_edits_percentage."</td><td>".$row->us_article_edits."</td><td>".$row->us_article_edits_percentage."</td><td>".$row->us_page_bytes."</td><td>".$row->us_page_bytes_percentage."</td><td>".$row->us_article_bytes."</td><td>".$row->us_article_bytes_percentage."</td><td>".$row->us_uploads."</td><td>".$row->us_uploads_percentage."</td><td>".$row->us_eval_average_mark."</td><td>".$row->us_eval_possitive_comments."</td><td>".$row->us_eval_neutral_comments."</td><td>".$row->us_eval_negative_comments."</td></tr>";
 	}
+	
+	echo "<tr>"
+	for($i = 0; $i < count($totals; $i++)
+		echo "<td>".$totals[$i]."</td>";
+	echo "</tr>";
+	
 	echo "</table>";
 }
 
-function draw_pages(){}
-function draw_categories(){}
-function draw_tag_cloud(){}
-   
-   /*[2]*/
+function draw_pages($rows, $th_titles, $totals){
+	if(count($rows) != count($th_titles) || count($rows) != count($totals) || count($totals) != count($th_titles)) 
+		die("draw_users(): Bad arguments.");
+	echo "<table>";
+	echo "<tr>"
+	for($i = 0; $i < count($th_titles); $i++)
+		echo "<th>".$th_titles[$i]."</th>";
+	echo "</tr>";
+	
+	foreach($rows as $row){
+		echo "<tr><td>".$row->pg_name."</td><td>".$row->pg_namespace."</td><td>".$row->pg_edits."</td><td>".$row->pg_edits_percentage."</td><td>".$row->pg_bytes."</td><td>".$row->pg_bytes_percentage."</td><td>".$row->pg_visits."</td><td>".$row->pg_visits_percentage."</td><td>".$row->pg_eval_average_mark."</td><td>".$row->pg_eval_positive_comments."</td><td>".$row->pg_eval_negative_comments."</td><td>";
+	}
+	
+	echo "<tr>"
+	for($i = 0; $i < count($totals; $i++)
+		echo "<td>".$totals[$i]."</td>";
+	echo "</tr>";
+	
+	echo "</table>";
 }
 
-?> 
+function draw_categories($rows, $th_titles, $totals){
+	if(count($rows) != count($th_titles) || count($rows) != count($totals) || count($totals) != count($th_titles)) 
+		die("draw_users(): Bad arguments.");
+	echo "<table>";
+	echo "<tr>"
+	for($i = 0; $i < count($th_titles); $i++)
+		echo "<th>".$th_titles[$i]."</th>";
+	echo "</tr>";
+	
+	foreach($rows as $row){
+		echo "<tr><td>".$row->ct_name."</td><td>".$row->ct_npages."</td><td>".$row->ct_npages_percentage."</td><td>".$row->ct_edits."</td><td>".$row->ct_edits_percentage."</td><td>".$row->ct_bytes."</td><td>".$row->ct_bytes_percentage."</td><td>".$row->ct_visits."</td><td>".$row->ct_visits_percentage."</td><td>".$row->ct_eval_average_mark."</td><td>".$row->pg_eval_positive_comments."</td><td>".$row->pg_eval_negative_comments."</td><td>";
+	}
+	
+	echo "<tr>"
+	for($i = 0; $i < count($totals; $i++)
+		echo "<td>".$totals[$i]."</td>";
+	echo "</tr>";
+	
+	echo "</table>";
+}
 
-<!--[1] TO_DO: must add helpers-->
+function draw_tag_cloud($tags){
+	$cloud = new tagcloud();
+	$cloud->addTags($tags);
+	echo $cloud->render();
+}
+}
 
-<!--[2] TO_DO: add more charts--> 
+?>
