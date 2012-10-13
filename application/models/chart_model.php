@@ -121,6 +121,9 @@ function draw_stacked_bar_chart($points_matrix, $line_labels, $axis_label, $absc
 	$myPicture->stroke();
 }
 
+function draw_spline_chart(){}
+function draw_bar_chart(){}
+
 function draw_users($rows, $th_titles, $totals){
 	if(count($rows) != count($th_titles) || count($rows) != count($totals) || count($totals) != count($th_titles)) 
 		die("draw_users(): Bad arguments.");
@@ -190,18 +193,18 @@ function draw_tag_cloud($tags){
 	echo $cloud->render();
 }
 
-function content_evolution_chart($filter_user, $filter_page, $filter_category){}
+function content_evolution_chart($filter_user, $filter_page, $filter_category){} //line + bars with values per day
 
-function activity_hour_chart($filter_user, $filter_page, $filter_category){}
+function activity_hour_chart($filter_user, $filter_page, $filter_category){} //stacked bars
 function activity_day_chart($filter_user, $filter_page, $filter_category){}
 function activity_week_chart($filter_user, $filter_page, $filter_category){}
 function activity_month_chart($filter_user, $filter_page, $filter_category){}
 function activity_year_chart($filter_user, $filter_page, $filter_category){}
 
-function evaluation_evolution($filter_user, $filter_page, $filter_category){}
+function evaluation_evolution($filter_user, $filter_page, $filter_category){} //linea de evolucion + barras de valores por dia
 
-function quality_evolution($filter_user, $filter_page, $filter_category){}
-function quality_average_hour_chart($filter_user, $filter_page, $filter_category){}
+function quality_evolution($filter_user, $filter_page, $filter_category){} //spline
+function quality_average_hour_chart($filter_user, $filter_page, $filter_category){} //bars
 function quality_average_day_chart($filter_user, $filter_page, $filter_category){}
 function quality_average_week_chart($filter_user, $filter_page, $filter_category){}
 function quality_average_year_chart($filter_user, $filter_page, $filter_category){}
