@@ -189,6 +189,23 @@ function draw_tag_cloud($tags){
 	$cloud->addTags($tags);
 	echo $cloud->render();
 }
+
+function content_evolution_chart($filter_user, $filter_page, $filter_category){}
+
+function activity_hour_chart($filter_user, $filter_page, $filter_category){}
+function activity_day_chart($filter_user, $filter_page, $filter_category){}
+function activity_week_chart($filter_user, $filter_page, $filter_category){}
+function activity_month_chart($filter_user, $filter_page, $filter_category){}
+function activity_year_chart($filter_user, $filter_page, $filter_category){}
+
+function evaluation_evolution($filter_user, $filter_page, $filter_category){}
+
+function quality_evolution($filter_user, $filter_page, $filter_category){}
+function quality_average_hour_chart($filter_user, $filter_page, $filter_category){}
+function quality_average_day_chart($filter_user, $filter_page, $filter_category){}
+function quality_average_week_chart($filter_user, $filter_page, $filter_category){}
+function quality_average_year_chart($filter_user, $filter_page, $filter_category){}
+
 }
 
 ?>
