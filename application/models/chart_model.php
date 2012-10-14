@@ -209,6 +209,7 @@ function quality_average_day_chart($filter_user, $filter_page, $filter_category)
 function quality_average_week_chart($filter_user, $filter_page, $filter_category){}
 function quality_average_year_chart($filter_user, $filter_page, $filter_category){}
 
+function draw_general_stats(){}
 }
 
 ?>
