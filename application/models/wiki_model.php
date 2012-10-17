@@ -10,16 +10,24 @@
 
 class Wiki_model extends CI_Model{
 	
-	//constructor
+	
    	function Wiki_model(){
+   		//Llamamos al constructor heredado.
    	   	parent::__construct();
+   	   	
+   	   	//Cargamos helpers
    	   	$this->load->helper('date');
+   	   	
+   	   	//Cargamos models necesarios
    	   	$ci =& get_instance();
 		$ci->load->model('connection_model');
    	}
    	
    	private function wconnection($wikiname){
+   		//Consultamos la conexión
    		$query = $this->db->query("select wiki_connection from wiki where wiki_name == $wikiname");
+   		
+   		//Comprobamos que existe y devolvemos el id de conexión
    		if($check->result()->num_rows() == 0)
    			return "connection(): ERR_NONEXISTENT";
    		else
@@ -28,20 +36,26 @@ class Wiki_model extends CI_Model{
    	}
    	
    	function new_wiki($wikiname, $db_server, $db_name, $db_user, $db_password){
+   		//Creamos una nueva conexión
    		$my_con = $this->connection_model->new_connection($db_server, $db_name, $db_user, $db_password);
+   		
+   		//Si hay error, devolvemos el mensaje de error
    		if(gettype($my_con) != "integer")
    			return "new_wiki(): $my_con";
-   			
+   		
+   		//Consultamos si la wiki ya existe, si es así devolvemos error
    		$check = $this->db->query("select * from wiki where wiki_name == $wikiname");
    		if($check->result()->num_rows() != 0)
    			return "new_wiki(): ERR_ALREADY_EXISTS";
    		else{
+   			//Creamos el array a insertar, con la info de la wiki e insertamos
    			$sql = array('wiki_id' => "",
    				'wiki_name' => "$wikiname",
    				'wiki_connection' => "$my_con"
    				);
 			$this->db->insert('wiki', $sql);
 		
+			//Si no hay error de inserción, devolvemos el id de la wiki
 			if($this->db->affected_rows() != 1) 
 				return "new_wiki(): ERR_AFFECTED_ROWS (".$this->db->affected_rows().")";
 			else
@@ -268,7 +282,91 @@ class Wiki_model extends CI_Model{
    		return array('imgsizes' => $imgsizes, 'imgtimes' => $imgtimes, 'imgusers' => $imgusers, 'imgtexts' => $imgtexts);
    	}
    	
-   	function fetch_users(){}/////////////////////////////////
+   	function fetch_users($wikiname, $date_range_a => 'default', $date_range_b => 'default', $filter_page => 'total', $filter_category => 'total'){ //HACIENDO ESTA. CONSULTAS
+   	
+   		//Establecemos conexión con la base de datos de la wiki
+   		$link = $this->connection_model->connect($this->wconnection($wikiname));
+   		
+   		//Establecemos filtros de fecha
+   		if($date_range_a == 'default'){
+   			$initial_date = $this->connection_model->get_query($link, "SELECT rev_timestamp FROM revision ORDER BY rev_timestamp ASC LIMIT 1");
+   			if($initial_date->num_rows() != 0)
+   				foreach ($initial_date as $row)
+   					$date_range_a = $row -> rev_timestamp;
+   			else
+   				return "fetch_categories(): ERR_NONEXISTENT";
+   		}
+   		
+   		if($date_range_b == 'default')
+   			$date_range_b = date('Y-m-d H:i:s', now());
+   		
+   		//Establecemos filtros de página o categoría.
+		if($filter_page != 'total'){
+			$type = 'page';
+			$filtername = $filter_user;
+		}
+		else if($filter_category != 'total'){
+			$type = 'category';
+			$filtername = $filter_page;
+		}
+		else{
+			$type = 'total';
+			$filtername = 'total';
+		}
+		
+		
+		if($type == 'page'){
+			//Nombre de usuario, nombre real y fecha de registro para una página en concreto
+   			$cdata = $link->query("SELECT user_name, user_real_name, user_registration FROM user, revision WHERE user_id == rev_user AND rev_page == $filtername AND rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b ORDER BY user_name ASC") -> result();
+   			
+   			//Número de ediciones, bytes y visitas para página en concreto
+   			$cdata2 = $link->query("SELECT user_name, count(rev_id) as edits, sum(page_len) as bytes, count(img_user) as uploads FROM user, revision, image, page WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_page == $filtername AND rev_page == page_id GROUP BY user_name ORDER BY user_name ASC") -> result();
+   			
+   			//Total de ediciones, bytes y visitas para página en concreto
+   			$totals = $link->query("SELECT user_name, count(rev_id) as totaledits, sum(page_len) as totalbytes FROM page, revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_page == page_id AND page_id == $filtername ORDER BY user_name ASC") -> result();
+   		}
+   		else if($type == 'category'){
+   			//Nombre de usuario, nombre real y fecha de registro para una categoría en concreto
+   			$cdata = $link->query("SELECT user_name, user_real_name, user_registration FROM user, revision, categorylinks WHERE user_id == rev_user AND rev_page == cl_from AND cl_to == $filtername AND rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b ORDER BY user_name ASC") -> result();
+   			
+   			//Número de ediciones, bytes y visitas para categoría en concreto
+   			$cdata2 = $link->query("SELECT user_name, count(rev_id) as edits, sum(page_len) as bytes, count(img_user) as uploads FROM user, page, revision, image, categorylinks WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_page == cl_from AND cl_to == $filtername GROUP BY user_name ORDER BY user_name ASC") -> result();
+   			
+   			//Total de ediciones, bytes y visitas para categoría en concreto
+   			$totals = $link->query("SELECT rev_name, count(rev_id) as totaledits, sum(page_len) as totalbytes FROM page, revision, categorylinks WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_page == page_id AND cl_from == page_id AND cl_to == $filtername ORDER BY user_name ASC") -> result();
+		}
+		else{
+			//Realizamos consultas según filtrado
+			$cdata = $link->query("SELECT user_name, user_real_name, user_registration FROM user, revision WHERE  rev_page IN (SELECT DISTINCT rev_page FROM revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b)") -> result();
+   		
+   			//Número de ediciones, bytes y visitas
+   			$cdata2 = $link->query("SELECT user_name, count(rev_id) as edits, sum(page_len) as bytes, count(img_user) as uploads FROM page, image, revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_page == page_id AND img_user == user_id GROUP BY user_name ORDER BY user_name ASC") -> result();
+   			
+   			//Total de ediciones, bytes y visitas
+   			$totals = $link->query("SELECT cl_to, count(rev_id) as totaledits, sum(page_len) as totalbytes, sum(page_counter) as totalvisits FROM page, categorylinks, revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_page == page_id AND page_id == cl_from ORDER BY cl_to ASC") -> result();
+		}
+   		
+   		//Formamos los vectores a devolver con los datos de las consultas
+   		foreach($cdata as $row){
+   			$userpages[$row->user_name] = $row->cat_pages;		//número de páginas
+   			$catsubcats[$row->cat_title] = $row->cat_subcats;	//número de subcategorías
+   		}
+   		
+   		foreach($cdata2 as $row){
+   			$catedits[$row->cl_to] = $row->edits;			//número de ediciones
+   			$catbytes[$row->cl_to] = $row->bytes;			//bytes
+   			$catvisits[$row->cl_to] = $row->visits;			//número de visitas
+   		}
+   		
+   		foreach($totals as $row){
+   			$catedits_per[$row->cl_to] = $catedits[$row->cl_to]/$row->totaledits;		//porcentaje de ediciones sobre el total (depende del filtro)
+   			$catbytes_per[$row->cl_to] = $catbytes[$row->cl_to]/$row->totalbytes;		//porcentaje de bytes sobre el total (depende del filtro)
+   			$catvisits_per[$row->cl_to] = $catvisits[$row->cl_to]/$row->totalvisits;	//porcentaje de visitas sobre el total (depende del filtro)
+   		}
+   		
+   		//Devolvemos conjunto de vectores con índices definidos
+   		return array('catpages' => $catpages, 'catsubcats' => $catsubcats, 'catedits' => $catedits, 'catbytes' => $catbytes, 'catvisits' => $catvisits, 'catedits_per' => $catedits_per, 'catbytes_per' => $catbytes_per, 'catvisits_per' => $catvisits_per, 'cattype' => $type, 'catfiltername' => $filtername);
+   	}
    	
    	function delete_wiki(){
    		$check = $this->db->query("select * from Wiki where wiki_id == $this->wiki_id");
