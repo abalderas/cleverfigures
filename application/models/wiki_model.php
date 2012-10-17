@@ -320,12 +320,12 @@ class Wiki_model extends CI_Model{
    			$cdata = $link->query("SELECT user_name, user_real_name, user_registration FROM user, revision WHERE user_id == rev_user AND rev_page == $filtername AND rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b ORDER BY user_name ASC") -> result();
    			
    			//Número de ediciones, bytes y visitas para página en concreto
-   			$cdata2 = $link->query("SELECT user_name, count(rev_id) as edits, sum(page_len) as bytes, count(img_user) as uploads FROM user, revision, image, page WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_page == $filtername AND rev_page == page_id GROUP BY user_name ORDER BY user_name ASC") -> result();
+   			$cdata2 = $link->query("SELECT user_name, count(rev_id) as edits, sum(page_len) as bytes, count(img_user) as uploads FROM user, revision, image, page WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_page == $filtername AND rev_page == page_id AND rev_user == user_id AND img_user == user_id GROUP BY user_name ORDER BY user_name ASC") -> result();
    			
    			//Total de ediciones, bytes y visitas para página en concreto
-   			$totals = $link->query("SELECT user_name, count(rev_id) as totaledits, sum(page_len) as totalbytes FROM page, revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_page == page_id AND page_id == $filtername ORDER BY user_name ASC") -> result();
+   			$totals = $link->query("SELECT user_name, count(rev_id) as totaledits, sum(page_len) as totalbytes, count(img_user) FROM page, revision, image WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_page == page_id AND page_id == $filtername AND rev_user == img_user ORDER BY user_name ASC") -> result();
    		}
-   		else if($type == 'category'){
+   		else if($type == 'category'){////////////////////////////////////////////////////////////////////////////////////////
    			//Nombre de usuario, nombre real y fecha de registro para una categoría en concreto
    			$cdata = $link->query("SELECT user_name, user_real_name, user_registration FROM user, revision, categorylinks WHERE user_id == rev_user AND rev_page == cl_from AND cl_to == $filtername AND rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b ORDER BY user_name ASC") -> result();
    			
