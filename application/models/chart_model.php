@@ -546,6 +546,8 @@ function draw_quality_average_day_chart($filter_user => 'default', $filter_page 
 function draw_quality_average_week_chart($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){}
 function draw_quality_average_year_chart($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){}
 
+function draw_work_distribution($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){} //accumulative
+
 function draw_general_stats(){
 	$labels = array($i18n_total_views, $i18n_total_edits, $i18n_good_articles, $i18n_total_pages, $i18n_users, $i18n_active_users, $i18n_admins, $i18n_images);
 	
