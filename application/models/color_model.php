@@ -2,13 +2,8 @@
 
 //AVAILABLE METHODS
 // 	new_color()
-// 	fetch_categories()
+// 	fetch_evaluations()
 // 	wconnection()
-// 	fetch_category_links()
-// 	fetch_general_stats()
-// 	fetch_images()
-// 	fetch_pages()
-// 	fetch_users()
 // 	delete_color()
 
 
@@ -67,7 +62,7 @@ class Color_model extends CI_Model{
 		}
    	}
    	
-   	function fetch_evaluations($colorname, $date_range_a => 'total', $date_range_b => 'total', $filter_user => 'total', $filter_page => 'total', $filter_category => 'total'){
+   	function fetch_evaluations($colorname, $date_range_a => 'total', $date_range_b => 'total', $filter_user => 'total'){
    	
    		//Establecemos conexión con la base de datos de la fuente
    		$link = $this->connection_model->connect($this->wconnection($colorname));
@@ -86,15 +81,7 @@ class Color_model extends CI_Model{
    			$date_range_b = date('Y-m-d H:i:s', now());
    		
    		//Establecemos filtros de página o categoría.
-		if($filter_page != 'total'){
-			$type = 'page';
-			$filtername = $filter_page;
-		}
-		else if($filter_category != 'total'){
-			$type = 'category';
-			$filtername = $filter_category;
-		}
-		else if($filter_user != 'total'){
+		if($filter_user != 'total'){
 			$type = 'user';
 			$filtername = $filter_category;
 		}
@@ -103,43 +90,47 @@ class Color_model extends CI_Model{
 			$filtername = 'total';
 		}
 		
-		
-		if($type == 'page'){
-			$cdata = $link->query("")->result();
+		//Aplicamos los filtros
+		if($type == 'user'){
+   			$cdata = $link->query("SELECT count(eva_id) as neval FROM evaluaciones WHERE eva_user == $filtername AND eva_time >= $date_range_a AND eva_time <= $date_range_b LIMIT 1")->result();
+   			$cdata2 = $link->query("SELECT avg(ee_nota) as avg_mark FROM evaluaciones, evaluaciones-entregables WHERE evaluaciones-entregables.eva_id == evaluaciones.eva_id AND eva_user == $filtername AND eva_time >= $date_range_a AND eva_time <= $date_range_b LIMIT 1")->result();
+   			$cdata3 = $link->query("SELECT count(rep_id) as replies_in FROM evaluaciones, replies WHERE rep_id == eva_id AND eva_user == $filtername AND eva_time >= $date_range_a AND eva_time <= $date_range_b LIMIT 1")->result();
+   			$cdata4 = $link->query("SELECT count(rep_id) as replies_out FROM evaluaciones, replies WHERE rep_id == eva_id AND eva_revisor == $filtername AND eva_time >= $date_range_a AND eva_time <= $date_range_b LIMIT 1")->result();
    		}
-   		else if($type == 'category'){
-   			$cdata = $link->query("")->result();
-   		}
-   		else if($type == 'user'){
-   			$cdata = $link->query("")->result();
-   		}
-		else{
-			$cdata = $link->query("")->result();
-   		}
-   		
-   		//Formamos los vectores a devolver con los datos de las consultas
-   		foreach($cdata as $row){
-   			$userrealname[$row->user_name] = $row->user_real_name;		//nombre real
-   			$userreg[$row->user_name] = $row->user_registration;		//fecha de registro
+   		else{
+			$cdata = $link->query("SELECT count(eva_id) as neval FROM evaluaciones WHERE eva_time >= $date_range_a AND eva_time <= $date_range_b LIMIT 1")->result();
+   			$cdata2 = $link->query("SELECT avg(ee_nota) as avg_mark FROM evaluaciones, evaluaciones-entregables WHERE evaluaciones-entregables.eva_id == evaluaciones.eva_id AND eva_time >= $date_range_a AND eva_time <= $date_range_b LIMIT 1")->result();
+   			$cdata3 = $link->query("SELECT count(rep_id) as replies_in FROM evaluaciones, replies WHERE rep_id == eva_id AND eva_time >= $date_range_a AND eva_time <= $date_range_b LIMIT 1")->result();
    		}
    		
-   		foreach($cdata2 as $row){
-   			$useredits[$row->user_name] = $row->edits;			//número de ediciones
-   			$userbytes[$row->user_name] = $row->bytes;			//bytes
-   		}
+   		//Formamos las variables a devolver con los datos de las consultas y devolvemos los datos
+   		foreach($cdata as $row)
+   			$neval = $row->neval;
    		
-   		//Devolvemos conjunto de vectores con índices definidos
-   		return array('userrealname' => $userrealname, 'userreg' => $userreg, 'useredits' => $useredits, 'userbytes' => $userbytes, 'useruploads' => $useruploads, 'useredits_per' => $useredits_per, 'userbytes_per' => $userbytes_per, 'useruploads_per' => $useruploads_per);
+   		foreach($cdata2 as $row)
+   			$avg_mark = $row->avg_mark;
+   		
+   		foreach($cdata3 as $row)
+   			$rep_in = $row->replies_in;
+   		
+   		if(isset($cdata4)){
+			foreach($cdata4 as $row)
+				$rep_out = $row->replies_out;
+			return array('neval' => $neval, 'avg_mark' => $avg_mark, 'rep_in' => $rep_in, 'rep_out' => $rep_out);
+		}
+		else
+			return array('neval' => $neval, 'avg_mark' => $avg_mark, 'rep_in' => $rep_in);
+   		
    	}
    	
-   	function delete_color(){
+   	function delete_color($colorname){
    		//Comprobamos que existe y devuelve error si no
-   		$check = $this->db->query("select * from color where color_id == $this->color_id");
+   		$check = $this->db->query("select * from color where color_name == $colorname");
    		if($check->result()->num_rows() == 0)
-   			die("delete_color(): color $this->color_id doesn't exist.");
+   			return "delete_color(): NONEXISTENT";
    		else
    			//Elimina la fuente de la base de datos
-   		 	$this->db->delete('color', array('color_id' => $this->color_id));
+   		 	$this->db->delete('color', array('color_name' => $colorname));
    	}
 }
 
