@@ -13,7 +13,6 @@
 		else
 			echo '<link rel="stylesheet" type="text/css" href="css/styles.css" media="screen" />';
 	?>
-	
 </head>
 <body>
 	<!--Loads the header-->

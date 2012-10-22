@@ -9,291 +9,14 @@
 
 <?php
 
-include("libraries/charts/pChart/class/pData.class.php");
-include("libraries/charts/pChart/class/pDraw.class.php");
-include("libraries/charts/pChart/class/pImage.class.php");
-include("classes/tagcloud.php");
-
 class Charts_model extends CI_Model{
    function Charts_model(){
       	parent::__construct();
       	
-      	/*[1]*/
+      	$id = 0;
    }
-   
-//Para pasar los datos a dibujar en los gráficos de lineas se usará una matriz de tres dimensiones de puntos $points_matrix
-   
-function draw_line_chart($points_matrix, $line_labels, $axis_label, $abscissa_labels, $chart_title){
-	if(count($points_matrix) != count($line_labels)) die("draw_line_chart(): Bad arguments.");
-	
-   	$myData = new pData();
-   	
-   	for($i = 0, $i < count($points_matrix); i++){
-   		$myData->addPoints($points_matrix[$i], $line_labels[$i]);
-		$myData->setSerieDescription($line_labels[$i], $line_labels[$i]);
-		$myData->setSerieOnAxis($line_labels[$i],0);
-   	}
-	
-	$myData->addPoints($abscissa_labels,"Absissa");
-	$myData->setAbscissa("Absissa");
-	
-	$myData->setAxisPosition(0,AXIS_POSITION_LEFT);
-	$myData->setAxisName(0,$axis_label);
-	$myData->setAxisUnit(0,"");
-	
-	$myPicture = new pImage(700,400,$myData,TRUE);
-	$myPicture->setFontProperties(array("FontName"=>"libraries/charts/pChart/fonts/advent_light.ttf","FontSize"=>14));
-	$TextSettings = array("Align"=>TEXT_ALIGN_MIDDLEMIDDLE
-	, "R"=>0, "G"=>0, "B"=>0);
-	$myPicture->drawText(250,25,$chart_title, $TextSettings);
-	
-	$myPicture->setGraphArea(50,50,675,360);
-	$myPicture->setFontProperties(array("R"=>0,"G"=>0,"B"=>0,"FontName"=>"libraries/charts/pChart/fonts/pf_arma_five.ttf","FontSize"=>10));
-	$myPicture->setShadow(TRUE,array("X"=>1,"Y"=>1,"R"=>50,"G"=>50,"B"=>50,"Alpha"=>20));
-	
-	$Settings = array("DisplayValues"=>1
-	, "Pos"=>SCALE_POS_LEFTRIGHT
-	, "Mode"=>SCALE_MODE_FLOATING
-	, "LabelingMethod"=>LABELING_ALL
-	, "GridR"=>0, "GridG"=>0, "GridB"=>0, "GridAlpha"=>50, "TickR"=>0, "TickG"=>0, "TickB"=>0, "TickAlpha"=>50, "LabelRotation"=>0, "CycleBackground"=>1, "DrawXLines"=>1, 	"DrawSubTicks"=>1, "SubTickR"=>255, "SubTickG"=>0, "SubTickB"=>0, "SubTickAlpha"=>50, "DrawYLines"=>ALL);
-	$myPicture->drawScale($Settings);
 
-	$Config = "";
-	$myPicture->drawLineChart($Config);
-	
-	$Config = array("FontR"=>0, "FontG"=>0, "FontB"=>0, "FontName"=>"libraries/charts/pChart/fonts/pf_arma_five.ttf", "FontSize"=>9, "Margin"=>6, "Alpha"=>30, "BoxSize"=>5, "Style"=>LEGEND_NOBORDER
-	, "Mode"=>LEGEND_HORIZONTAL
-	, "Family"=>LEGEND_FAMILY_CIRCLE
-	);
-	$myPicture->drawLegend(432,16,$Config);
-	
-	$myPicture->stroke();
-   }
-   
-function draw_stacked_bar_chart($points_matrix, $line_labels, $axis_label, $abscissa_labels, $chart_title){
-	if(count($points_matrix) != count($line_labels)) die("draw_line_chart(): Bad arguments.");
-	
-   	$myData = new pData();
-   	
-   	for($i = 0, $i < count($points_matrix); i++){
-   		$myData->addPoints($points_matrix[$i], $line_labels[$i]);
-		$myData->setSerieDescription($line_labels[$i], $line_labels[$i]);
-		$myData->setSerieOnAxis($line_labels[$i],0);
-   	}
-   	
-   	$myData->addPoints($abscissa_labels,"Absissa");
-	$myData->setAbscissa("Absissa");
-	
-	$myData->setAxisPosition(0,AXIS_POSITION_LEFT);
-	$myData->setAxisName(0,$axis_label);
-	$myData->setAxisUnit(0,"");
-	
-	$myPicture = new pImage(700,400,$myData,TRUE);
-	$myPicture->drawRectangle(0,0,699,399,array("R"=>0,"G"=>0,"B"=>0));
-
-	$myPicture->setShadow(TRUE,array("X"=>1,"Y"=>1,"R"=>50,"G"=>50,"B"=>50,"Alpha"=>20));
-	
-	$myPicture->setFontProperties(array("FontName"=>"libraries/charts/pChart/fonts/advent_light.ttf","FontSize"=>14));
-	$TextSettings = array("Align"=>TEXT_ALIGN_MIDDLEMIDDLE
-	, "R"=>0, "G"=>0, "B"=>0);
-	$myPicture->drawText(350,25,$chart_title, $TextSettings);
-	
-	$myPicture->setShadow(FALSE);
-	$myPicture->setGraphArea(50,50,675,360);
-	$myPicture->setFontProperties(array("R"=>0,"G"=>0,"B"=>0,"FontName"=>"libraries/charts/pChart/fonts/pf_arma_five.ttf","FontSize"=>6));
-	
-	$Settings = array("Pos"=>SCALE_POS_LEFTRIGHT
-	, "Mode"=>SCALE_MODE_ADDALL
-	, "LabelingMethod"=>LABELING_ALL
-	, "GridR"=>0, "GridG"=>0, "GridB"=>0, "GridAlpha"=>50, "TickR"=>0, "TickG"=>0, "TickB"=>0, "TickAlpha"=>50, "LabelRotation"=>0, "CycleBackground"=>1, "DrawXLines"=>1, 	"DrawSubTicks"=>1, "SubTickR"=>255, "SubTickG"=>0, "SubTickB"=>0, "SubTickAlpha"=>50, "DrawYLines"=>ALL);	
-	$myPicture->drawScale($Settings);
-	
-	$myPicture->setShadow(TRUE,array("X"=>1,"Y"=>1,"R"=>50,"G"=>50,"B"=>50,"Alpha"=>10));
-	
-	$Config = array("DisplayValues"=>1, "AroundZero"=>1);
-	$myPicture->drawStackedBarChart($Config);
-	
-	$Config = array("FontR"=>0, "FontG"=>0, "FontB"=>0, "FontName"=>"libraries/charts/pChart/fonts/pf_arma_five.ttf", "FontSize"=>10, "Margin"=>6, "Alpha"=>30, "BoxSize"=>5, "Style"=>LEGEND_NOBORDER
-	, "Mode"=>LEGEND_HORIZONTAL
-	, "Family"=>LEGEND_FAMILY_CIRCLE
-	);
-	$myPicture->drawLegend(516,16,$Config);
-	
-	$myPicture->stroke();
-}
-
-function draw_spline_chart($points_matrix, $line_labels, $axis_label, $abscissa_labels, $chart_title){
-	if(count($points_matrix) != count($line_labels)) die("draw_line_chart(): Bad arguments.");
-	
-   	$myData = new pData();
-   	
-   	for($i = 0, $i < count($points_matrix); i++){
-   		$myData->addPoints($points_matrix[$i], $line_labels[$i]);
-		$myData->setSerieDescription($line_labels[$i], $line_labels[$i]);
-		$myData->setSerieOnAxis($line_labels[$i],0);
-   	}
-   	$myData->addPoints($abscissa_labels,"Absissa");
-	$myData->setAbscissa("Absissa");
-	
-	$myData->setAxisPosition(0,AXIS_POSITION_LEFT);
-	$myData->setAxisName(0,$axis_label);
-	$myData->setAxisUnit(0,"");
-	
-	$myPicture = new pImage(700,400,$myData,TRUE);
-	$myPicture->drawRectangle(0,0,699,399,array("R"=>0,"G"=>0,"B"=>0));
-
-	$myPicture->setShadow(TRUE,array("X"=>1,"Y"=>1,"R"=>50,"G"=>50,"B"=>50,"Alpha"=>20));
-	
-	$myPicture->setFontProperties(array("FontName"=>"libraries/charts/pChart/fonts/advent_light.ttf","FontSize"=>14));
-	$TextSettings = array("Align"=>TEXT_ALIGN_MIDDLEMIDDLE
-	, "R"=>0, "G"=>0, "B"=>0);
-	$myPicture->drawText(350,25,$chart_title, $TextSettings);
-	
-	$myPicture->setShadow(FALSE);
-	$myPicture->setGraphArea(50,50,675,360);
-	$myPicture->setFontProperties(array("R"=>0,"G"=>0,"B"=>0,"FontName"=>"libraries/charts/pChart/fonts/pf_arma_five.ttf","FontSize"=>6));
-	
-	$Settings = array("Pos"=>SCALE_POS_LEFTRIGHT
-	, "Mode"=>SCALE_MODE_ADDALL
-	, "LabelingMethod"=>LABELING_ALL
-	, "GridR"=>0, "GridG"=>0, "GridB"=>0, "GridAlpha"=>50, "TickR"=>0, "TickG"=>0, "TickB"=>0, "TickAlpha"=>50, "LabelRotation"=>0, "CycleBackground"=>1, "DrawXLines"=>1, 	"DrawSubTicks"=>1, "SubTickR"=>255, "SubTickG"=>0, "SubTickB"=>0, "SubTickAlpha"=>50, "DrawYLines"=>ALL);	
-	$myPicture->drawScale($Settings);
-	
-	$myPicture->setShadow(TRUE,array("X"=>1,"Y"=>1,"R"=>50,"G"=>50,"B"=>50,"Alpha"=>10));
-	
-	$Config = array("DisplayValues"=>1);
-	$myPicture->drawSplineChart($Config);
-
-	$Config = array("FontR"=>0, "FontG"=>0, "FontB"=>0, "FontName"=>"fonts/pf_arma_five.ttf", "FontSize"=>6, "Margin"=>6, "Alpha"=>30, "BoxSize"=>5, "Style"=>LEGEND_NOBORDER
-	, "Mode"=>LEGEND_HORIZONTAL
-	, "Family"=>LEGEND_FAMILY_CIRCLE
-	);
-	$myPicture->drawLegend(563,16,$Config);
-
-	$myPicture->stroke();
-}
-
-function draw_bar_chart($points_matrix, $line_labels, $axis_label, $abscissa_labels, $chart_title){
-	if(count($points_matrix) != count($line_labels)) die("draw_line_chart(): Bad arguments.");
-	
-   	$myData = new pData();
-   	
-   	for($i = 0, $i < count($points_matrix); i++){
-   		$myData->addPoints($points_matrix[$i], $line_labels[$i]);
-		$myData->setSerieDescription($line_labels[$i], $line_labels[$i]);
-		$myData->setSerieOnAxis($line_labels[$i],0);
-   	}
-   	$myData->addPoints($abscissa_labels,"Absissa");
-	$myData->setAbscissa("Absissa");
-	
-	$myData->setAxisPosition(0,AXIS_POSITION_LEFT);
-	$myData->setAxisName(0,$axis_label);
-	$myData->setAxisUnit(0,"");
-	
-	$myPicture = new pImage(700,400,$myData,TRUE);
-	$myPicture->drawRectangle(0,0,699,399,array("R"=>0,"G"=>0,"B"=>0));
-
-	$myPicture->setShadow(TRUE,array("X"=>1,"Y"=>1,"R"=>50,"G"=>50,"B"=>50,"Alpha"=>20));
-	
-	$myPicture->setFontProperties(array("FontName"=>"libraries/charts/pChart/fonts/advent_light.ttf","FontSize"=>14));
-	$TextSettings = array("Align"=>TEXT_ALIGN_MIDDLEMIDDLE
-	, "R"=>0, "G"=>0, "B"=>0);
-	$myPicture->drawText(350,25,$chart_title, $TextSettings);
-	
-	$myPicture->setShadow(FALSE);
-	$myPicture->setGraphArea(50,50,675,360);
-	$myPicture->setFontProperties(array("R"=>0,"G"=>0,"B"=>0,"FontName"=>"libraries/charts/pChart/fonts/pf_arma_five.ttf","FontSize"=>6));
-	
-	$Settings = array("Pos"=>SCALE_POS_LEFTRIGHT
-	, "Mode"=>SCALE_MODE_ADDALL
-	, "LabelingMethod"=>LABELING_ALL
-	, "GridR"=>0, "GridG"=>0, "GridB"=>0, "GridAlpha"=>50, "TickR"=>0, "TickG"=>0, "TickB"=>0, "TickAlpha"=>50, "LabelRotation"=>0, "CycleBackground"=>1, "DrawXLines"=>1, 	"DrawSubTicks"=>1, "SubTickR"=>255, "SubTickG"=>0, "SubTickB"=>0, "SubTickAlpha"=>50, "DrawYLines"=>ALL);	
-	$myPicture->drawScale($Settings);
-	
-	$myPicture->setShadow(TRUE,array("X"=>1,"Y"=>1,"R"=>50,"G"=>50,"B"=>50,"Alpha"=>10));
-	
-	$Config = array("DisplayValues"=>1, "Rounded"=>1, "AroundZero"=>1);
-	$myPicture->drawBarChart($Config);
-
-	$Config = array("FontR"=>0, "FontG"=>0, "FontB"=>0, "FontName"=>"fonts/pf_arma_five.ttf", "FontSize"=>6, "Margin"=>6, "Alpha"=>30, "BoxSize"=>5, "Style"=>LEGEND_NOBORDER
-	, "Mode"=>LEGEND_HORIZONTAL
-	);
-	$myPicture->drawLegend(563,16,$Config);
-	
-	$myPicture->stroke();
-}
-
-function draw_bar_line_chart($chart_type1, $chart_type2, $points_matrix1, $points_matrix2, $line_labels, $bar_labels, $axis_label, $abscissa_labels, $chart_title){
-	if(count($points_matrix) != count($line_labels)) die("draw_line_chart(): Bad arguments.");
-	
-   	$myData = new pData();
-   	
-   	for($i = 0, $i < count($points_matrix1); i++){
-   		$myData->addPoints($points_matrix1[$i], $line_labels[$i]);
-		$myData->setSerieDescription($line_labels[$i], $line_labels[$i]);
-		$myData->setSerieOnAxis($line_labels[$i],0);
-   	}
-   	
-   	for($i = 0, $i < count($points_matrix2); i++){
-   		$myData->addPoints($points_matrix2[$i], $bar_labels[$i]);
-		$myData->setSerieDescription($bar_labels[$i], $bar_labels[$i]);
-		$myData->setSerieOnAxis($bar_labels[$i],0);
-   	}
-   	
-   	$myData->addPoints($abscissa_labels,"Absissa");
-	$myData->setAbscissa("Absissa");
-	
-	$myData->setAxisPosition(0,AXIS_POSITION_LEFT);
-	$myData->setAxisName(0,$axis_label);
-	$myData->setAxisUnit(0,"");
-	
-	$myPicture = new pImage(700,400,$myData,TRUE);
-	$myPicture->drawRectangle(0,0,699,399,array("R"=>0,"G"=>0,"B"=>0));
-
-	$myPicture->setShadow(TRUE,array("X"=>1,"Y"=>1,"R"=>50,"G"=>50,"B"=>50,"Alpha"=>20));
-	
-	$myPicture->setFontProperties(array("FontName"=>"libraries/charts/pChart/fonts/advent_light.ttf","FontSize"=>14));
-	$TextSettings = array("Align"=>TEXT_ALIGN_MIDDLEMIDDLE
-	, "R"=>0, "G"=>0, "B"=>0);
-	$myPicture->drawText(350,25,$chart_title, $TextSettings);
-	
-	$myPicture->setShadow(FALSE);
-	$myPicture->setGraphArea(50,50,675,360);
-	$myPicture->setFontProperties(array("R"=>0,"G"=>0,"B"=>0,"FontName"=>"libraries/charts/pChart/fonts/pf_arma_five.ttf","FontSize"=>6));
-	
-	$Settings = array("Pos"=>SCALE_POS_LEFTRIGHT
-	, "Mode"=>SCALE_MODE_ADDALL
-	, "LabelingMethod"=>LABELING_ALL
-	, "GridR"=>0, "GridG"=>0, "GridB"=>0, "GridAlpha"=>50, "TickR"=>0, "TickG"=>0, "TickB"=>0, "TickAlpha"=>50, "LabelRotation"=>0, "CycleBackground"=>1, "DrawXLines"=>1, 	"DrawSubTicks"=>1, "SubTickR"=>255, "SubTickG"=>0, "SubTickB"=>0, "SubTickAlpha"=>50, "DrawYLines"=>ALL);	
-	$myPicture->drawScale($Settings);
-	
-	$myPicture->setShadow(TRUE,array("X"=>1,"Y"=>1,"R"=>50,"G"=>50,"B"=>50,"Alpha"=>10));
-	
-	$Config = array("DisplayValues"=>1, "Rounded"=>1, "AroundZero"=>1);
-	
-	for($i = 0, $i < count($bar_labels); i++){
-   		$MyData->setSerieDrawable($bar_labels[$i], FALSE);
-   	}
-	$myPicture->drawSplineChart($Config);
-	
-	for($i = 0, $i < count($bar_labels); i++){
-   		$MyData->setSerieDrawable($bar_labels[$i], TRUE);
-   		$MyData->setSerieDrawable($line_labels[$i], FALSE);
-   	}
-   	$myPicture->drawBarChart($Config);
-
-   	for($i = 0, $i < count($bar_labels); i++){
-   		$MyData->setSerieDrawable($line_labels[$i], TRUE);
-   	}
-   	
-	$Config = array("FontR"=>0, "FontG"=>0, "FontB"=>0, "FontName"=>"fonts/pf_arma_five.ttf", "FontSize"=>6, "Margin"=>6, "Alpha"=>30, "BoxSize"=>5, "Style"=>LEGEND_NOBORDER
-	, "Mode"=>LEGEND_HORIZONTAL
-	);
-	$myPicture->drawLegend(563,16,$Config);
-	
-	$myPicture->stroke();
-}
-
+//TABLES
 function draw_users($id_analisis, $filter_category => 'total', $filter_page => 'total'){
 	
 	//Tomamos los nombres de las cabeceras de la tabla según idioma.
@@ -524,30 +247,6 @@ function draw_categories($id_analisis, $filter_page => 'total', $filter_user => 
 	echo "</table>";
 }
 
-function draw_tag_cloud($tags){
-	$cloud = new tagcloud();
-	$cloud->addTags($tags);
-	echo $cloud->render();
-}
-
-function draw_content_evolution_chart($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){} //line + bars with values per day
-
-function draw_activity_hour_chart($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){} //stacked bars
-function draw_activity_day_chart($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){}
-function draw_activity_week_chart($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){}
-function draw_activity_month_chart($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){}
-function draw_activity_year_chart($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){}
-
-function draw_evaluation_evolution($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){} //linea de evolucion + barras de valores por dia
-
-function draw_quality_evolution($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){} //spline
-function draw_quality_average_hour_chart($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){} //bars
-function draw_quality_average_day_chart($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){}
-function draw_quality_average_week_chart($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){}
-function draw_quality_average_year_chart($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){}
-
-function draw_work_distribution($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){} //accumulative
-
 function draw_general_stats(){
 	$labels = array($i18n_total_views, $i18n_total_edits, $i18n_good_articles, $i18n_total_pages, $i18n_users, $i18n_active_users, $i18n_admins, $i18n_images);
 	
@@ -570,6 +269,52 @@ function draw_general_stats(){
 	}
 	echo "</table>";
 }
+
+//TAG CLOUD
+
+function draw_tag_cloud($tags){
+	$cloud = new tagcloud();
+	$cloud->addTags($tags);
+	echo $cloud->render();
+}
+
+//CONTENT CHARTS
+
+function draw_content_evolution_chart($analisis, $filter_mindate => 'default', $filter_maxdate => 'default', $filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){
+	//Retrieve data from chart table
+	
+	$mindate['year'] = ;
+	$mindate['month'] = ;
+	$mindate['day'] = ;
+	$mindate['hour'] = ;
+	
+	$maxdate['year'] = ;
+	$maxdate['month'] = ;
+	$maxdate['day'] = ;
+	$maxdate['hour'] = ;
+	
+	$data = ;
+	
+	//Put data into correct format
+	//Draw chart
+}
+
+function draw_activity_hour_chart($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){} //stacked bars
+function draw_activity_day_chart($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){}
+function draw_activity_week_chart($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){}
+function draw_activity_month_chart($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){}
+function draw_activity_year_chart($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){}
+
+function draw_evaluation_evolution($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){} //linea de evolucion + barras de valores por dia
+
+function draw_quality_evolution($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){} //spline
+function draw_quality_average_hour_chart($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){} //bars
+function draw_quality_average_day_chart($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){}
+function draw_quality_average_week_chart($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){}
+function draw_quality_average_year_chart($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){}
+
+function draw_work_distribution($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){} //accumulative
+
 }
 
 ?>
