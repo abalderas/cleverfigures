@@ -67,7 +67,7 @@ class Wiki_model extends CI_Model{
 		}
    	}
    	
-   	function fetch_general_stats($wikiname){
+   	function fetch_general_stats($wikiname, $analisis){
    		//Establecemos conexión con la base de datos de la wiki
    		$link = $this->connection_model->connect($this->wconnection($wikiname));
    		
@@ -85,6 +85,7 @@ class Wiki_model extends CI_Model{
    					'wgen_active_users' => "$row->ss_active_users",
    					'wgen_admins' => "$row->ss_admins",
    					'wgen_images' => "$row->ss_images",
+   					'wgen_analisis' => "$analisis"
    				);
 			}
 			
@@ -94,9 +95,6 @@ class Wiki_model extends CI_Model{
 		//Comprobamos que la insertación se hizo con éxito
 		if($this->db->affected_rows() != 1) 
 			return "fetch_general_stats(): ERR_AFFECTED_ROWS (".$this->db->affected_rows().")";
-		else 
-			//Devuelve el id de la fila insertada para relacionarlo con la tabla análisis
-			return $this->db->insert_id();
    	}
    	
    	function fetch_category_links($wikiname, $date_range_a = 'default', $date_range_b = 'default'){
@@ -513,6 +511,8 @@ class Wiki_model extends CI_Model{
    		//Devolvemos conjunto de vectores con índices definidos
    		return array('pagenamespace' => $pagenamespace, 'pageedits' => $pageedits, 'pagebytes' => $pagebytes, 'pagevisits' => $pagevisits, 'pageuploads' => $pageuploads, 'pageedits_per' => $pageedits_per, 'pagebytes_per' => $pagebytes_per, 'pageuploads_per' => $pageuploads_per, 'filtertype' => $type, 'filtername' => $filtername);
    	}
+   	
+   	//TO_DO: graficos   	
    	
    	function delete_wiki($wikiname){
    		//Comprobamos que existe y devuelve error si no

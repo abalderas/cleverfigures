@@ -84,18 +84,6 @@ class User_model extends CI_Model{
 		$this->db->update('User', $data); 
    	}
    	
-   	function update_wiki($wiki){
-   		$data = array('user_active_wiki' => $wiki);
-		$this->db->where('user_username', $this->user_username);
-		$this->db->update('User', $data); 
-   	}
-   	
-   	function update_color($color){
-   		$data = array('user_active_color' => $color);
-		$this->db->where('user_username', $this->user_username);
-		$this->db->update('User', $data); 
-   	}
-   	
    	function add_database($dbid){
    		$query = $this->db->query("select * from Database where database_id == $dbid");
    		if($query->result()->num_rows() != 0){
@@ -133,7 +121,7 @@ class User_model extends CI_Model{
    	//login methods
    	function login(){
    		$this -> db -> select('user_username') 
-      		  -> from('User') 
+      		  -> from('user') 
       		  -> where('user_username = ' . "'" . $this->user_username . "'") 
       		  -> where('user_password = ' . "'" . $this->user_password . "'") 
       		  -> limit(1);
@@ -144,9 +132,7 @@ class User_model extends CI_Model{
       		if($query -> num_rows() == 1){
       			foreach($query->result() as $row) 
         			$sess_array = array('user_username' => $row -> user_username,
-        						'user_language' => $row->user_language, 
-        						'user_active_wiki' => $row -> user_active_wiki,
-        						'user_active_color' => $row -> user_active_color); 
+        						'user_language' => $row->user_language); 
             		$this -> session -> set_userdata('logged_in', $sess_array);
             		return true;
       		}
@@ -156,7 +142,7 @@ class User_model extends CI_Model{
    	
    	//save & delete methods
    	function save_user(){
-   		$check = $this->db->query("select * from User where user_username == $this->user_username");
+   		$check = $this->db->query("select * from user where user_username == $this->user_username");
    		if($check->result()->num_rows() != 0)
    			return false;
    		else{
