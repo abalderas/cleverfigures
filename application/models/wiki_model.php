@@ -171,6 +171,8 @@ class Wiki_model extends CI_Model{
 			//Título de categoría, número de páginas y número de subcategorías para página en concreto
    			$cdata = $link->query("SELECT cat_title, cat_pages, cat_subcats FROM category, categorylinks WHERE cl_from == $filtername AND cl_to == cat_title AND $filtername IN (SELECT DISTINCT rev_page FROM revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b) ORDER BY cat_title ASC") -> result();
    			
+   			$cdata1 = $link->query("SELECT cat_title, sum(cat_pages) as totalpages FROM category, categorylinks WHERE cl_from == $filtername AND cl_to == cat_title AND $filtername IN (SELECT DISTINCT rev_page FROM revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b) GROUP BY cat_title") -> result();
+   			
    			//Número de ediciones, bytes y visitas para página en concreto
    			$cdata2 = $link->query("SELECT cl_to, count(rev_id) as edits, sum(page_len) as bytes, sum(page_counter) as visits FROM page, categorylinks, revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_page == page_id AND page_id == cl_from AND page_id == $filtername GROUP BY cl_to ORDER BY cl_to ASC") -> result();
    			
@@ -180,6 +182,8 @@ class Wiki_model extends CI_Model{
    		else if($type == 'user'){
    			//Título de categoría, número de páginas y número de subcategorías para usuario en concreto
 			$cdata = $link->query("SELECT cat_title, cat_pages, cat_subcats FROM page, category WHERE page_id == cat_title AND page_namespace=14 AND page_id IN (SELECT DISTINCT rev_page FROM revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_user == $filtername)") -> result();
+			
+			$cdata1 = $link->query("SELECT cat_title, sum(cat_pages) as totalpages FROM category WHERE $filtername IN (SELECT DISTINCT rev_user FROM revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b) GROUP BY cat_title") -> result();
    		
    			//Número de ediciones, bytes y visitas para usuario en concreto
    			$cdata2 = $link->query("SELECT cl_to, count(rev_id) as edits, sum(page_len) as bytes, sum(page_counter) as visits FROM page, categorylinks, revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_page == page_id AND page_id == cl_from AND rev_user == $filtername GROUP BY cl_to ORDER BY cl_to ASC") -> result();
@@ -190,6 +194,8 @@ class Wiki_model extends CI_Model{
 		else{
 			//Realizamos consultas según filtrado
 			$cdata = $link->query("SELECT cat_title, cat_pages, cat_subcats FROM page, category WHERE page_id == cat_title AND page_namespace=14 AND page_id IN (SELECT DISTINCT rev_page FROM revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b)") -> result();
+			
+			$cdata1 = $link->query("SELECT cat_title,  sum(cat_pages) as totalpages FROM category, categorylinks, revision WHERE cl_to == cat_title AND cl_from IN (SELECT DISTINCT rev_page FROM revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b) GROUP BY cat_title") -> result();
    		
    			//Número de ediciones, bytes y visitas
    			$cdata2 = $link->query("SELECT cl_to, count(rev_id) as edits, sum(page_len) as bytes, sum(page_counter) as visits FROM page, categorylinks, revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_page == page_id AND page_id == cl_from GROUP BY cl_to ORDER BY cl_to ASC") -> result();
@@ -202,6 +208,10 @@ class Wiki_model extends CI_Model{
    		foreach($cdata as $row){
    			$catpages[$row->cat_title] = $row->cat_pages;		//número de páginas
    			$catsubcats[$row->cat_title] = $row->cat_subcats;	//número de subcategorías
+   		}
+   		
+   		foreach($cdata1 as $row){
+   			$catpages_per[$row->cl_to] = $catpages[$row->cl_to] / $row->totalpages;
    		}
    		
    		foreach($cdata2 as $row){
@@ -217,7 +227,7 @@ class Wiki_model extends CI_Model{
    		}
    		
    		//Devolvemos conjunto de vectores con índices definidos
-   		return array('catpages' => $catpages, 'catsubcats' => $catsubcats, 'catedits' => $catedits, 'catbytes' => $catbytes, 'catvisits' => $catvisits, 'catedits_per' => $catedits_per, 'catbytes_per' => $catbytes_per, 'catvisits_per' => $catvisits_per, 'filtertype' => $type, 'filtername' => $filtername);
+   		return array('catpages_per' => $catpages_per, 'catpages' => $catpages, 'catsubcats' => $catsubcats, 'catedits' => $catedits, 'catbytes' => $catbytes, 'catvisits' => $catvisits, 'catedits_per' => $catedits_per, 'catbytes_per' => $catbytes_per, 'catvisits_per' => $catvisits_per, 'filtertype' => $type, 'filtername' => $filtername);
    	}
    	
    	function fetch_images($wikiname, $date_range_a = 'default', $date_range_b = 'default', $filter_page = 'total', $filter_user = 'total', $filter_category = 'total'){
