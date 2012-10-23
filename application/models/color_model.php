@@ -62,7 +62,7 @@ class Color_model extends CI_Model{
 		}
    	}
    	
-   	function fetch_evaluations($colorname, $date_range_a => 'total', $date_range_b => 'total', $filter_user => 'total'){
+   	function fetch_evaluations($colorname, $date_range_a = 'total', $date_range_b = 'total', $filter_user = 'total'){
    	
    		//Establecemos conexión con la base de datos de la fuente
    		$link = $this->connection_model->connect($this->wconnection($colorname));
@@ -92,30 +92,31 @@ class Color_model extends CI_Model{
 		
 		//Aplicamos los filtros
 		if($type == 'user'){
-   			$cdata = $link->query("SELECT count(eva_id) as neval FROM evaluaciones WHERE eva_user == $filtername AND eva_time >= $date_range_a AND eva_time <= $date_range_b LIMIT 1")->result();
-   			$cdata2 = $link->query("SELECT avg(ee_nota) as avg_mark FROM evaluaciones, evaluaciones-entregables WHERE evaluaciones-entregables.eva_id == evaluaciones.eva_id AND eva_user == $filtername AND eva_time >= $date_range_a AND eva_time <= $date_range_b LIMIT 1")->result();
-   			$cdata3 = $link->query("SELECT count(rep_id) as replies_in FROM evaluaciones, replies WHERE rep_id == eva_id AND eva_user == $filtername AND eva_time >= $date_range_a AND eva_time <= $date_range_b LIMIT 1")->result();
-   			$cdata4 = $link->query("SELECT count(rep_id) as replies_out FROM evaluaciones, replies WHERE rep_id == eva_id AND eva_revisor == $filtername AND eva_time >= $date_range_a AND eva_time <= $date_range_b LIMIT 1")->result();
+   			$cdata = $link->query("SELECT eva_user, count(eva_id) as neval FROM evaluaciones WHERE eva_user == $filtername AND eva_time >= $date_range_a AND eva_time <= $date_range_b LIMIT 1")->result();
+   			$cdata2 = $link->query("SELECT eva_user, avg(ee_nota) as avg_mark FROM evaluaciones, evaluaciones-entregables WHERE evaluaciones-entregables.eva_id == evaluaciones.eva_id AND eva_user == $filtername AND eva_time >= $date_range_a AND eva_time <= $date_range_b LIMIT 1")->result();
+   			$cdata3 = $link->query("SELECT eva_user, count(rep_id) as replies_in FROM evaluaciones, replies WHERE rep_id == eva_id AND eva_user == $filtername AND eva_time >= $date_range_a AND eva_time <= $date_range_b LIMIT 1")->result();
+   			$cdata4 = $link->query("SELECT eva_user, count(rep_id) as replies_out FROM evaluaciones, replies WHERE rep_id == eva_id AND eva_revisor == $filtername AND eva_time >= $date_range_a AND eva_time <= $date_range_b LIMIT 1")->result();
    		}
    		else{
-			$cdata = $link->query("SELECT count(eva_id) as neval FROM evaluaciones WHERE eva_time >= $date_range_a AND eva_time <= $date_range_b LIMIT 1")->result();
-   			$cdata2 = $link->query("SELECT avg(ee_nota) as avg_mark FROM evaluaciones, evaluaciones-entregables WHERE evaluaciones-entregables.eva_id == evaluaciones.eva_id AND eva_time >= $date_range_a AND eva_time <= $date_range_b LIMIT 1")->result();
-   			$cdata3 = $link->query("SELECT count(rep_id) as replies_in FROM evaluaciones, replies WHERE rep_id == eva_id AND eva_time >= $date_range_a AND eva_time <= $date_range_b LIMIT 1")->result();
+			$cdata = $link->query("SELECT eva_user, count(eva_id) as neval FROM evaluaciones WHERE eva_time >= $date_range_a AND eva_time <= $date_range_b GROUP BY eva_user")->result();
+   			$cdata2 = $link->query("SELECT eva_user, avg(ee_nota) as avg_mark FROM evaluaciones, evaluaciones-entregables WHERE evaluaciones-entregables.eva_id == evaluaciones.eva_id AND eva_time >= $date_range_a AND eva_time <= $date_range_b GROUP BY eva_user")->result();
+   			$cdata3 = $link->query("SELECT eva_user, count(rep_id) as replies_in FROM evaluaciones, replies WHERE rep_id == eva_id AND eva_time >= $date_range_a AND eva_time <= $date_range_b GROUP BY eva_user")->result();
    		}
    		
    		//Formamos las variables a devolver con los datos de las consultas y devolvemos los datos
    		foreach($cdata as $row)
-   			$neval = $row->neval;
+   			$neval[$row->eva_user] = $row->neval;
    		
    		foreach($cdata2 as $row)
-   			$avg_mark = $row->avg_mark;
+   			$avg_mark[$row->eva_user] = $row->avg_mark;
    		
    		foreach($cdata3 as $row)
-   			$rep_in = $row->replies_in;
+   			$rep_in[$row->eva_user] = $row->replies_in;
    		
    		if(isset($cdata4)){
 			foreach($cdata4 as $row)
-				$rep_out = $row->replies_out;
+				$rep_out[$row->eva_user] = $row->replies_out;
+				
 			return array('neval' => $neval, 'avg_mark' => $avg_mark, 'rep_in' => $rep_in, 'rep_out' => $rep_out);
 		}
 		else

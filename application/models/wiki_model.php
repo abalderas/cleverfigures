@@ -99,7 +99,7 @@ class Wiki_model extends CI_Model{
 			return $this->db->insert_id();
    	}
    	
-   	function fetch_category_links($wikiname, $date_range_a => 'default', $date_range_b => 'default'){
+   	function fetch_category_links($wikiname, $date_range_a = 'default', $date_range_b = 'default'){
    		//Establecemos conexión con la base de datos de la wiki
    		$link = $this->connection_model->connect($this->wconnection($wikiname));
    		
@@ -134,7 +134,7 @@ class Wiki_model extends CI_Model{
    		
    	}
    	
-   	function fetch_categories($wikiname, $date_range_a => 'default', $date_range_b => 'default', $filter_page => 'total', $filter_user => 'total'){
+   	function fetch_categories($wikiname, $date_range_a = 'default', $date_range_b = 'default', $filter_page = 'total', $filter_user = 'total'){
    	
    		//Establecemos conexión con la base de datos de la wiki
    		$link = $this->connection_model->connect($this->wconnection($wikiname));
@@ -217,10 +217,10 @@ class Wiki_model extends CI_Model{
    		}
    		
    		//Devolvemos conjunto de vectores con índices definidos
-   		return array('catpages' => $catpages, 'catsubcats' => $catsubcats, 'catedits' => $catedits, 'catbytes' => $catbytes, 'catvisits' => $catvisits, 'catedits_per' => $catedits_per, 'catbytes_per' => $catbytes_per, 'catvisits_per' => $catvisits_per, 'cattype' => $type, 'catfiltername' => $filtername);
+   		return array('catpages' => $catpages, 'catsubcats' => $catsubcats, 'catedits' => $catedits, 'catbytes' => $catbytes, 'catvisits' => $catvisits, 'catedits_per' => $catedits_per, 'catbytes_per' => $catbytes_per, 'catvisits_per' => $catvisits_per, 'filtertype' => $type, 'filtername' => $filtername);
    	}
    	
-   	function fetch_images($wikiname, $date_range_a => 'default', $date_range_b => 'default', $filter_page => 'total', $filter_user => 'total', $filter_category => 'total'){
+   	function fetch_images($wikiname, $date_range_a = 'default', $date_range_b = 'default', $filter_page = 'total', $filter_user = 'total', $filter_category = 'total'){
    	
    		//Establecemos conexión con la base de datos de la wiki
    		$link = $this->connection_model->connect($this->wconnection($wikiname));
@@ -283,10 +283,10 @@ class Wiki_model extends CI_Model{
    		}
    		
    		//Devolvemos conjunto de vectores con índices definidos
-   		return array('imgsizes' => $imgsizes, 'imgtimes' => $imgtimes, 'imgusers' => $imgusers, 'imgtexts' => $imgtexts);
+   		return array('imgsizes' => $imgsizes, 'imgtimes' => $imgtimes, 'imgusers' => $imgusers, 'imgtexts' => $imgtexts, 'filtertype' => $type, 'filtername' => $filtername);
    	}
    	
-   	function fetch_users($wikiname, $date_range_a => 'default', $date_range_b => 'default', $filter_page => 'total', $filter_category => 'total'){
+   	function fetch_users($wikiname, $date_range_a = 'default', $date_range_b = 'default', $filter_page = 'total', $filter_category = 'total'){
    	
    		//Establecemos conexión con la base de datos de la wiki
    		$link = $this->connection_model->connect($this->wconnection($wikiname));
@@ -326,6 +326,9 @@ class Wiki_model extends CI_Model{
    			//Número de ediciones y bytes para página en concreto
    			$cdata2 = $link->query("SELECT user_name, count(rev_id) as edits, sum(rev_len) as bytes FROM user, revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_page == $filtername AND rev_user == user_id GROUP BY user_name ORDER BY user_name ASC") -> result();
    			
+   			//Este no se usará, lo creamos para poder incluirlo en el resultado y mantener la estructura del array devuelto
+   			$cdata22 = array();
+   			
    			//Número de uploads para página en concreto
    			$cdata3 = $link->query("SELECT user_name, count(img_id) FROM user, image, imagelinks WHERE user_id == img_user AND img_name == il_to AND il_from == $filtername AND img_timestamp>=$date_range_a AND img_timestamp<=$date_range_b GROUP BY user_name ORDER BY user_name ASC") -> result();
    			
@@ -342,6 +345,11 @@ class Wiki_model extends CI_Model{
    			//Número de ediciones y bytes para categoría en concreto
    			$cdata2 = $link->query("SELECT user_name, count(rev_id) as edits, sum(rev_len) as bytes FROM user, revision, categorylinks WHERE rev_user == user_id AND rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_page == cl_from AND cl_to == $filtername GROUP BY user_name ORDER BY user_name ASC") -> result();
    			
+   			//Número de ediciones y bytes de artículos para categoría en concreto
+   			$cdata22 = $link->query("SELECT user_name, count(rev_id) as edits, sum(rev_len) as bytes FROM user, revision, categorylinks, page WHERE rev_user == user_id AND rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_page == cl_from AND cl_to == $filtername AND rev_page == page_id AND page_namespace == 0 GROUP BY user_name ORDER BY user_name ASC") -> result();
+   			
+   			$cdata22 = $link->query("SELECT user_name, count(rev_id) as edits, sum(rev_len) as bytes FROM user, revision, page WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_page == $filtername AND rev_user == user_id AND rev_page == page_id AND page_namespace == 0 GROUP BY user_name ORDER BY user_name ASC") -> result();
+   			
    			//Número de uploads para categoría en concreto
    			$cdata3 = $link->query("SELECT user_name, count(img_id) FROM user, image, imagelinks, categorylinks, revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_user == user_id AND user_id == img_user AND img_name == il_to AND il_from == cl_from AND cl_to == $filtername AND img_timestamp>=$date_range_a AND img_timestamp<=$date_range_b GROUP BY user_name ORDER BY user_name ASC") -> result();
    			
@@ -357,6 +365,9 @@ class Wiki_model extends CI_Model{
    			
    			//Número de ediciones y bytes
    			$cdata2 = $link->query("SELECT user_name, count(rev_id) as edits, sum(rev_len) as bytes FROM user, revision WHERE rev_user == user_id AND rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b GROUP BY user_name ORDER BY user_name ASC") -> result();
+   			
+   			//Número de ediciones y bytes de artículos
+   			$cdata22 = $link->query("SELECT user_name, count(rev_id) as edits, sum(rev_len) as bytes FROM user, revision, page WHERE rev_user == user_id AND rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b GROUP BY user_name AND rev_page == page_id AND page_namespace == 0 ORDER BY user_name ASC") -> result();
    			
    			//Número de uploads
    			$cdata3 = $link->query("SELECT user_name, count(img_id) as images FROM user, image WHERE user_id == img_user AND img_timestamp>=$date_range_a AND img_timestamp<=$date_range_b GROUP BY user_name ORDER BY user_name ASC") -> result();
@@ -379,13 +390,20 @@ class Wiki_model extends CI_Model{
    			$userbytes[$row->user_name] = $row->bytes;			//bytes
    		}
    		
+   		foreach($cdata22 as $row){
+   			$useredits_art[$row->user_name] = $row->edits;			//número de ediciones de artículos
+   			$userbytes_art[$row->user_name] = $row->bytes;			//bytes de artículos
+   		}
+   		
    		foreach($cdata3 as $row){
    			$useruploads[$row->user_name] = $row->images;			//número de visitas
    		}
    		
    		foreach($totals as $row){
-   			$useredits_per[$row->user_name] = $useredits[$row->user_name]/$row->totaledits;		//porcentaje de ediciones sobre el total (depende del filtro)
-   			$userbytes_per[$row->user_name] = $userbytes[$row->user_name]/$row->totalbytes;		//porcentaje de bytes sobre el total (depende del filtro)
+   			$useredits_per[$row->user_name] = $useredits[$row->user_name]/$row->totaledits;			//porcentaje de ediciones sobre el total (depende del filtro)
+   			$userbytes_per[$row->user_name] = $userbytes[$row->user_name]/$row->totalbytes;			//porcentaje de bytes sobre el total (depende del filtro)
+   			$useredits_art_per[$row->user_name] = $useredits_art[$row->user_name]/$row->totaledits;		//porcentaje de ediciones sobre el total (depende del filtro)
+   			$userbytes_art_per[$row->user_name] = $userbytes_art[$row->user_name]/$row->totalbytes;		//porcentaje de bytes sobre el total (depende del filtro)
    		}
    		
    		foreach($totaluploads as $row){
@@ -393,10 +411,10 @@ class Wiki_model extends CI_Model{
    		}
    		
    		//Devolvemos conjunto de vectores con índices definidos
-   		return array('userrealname' => $userrealname, 'userreg' => $userreg, 'useredits' => $useredits, 'userbytes' => $userbytes, 'useruploads' => $useruploads, 'useredits_per' => $useredits_per, 'userbytes_per' => $userbytes_per, 'useruploads_per' => $useruploads_per);
+   		return array('userrealname' => $userrealname, 'userreg' => $userreg, 'useredits' => $useredits, 'userbytes' => $userbytes, 'useruploads' => $useruploads, 'useredits_per' => $useredits_per, 'userbytes_per' => $userbytes_per, 'useredits_art' => $useredits_art, 'userbytes_art' => $userbytes_art, 'useredits_art_per' => $useredits_art_per, 'userbytes_art_per' => $userbytes_art_per, 'useruploads_per' => $useruploads_per, 'filtertype' => $type, 'filtername' => $filtername);
    	}
    	
-   	function fetch_pages($wikiname, $date_range_a => 'default', $date_range_b => 'default', $filter_user => 'total'){
+   	function fetch_pages($wikiname, $date_range_a = 'default', $date_range_b = 'default', $filter_user = 'total'){
    	
    		//Establecemos conexión con la base de datos de la wiki
    		$link = $this->connection_model->connect($this->wconnection($wikiname));
@@ -483,17 +501,17 @@ class Wiki_model extends CI_Model{
    		}
    		
    		//Devolvemos conjunto de vectores con índices definidos
-   		return array('pagenamespace' => $pagenamespace, 'pageedits' => $pageedits, 'pagebytes' => $pagebytes, 'pagevisits' => $pagevisits, 'pageuploads' => $pageuploads, 'pageedits_per' => $pageedits_per, 'pagebytes_per' => $pagebytes_per, 'pageuploads_per' => $pageuploads_per);
+   		return array('pagenamespace' => $pagenamespace, 'pageedits' => $pageedits, 'pagebytes' => $pagebytes, 'pagevisits' => $pagevisits, 'pageuploads' => $pageuploads, 'pageedits_per' => $pageedits_per, 'pagebytes_per' => $pagebytes_per, 'pageuploads_per' => $pageuploads_per, 'filtertype' => $type, 'filtername' => $filtername);
    	}
    	
-   	function delete_wiki(){
+   	function delete_wiki($wikiname){
    		//Comprobamos que existe y devuelve error si no
-   		$check = $this->db->query("select * from Wiki where wiki_id == $this->wiki_id");
+   		$check = $this->db->query("select * from wiki where wiki_name == $wikiname");
    		if($check->result()->num_rows() == 0)
-   			die("delete_wiki(): Wiki $this->wiki_id doesn't exist.");
+   			return "delete_wiki(): NONEXISTENT";
    		else
    			//Elimina la wiki de la base de datos
-   		 	$this->db->delete('Wiki', array('wiki_id' => $this->wiki_id));
+   		 	$this->db->delete('wiki', array('wiki_name' => $wikiname));
    	}
 }
 
