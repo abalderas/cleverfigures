@@ -10,8 +10,8 @@
 	<!--Loads information with the name of the analised wiki and the license-->
 	<div id = "info"> 
 		<div id = "wiki"> CleverFigures : <?=$wikiname?> </div> 
-		<div id = "contact"> <a href = "mailto:alvaro.almagrodoello@alum.uca.es"> <?=$i18n_contact?> </a> </div>
-		<div id = "license"> <?=$i18n_license?> </div>
+		<div id = "contact"> <a href = "mailto:alvaro.almagrodoello@alum.uca.es"> <?=lang('i18n_contact')?> </a> </div>
+		<div id = "license"> <?=lang('i18n_license')?> </div>
 	</div>
 	
 	<!--Shows misc-->

@@ -1,5 +1,5 @@
 <!--
-	INPUT: i18n_language, i18n_spanish, i18n_english, i18n_french, i18n_german, i18n_russian, i18n_save_conf
+	INPUT: $wikis, $colors
 	OUTPUT: configuration_form(select_language, save_conf, select_color, select_wiki)
 -->
 
@@ -7,32 +7,29 @@
 
 <?	
 echo form_open('configuration_form');
-	echo "<h3>$i18n_language</h3><br>";
+	echo "<h3>".lang('i18n_language')."</h3><br>";
 
 	$languages = array(
-                  'spanish'  => $i18n_spanish,
-                  'english'    => $i18n_english,
-                  'french'   => $i18n_french,
-                  'russian' => $i18n_russian,
-                  'german' => $i18n_german,
-                );
+           	'spanish'  => lang('i18n_spanish'),
+                'english'    => lang('i18n_english'),
+                'french'   => lang('i18n_french'),
+                'russian' => lang('i18n_russian'),
+                'german' => lang('i18n_german'),
+             );
    
 	echo form_dropdown('select_language', $languages, 'english');
 	echo '<br>';
 	
-	echo "<h3>$i18n_data_origin</h3><br>";
+	echo "<h3>".lang('i18n_data_origin')."</h3><br>";
 	echo form_label('Wiki', 'select_wiki');
-	echo form_dropdown('select_wiki', $languages);
+	echo form_dropdown('select_wiki', $wikis);
 	echo '<br>';
 	
-	echo form_label($i18n_qualitative_data_origin, 'select_color');
-	echo form_dropdown('select_color', $languages);
+	echo form_label(lang('i18n_qualitative_data_origin'), 'select_color');
+	echo form_dropdown('select_color', $colors);
 	echo '<br>';
 	
-	echo form_submit('save_conf', $i18n_save_conf);
+	echo form_submit('save_conf', lang('i18n_save_conf'));
 
-	//[1]
 echo form_close();
 ?>
-
-<!--[1] TO_DO: add more, be carefull, one more up there in the initial comment-->

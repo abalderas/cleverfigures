@@ -4,25 +4,25 @@
 -->
 
 <?
-echo $i18n_installation_intro;
+echo lang('i18n_installation_intro');
 
-echo "<h3>$i18n_create_user</h3>";
+echo "<h3>".lang('i18n_create_user')."</h3>";
 echo form_open('create_user_form');
 <table cellspacing="0" cellpadding="5" border="0">
 	<tr>
-		<td class="fieldbox"><?=$i18n_email?>:</td>
+		<td class="fieldbox"><?=lang('i18n_email')?>:</td>
 		<td><?= form_input('email') ?></td>
 	</tr>
 	<tr>
-		<td class="fieldbox"><?=$i18n_username?>:</td>
+		<td class="fieldbox"><?=lang('i18n_username')?>:</td>
 		<td><?= form_input('username') ?></td>
 	</tr>
 	<tr>
-		<td class="fieldbox"><?=$i18n_password?>:</td>
+		<td class="fieldbox"><?=lang('i18n_password')?>:</td>
 		<td><?= form_password('password') ?></td>
 	</tr>
 	<tr>
-		<td class="fieldbox"><?=$i18n_retype_password?>:</td>
+		<td class="fieldbox"><?=lang('i18n_retype_password')?>:</td>
 		<td><?= form_password('retype_password') ?></td>
 	</tr>
 	<tr>

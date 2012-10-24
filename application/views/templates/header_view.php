@@ -14,14 +14,14 @@
 		<? 
 			if($this->session->userdata('user_username')){
 				echo "<td>$this->session->userdata('user_realname')</td>";
-				echo "<td>$i18n_configuration</td>";
-				echo "<td>$i18n_view_results</td>";
-				echo "<td>$i18n_analise</td>";
-				echo "<td>$i18n_about</td>";
+				echo "<td>".lang('i18n_configuration')."</td>";
+				echo "<td>".lang('i18n_view_results')."</td>";
+				echo "<td".lang('i18n_analise')."</td>";
+				echo "<td>".lang('i18n_about')."</td>";
 			}
 			else{
-				echo "<td>$i18n_login</td>";
-				echo "<td>$i18n_about</td>";
+				echo "<td>".lang('i18n_login')."</td>";
+				echo "<td>".lang('i18n_about')."</td>";
 			}
 		?>
 	</tr>

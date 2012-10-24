@@ -109,7 +109,8 @@ class User_model extends CI_Model{
       		if($query -> num_rows() == 1){
       			foreach($query->result() as $row) 
         			$sess_array = array('user_username' => $row -> user_username,
-        						'user_language' => $row->user_language); 
+        						'user_language' => $row->user_language,
+        						'user_realname' => $row->user_realname); 
             		$this -> session -> set_userdata('logged_in', $sess_array);
             		return true;
       		}
