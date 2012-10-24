@@ -19,9 +19,6 @@ class Wiki_model extends CI_Model{
    		//Llamamos al constructor heredado.
    	   	parent::__construct();
    	   	
-   	   	//Cargamos helpers
-   	   	$this->load->helper('date');
-   	   	
    	   	//Cargamos models necesarios
    	   	$ci =& get_instance();
 		$ci->load->model('connection_model');

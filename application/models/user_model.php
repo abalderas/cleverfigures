@@ -1,129 +1,106 @@
 <?php
 
-//METHODS
-// 	Users_model()
-//    	username()
-//    	password()
-//    	last_session()
-//    	realname()
-//    	email()
-//    	active_wiki()
-//    	active_color()
-//    	language()
-//    	set_user_data($id, $name, $pass, $email_address, $user_wiki, $user_color, $lang)
-//    	update_last_session()
-//    	update_language($lang)
-//    	update_wiki($wiki)
-//    	update_color($color)
-//    	login()
-//    	save_user()
-//    	delete_user()
-
 
 class User_model extends CI_Model{
 
-	//ATTIRBUTES
-	private $user_username;
-	private $user_password;
-	private $user_last_session;
-	private $user_realname;
-	private $user_email;
-	private $user_active_wiki;
-	private $user_active_color;
-	private $user_language;
-	
 	//METHODS
 	//constructor
-   	function Users_model(){
+   	function User_model(){
    	   	parent::__construct();
-   	   	$this->load->helper('date');
-   	   	
-   	   	$user_username = 'default';
-   	   	$user_password = 'default';
-		$user_last_session = 0;
-		$user_realname = 'default';
-		$user_email = 'default';
-		$user_active_wiki = 'default';
-		$user_active_color = 'default';
-		$user_language = 'default';
    	}
-   	
-   	//reading methods
-   	function username(){return $this->user_username;}
-   	function password(){return $this->user_password;}
-   	function last_session(){return $this->user_last_session;}
-   	function realname(){return $this->user_realname;}
-   	function email(){return $this->user_email;}
-   	function active_wiki(){return $this->user_active_wiki;}
-   	function active_color(){return $this->user_active_color;}
-   	function language(){return $this->user_language;}
-   	function language(){return $this->user_databases;}
    	
    	//writing methods
-   	function set_user_data($id, $name, $pass, $email_address, $user_wiki, $user_color, $lang, $dbs){
-   		$this->user_username = $id;
-   		$this->user_password = $pass;
-   		$this->user_last_session = now();
-   		$this->user_realname = $name;
-   		$this->user_email = $email_address;
-   		$this->user_active_wiki = $user_wiki;
-   		$this->user_active_color = $user_color;
-   		$this->user_language = $lang;
-   		$this->user_databases = $dbs;
+   	function new_user($uname, $pass, $date, $rname, $mail){
+   		$check = $this->db->query("select * from user where user_username == $uname");
+   		if($check->result()->num_rows() != 0)
+   			return "new_user(): ERR_ALREADY_EXISTS";
+   		else{
+   			$sql = array('user_username' => $uname,
+   					'user_password' => MD5($pass),
+   					'user_last_session' => $date,
+   					'user_realname' => $rname,
+   					'user_email' => $mail,
+   					'user_language' => $this->session->userdata('user_language')
+   				);
+	
+			$this->db->insert('user', $sql);
+		
+			if($this->db->affected_rows() != 1) 
+				return "ERR_AFFECTED_ROWS";
+			else 
+				return true;
+		}
    	}
    	
-   	function update_last_session(){
+   	function update_last_session($uname){
    		$data = array('user_last_session' => now());
-		$this->db->where('user_username', $this->user_username);
-		$this->db->update('User', $data); 
+		$this->db->where('user_username', $uname);
+		$this->db->update('user', $data); 
    	}
    	
-   	function update_language($lang){
+   	function update_language($uname, $lang){
    		$data = array('user_language' => $lang);
-		$this->db->where('user_username', $this->user_username);
-		$this->db->update('User', $data); 
+		$this->db->where('user_username', $uname);
+		$this->db->update('user', $data); 
    	}
    	
-   	function add_database($dbid){
-   		$query = $this->db->query("select * from Database where database_id == $dbid");
+   	function relate_wiki($wikiname){
+   		$query = $this->db->query("select * from wiki where wiki_name == $wikiname");
    		if($query->result()->num_rows() != 0){
-   			$sql = array('user_username' => "$this->user_username",
-   					'database_id' => "$dbid"
+   			$sql = array('user_username' => $this->session->userdata('user_username');,
+   					'wiki_name' => "$wikiname"
    				);
 	
-			$this->db->insert('User-Database', $sql);
+			$this->db->insert('user-wiki', $sql);
 		
 			if($this->db->affected_rows() != 1) 
-				die("add_database($dbid): Error relating database $dbid to user $this->user_username.");
+				return "relate_wiki(): ERR_AFFECTED_ROWS";
 			else return TRUE;
 		}
    		else
-   			die("add_database($dbid): Database $dbid not found.");
+   			return "relate_wiki(): ERR_ALREADY_EXISTS";
    	}
    	
-   	function add_analisis($a_id){
-   		$query = $this->db->query("select * from Analisis where analisis_id == $a_id");
+   	function relate_color($colorname){
+   		$query = $this->db->query("select * from color where color_name == $colorname");
    		if($query->result()->num_rows() != 0){
-   			$sql = array('user_username' => "$this->user_username",
-   					'analisis_id' => "$a_id",
+   			$sql = array('user_username' => $this->session->userdata('user_username');,
+   					'color_name' => "$colorname"
    				);
 	
-			$this->db->insert('User-Analisis', $sql);
+			$this->db->insert('user-color', $sql);
 		
 			if($this->db->affected_rows() != 1) 
-				die("add_analisis($a_id): Error relating analisis $a_id to user $this->user_username.");
+				return "relate_color(): ERR_AFFECTED_ROWS";
 			else return TRUE;
 		}
    		else
-   			die("add_analisis($a_id): Analisis $a_id not found.");
+   			return "relate_color(): ERR_ALREADY_EXISTS";
+   	}
+   	
+   	function relate_analisis($analisis){
+   		$query = $this->db->query("select * from analisis where analisis_id == $analisis");
+   		if($query->result()->num_rows() != 0){
+   			$sql = array('user_username' => "$this->user_username",
+   					'analisis_id' => "$analisis",
+   				);
+	
+			$this->db->insert('user-analisis', $sql);
+		
+			if($this->db->affected_rows() != 1) 
+				return "relate_analisis(): ERR_AFFECTED_ROWS";
+			else return TRUE;
+		}
+   		else
+   			return "relate_analisis(): ERR_ALREADY_EXISTS";
    	}
    	
    	//login methods
-   	function login(){
+   	function login($uname, $pass){
    		$this -> db -> select('user_username') 
       		  -> from('user') 
-      		  -> where('user_username = ' . "'" . $this->user_username . "'") 
-      		  -> where('user_password = ' . "'" . $this->user_password . "'") 
+      		  -> where('user_username = ' . "'" . $uname . "'") 
+      		  -> where('user_password = ' . "'" . MD5($pass) . "'") 
       		  -> limit(1);
    
       		$this->db->flush_cache();
@@ -141,34 +118,15 @@ class User_model extends CI_Model{
    	}
    	
    	//save & delete methods
-   	function save_user(){
-   		$check = $this->db->query("select * from user where user_username == $this->user_username");
-   		if($check->result()->num_rows() != 0)
-   			return false;
-   		else{
-   			$sql = array('user_username' => "$this->user_username",
-   					'user_password' => "$this->user_password",
-   					'user_last_session' => "$this->user_last_session",
-   					'user_realname' => "$this->user_realname",
-   					'user_email' => "$this->user_email",
-   					'user_configuration' => "$this->user_configuration"
-   				);
-	
-			$this->db->insert('User', $sql);
-		
-			if($this->db->affected_rows() != 1) 
-				return false;
-			else 
-				return true;
-		}
-   	}
    	
    	function delete_user(){
-   		$check = $this->db->query("select * from User where user_username == $this->user_username");
+   		$check = $this->db->query("select * from user where user_username == ".$this->session->userdata('user_username'));
    		if($check->result()->num_rows() == 0)
-   			return false;
+   			return "delete(): ERR_NONEXISTENT";
    		else
-   		 	$this->db->delete('User', array('user_username' => $this->user_username)); 
+   		 	$this->db->delete('user', array('user_username' => $this->session->userdata('user_username')));
+   		 	
+   		 	$this->session->sess_destroy();
    		 	return true;
    	}
 }

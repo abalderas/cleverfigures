@@ -52,6 +52,9 @@ class Analisis_model extends CI_Model{
 		//Comprobamos que la insertación se hizo con éxito
 		if($this->db->affected_rows() != 1) 
 			return "perform_analisis(): ERR_AFFECTED_ROWS (".$this->db->affected_rows().")";
+			
+		//Devolvemos el nombre del analisis
+		return $analisis;
    	}
    	
    	function delete_analisis($analisis){
