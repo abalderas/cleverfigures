@@ -121,6 +121,36 @@ class Color_model extends CI_Model{
    		
    	}
    	
+   	function fetch_quality_evolution($colorname, $filter_user = 'default'){
+   	
+   		//Establecemos conexión con la base de datos de la fuente
+   		$link = $this->connection_model->connect($this->wconnection($colorname));
+   		
+   		if($filter_user != 'default'){
+			$type = 'user';
+			$filtername = $filter_category;
+		}
+		else{
+			$type = 'default';
+			$filtername = 'default';
+		}
+		
+		//Aplicamos los filtros
+		if($type == 'user'){
+   			$cdata2 = $linkc->query("SELECT eva_revision, avg(ee_nota) as average FROM evaluaciones, evaluaciones_entregables WHERE eva_id == evaluaciones_entregables.eva_id AND eva_user == $filtername GROUP BY eva_revision") -> result();
+   		}
+   		else{
+			$cdata2 = $linkc->query("SELECT eva_revision, avg(ee_nota) as average FROM evaluaciones, evaluaciones_entregables WHERE eva_id == evaluaciones_entregables.eva_id GROUP BY eva_revision") -> result();
+   		}
+   		
+   		//Formamos las variables a devolver con los datos de las consultas y devolvemos los datos
+   		foreach($cdata2 as $row)
+			$qualityevolution[$row->eva_revision] = $row->average;
+			
+		return $qualityevolution;
+   		
+   	}
+   	
    	function delete_color($colorname){
    		//Comprobamos que existe y devuelve error si no
    		$check = $this->db->query("select * from color where color_name == $colorname");

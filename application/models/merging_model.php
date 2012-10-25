@@ -98,7 +98,7 @@ class Merging_model extends CI_Model{
 		return TRUE;
    	}
    	
-   	function save_pages($wikiname, $analisis, $colorname = 'default', $date_range_a = 'default', $date_range_b = 'default', $filter_user = 'default'){
+   	function save_pages($wikiname, $analisis, /*$colorname = 'default',*/ $date_range_a = 'default', $date_range_b = 'default', $filter_user = 'default'){
 		//Fetching pages info from wiki
 		$wikidata = $this->wiki_model->fetch_pages($wikiname, $date_range_a, $date_range_b, $filter_user);
 		
@@ -138,7 +138,7 @@ class Merging_model extends CI_Model{
 		return TRUE;
    	}
    	
-   	function save_categories($wikiname, $analisis, $colorname = 'default', $date_range_a = 'default', $date_range_b = 'default', $filter_page = 'default', $filter_user = 'default'){
+   	function save_categories($wikiname, $analisis, /*$colorname = 'default',*/ $date_range_a = 'default', $date_range_b = 'default', $filter_page = 'default', $filter_user = 'default'){
 		//Fetching cats info from wiki
 		$wikidata = $this->wiki_model->fetch_categories($wikiname, $date_range_a, $date_range_b, $filter_page, $filter_user);
 		
@@ -179,7 +179,7 @@ class Merging_model extends CI_Model{
 		return TRUE;
    	}
    	
-   	function save_images($wikiname, $analisis, $colorname = 'default', $date_range_a = 'default', $date_range_b = 'default', $filter_page = 'default', $filter_user = 'default', $filter_category = 'default'){
+   	function save_images($wikiname, $analisis, /*$colorname = 'default',*/ $date_range_a = 'default', $date_range_b = 'default', $filter_page = 'default', $filter_user = 'default', $filter_category = 'default'){
 		//Fetching images info from wiki
 		$wikidata = $this->wiki_model->fetch_images($wikiname, $date_range_a, $date_range_b, $filter_user, $filter_page, $filter_category);
 		
@@ -187,7 +187,7 @@ class Merging_model extends CI_Model{
 		if(gettype($wikidata) == "string")
 			return "save_images(): $wikidata";
 		
-		//Creating list of user names
+		//Creating list of images names
 		foreach(array_keys($wikidata['imgsizes']) as $key)
 			$imgnames[] = $key;
 		
@@ -245,6 +245,41 @@ class Merging_model extends CI_Model{
 // 				$this->db->insert('wuser', $sql);
 // 			}
 // 		}
+		
+		return TRUE;
+   	}
+   	
+   	function save_content_evolution($wikiname, $analisis, $colorname = 'default', $date_range_a = 'default', $date_range_b = 'default', $filter_user = 'default', $filter_page = 'default', $filter_category = 'default'){
+		//Fetching images info from data bases
+		$wikidata = $this->wiki_model->fetch_content_evolution($wikiname, $date_range_a, $date_range_b, $filter_user, $filter_page, $filter_category);
+		
+		$colordata = $this->color_model->fetch_quality_evolution($colorname, $filter_user);
+		
+		//Check no errors
+		if(gettype($wikidata) == "string")
+			return "save_content_evolution(): $wikidata";
+		if(gettype($colordata) == "string")
+			return "save_content_evolution(): $colordata";
+		
+		//Inserting data
+		foreach(array_keys($wikidata[]) as $key){
+			$sql = array(
+				'da_id' => $analisis."contentevolution",
+				'da_s1' => $key,
+				'da_s2' => $wikidata[$key],
+				'da_s3' => $colordata[$key]
+   				);
+   				
+			$this->db->insert('data', $sql);
+		}
+			
+		//Registering chart
+		$sql = array(
+			'ch_id' => $analisis."contentevolution",
+			'ch_title' => lang('content_evolution'),
+			'ch_type' => "combo");
+		
+		$this->db->insert('chart', $sql);
 		
 		return TRUE;
    	}

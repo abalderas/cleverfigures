@@ -280,23 +280,29 @@ function draw_tag_cloud($tags){
 
 //CONTENT CHARTS
 
-function draw_content_evolution_chart($analisis, $filter_mindate => 'default', $filter_maxdate => 'default', $filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){
-	//Retrieve data from chart table
+function draw_content_evolution_chart($analisis){
+	$datasource = $analisis."contentevolution";
+	$query = $this->db->query("SELECT * FROM data WHERE da_id == \"$datasource\" ORDER BY da_s1 ASC");
 	
-	$mindate['year'] = ;
-	$mindate['month'] = ;
-	$mindate['day'] = ;
-	$mindate['hour'] = ;
-	
-	$maxdate['year'] = ;
-	$maxdate['month'] = ;
-	$maxdate['day'] = ;
-	$maxdate['hour'] = ;
-	
-	$data = ;
-	
-	//Put data into correct format
-	//Draw chart
+	echo "
+		var datace = google.visualization.arrayToDataTable([";
+			echo "[".lang('date').",".lang('bytes').",".lang('average_mark')."]";
+			foreach($query->result() as $row)
+				echo "[".$row->da_s1.",".$row->da_s2.",".$row->da_s3."]";
+		echo "]);
+
+		var acce = new google.visualization.ComboChart(document.getElementById('content_evolution'));
+		acce.draw(datace, {
+			title : ".lang('content_evolution').",
+			width: 600,
+			height: 400,
+			vAxis: {title: ".lang('bytes')."},
+			hAxis: {title: ".lang('date')."},
+			seriesType: \"bars\",
+			series: {1: {type: \"line\"}}
+			});
+		}";
+	return "<div id=\"content_evolution\" style=\"width: 600px; height: 400px;\"></div>";
 }
 
 function draw_activity_hour_chart($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){} //stacked bars
