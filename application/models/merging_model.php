@@ -18,6 +18,36 @@ class Merging_model extends CI_Model{
 		$co->load->model('color_model');
    	}
    	
+   	function save_general_stats($wikiname, $analisis){
+   		//Establecemos conexión con la base de datos de la wiki
+   		$link = $this->connection_model->connect($this->wconnection($wikiname));
+   		
+   		//Consultamos a la tabla de estadísticas
+   		$result = $link->query("SELECT * FROM site_stats") -> result();
+   		
+   		//Generamos un vector con los resultados.
+   		foreach($result as $row){
+   			$sql = array('wgen_id' => '',
+   					'wgen_total_views' => "$row->ss_total_views",
+   					'wgen_total_edits' => "$row->ss_total_edits",
+   					'wgen_good_articles' => "$row->ss_good_articles",
+   					'wgen_total_peges' => "$row->ss_total_pages",
+   					'wgen_users' => "$row->ss_users",
+   					'wgen_active_users' => "$row->ss_active_users",
+   					'wgen_admins' => "$row->ss_admins",
+   					'wgen_images' => "$row->ss_images",
+   					'wgen_analisis' => "$analisis"
+   				);
+			}
+			
+		//Lo insertamos en nuestro análisis
+		$this->db->insert('wgeneral', $sql);
+		
+		//Comprobamos que la inserción se hizo con éxito
+		if($this->db->affected_rows() != 1) 
+			return "fetch_general_stats(): ERR_AFFECTED_ROWS (".$this->db->affected_rows().")";
+   	}
+   	
    	function merge_save_users($wikiname, $analisis, $colorname = 'default', $date_range_a = 'default', $date_range_b = 'default', $filter_page = 'default', $filter_category = 'default'){
 		//Fetching users info from wiki
 		$wikidata = $this->wiki_model->fetch_users($wikiname, $date_range_a, $date_range_b, $filter_page, $filter_category);
@@ -260,6 +290,44 @@ class Merging_model extends CI_Model{
 			return "save_content_evolution(): $wikidata";
 		if(gettype($colordata) == "string")
 			return "save_content_evolution(): $colordata";
+		
+		//Inserting data
+		foreach(array_keys($wikidata[]) as $key){
+			$sql = array(
+				'da_id' => $analisis."contentevolution",
+				'da_s1' => $key,
+				'da_s2' => $wikidata[$key],
+				'da_s3' => $colordata[$key]
+   				);
+   				
+			$this->db->insert('data', $sql);
+		}
+			
+		//Registering chart
+		$sql = array(
+			'ch_id' => $analisis."contentevolution",
+			'ch_title' => lang('content_evolution'),
+			'ch_type' => "combo");
+		
+		$this->db->insert('chart', $sql);
+		
+		return TRUE;
+   	}
+   	
+   	function save_activity($wikiname, $analisis, $colorname = 'default', $date_range_a = 'default', $date_range_b = 'default', $filter_user = 'default', $filter_page = 'default', $filter_category = 'default'){
+		//Fetching images info from data bases
+		$wikidata = $this->wiki_model->fetch_activity($wikiname, $date_range_a, $date_range_b, $filter_user, $filter_page, $filter_category);
+		
+		$colordata = $this->color_model->fetch_activity($colorname, $filter_user);
+		
+		//Check no errors
+		if(gettype($wikidata) == "string")
+			return "save_activity(): $wikidata";
+		if(gettype($colordata) == "string")
+			return "save_activity(): $colordata";
+			
+		//Calculating data
+		//////////////////////////////////////////////////////////////////
 		
 		//Inserting data
 		foreach(array_keys($wikidata[]) as $key){

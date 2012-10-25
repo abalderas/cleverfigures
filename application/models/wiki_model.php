@@ -64,36 +64,6 @@ class Wiki_model extends CI_Model{
 		}
    	}
    	
-   	function fetch_general_stats($wikiname, $analisis){
-   		//Establecemos conexión con la base de datos de la wiki
-   		$link = $this->connection_model->connect($this->wconnection($wikiname));
-   		
-   		//Consultamos a la tabla de estadísticas
-   		$result = $this->connection_model->query("SELECT * FROM site_stats") -> result();
-   		
-   		//Generamos un vector con los resultados.
-   		foreach($result as $row){
-   			$sql = array('wgen_id' => '',
-   					'wgen_total_views' => "$row->ss_total_views",
-   					'wgen_total_edits' => "$row->ss_total_edits",
-   					'wgen_good_articles' => "$row->ss_good_articles",
-   					'wgen_total_peges' => "$row->ss_total_pages",
-   					'wgen_users' => "$row->ss_users",
-   					'wgen_active_users' => "$row->ss_active_users",
-   					'wgen_admins' => "$row->ss_admins",
-   					'wgen_images' => "$row->ss_images",
-   					'wgen_analisis' => "$analisis"
-   				);
-			}
-			
-		//Lo insertamos en nuestro análisis
-		$this->db->insert('wgeneral', $sql);
-		
-		//Comprobamos que la insertación se hizo con éxito
-		if($this->db->affected_rows() != 1) 
-			return "fetch_general_stats(): ERR_AFFECTED_ROWS (".$this->db->affected_rows().")";
-   	}
-   	
    	function fetch_categories($wikiname, $date_range_a = 'default', $date_range_b = 'default', $filter_page = 'total', $filter_user = 'total'){
    	
    		//Establecemos conexión con la base de datos de la wiki
@@ -534,6 +504,81 @@ class Wiki_model extends CI_Model{
    			
    		//Devolvemos conjunto de vectores con índices definidos
    		return $contentevolution;
+   	}  	
+   	
+   	function fetch_activity($wikiname, $date_range_a = 'default', $date_range_b = 'default', $filter_user = 'default', $filter_page = 'default', $filter_category = 'default'){
+		//Establecemos conexión con las bases de datos
+   		$link = $this->connection_model->connect($this->wconnection($wikiname));
+   		
+   		//Establecemos filtros de fecha
+   		if($date_range_a == 'default'){
+   			$initial_date = $link->query($link, "SELECT rev_timestamp FROM revision ORDER BY rev_timestamp ASC LIMIT 1")->result();
+   			if($initial_date->num_rows() != 0)
+   				foreach ($initial_date as $row)
+   					$date_range_a = $row -> rev_timestamp;
+   			else
+   				return "fetch_activity(): ERR_NONEXISTENT";
+   		}
+   		
+   		if($date_range_b == 'default')
+   			$date_range_b = date('Y-m-d H:i:s', now());
+   		
+   		//Establecemos filtros de página o categoría.
+		if($filter_user != 'default'){
+			$type = 'user';
+			$filtername = $filter_page;
+		}
+		else if($filter_page != 'default'){
+			$type = 'page';
+			$filtername = $filter_category;
+		}
+		else if($filter_category != 'default'){
+			$type = 'category';
+			$filtername = $filter_category;
+		}
+		else{
+			$type = 'default';
+			$filtername = 'default';
+		}
+		
+		
+		if($type == 'user'){
+			//Fecha y bytes para un usuario concreto
+   			$cdata = $link->query("SELECT rev_timestamp FROM revision WHERE rev_user == $filtername AND rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b ORDER BY rev_timestamp ASC") -> result();
+   			$cdata2 = $link->query("SELECT rev_timestamp FROM revision, page WHERE rev_user == $filtername AND rev_page == page_id AND page_namespace == 0 AND rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b ORDER BY rev_timestamp ASC") -> result();
+   			$cdata3 = $link->query("SELECT rev_timestamp FROM revision, page WHERE rev_user == $filtername AND rev_page == page_id AND page_namespace == 1 AND rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b ORDER BY rev_timestamp ASC") -> result();
+   		}
+   		else if($type == 'page'){
+			//Fecha y bytes para una página concreta
+   			$cdata = $link->query("SELECT rev_timestamp FROM revision WHERE rev_page == $filtername AND rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b ORDER BY rev_timestamp ASC") -> result();
+   			$cdata2 = false;
+   			$cdata3 = false;
+   		}
+   		else if($type == 'category'){
+			//Fecha y bytes para una categoría concreta
+   			$cdata = $link->query("SELECT rev_timestamp FROM revision, categorylinks WHERE rev_page == cl_from AND cl_to ==  $filtername AND rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b ORDER BY rev_timestamp ASC") -> result();
+   			$cdata2 = $link->query("SELECT rev_timestamp FROM revision, categorylinks, page WHERE rev_page == page_id AND page_namespace == 0 AND rev_page == cl_from AND cl_to ==  $filtername AND rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b ORDER BY rev_timestamp ASC") -> result();
+   			$cdata2 = $link->query("SELECT rev_timestamp FROM revision, categorylinks, page WHERE rev_page == page_id AND page_namespace == 1 AND rev_page == cl_from AND cl_to ==  $filtername AND rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b ORDER BY rev_timestamp ASC") -> result();
+   		}
+		else{
+			//Fecha y bytes totales
+   			$cdata = $link->query("SELECT rev_timestamp FROM revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b ORDER BY rev_timestamp ASC") -> result();
+   		}
+   		
+   		//Formamos los vectores a devolver con los datos de las consultas
+   		foreach($cdata as $row)
+   			$totalactivity[] = $row->rev_timestamp;
+   		
+   		if($cdata2)
+			foreach($cdata2 as $row)
+				$articleactivity[] = $row->rev_timestamp;
+   			
+   		if($cdata3)
+			foreach($cdata3 as $row)
+				$talkactivity[] = $row->rev_timestamp;
+   			
+   		//Devolvemos conjunto de vectores con índices definidos
+   		return array('totalactivity' => $totalactivity, 'articleactivity' => $articleactivity, 'talkactivity' => $talkactivity);
    	}  	
    	
    	function delete_wiki($wikiname){

@@ -66,7 +66,7 @@ class Color_model extends CI_Model{
    		
    		//Establecemos filtros de fecha
    		if($date_range_a == 'total'){
-   			$initial_date = $link->query($link, "SELECT rev_timestamp FROM revision ORDER BY rev_timestamp ASC LIMIT 1")->result();
+   			$initial_date = $link->query($link, "SELECT eva_time FROM evaluaciones ORDER BY rev_timestamp ASC LIMIT 1")->result();
    			if($initial_date->num_rows() != 0)
    				foreach ($initial_date as $row)
    					$date_range_a = $row -> rev_timestamp;
@@ -149,6 +149,71 @@ class Color_model extends CI_Model{
 			
 		return $qualityevolution;
    		
+   	}
+   	
+   	function fetch_activity($colorname, $date_range_a = 'default', $date_range_b = 'default', $filter_user = 'default'/*, $filter_page = 'default', $filter_category = 'default'*/){
+		//Establecemos conexión con las bases de datos
+   		$link = $this->connection_model->connect($this->wconnection($colorname));
+   		
+   		//Establecemos filtros de fecha
+   		if($date_range_a == 'default'){
+   			$initial_date = $link->query("SELECT eva_time FROM evaluaciones ORDER BY eva_time ASC LIMIT 1")->result();
+   			if($initial_date->num_rows() != 0)
+   				foreach ($initial_date as $row)
+   					$date_range_a = $row -> rev_timestamp;
+   			else
+   				return "fetch_activity(): ERR_NONEXISTENT";
+   		}
+   		
+   		if($date_range_b == 'default')
+   			$date_range_b = date('Y-m-d H:i:s', now());
+   		
+   		//Establecemos filtros de página o categoría.
+		if($filter_user != 'default'){
+			$type = 'user';
+			$filtername = $filter_page;
+		}/*
+		else if($filter_page != 'default'){
+			$type = 'page';
+			$filtername = $filter_category;
+		}
+		else if($filter_category != 'default'){
+			$type = 'category';
+			$filtername = $filter_category;
+		}*/
+		else{
+			$type = 'default';
+			$filtername = 'default';
+		}
+		
+		
+		if($type == 'user'){
+			//Fecha y bytes para un usuario concreto
+   			$cdata = $link->query("SELECT eva_time FROM evaluaciones WHERE eva_user == $filtername AND eva_time >= $date_range_a AND eva_time <= $date_range_b ORDER BY eva_time ASC") -> result();
+   		}/*
+   		else if($type == 'page'){
+			//Fecha y bytes para una página concreta
+   			$cdata = $link->query("SELECT rev_timestamp FROM revision WHERE rev_page == $filtername AND rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b ORDER BY rev_timestamp ASC") -> result();
+   			$cdata2 = false;
+   			$cdata3 = false;
+   		}
+   		else if($type == 'category'){
+			//Fecha y bytes para una categoría concreta
+   			$cdata = $link->query("SELECT rev_timestamp FROM revision, categorylinks WHERE rev_page == cl_from AND cl_to ==  $filtername AND rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b ORDER BY rev_timestamp ASC") -> result();
+   			$cdata2 = $link->query("SELECT rev_timestamp FROM revision, categorylinks, page WHERE rev_page == page_id AND page_namespace == 0 AND rev_page == cl_from AND cl_to ==  $filtername AND rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b ORDER BY rev_timestamp ASC") -> result();
+   			$cdata2 = $link->query("SELECT rev_timestamp FROM revision, categorylinks, page WHERE rev_page == page_id AND page_namespace == 1 AND rev_page == cl_from AND cl_to ==  $filtername AND rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b ORDER BY rev_timestamp ASC") -> result();
+   		}*/
+		else{
+			//Fecha y bytes totales
+   			$cdata = $link->query("SELECT eva_time FROM evaluaciones WHERE eva_time >= $date_range_a AND eva_time <= $date_range_b ORDER BY eva_time ASC") -> result();
+   		}
+   		
+   		//Formamos los vectores a devolver con los datos de las consultas
+   		foreach($cdata as $row)
+   			$totalactivity[] = $row->rev_timestamp;
+   			
+   		//Devolvemos conjunto de vectores con índices definidos
+   		return $totalactivity;
    	}
    	
    	function delete_color($colorname){

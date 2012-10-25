@@ -305,11 +305,9 @@ function draw_content_evolution_chart($analisis){
 	return "<div id=\"content_evolution\" style=\"width: 600px; height: 400px;\"></div>";
 }
 
-function draw_activity_hour_chart($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){} //stacked bars
-function draw_activity_day_chart($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){}
-function draw_activity_week_chart($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){}
-function draw_activity_month_chart($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){}
-function draw_activity_year_chart($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){}
+function draw_activity_hour_chart($analisis, $unit, $filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){
+	
+} //stacked bars, units: Y, M, W, D, H
 
 function draw_evaluation_evolution($filter_user => 'default', $filter_page => 'default', $filter_category => 'default'){} //linea de evolucion + barras de valores por dia
 
