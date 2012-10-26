@@ -1,0 +1,1 @@
+cat *.php | grep -o "SELECT".*"FROM".*[$\"] 

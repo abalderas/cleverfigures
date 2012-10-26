@@ -99,33 +99,33 @@ class Wiki_model extends CI_Model{
 		
 		if($type == 'page'){
 			//Título de categoría, número de páginas y número de subcategorías para página en concreto
-   			$cdata = $link->query("SELECT cat_title, cat_pages, cat_subcats FROM category, categorylinks WHERE cl_from == $filtername AND cl_to == cat_title AND $filtername IN (SELECT DISTINCT rev_page FROM revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b) ORDER BY cat_title ASC") -> result();
+   			$cdata = $link->query("SELECT cat_title, cat_pages, cat_subcats FROM category, categorylinks, revision WHERE cl_from = $filtername AND cl_to = cat_title AND $filtername IN (SELECT DISTINCT rev_page FROM revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b) ORDER BY cat_title ASC") -> result();
    			
-   			$cdata1 = $link->query("SELECT cat_title, sum(cat_pages) as totalpages FROM category, categorylinks WHERE cl_from == $filtername AND cl_to == cat_title AND $filtername IN (SELECT DISTINCT rev_page FROM revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b) GROUP BY cat_title") -> result();
+   			$cdata1 = $link->query("SELECT cat_title, sum(cat_pages) as totalpages FROM category, categorylinks, revision WHERE cl_from = $filtername AND cl_to = cat_title AND $filtername IN (SELECT DISTINCT rev_page FROM revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b) GROUP BY cat_title") -> result();
    			
    			//Número de ediciones, bytes y visitas para página en concreto
-   			$cdata2 = $link->query("SELECT cl_to, count(rev_id) as edits, sum(page_len) as bytes, sum(page_counter) as visits FROM page, categorylinks, revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_page == page_id AND page_id == cl_from AND page_id == $filtername GROUP BY cl_to ORDER BY cl_to ASC") -> result();
+   			$cdata2 = $link->query("SELECT cl_to, count(rev_id) as edits, page_len as bytes, page_counter as visits FROM page, categorylinks, revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_page = page_id AND page_id = cl_from AND page_id = $filtername GROUP BY cl_to ORDER BY cl_to ASC") -> result();
    			
    			//Total de ediciones, bytes y visitas para página en concreto
-   			$totals = $link->query("SELECT cl_to, count(rev_id) as totaledits, sum(page_len) as totalbytes, sum(page_counter) as totalvisits FROM page, categorylinks, revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_page == page_id AND page_id == cl_from AND page_id == $filtername ORDER BY cl_to ASC") -> result();
+   			$totals = $link->query("SELECT cl_to, count(rev_id) as totaledits, sum(page_len) as totalbytes, sum(page_counter) as totalvisits FROM revision, categorylinks, page WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND page_id = rev_page AND  rev_page = cl_from AND cl_to in (SELECT cl_to FROM categorylinks WHERE cl_from = $filtername) GROUP BY cl_to ORDER BY cl_to ASC") -> result();
    		}
    		else if($type == 'user'){
    			//Título de categoría, número de páginas y número de subcategorías para usuario en concreto
-			$cdata = $link->query("SELECT cat_title, cat_pages, cat_subcats FROM page, category WHERE page_id == cat_title AND page_namespace=14 AND page_id IN (SELECT DISTINCT rev_page FROM revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_user == $filtername)") -> result();
+			$cdata = $link->query("SELECT DISTINCT cat_title, cat_pages, cat_subcats FROM categorylinks, category, revision WHERE cl_to = cat_title AND cl_from IN (SELECT DISTINCT rev_page FROM revision WHERE rev_user = $filtername AND rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b)") -> result();
 			
 			$cdata1 = $link->query("SELECT cat_title, sum(cat_pages) as totalpages FROM category WHERE $filtername IN (SELECT DISTINCT rev_user FROM revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b) GROUP BY cat_title") -> result();
    		
    			//Número de ediciones, bytes y visitas para usuario en concreto
-   			$cdata2 = $link->query("SELECT cl_to, count(rev_id) as edits, sum(page_len) as bytes, sum(page_counter) as visits FROM page, categorylinks, revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_page == page_id AND page_id == cl_from AND rev_user == $filtername GROUP BY cl_to ORDER BY cl_to ASC") -> result();
+   			$cdata2 = $link->query("SELECT cl_to, count(rev_id) as edits, page_len as bytes, page_counter as visits FROM categorylinks, revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_user = $filtername AND rev_page = cl_from GROUP BY cl_to ORDER BY cl_to ASC") -> result();
    			
    			//Total de ediciones, bytes y visitas para usuario en concreto
-   			$totals = $link->query("SELECT cl_to, count(rev_id) as totaledits, sum(page_len) as totalbytes, sum(page_counter) as totalvisits FROM page, categorylinks, revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_page == page_id AND page_id == cl_from AND rev_user == $filtername ORDER BY cl_to ASC") -> result();
+   			$totals = $link->query("SELECT cl_to, count(rev_id) as totaledits, sum(page_len) as totalbytes, sum(page_counter) as totalvisits FROM revision, categorylinks WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_user = $filtername AND cl_from = rev_page AND cl_to GROUP BY cl_to ORDER BY cl_to ASC") -> result();
 		}
 		else{
 			//Realizamos consultas según filtrado
-			$cdata = $link->query("SELECT cat_title, cat_pages, cat_subcats FROM page, category WHERE page_id == cat_title AND page_namespace=14 AND page_id IN (SELECT DISTINCT rev_page FROM revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b)") -> result();
+			$cdata = $link->query("SELECT DISTINCT cat_title, cat_pages, cat_subcats FROM categorylinks, category, revision WHERE cl_to = cat_title AND cl_from IN (SELECT DISTINCT rev_page FROM revision WHERE rev_user = $filtername AND rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b)") -> result();
 			
-			$cdata1 = $link->query("SELECT cat_title,  sum(cat_pages) as totalpages FROM category, categorylinks, revision WHERE cl_to == cat_title AND cl_from IN (SELECT DISTINCT rev_page FROM revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b) GROUP BY cat_title") -> result();
+			$cdata1 = $link->query("SELECT cat_title, sum(cat_pages) as totalpages FROM category, categorylinks, revision WHERE cl_to == cat_title AND cl_from IN (SELECT DISTINCT rev_page FROM revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b) GROUP BY cat_title") -> result();
    		
    			//Número de ediciones, bytes y visitas
    			$cdata2 = $link->query("SELECT cl_to, count(rev_id) as edits, sum(page_len) as bytes, sum(page_counter) as visits FROM page, categorylinks, revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_page == page_id AND page_id == cl_from GROUP BY cl_to ORDER BY cl_to ASC") -> result();
