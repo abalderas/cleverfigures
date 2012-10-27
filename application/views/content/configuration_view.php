@@ -6,6 +6,8 @@
 <!--Main form. Lets you choose what to do-->
 
 <?	
+echo "<h1>".lang('i18n_configuration')."</h1></br>";
+
 echo form_open('configuration_form');
 	echo "<h3>".lang('i18n_language')."</h3><br>";
 

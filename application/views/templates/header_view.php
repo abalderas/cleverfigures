@@ -1,12 +1,17 @@
-<!--
-	INPUT:	actual_wikiname, i18n_about, i18n_analise, i18n_configuration, i18n_login, i18n_view_results
-	OUTPUT: menu
--->
-
+<html>
+<head>
+	<!--Title structure: CleverFigures | PageName-->
+	<title> CleverFigures | <?=$title?> </title>
+	<link rel="shortcut icon" type="image/x-icon" href="images/icons/favicon.ico">
+	<? 
+		if($this->session->userdata('user_language' == 'russian')) 
+			echo '<link rel="stylesheet" type="text/css" href="css/russianstyles.css" media="screen" />';
+		else
+			echo '<link rel="stylesheet" type="text/css" href="css/styles.css" media="screen" />';
+	?>
+</head>
+<body>
 <div id="header">
-	<!--Loads the logo image-->
-	<div id = "logo"> <img src = "../../images/logo.jpg"> </div>
-
 	<!--Displays user menu-->
 	<div id = "menu">
 	<table cellspacing="0" cellpadding="5" border="0">

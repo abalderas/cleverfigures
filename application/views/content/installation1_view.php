@@ -3,6 +3,8 @@
 -->
 
 <?
+echo "<h1>".lang('i18n_installation')."</h1></br>";
+
 echo "Select language for the installation process: ";
 
 $languages = array(

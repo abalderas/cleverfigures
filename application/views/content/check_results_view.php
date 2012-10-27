@@ -7,6 +7,8 @@
 <!--Stats view-->
 
 <?	
+echo "<h1>".lang('i18n_check_results')."</h1></br>";
+
 echo "<h3>".lang('i18n_content_evolution')."</h3>";
 echo $content_evolution_chart;
 echo "</br>";

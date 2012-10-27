@@ -71,11 +71,15 @@ class Analisis_model extends CI_Model{
 		$this->db->delete('wgeneral', array('wgen_analisis' => $analisis));
    	}
    	
-   	function get_analisis_data($analisis){
-		$data = $this->db->query("select * from analisis where analisis_id == $analisis");
+   	function get_analisis_data($user){
+		$data = $this->db->query("select * from analisis where analisis_user = $user");
 		
+		$result = "<table><tr><th>".lang('i18n_date_hour')."</th><th>".lang('i18n_wiki')."</th><th>".lang('i18n_color')."</th><th>".lang('i18n_date_range_a')."</th><th>".lang('i18n_date_range_b')."</th></tr>";
 		foreach($data as $row)
-			return $row;
+			$result .= "<tr><td>".$row->analisis_date."</td><td>".$row->analisis_wiki_id."</td><td>".$row->analisis_color_id."</td><td>".$row->analisis_date_range_a."</td><td>".$row->analisis_date_range_b."</td></tr>";
+		$result .= "</table>";
+		
+		return $result;
    	}
 }
 

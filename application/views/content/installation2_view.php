@@ -4,6 +4,8 @@
 -->
 
 <?
+echo "<h1>".lang('i18n_installation')."</h1></br>";
+
 echo lang('i18n_installation_intro');
 
 echo "<h3>".lang('i18n_create_user')."</h3>";

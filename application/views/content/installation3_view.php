@@ -4,6 +4,8 @@
 -->
 
 <?
+echo "<h1>".lang('i18n_installation')."</h1></br>";
+
 echo lang('i18n_installation_end');
 
 echo form_open('installation_end_form');

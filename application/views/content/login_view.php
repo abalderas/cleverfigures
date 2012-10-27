@@ -1,9 +1,10 @@
 <!--
-	INPUT: i18n_password, i18n_submit, i18n_username
 	OUTPUT: login_form(username, password)
 -->
 
 <!--Login form. Gets login information-->
+<?= "<h1>".lang('i18n_login')."</h1></br>"?>
+
 <?= form_open('login_form') ?>
 <table cellspacing="0" cellpadding="5" border="0">
 	<tr>
