@@ -8,13 +8,14 @@ class Index_controller extends CI_Controller {
    	}
    	
 	private function first_time(){
-		$this->db->table_exists('user')?false:true;
+		return $this->db->table_exists('u')?false:true;
 	}
 	
 	function index(){	
+		$this->lang->load('voc');
 		//If first time running CleverFigures, load installation
-		if(first_time()){
-			$datah = array('title' => lang('i18n_installation'));
+		if($this->first_time()){
+			$datah = array('title' => lang('voc.i18n_installation'));
 			
 			$this->load->view('templates/header_view.php', $datah);
 			$this->load->view('content/installation1_view.php');
@@ -24,16 +25,16 @@ class Index_controller extends CI_Controller {
 		else{
 			//If user logged in, load teacher view
 			if($this->session->userdata('user_username')){
-				$datah = array('title' => lang('i18n_check_results'));
+				$datah = array('title' => lang('voc.i18n_check_results'));
 				$datat = array('analisis_list' => $this->analisis_model->get_analisis_data($this->session->userdata('user_username')));
 			
 				$this->load->view('templates/header_view.php', $datah);
-				$this->load->view('content/teacher_view.php' $datat);
+				$this->load->view('content/teacher_view.php', $datat);
 				$this->load->view('templates/footer_view.php');
 			}
 			//If not, load login view
 			else{
-				$datah = array('title' => lang('i18n_login'));
+				$datah = array('title' => lang('voc.i18n_login'));
 			
 				$this->load->view('templates/header_view.php', $datah);
 				$this->load->view('content/login_view.php');

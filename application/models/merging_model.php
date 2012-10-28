@@ -73,22 +73,22 @@ class Merging_model extends CI_Model{
 				$sql = array(
 				'wu_id' => "",
    				'wu_name' => "$uname",
-   				'wu_edits' => $wikidata['useredits'][$uname]
-   				'wu_edits_per' => $wikidata['useredits_per'][$uname]
-   				'wu_edits_art' => $wikidata['useredits_art'][$uname]
-   				'wu_edits_art_per' => $wikidata['useredits_art_per'][$uname]
-   				'wu_bytes' => $wikidata['userbytes'][$uname]
-   				'wu_bytes_per' => $wikidata['userbytes_per'][$uname]
-   				'wu_bytes_art' => $wikidata['userbytes_art'][$uname]
-   				'wu_bytes_art_per' => $wikidata['userbytes_art_per'][$uname]
-   				'wu_uploads' => $wikidata['useruploads'][$uname]
-   				'wu_uploads_per' => $wikidata['useruploads_per'][$uname]
-   				'wu_neval' => $colordata['neval'][$uname]
-   				'wu_avg_mark' => $colordata['avg_mark'][$uname]
-   				'wu_replies_in' => $colordata['rep_in'][$uname]
-   				'wu_replies_out' => $colordata['rep_out'][$uname]
-   				'wu_type' => $wikidata['filtertype']
-   				'wu_type_str' => $wikidata['filtername']
+   				'wu_edits' => $wikidata['useredits'][$uname],
+   				'wu_edits_per' => $wikidata['useredits_per'][$uname],
+   				'wu_edits_art' => $wikidata['useredits_art'][$uname],
+   				'wu_edits_art_per' => $wikidata['useredits_art_per'][$uname],
+   				'wu_bytes' => $wikidata['userbytes'][$uname],
+   				'wu_bytes_per' => $wikidata['userbytes_per'][$uname],
+   				'wu_bytes_art' => $wikidata['userbytes_art'][$uname],
+   				'wu_bytes_art_per' => $wikidata['userbytes_art_per'][$uname],
+   				'wu_uploads' => $wikidata['useruploads'][$uname],
+   				'wu_uploads_per' => $wikidata['useruploads_per'][$uname],
+   				'wu_neval' => $colordata['neval'][$uname],
+   				'wu_avg_mark' => $colordata['avg_mark'][$uname],
+   				'wu_replies_in' => $colordata['rep_in'][$uname],
+   				'wu_replies_out' => $colordata['rep_out'][$uname],
+   				'wu_type' => $wikidata['filtertype'],
+   				'wu_type_str' => $wikidata['filtername'],
    				'wu_analisis' => "$analisis"
    				);
    				
@@ -102,22 +102,22 @@ class Merging_model extends CI_Model{
 				$sql = array(
 				'wu_id' => "",
    				'wu_name' => "$uname",
-   				'wu_edits' => $wikidata['useredits'][$uname]
-   				'wu_edits_per' => $wikidata['useredits_per'][$uname]
-   				'wu_edits_art' => $wikidata['useredits_art'][$uname]
-   				'wu_edits_art_per' => $wikidata['useredits_art_per'][$uname]
-   				'wu_bytes' => $wikidata['userbytes'][$uname]
-   				'wu_bytes_per' => $wikidata['userbytes_per'][$uname]
-   				'wu_bytes_art' => $wikidata['userbytes_art'][$uname]
-   				'wu_bytes_art_per' => $wikidata['userbytes_art_per'][$uname]
-   				'wu_uploads' => $wikidata['useruploads'][$uname]
-   				'wu_uploads_per' => $wikidata['useruploads_per'][$uname]
-   				'wu_neval' => NULL
-   				'wu_avg_mark' => NULL
-   				'wu_replies_in' => NULL
-   				'wu_replies_out' => NULL
-   				'wu_type' => $wikidata['filtertype']
-   				'wu_type_str' => $wikidata['filtername']
+   				'wu_edits' => $wikidata['useredits'][$uname],
+   				'wu_edits_per' => $wikidata['useredits_per'][$uname],
+   				'wu_edits_art' => $wikidata['useredits_art'][$uname],
+   				'wu_edits_art_per' => $wikidata['useredits_art_per'][$uname],
+   				'wu_bytes' => $wikidata['userbytes'][$uname],
+   				'wu_bytes_per' => $wikidata['userbytes_per'][$uname],
+   				'wu_bytes_art' => $wikidata['userbytes_art'][$uname],
+   				'wu_bytes_art_per' => $wikidata['userbytes_art_per'][$uname],
+   				'wu_uploads' => $wikidata['useruploads'][$uname],
+   				'wu_uploads_per' => $wikidata['useruploads_per'][$uname],
+   				'wu_neval' => NULL,
+   				'wu_avg_mark' => NULL,
+   				'wu_replies_in' => NULL,
+   				'wu_replies_out' => NULL,
+   				'wu_type' => $wikidata['filtertype'],
+   				'wu_type_str' => $wikidata['filtername'],
    				'wu_analisis' => "$analisis"
    				);
    				
@@ -149,15 +149,15 @@ class Merging_model extends CI_Model{
 				$sql = array(
 				'wp_id' => "",
    				'wp_name' => "$pname",
-   				'wp_namespace' => $wikidata['pagenamespace'][$pname]
-   				'wp_edits' => $wikidata['pageedits'][$pname]
-   				'wp_edits_per' => $wikidata['pageedits_per'][$pname]
-   				'wp_bytes' => $wikidata['pagebytes'][$pname]
-   				'wp_bytes_per' => $wikidata['pagebytes_per'][$pname]
-   				'wp_visits' => $wikidata['pagevisits'][$pname]
-   				'wp_visits_per' => $wikidata['pagevisits_per'][$pname]
-   				'wp_type' => $wikidata['filtertype']
-   				'wp_type_str' => $wikidata['filtername']
+   				'wp_namespace' => $wikidata['pagenamespace'][$pname],
+   				'wp_edits' => $wikidata['pageedits'][$pname],
+   				'wp_edits_per' => $wikidata['pageedits_per'][$pname],
+   				'wp_bytes' => $wikidata['pagebytes'][$pname],
+   				'wp_bytes_per' => $wikidata['pagebytes_per'][$pname],
+   				'wp_visits' => $wikidata['pagevisits'][$pname],
+   				'wp_visits_per' => $wikidata['pagevisits_per'][$pname],
+   				'wp_type' => $wikidata['filtertype'],
+   				'wp_type_str' => $wikidata['filtername'],
    				'wp_analisis' => "$analisis"
    				);
    				
@@ -184,27 +184,27 @@ class Merging_model extends CI_Model{
 		//if ($colorname != 'default'){} to_do
 		
 		//If color not provided, fill color data with NULL, and add to local database
-		else{
+		//else{
 			foreach($catnames as $catname){
 				$sql = array(
 				'wc_id' => "",
    				'wc_name' => "$catname",
-   				'wc_pages' => $wikidata['catpages'][$catname]
-   				'wc_pages_per' => $wikidata['catpages_per'][$catname]
-   				'wc_edits' => $wikidata['catedits'][$catname]
-   				'wc_edits_per' => $wikidata['catedits_per'][$catname]
-   				'wc_bytes' => $wikidata['catbytes'][$catname]
-   				'wc_bytes_per' => $wikidata['catbytes_per'][$catname]
-   				'wc_visits' => $wikidata['catvisits'][$catname]
-   				'wc_visits_per' => $wikidata['catvisits_per'][$catname]
-   				'wc_type' => $wikidata['filtertype']
-   				'wc_type_str' => $wikidata['filtername']
+   				'wc_pages' => $wikidata['catpages'][$catname],
+   				'wc_pages_per' => $wikidata['catpages_per'][$catname],
+   				'wc_edits' => $wikidata['catedits'][$catname],
+   				'wc_edits_per' => $wikidata['catedits_per'][$catname],
+   				'wc_bytes' => $wikidata['catbytes'][$catname],
+   				'wc_bytes_per' => $wikidata['catbytes_per'][$catname],
+   				'wc_visits' => $wikidata['catvisits'][$catname],
+   				'wc_visits_per' => $wikidata['catvisits_per'][$catname],
+   				'wc_type' => $wikidata['filtertype'],
+   				'wc_type_str' => $wikidata['filtername'],
    				'wc_analisis' => "$analisis"
    				);
    				
 				$this->db->insert('wcategory', $sql);
 			}
-		}
+		//}
 		
 		return TRUE;
    	}
@@ -234,12 +234,12 @@ class Merging_model extends CI_Model{
 				$sql = array(
 				'wi_id' => "",
    				'wi_name' => "$imgname",
-   				'wi_user_text' => $wikidata['imgtexts'][$imgname]
-   				'wi_timestamp' => $wikidata['imgtimes'][$imgname]
-   				'wi_size' => $wikidata['imgsizes'][$imgname]
-   				'wi_user' => $wikidata['imgusers'][$imgname]
-   				'wi_type' => $wikidata['filtertype']
-   				'wi_type_src' => $wikidata['filtername']
+   				'wi_user_text' => $wikidata['imgtexts'][$imgname],
+   				'wi_timestamp' => $wikidata['imgtimes'][$imgname],
+   				'wi_size' => $wikidata['imgsizes'][$imgname],
+   				'wi_user' => $wikidata['imgusers'][$imgname],
+   				'wi_type' => $wikidata['filtertype'],
+   				'wi_type_src' => $wikidata['filtername'],
    				'wi_analisis' => "$analisis"
    				);
    				
@@ -292,7 +292,7 @@ class Merging_model extends CI_Model{
 			return "save_content_evolution(): $colordata";
 		
 		//Inserting data
-		foreach(array_keys($wikidata[]) as $key){
+		foreach(array_keys($wikidata) as $key){
 			$sql = array(
 				'da_id' => $analisis."contentevolution",
 				'da_s1' => $key,
@@ -330,7 +330,7 @@ class Merging_model extends CI_Model{
 		//////////////////////////////////////////////////////////////////
 		
 		//Inserting data
-		foreach(array_keys($wikidata[]) as $key){
+		foreach(array_keys($wikidata) as $key){
 			$sql = array(
 				'da_id' => $analisis."contentevolution",
 				'da_s1' => $key,

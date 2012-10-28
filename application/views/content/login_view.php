@@ -3,22 +3,29 @@
 -->
 
 <!--Login form. Gets login information-->
-<?= "<h1>".lang('i18n_login')."</h1></br>"?>
+<?= "<h1>".lang('voc.i18n_login')."</h1></br>"?>
 
 <?= form_open('login_form') ?>
-<table cellspacing="0" cellpadding="5" border="0">
+<table id = "form">
 	<tr>
-		<td class="fieldbox"><?=lang('i18n_username')?>:</td>
+		<td width = "40%"></td>
+		<td><?=lang('voc.i18n_username')?></td>
 		<td><?= form_input('username') ?></td>
+		<td width = "40%"></td>
 	</tr>
 	<tr>
-		<td class="fieldbox"><?=lang('i18n_password')?>:</td>
+		<td width = "40%"></td>
+		<td><?=lang('voc.i18n_password')?></td>
 		<td><?= form_password('password') ?></td>
+		<td width = "40%"></td>
 	</tr>
-	<tr>
+	<tr height = "30px">
+		<td width = "40%"></td>
 		<td colspan="2">
-		<?= form_submit('submit', lang('i18n_submit')) ?>
+		<?= form_submit(array('id' => 'submit', 'value' => lang('voc.i18n_submit'), 'class' => 'submit')) ?>
+		</br>
 		</td>
+		<td width = "40%"></td>
 	</tr>
 </table>
 <?= form_close() ?>

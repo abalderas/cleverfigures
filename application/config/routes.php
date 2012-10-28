@@ -38,7 +38,7 @@
 |
 */
 
-$route['default_controller'] = "controlador";
+$route['default_controller'] = "index_controller";
 $route['404_override'] = '';
 
 //Internationalization (go to http://maestric.com/doc/php/codeigniter_i18n to see how to use)

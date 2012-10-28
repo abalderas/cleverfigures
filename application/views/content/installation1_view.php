@@ -3,21 +3,29 @@
 -->
 
 <?
-echo "<h1>".lang('i18n_installation')."</h1></br>";
-
-echo "Select language for the installation process: ";
+echo "<h1>".lang('voc.i18n_installation')."</h1></br>";
 
 $languages = array(
-           	'spanish'  => lang('i18n_spanish'),
-                'english'    => lang('i18n_english'),
-                'french'   => lang('i18n_french'),
-                'russian' => lang('i18n_russian'),
-                'german' => lang('i18n_german'),
+           	'spanish'  => lang('voc.i18n_spanish'),
+                'english'    => lang('voc.i18n_english'),
+                'french'   => lang('voc.i18n_french'),
+                'russian' => lang('voc.i18n_russian'),
+                'german' => lang('voc.i18n_german'),
              );
-            
-echo form_open('select_language_form');
-echo form_dropdown('select_language', $languages, 'english');
-echo '<br>';
-echo form_submit('next', 'Next');
-echo form_close();
 ?>
+            
+<?=form_open('select_language_form');?>
+<table id = "formins">
+<tr>
+	<th>Select language for the installation process:</th>
+</tr>
+
+<tr>
+	<td><?=form_dropdown('select_language', $languages, 'english');?></td>
+</tr>
+
+</table>
+
+<div id = "nextbutton"><?=form_submit(array('id' => 'submit', 'value' => lang('voc.i18n_next'), 'class' => 'submit'));?></div>
+
+<?=form_close();?>

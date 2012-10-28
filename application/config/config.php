@@ -59,6 +59,7 @@ $config['uri_protocol']	= 'AUTO';
 
 $config['url_suffix'] = '';
 
+				// form submitted and validated continue processing
 /*
 |--------------------------------------------------------------------------
 | Default Language

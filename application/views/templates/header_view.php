@@ -11,26 +11,21 @@
 	?>
 </head>
 <body>
-<div id="header">
-	<!--Displays user menu-->
-	<div id = "menu">
-	<table cellspacing="0" cellpadding="5" border="0">
+<table id = "menu">
 	<tr>
 		<? 
 			if($this->session->userdata('user_username')){
-				echo "<td>$this->session->userdata('user_realname')</td>";
-				echo "<td>".lang('i18n_configuration')."</td>";
-				echo "<td>".lang('i18n_view_results')."</td>";
-				echo "<td".lang('i18n_analise')."</td>";
-				echo "<td>".lang('i18n_about')."</td>";
+				echo "<th>$this->session->userdata('user_realname')</th>";
+				echo "<th>".lang('voc.i18n_configuration')."</th>";
+				echo "<th>".lang('voc.i18n_view_results')."</th>";
+				echo "<th".lang('voc.i18n_analise')."</th>";
+				echo "<th>".lang('voc.i18n_about')."</th>";
 			}
 			else{
-				echo "<td>".lang('i18n_login')."</td>";
-				echo "<td>".lang('i18n_about')."</td>";
+				echo "<th>".lang('voc.i18n_login')."</th>";
+				echo "<th>".lang('voc.i18n_about')."</th>";
 			}
 		?>
 	</tr>
-	</table>
-	</div>
-	
-</div>
+</table>
+</br>
