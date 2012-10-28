@@ -8,7 +8,7 @@ class Index_controller extends CI_Controller {
    	}
    	
 	private function first_time(){
-		return $this->db->table_exists('u')?false:true;
+		return $this->db->table_exists('user')?false:true;
 	}
 	
 	function index(){	
