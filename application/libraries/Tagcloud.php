@@ -23,7 +23,7 @@
 	 *
 	 \************************************************************/
 	
-	class tagcloud
+	class Tagcloud
 	{
 		/**
 		 * Tag cloud version

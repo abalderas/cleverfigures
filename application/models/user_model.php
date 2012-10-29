@@ -11,8 +11,8 @@ class User_model extends CI_Model{
    	
    	//writing methods
    	function new_user($uname, $pass, $date, $rname, $mail){
-   		$check = $this->db->query("select * from user where user_username = $uname");
-   		if($check->result()->num_rows() != 0)
+   		$check = $this->db->query("select * from user where user_username = '$uname'");
+   		if($check->result())
    			return "new_user(): ERR_ALREADY_EXISTS";
    		else{
    			$sql = array('user_username' => $uname,
@@ -20,15 +20,10 @@ class User_model extends CI_Model{
    					'user_last_session' => $date,
    					'user_realname' => $rname,
    					'user_email' => $mail,
-   					'user_language' => $this->session->userdata('user_language')
+   					'user_language' => $this->config->item('language')
    				);
 	
 			$this->db->insert('user', $sql);
-		
-			if($this->db->affected_rows() != 1) 
-				return "ERR_AFFECTED_ROWS";
-			else 
-				return true;
 		}
    	}
    	
@@ -47,7 +42,7 @@ class User_model extends CI_Model{
    	function relate_wiki($wikiname){
    		$query = $this->db->query("select * from wiki where wiki_name == $wikiname");
    		if($query->result()->num_rows() != 0){
-   			$sql = array('user_username' => $this->session->userdata('user_username');,
+   			$sql = array('user_username' => $this->session->userdata('user_username'),
    					'wiki_name' => "$wikiname"
    				);
 	
@@ -64,7 +59,7 @@ class User_model extends CI_Model{
    	function relate_color($colorname){
    		$query = $this->db->query("select * from color where color_name == $colorname");
    		if($query->result()->num_rows() != 0){
-   			$sql = array('user_username' => $this->session->userdata('user_username');,
+   			$sql = array('user_username' => $this->session->userdata('user_username'),
    					'color_name' => "$colorname"
    				);
 	

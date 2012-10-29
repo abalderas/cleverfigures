@@ -9,6 +9,9 @@ class Select_language_form extends CI_Controller {
 	function index(){	
 		if($this->input->post('select_language')){
 			$this->config->set_item('language', $this->input->post('select_language'));
+			$this->lang->is_loaded = array();
+			$this->lang->language = array($this->input->post('select_language'));
+			$this->lang->load('voc');
 			
 			$datah = array('title' => lang('voc.i18n_installation'));
 			$this->load->view('templates/header_view', $datah);

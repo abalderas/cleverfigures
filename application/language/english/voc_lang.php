@@ -2,6 +2,7 @@
 $lang['voc.i18n_about'] = "About";
 $lang['voc.i18n_activity'] = "Activity";
 $lang['voc.i18n_analise'] = "Analise Wiki";
+$lang['voc.i18n_building_database'] = "Building database...";
 $lang['voc.i18n_categories'] = "Categories";
 $lang['voc.i18n_check'] = "Check Reports";
 $lang['voc.i18n_cleverfigures_database'] = "CleverFigures Database";

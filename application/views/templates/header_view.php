@@ -2,6 +2,7 @@
 <head>
 	<!--Title structure: CleverFigures | PageName-->
 	<title> CleverFigures | <?=$title?> </title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<link rel="shortcut icon" type="image/x-icon" href="images/icons/favicon.ico">
 	<? 
 		if($this->config->item('language') == 'russian') 
