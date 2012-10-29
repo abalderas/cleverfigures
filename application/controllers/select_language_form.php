@@ -6,17 +6,17 @@ class Select_language_form extends CI_Controller {
       		parent::__construct();
    	}
    	
-	function index(){	
-		if($this->input->post('select_language')){
-			$this->config->set_item('language', $this->input->post('select_language'));
-			$this->lang->is_loaded = array();
-			$this->lang->language = array($this->input->post('select_language'));
-			$this->lang->load('voc');
-			
-			$datah = array('title' => lang('voc.i18n_installation'));
-			$this->load->view('templates/header_view', $datah);
-			$this->load->view('content/installation2_view');
-			$this->load->view('templates/footer_view');
-		}
+	function index(){
+      		$newdata = array(
+                   'language'  => $this->input->post('select_language')
+		);
+
+		$this->session->set_userdata($newdata);
+      		$this->lang->load('voc', $this->session->userdata('language'));
+      		
+		$datah = array('title' => lang('voc.i18n_installation'));
+		$this->load->view('templates/header_view', $datah);
+		$this->load->view('content/installation2_view');
+		$this->load->view('templates/footer_view');
 	}
 } 

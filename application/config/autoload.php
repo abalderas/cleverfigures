@@ -96,7 +96,7 @@ $autoload['config'] = array();
 |
 */
 
-$autoload['language'] = array('voc');
+$autoload['language'] = array();
 
 
 /*
