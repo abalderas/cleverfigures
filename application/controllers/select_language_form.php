@@ -7,13 +7,13 @@ class Select_language_form extends CI_Controller {
    	}
    	
 	function index(){	
-		$this->form_validation->set_rules('select_language_form', lang('i18n_language'), 'required');
-		$this->form_validation->set_error_delimiters('<em>','</em>');
-
-		if($this->input->post('select_language_form')){
-			if($this->form_validation->run()){
-				/////////////////////////////////////////// establecer idioma
-			}
+		if($this->input->post('select_language')){
+			$this->config->set_item('language', $this->input->post('select_language'));
+			
+			$datah = array('title' => lang('voc.i18n_installation'));
+			$this->load->view('templates/header_view', $datah);
+			$this->load->view('content/installation2_view');
+			$this->load->view('templates/footer_view');
 		}
 	}
 } 

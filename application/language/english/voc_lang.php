@@ -30,6 +30,7 @@ $lang['voc.i18n_login'] = "Log in";
 $lang['voc.i18n_next'] = "Next";
 $lang['voc.i18n_pages'] = "Pages";
 $lang['voc.i18n_password'] = "Password";
+$lang['voc.i18n_password_confirmation'] = "Password Confirmation";
 $lang['voc.i18n_qualitative_data_origin'] = "Qualitative Data Origin";
 $lang['voc.i18n_retype_password'] = "Retype password";
 $lang['voc.i18n_russian'] = "Russian";
@@ -39,6 +40,7 @@ $lang['voc.i18n_spanish'] = "Spanish";
 $lang['voc.i18n_submit'] = "Submit";
 $lang['voc.i18n_tag_cloud'] = "Tag Cloud";
 $lang['voc.i18n_username'] = "Username";
+$lang['voc.i18n_real_name'] = "Real Name";
 $lang['voc.i18n_users'] = "Users";
 $lang['voc.i18n_wiki_database'] = "Wiki Database";
 ?>

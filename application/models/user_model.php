@@ -11,7 +11,7 @@ class User_model extends CI_Model{
    	
    	//writing methods
    	function new_user($uname, $pass, $date, $rname, $mail){
-   		$check = $this->db->query("select * from user where user_username == $uname");
+   		$check = $this->db->query("select * from user where user_username = $uname");
    		if($check->result()->num_rows() != 0)
    			return "new_user(): ERR_ALREADY_EXISTS";
    		else{
@@ -112,6 +112,7 @@ class User_model extends CI_Model{
         						'user_language' => $row->user_language,
         						'user_realname' => $row->user_realname); 
             		$this -> session -> set_userdata('logged_in', $sess_array);
+            		//todo: Load user configuration
             		return true;
       		}
       		else

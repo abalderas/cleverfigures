@@ -4,10 +4,10 @@
 	<title> CleverFigures | <?=$title?> </title>
 	<link rel="shortcut icon" type="image/x-icon" href="images/icons/favicon.ico">
 	<? 
-		if($this->session->userdata('user_language' == 'russian')) 
-			echo '<link rel="stylesheet" type="text/css" href="css/russianstyles.css" media="screen" />';
+		if($this->config->item('language') == 'russian') 
+			 echo link_tag('css/russianstyles.css');  
 		else
-			echo '<link rel="stylesheet" type="text/css" href="css/styles.css" media="screen" />';
+			 echo link_tag('css/styles.css'); 
 	?>
 </head>
 <body>
@@ -21,11 +21,9 @@
 				echo "<th".lang('voc.i18n_analise')."</th>";
 				echo "<th>".lang('voc.i18n_about')."</th>";
 			}
-			else{
-				echo "<th>".lang('voc.i18n_login')."</th>";
-				echo "<th>".lang('voc.i18n_about')."</th>";
-			}
 		?>
 	</tr>
 </table>
 </br>
+<div id = "wrap">
+<div id= "content">

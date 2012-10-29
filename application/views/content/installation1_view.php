@@ -3,7 +3,8 @@
 -->
 
 <?
-echo "<h1>".lang('voc.i18n_installation')."</h1></br>";
+echo img('images/logo/logotrans.png');
+echo br();
 
 $languages = array(
            	'spanish'  => lang('voc.i18n_spanish'),
@@ -17,15 +18,14 @@ $languages = array(
 <?=form_open('select_language_form');?>
 <table id = "formins">
 <tr>
-	<th>Select language for the installation process:</th>
+	<th colspan = "2">Select language</th>
 </tr>
-
 <tr>
 	<td><?=form_dropdown('select_language', $languages, 'english');?></td>
 </tr>
-
+<tr>
+	<th class = "next"><?=form_submit(array('id' => 'submit', 'value' => lang('voc.i18n_next'), 'class' => 'next'));?></th>
+</tr>
 </table>
-
-<div id = "nextbutton"><?=form_submit(array('id' => 'submit', 'value' => lang('voc.i18n_next'), 'class' => 'submit'));?></div>
 
 <?=form_close();?>

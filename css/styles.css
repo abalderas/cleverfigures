@@ -1,9 +1,21 @@
 body
 {
-background-color:#EAF2D3;
+background-color:#EAF2ff;
 font-family:"Trebuchet MS";
-height:100%;
+height:97%;
 }
+
+#wrap{
+	min-height: 100%;
+	margin: 0 auto -35px; /* the bottom margin is the negative value of the footer's height */
+	position: relative;
+}
+
+#content{
+	margin: 0 auto;
+	padding: 0 0 103px 0;
+}
+
 h1
 {
 text-transform: uppercase; 
@@ -49,6 +61,9 @@ a:active {
     width:100%;
     left:0px;
     right:0px;
+}
+em{
+	color:red;
 }
 
 #form td, #form th 
@@ -103,13 +118,18 @@ background-color:#EAF2D3;
 }
 
 #formins {
-table-layout: fixed;
+	table-layout: fixed;
+	text-align:left;
 	font-size:1.2em;
-    font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
-    border-collapse:collapse;
-    width:100%;
-    left:0px;
-    right:0px;
+	border:1px solid #A7C942;
+	font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+	margin: auto;
+	border-radius: 10px;
+	min-width:500px;
+}
+
+#formins tr{
+border: 1px solid #ffffff;
 }
 
 #formins td, #formins th 
@@ -117,87 +137,62 @@ table-layout: fixed;
 font-size:1em;
 height:50px;
 padding:3px 7px 2px 7px;
+border-radius: 10px;
 }
 
 #formins th 
 {
 font-size:1em;
-text-align:left;
+text-align:center;
 padding-top:5px;
 padding-bottom:4px;
-background-color:#A7C942;
 color:#ffffff;
+text-transform: uppercase;
+text-shadow: 0.1em 0.1em 0.2em black;
+background-color:#A7C942;
 }
 
 #formins td 
 {
 font-size:1em;
-font-weight:bold;
-text-align:center;
-color:#A7C942;
-background-color:#EAF2D3;
-}
-
-#formins input{
-	font-size:1.2em;
-	padding-left:5px;
-	text-align:left;
-	font-weight:bold;
-	border:1px solid #EAF2D3;
-	color:#A7C942;
-}
-#formins input.submit {
-text-transform: uppercase; 
-text-align:center;
-padding-top:5px;
-padding-bottom:4px;
-background-color:#EAF2D3;
-}
-
-#formins input.submit:hover {
-  font-size:130%;
-  cursor:pointer;
 }
 
 #formins select{
 	font-size:1.2em;
 	padding-left:5px;
 	text-align:left;
+	width:100%;
+}
+
+#formins input{
+	font-size:1.2em;
+	padding-left:5px;
+	text-align:left;
+}
+
+#formins input.next{
+	font-size:1.2em;
+	padding-left:5px;
+	text-align:left;
 	font-weight:bold;
 	border:1px solid #EAF2D3;
-	color:#A7C942;
-	background-color:#EAF2D3;
+	color:#ffffff;
+	background-color:#A7C942;
+	text-transform: uppercase;
+	text-shadow: 0.1em 0.1em 0.2em black;
 }
 
-#nextbutton{
-    font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
-    border-collapse:collapse;
-	position:absolute;
-	bottom:50px;
-	right:10px;
-}
-
-#nextbutton input {
-	color:#A7C942;
-	border:0px;
-	font-size:1.8em;
-    border-collapse:collapse;
-text-transform: uppercase; 
-text-align:center;
-padding-top:5px;
-padding-bottom:4px;
-background-color:#EAF2D3;
-}
-
-#nextbutton input.submit:hover {
-    border-collapse:collapse;
-text-transform: uppercase; 
-text-align:center;
-padding-top:5px;
-padding-bottom:4px;
-background-color:#EAF2D3;
-  font-size:200%;
-  cursor:pointer;
+#formins input.next:hover{
+	font-size:1.3em;
+	padding-left:5px;
+	text-align:left;
+	font-weight:bold;
+	border:1px solid #EAF2D3;
+	color:#ffffff;
+	background-color:#A7C942;
+	text-transform: uppercase;
+	text-shadow: 0.1em 0.1em 0.2em black;
+	cursor:pointer;
 }
 
 #menu
@@ -325,12 +320,13 @@ height:29px;
 {
 font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
 width:100%;
+height:35px;
 border-collapse:collapse;
 text-align:center;
 table-layout: fixed;
-position: fixed;
+position: absolute;
 bottom: 0px;
-left:0px;
+text-shadow: 0.1em 0.1em 0.2em black;
 }
 
 #footer td, #footer th 
@@ -348,7 +344,6 @@ padding-top:5px;
 padding-bottom:4px;
 background-color:#A7C942;
 color:#ffffff;
-height:35px;
 }
 
 #footer td 
@@ -376,9 +371,3 @@ a.footer:active {
 }
 
 ul {list-style-type:square;}
-
-#progress{
-  font-size:130%;
-  font-weight:bold;
-  text-align:center;
-}
