@@ -92,22 +92,20 @@ class User_model extends CI_Model{
    	
    	//login methods
    	function login($uname, $pass){
-   		$this -> db -> select('user_username') 
-      		  -> from('user') 
+   		$this -> db -> from('user') 
       		  -> where('user_username = ' . "'" . $uname . "'") 
       		  -> where('user_password = ' . "'" . MD5($pass) . "'") 
       		  -> limit(1);
    
-      		$this->db->flush_cache();
       		$query = $this -> db -> get();
        
-      		if($query -> num_rows() == 1){
+      		if($query->result()){
       			foreach($query->result() as $row) 
         			$sess_array = array('user_username' => $row -> user_username,
-        						'user_language' => $row->user_language,
-        						'user_realname' => $row->user_realname); 
+        						'user_language' => $row -> user_language,
+        						'user_realname' => $row -> user_realname); 
             		$this -> session -> set_userdata('logged_in', $sess_array);
-            		//todo: Load user configuration
+            		$this->update_last_session($uname);
             		return true;
       		}
       		else
@@ -117,8 +115,8 @@ class User_model extends CI_Model{
    	//save & delete methods
    	
    	function delete_user(){
-   		$check = $this->db->query("select * from user where user_username == ".$this->session->userdata('user_username'));
-   		if($check->result()->num_rows() == 0)
+   		$check = $this->db->get_where('user', array('user_username' => $this->session->userdata('user_username')));
+   		if(!$check)
    			return "delete(): ERR_NONEXISTENT";
    		else
    		 	$this->db->delete('user', array('user_username' => $this->session->userdata('user_username')));

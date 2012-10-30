@@ -5,7 +5,7 @@ class Create_user_form extends CI_Controller {
 	function Create_user_form(){
       		parent::__construct();
       		$this->load->model('user_model');
-      		$this->lang->load('voc', $this->session->userdata('language'));
+//       	$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	
 	function index(){

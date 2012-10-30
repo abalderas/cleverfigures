@@ -6,7 +6,7 @@ class Index_controller extends CI_Controller {
       		parent::__construct();
 		$this->load->model('analisis_model');
 		$this->load->dbforge();
-		$this->lang->load('voc', $this->session->userdata('language'));
+// 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	
 	private function first_time(){
@@ -582,20 +582,44 @@ class Index_controller extends CI_Controller {
 		else{
 			//If user logged in, load teacher view
 			if($this->session->userdata('user_username')){
-				$datah = array('title' => lang('voc.i18n_check_results'));
-				$datat = array('analisis_list' => $this->analisis_model->get_analisis_data($this->session->userdata('user_username')));
+				$datah = array('title' => lang('voc.i18n_teacher_view'));
+				
+				if($datanalisis = $this->analisis_model->get_analisis_data($this->session->userdata('user_username'))){
+					foreach($datanalisis as $row){
+						$adate[] = $row->analisis_date;
+						$awiki[] = $row->analisis_wiki_id;
+						$acolor[] = $row->analisis_color_id;
+						$arangea[] = $row->analisis_date_range_a;
+						$arangeb[] = $row->analisis_date_range_b;
+					}
+					$datat = array('adate' => $adate, 'awiki' => $awiki, 'acolor' => $acolor, 'arangea' => $arangea, 'arangeb' => $arangeb);
 			
-				$this->load->view('templates/header_view', $datah);
-				$this->load->view('content/teacher_view', $datat);
-				$this->load->view('templates/footer_view');
+					$this->load->view('templates/header_view', $datah);
+					$this->load->view('content/teacher_view', $datat);
+					$this->load->view('templates/footer_view');
+				}
+				else{
+					$this->load->view('templates/header_view', $datah);
+					$this->load->view('content/teacher_view');
+					$this->load->view('templates/footer_view');
+				}
 			}
 			//If not, load login view
 			else{
-				$datah = array('title' => lang('voc.i18n_login'));
+				if($this->db->query('select * from user')->result()){
+					$datah = array('title' => lang('voc.i18n_login'));
 			
-				$this->load->view('templates/header_view', $datah);
-				$this->load->view('content/login_view');
-				$this->load->view('templates/footer_view');
+					$this->load->view('templates/header_view', $datah);
+					$this->load->view('content/login_view');
+					$this->load->view('templates/footer_view');
+				}
+				else{
+					$datah = array('title' => lang('voc.i18n_installation'));
+			
+					$this->load->view('templates/header_view', $datah);
+					$this->load->view('content/installation2_view');
+					$this->load->view('templates/footer_view');
+				}
 			}
 		}
 	}

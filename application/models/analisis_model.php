@@ -72,16 +72,11 @@ class Analisis_model extends CI_Model{
    	}
    	
    	function get_analisis_data($user){
-		$data = $this->db->query("select * from analisis where analisis_user = $user");
-		if($data->result()->num_rows() == 0)
-			return lang('voc.i18n_no_analisis');
+		$data = $this->db->get_where('analisis', array('analisis_username' => $user));
+		if(!$data->result())
+			return false;
 		
-		$result = "<table><tr><th>".lang('i18n_date_hour')."</th><th>".lang('i18n_wiki')."</th><th>".lang('i18n_color')."</th><th>".lang('i18n_date_range_a')."</th><th>".lang('i18n_date_range_b')."</th></tr>";
-		foreach($data as $row)
-			$result .= "<tr><td>".$row->analisis_date."</td><td>".$row->analisis_wiki_id."</td><td>".$row->analisis_color_id."</td><td>".$row->analisis_date_range_a."</td><td>".$row->analisis_date_range_b."</td></tr>";
-		$result .= "</table>";
-		
-		return $result;
+		return $data->result();
    	}
 }
 

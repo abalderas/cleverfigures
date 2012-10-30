@@ -5,7 +5,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<link rel="shortcut icon" type="image/x-icon" href="images/icons/favicon.ico">
 	<? 
-		if($this->config->item('language') == 'russian') 
+		if($this->session->userdata('language') == 'russian') 
 			 echo link_tag('css/russianstyles.css');  
 		else
 			 echo link_tag('css/styles.css'); 
@@ -15,12 +15,13 @@
 <table id = "menu">
 	<tr>
 		<? 
-			if($this->session->userdata('user_username')){
-				echo "<th>$this->session->userdata('user_realname')</th>";
+			if($this->session->userdata('user_username')){ //no se ve menu!!!
+				echo "<th>".$this->session->userdata('user_realname')."</th>";
 				echo "<th>".lang('voc.i18n_configuration')."</th>";
-				echo "<th>".lang('voc.i18n_view_results')."</th>";
-				echo "<th".lang('voc.i18n_analise')."</th>";
+				echo "<th>".lang('voc.i18n_view_analisis')."</th>";
+				echo "<th>".lang('voc.i18n_analise')."</th>";
 				echo "<th>".lang('voc.i18n_about')."</th>";
+				echo "<th>".lang('voc.i18n_close_session')."</th>";
 			}
 		?>
 	</tr>
