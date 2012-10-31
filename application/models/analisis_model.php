@@ -40,9 +40,8 @@ class Analisis_model extends CI_Model{
 		$sql = array(
 			'analisis_id' => $analisis,
    			'analisis_date' => standard_date($formato, $tiempo),
-   			'analisis_username' => $this->session->userdata('user_username'),
-   			'analisis_wiki_id' => $wikiname,
-   			'analisis_color_id' => $colorname,
+   			'analisis_wiki_name' => $wikiname,
+   			'analisis_color_name' => $colorname,
    			'analisis_date_range_a' => $date_range_a,
    			'analisis_date_range_b' => $date_range_b
    			);
@@ -71,11 +70,10 @@ class Analisis_model extends CI_Model{
 		$this->db->delete('wgeneral', array('wgen_analisis' => $analisis));
    	}
    	
-   	function get_analisis_data($user){
-		$data = $this->db->get_where('analisis', array('analisis_username' => $user));
+   	function get_analisis_data($analisis){
+		$data = $this->db->get_where('analisis', array('analisis_id' => $analisis));
 		if(!$data->result())
 			return false;
-		
 		return $data->result();
    	}
 }

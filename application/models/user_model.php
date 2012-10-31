@@ -42,7 +42,7 @@ class User_model extends CI_Model{
    	function relate_wiki($wikiname){
    		$query = $this->db->query("select * from wiki where wiki_name == $wikiname");
    		if($query->result()->num_rows() != 0){
-   			$sql = array('user_username' => $this->session->userdata('user_username'),
+   			$sql = array('user_username' => $this->session->userdata('username'),
    					'wiki_name' => "$wikiname"
    				);
 	
@@ -59,7 +59,7 @@ class User_model extends CI_Model{
    	function relate_color($colorname){
    		$query = $this->db->query("select * from color where color_name == $colorname");
    		if($query->result()->num_rows() != 0){
-   			$sql = array('user_username' => $this->session->userdata('user_username'),
+   			$sql = array('user_username' => $this->session->userdata('username'),
    					'color_name' => "$colorname"
    				);
 	
@@ -101,10 +101,10 @@ class User_model extends CI_Model{
        
       		if($query->result()){
       			foreach($query->result() as $row) 
-        			$sess_array = array('user_username' => $row -> user_username,
-        						'user_language' => $row -> user_language,
-        						'user_realname' => $row -> user_realname); 
-            		$this -> session -> set_userdata('logged_in', $sess_array);
+        			$sess_array = array('username' => $row -> user_username,
+        						'language' => $row -> user_language,
+        						'realname' => $row -> user_realname); 
+            		$this -> session -> set_userdata($sess_array);
             		$this->update_last_session($uname);
             		return true;
       		}
@@ -115,11 +115,11 @@ class User_model extends CI_Model{
    	//save & delete methods
    	
    	function delete_user(){
-   		$check = $this->db->get_where('user', array('user_username' => $this->session->userdata('user_username')));
+   		$check = $this->db->get_where('user', array('user_username' => $this->session->userdata('username')));
    		if(!$check)
    			return "delete(): ERR_NONEXISTENT";
    		else
-   		 	$this->db->delete('user', array('user_username' => $this->session->userdata('user_username')));
+   		 	$this->db->delete('user', array('user_username' => $this->session->userdata('username')));
    		 	
    		 	$this->session->sess_destroy();
    		 	return true;

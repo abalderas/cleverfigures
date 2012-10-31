@@ -5,6 +5,7 @@ class Index_controller extends CI_Controller {
 	function Index_controller(){
       		parent::__construct();
 		$this->load->model('analisis_model');
+		$this->load->model('user_analisis_model');
 		$this->load->dbforge();
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
@@ -126,17 +127,13 @@ class Index_controller extends CI_Controller {
                                                  'type' => 'VARCHAR',
                                                  'constraint' => '30'
                                           ),
-                        'analisis_username' => array(
-                                                 'type' =>'VARCHAR',
-                                                 'constraint' => '20'
+                        'analisis_wiki_name' => array(
+                                                 'type' => 'VARCHAR',
+                                                 'constraint' => '30'
                                           ),
-                        'analisis_wiki_id' => array(
-                                                 'type' => 'INT',
-                                                 'constraint' => 9
-                                          ),
-                        'analisis_color_id' => array(
-                                                 'type' => 'INT',
-                                                 'constraint' => 9
+                        'analisis_color_name' => array(
+                                                 'type' => 'VARCHAR',
+                                                 'constraint' => '30'
                                           ),
                         'analisis_date_range_a' => array(
                                                  'type' => 'VARCHAR',
@@ -516,7 +513,7 @@ class Index_controller extends CI_Controller {
 			$this->dbforge->create_table('data');
 			
 			$fields = array(
-                        'user_name' => array(
+                        'user_username' => array(
                                                  'type' =>'VARCHAR',
                                                  'constraint' => '20'
                                           ),
@@ -526,11 +523,11 @@ class Index_controller extends CI_Controller {
                                           )
 			);
 			$this->dbforge->add_field($fields);
-			$this->dbforge->add_key('user_name');
+			$this->dbforge->add_key('user_username');
 			$this->dbforge->create_table('user-wiki');
 			
 			$fields = array(
-                        'user_name' => array(
+                        'user_username' => array(
                                                  'type' =>'VARCHAR',
                                                  'constraint' => '20'
                                           ),
@@ -540,11 +537,11 @@ class Index_controller extends CI_Controller {
                                           )
 			);
 			$this->dbforge->add_field($fields);
-			$this->dbforge->add_key('user_name');
+			$this->dbforge->add_key('user_username');
 			$this->dbforge->create_table('user-color');
 			
 			$fields = array(
-                        'user_name' => array(
+                        'user_username' => array(
                                                  'type' =>'VARCHAR',
                                                  'constraint' => '20'
                                           ),
@@ -554,7 +551,7 @@ class Index_controller extends CI_Controller {
                                           )
 			);
 			$this->dbforge->add_field($fields);
-			$this->dbforge->add_key('user_name');
+			$this->dbforge->add_key('user_username');
 			$this->dbforge->create_table('user-analisis');
 			
 // 			$fields = array(
@@ -581,10 +578,13 @@ class Index_controller extends CI_Controller {
 		//If not, check session
 		else{
 			//If user logged in, load teacher view
-			if($this->session->userdata('user_username')){
+			if($this->session->userdata('username')){
 				$datah = array('title' => lang('voc.i18n_teacher_view'));
 				
-				if($datanalisis = $this->analisis_model->get_analisis_data($this->session->userdata('user_username'))){
+				if($analist = $this->user_analisis_model->get_analisis_list($this->session->userdata('username'))){
+				foreach($analist as $row){
+					$datanalisis = $this->analisis->get_analisis_data($row->analisis_id);
+					
 					foreach($datanalisis as $row){
 						$adate[] = $row->analisis_date;
 						$awiki[] = $row->analisis_wiki_id;
@@ -592,17 +592,18 @@ class Index_controller extends CI_Controller {
 						$arangea[] = $row->analisis_date_range_a;
 						$arangeb[] = $row->analisis_date_range_b;
 					}
-					$datat = array('adate' => $adate, 'awiki' => $awiki, 'acolor' => $acolor, 'arangea' => $arangea, 'arangeb' => $arangeb);
+				}
+				$datat = array('adate' => $adate, 'awiki' => $awiki, 'acolor' => $acolor, 'arangea' => $arangea, 'arangeb' => $arangeb);
 			
-					$this->load->view('templates/header_view', $datah);
-					$this->load->view('content/teacher_view', $datat);
-					$this->load->view('templates/footer_view');
-				}
-				else{
-					$this->load->view('templates/header_view', $datah);
-					$this->load->view('content/teacher_view');
-					$this->load->view('templates/footer_view');
-				}
+				$this->load->view('templates/header_view', $datah);
+				$this->load->view('content/teacher_view', $datat);
+				$this->load->view('templates/footer_view');
+			}
+			else{
+				$this->load->view('templates/header_view', $datah);
+				$this->load->view('content/teacher_view');
+				$this->load->view('templates/footer_view');
+			}
 			}
 			//If not, load login view
 			else{

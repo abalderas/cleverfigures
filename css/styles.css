@@ -255,7 +255,7 @@ background-color:#EAF2D3;
 font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
 width:100%;
 border-collapse:collapse;
-text-align:left;
+text-align:center;
 table-layout: fixed;
 }
 
@@ -269,7 +269,6 @@ padding:3px 7px 2px 7px;
 #bodytable th 
 {
 font-size:1em;
-text-align:center;
 padding-top:5px;
 padding-bottom:4px;
 background-color:#A7C942;

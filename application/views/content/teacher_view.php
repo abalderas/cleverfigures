@@ -1,5 +1,5 @@
 
-<?="<h3>".lang('voc.i18n_performed_analisis')."</h3></br>"?>
+<?="<h1>".lang('voc.i18n_performed_analisis')."</h1></br>"?>
 <table id = "bodytable">
 <tr>
 	<th><?=lang('voc.i18n_date_hour')?></th>
@@ -11,7 +11,7 @@
 </tr>
 
 <? 
-	if(isset($datat))
+	if(isset($adate))
 		for($i = 0; $i < count($adate); $i++){
 			echo "<tr>";
 				echo "<td>".$adate[$i]."</td>";

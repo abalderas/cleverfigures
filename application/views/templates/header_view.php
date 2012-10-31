@@ -15,8 +15,9 @@
 <table id = "menu">
 	<tr>
 		<? 
-			if($this->session->userdata('user_username')){ //no se ve menu!!!
-				echo "<th>".$this->session->userdata('user_realname')."</th>";
+			$logged = $this->session->userdata('username');
+			if($logged != ''){
+				echo "<th>".$this->session->userdata('realname')."</th>";
 				echo "<th>".lang('voc.i18n_configuration')."</th>";
 				echo "<th>".lang('voc.i18n_view_analisis')."</th>";
 				echo "<th>".lang('voc.i18n_analise')."</th>";

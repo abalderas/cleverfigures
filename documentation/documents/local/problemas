@@ -2,3 +2,4 @@ estructura de bd de assessmw
 qué guardar en la bd
 lenguaje no cambiaba dinámicamente
 quitar index.php de la url
+sesión no se mantenía -> mentira: no se estaba guardando correctamente (array)
