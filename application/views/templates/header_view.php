@@ -37,11 +37,11 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 		<? 
 			$logged = $this->session->userdata('username');
 			if($logged != ''){
-				echo "<th><un>".$this->session->userdata('realname')."</un></th>";
-				echo "<th>".lang('voc.i18n_configuration')."</th>";
-				echo "<th>".lang('voc.i18n_view_analisis')."</th>";
-				echo "<th>".lang('voc.i18n_analise')."</th>";
-				echo "<th>".lang('voc.i18n_close_session')."</th>";
+				echo "<th><un>".img('images/icons/PNG/Green/32/door.png').$this->session->userdata('realname')."</un></th>";
+				echo "<th>".img('images/icons/PNG/Green/32/tool.png').lang('voc.i18n_configuration')."</th>";
+				echo "<th>".img('images/icons/PNG/Green/32/charts.png').lang('voc.i18n_view_analisis')."</th>";
+				echo "<th>".img('images/icons/PNG/Green/32/Forward.png').lang('voc.i18n_analise')."</th>";
+				echo "<th>".img('images/icons/PNG/Green/32/user.png').lang('voc.i18n_close_session')."</th>";
 			}
 		?>
 	</tr>
