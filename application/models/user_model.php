@@ -24,6 +24,7 @@ class User_model extends CI_Model{
 	//constructor
    	function User_model(){
    	   	parent::__construct();
+   	   	$this->load->database();
    	}
    	
    	//writing methods

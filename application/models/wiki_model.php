@@ -36,6 +36,7 @@ class Wiki_model extends CI_Model{
    	function Wiki_model(){
    		//Llamamos al constructor heredado.
    	   	parent::__construct();
+   	   	$this->load->database();
    	   	
    	   	//Cargamos models necesarios
    	   	$ci =& get_instance();

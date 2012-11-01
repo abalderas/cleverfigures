@@ -21,7 +21,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 echo img('images/logo/logotrans.png');
 echo br();
 
-echo "</b><p align = \"center\">".lang('voc.i18n_installation_end')."</p></b>";
+echo "<p align = \"center\">".lang('voc.i18n_installation_end')."</p>";
 ?>
 
 <?echo form_open('installation_end_form');?>

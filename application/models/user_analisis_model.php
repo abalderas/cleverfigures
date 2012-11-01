@@ -24,6 +24,7 @@ class User_analisis_model extends CI_Model{
 	//METHODS
    	function User_analisis_model(){
    	   	parent::__construct();
+   	   	$this->load->database();
    	}
    	
    	function get_analisis_list($user){

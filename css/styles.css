@@ -21,18 +21,14 @@ body
 {
 background-color:#EAF2ff;
 font-family:"Trebuchet MS";
-height:97%;
+height:100%;
 }
 
 #wrap{
 	min-height: 100%;
-	margin: 0 auto -35px; /* the bottom margin is the negative value of the footer's height */
+	padding-top:10px;
+	margin: 0 auto -50px; /* the bottom margin is the negative value of the footer's height */
 	position: relative;
-}
-
-#content{
-	margin: 0 auto;
-	padding: 0 0 103px 0;
 }
 
 h1
@@ -83,6 +79,11 @@ a:active {
 }
 em{
 	color:red;
+	font-size:0.8em;
+}
+
+un{
+	color:#A7C942;
 }
 
 #form td, #form th 

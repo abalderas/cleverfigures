@@ -24,6 +24,7 @@ class Analisis_model extends CI_Model{
 	//METHODS
    	function Analisis_model(){
    	   	parent::__construct();
+   	   	$this->load->database();
    	   	$co =& get_instance();
 		$co->load->model('merging_model');
 		$ci =& get_instance();

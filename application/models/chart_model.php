@@ -22,6 +22,7 @@
 class Charts_model extends CI_Model{
    function Charts_model(){
       	parent::__construct();
+   	$this->load->database();
       	
       	$id = 0;
    }

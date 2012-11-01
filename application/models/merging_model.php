@@ -27,6 +27,7 @@ class Merging_model extends CI_Model{
    	function Merging_model(){
    		//Llamamos al constructor heredado.
    	   	parent::__construct();
+   	   	$this->load->database();
    	   	
    	   	//Cargamos models necesarios
    	   	$ci =& get_instance();

@@ -30,6 +30,7 @@ class Connection_model extends CI_Model{
 	//constructor
    	function Connection_model(){
    	   	parent::__construct();
+   	   	$this->load->database();
    	}
    	
    	function new_connection($server, $name, $user, $password){

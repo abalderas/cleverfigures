@@ -33,6 +33,7 @@ class Color_model extends CI_Model{
    	function Color_model(){
    		//Llamamos al constructor heredado.
    	   	parent::__construct();
+   	   	$this->load->database();
    	   	
    	   	//Cargamos models necesarios
    	   	$ci =& get_instance();

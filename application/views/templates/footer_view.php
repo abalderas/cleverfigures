@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License
 along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-</div>
 <table id ="footer">
 	<tr>
 		<th><?=safe_mailto('alvaro.almagrodoello@alum.uca.es', lang('voc.i18n_contact'))?></th>

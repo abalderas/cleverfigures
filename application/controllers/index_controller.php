@@ -26,19 +26,21 @@ class Index_controller extends CI_Controller {
 		$this->load->model('analisis_model');
 		$this->load->model('user_analisis_model');
 		$this->load->model('dbforge_model');
+		$this->load->dbutil();
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	
 	private function first_time(){
-		return $this->db->table_exists('user')?false:true;
+		$dbs = $this->dbutil->list_databases();
+		if(count($dbs) > 1) return false;
+		return true;
 	}
 	
 	function index(){
-		//If first time running CleverFigures, create database and load installation
+	
+		//If first time running CleverFigures,load installation
 		if($this->first_time()){
-			//Creating database
-			$this->dbforge_model->build_database();
-			
+		
 			//Loading installation
 			$datah = array('title' => lang('voc.i18n_installation'));
 			$this->load->view('templates/header_view', $datah);
@@ -68,15 +70,15 @@ class Index_controller extends CI_Controller {
 				$this->load->view('templates/header_view', $datah);
 				$this->load->view('content/teacher_view', $datat);
 				$this->load->view('templates/footer_view');
+				}
+				else{
+					$this->load->view('templates/header_view', $datah);
+					$this->load->view('content/teacher_view');
+					$this->load->view('templates/footer_view');
+				}
 			}
 			else{
-				$this->load->view('templates/header_view', $datah);
-				$this->load->view('content/teacher_view');
-				$this->load->view('templates/footer_view');
-			}
-			}
-			//If not, load login view
-			else{
+				//If it exists user
 				if($this->db->query('select * from user')->result()){
 					$datah = array('title' => lang('voc.i18n_login'));
 			
@@ -84,11 +86,12 @@ class Index_controller extends CI_Controller {
 					$this->load->view('content/login_view');
 					$this->load->view('templates/footer_view');
 				}
+				//Else, load user creation view
 				else{
 					$datah = array('title' => lang('voc.i18n_installation'));
 			
 					$this->load->view('templates/header_view', $datah);
-					$this->load->view('content/installation1_view');
+					$this->load->view('content/installation2_view');
 					$this->load->view('templates/footer_view');
 				}
 			}

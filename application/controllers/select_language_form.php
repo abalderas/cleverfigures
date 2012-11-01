@@ -34,7 +34,7 @@ class Select_language_form extends CI_Controller {
       		
 		$datah = array('title' => lang('voc.i18n_installation'));
 		$this->load->view('templates/header_view', $datah);
-		$this->load->view('content/installation2_view');
+		$this->load->view('content/dbconfig_view');
 		$this->load->view('templates/footer_view');
 	}
 } 
