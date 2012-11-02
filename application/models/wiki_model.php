@@ -48,11 +48,24 @@ class Wiki_model extends CI_Model{
    		$query = $this->db->query("select wiki_connection from wiki where wiki_name == $wikiname");
    		
    		//Comprobamos que existe y devolvemos el id de conexión
-   		if($check->result()->num_rows() == 0)
+   		if(!$query->result())
    			return "connection(): ERR_NONEXISTENT";
    		else
    			foreach($check->result() as $row)
    				return $row->wiki_connection;
+   	}
+   	
+   	function get_wiki_list($username){
+		//Consultamos la conexión
+   		$query = $this->db->get_where('wiki, user-wiki', array('wiki.wiki_name' => 'user-wiki.wiki_name', 'user-wiki.user_username' => $username));
+   		//Comprobamos que existe y devolvemos el id de conexión
+   		if(!$query->result())
+   			return false;
+   		else
+   			foreach($query->result() as $row)
+   				$wikis[$row->wiki_name] = $row->wiki_name;
+   				
+   		return $wikis;
    	}
    	
    	function new_wiki($wikiname, $db_server, $db_name, $db_user, $db_password){

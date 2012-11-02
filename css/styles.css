@@ -26,7 +26,7 @@ height:100%;
 
 #wrap{
 	min-height: 100%;
-	padding-top:10px;
+	padding-top:75px;
 	margin: 0 auto -50px; /* the bottom margin is the negative value of the footer's height */
 	position: relative;
 }
@@ -83,7 +83,7 @@ em{
 }
 
 un{
-	color:#A7C942;
+	color:#878787 ;
 }
 
 #form td, #form th 
@@ -229,20 +229,19 @@ border-collapse:collapse;
 text-align:center;
 }
 
-a.menulink:link {
+#menu a:link {
   color:white;
   text-decoration:none;
 }
-a.menulink:visited {
+#menu a:visited {
   color:lightpurple;
   text-decoration:none;
 }
-a.menulink:hover {
-  color:white;
-  font-size:110%;
+#menu a:hover {
+  color:A7C942;
   text-decoration:none;
 }
-a.menulink:active {
+#menu a:active {
   color:white;
   text-decoration:none;
 }

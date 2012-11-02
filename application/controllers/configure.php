@@ -17,17 +17,19 @@
 // You should have received a copy of the GNU General Public License
 // along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
-class Select_language_form extends CI_Controller {
+class Configure extends CI_Controller {
 
-	function Select_language_form(){
+	function Configure(){
       		parent::__construct();
+      		$this->load->model('wiki_model');
+      		$this->load->model('color_model');
    	}
    	
 	function index(){
-      		
+      		$confdata = array('wikis' => $this->wiki_model->get_wiki_list($this->session->userdata('username')), 'colors' => $this->color_model->get_color_list($this->session->userdata('username')));
 		$datah = array('title' => lang('voc.i18n_configuration'));
 		$this->load->view('templates/header_view', $datah);
-		$this->load->view('content/configuration_view');
+		$this->load->view('content/configuration_view', $confdata);
 		$this->load->view('templates/footer_view');
 	}
 } 
