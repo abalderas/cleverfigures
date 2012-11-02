@@ -58,7 +58,7 @@ class Color_model extends CI_Model{
    		
    		//Comprobamos que existe y devolvemos el id de conexión
    		if(!$query->result())
-   			return false;
+   			return array();
    		else
    			foreach($query->result() as $row)
    				$colors[$row->color_name] = $row->color_name;

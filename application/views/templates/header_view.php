@@ -39,7 +39,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			if($logged != ''){
 				echo "<th>".img('images/icons/Developer_Icons_PNG/PNG/Green/32/user.png')."<un>".$this->session->userdata('realname')."</un></th>";
 				echo "<th>".img('images/icons/Developer_Icons_PNG/PNG/Green/32/tool.png').anchor('configure', lang('voc.i18n_configuration'))."</th>";
-				echo "<th>".img('images/icons/Developer_Icons_PNG/PNG/Green/32/charts.png').lang('voc.i18n_view_analisis')."</th>";
+				echo "<th>".img('images/icons/Developer_Icons_PNG/PNG/Green/32/charts.png').anchor('teacher', lang('voc.i18n_view_analisis'))."</th>";
 				echo "<th>".img('images/icons/Developer_Icons_PNG/PNG/Green/32/Forward.png').lang('voc.i18n_analise')."</th>";
 				echo "<th>".img('images/icons/Developer_Icons_PNG/PNG/Green/32/door.png').anchor('close_session', lang('voc.i18n_close_session'));
 			}

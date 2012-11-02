@@ -60,7 +60,7 @@ class Wiki_model extends CI_Model{
    		$query = $this->db->get_where('wiki, user-wiki', array('wiki.wiki_name' => 'user-wiki.wiki_name', 'user-wiki.user_username' => $username));
    		//Comprobamos que existe y devolvemos el id de conexión
    		if(!$query->result())
-   			return false;
+   			return array();
    		else
    			foreach($query->result() as $row)
    				$wikis[$row->wiki_name] = $row->wiki_name;
