@@ -19,21 +19,18 @@
 
 
 
-class Analise extends CI_Controller {
+class About extends CI_Controller {
 
-	function Analise(){
+	function About(){
       		parent::__construct();
-      		$this->load->model('wiki_model');
-      		$this->load->model('color_model');
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	
    	function index(){
-		$datah = array('title' => lang('voc.i18n_analise'));
-		$adata = array('wikis' => $this->wiki_model->get_wiki_list($this->session->userdata('username')), 'colors' => $this->color_model->get_color_list($this->session->userdata('username')), 'filters' => array() /*PENDIENTE!!!!!!!!!*/);
+		$datah = array('title' => lang('voc.i18n_about'));
 		
 		$this->load->view('templates/header_view', $datah);
-		$this->load->view('content/analise_view', $adata);
+		$this->load->view('content/about_view');
 		$this->load->view('templates/footer_view');
 	}
 }

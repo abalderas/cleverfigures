@@ -55,10 +55,9 @@ class Wiki_model extends CI_Model{
    				return $row->wiki_connection;
    	}
    	
-   	function get_wiki_list($username){
+   	function get_wiki_list($username = 'default'){
 		//Consultamos la conexión
    		$query = $this->db->get_where('wiki, user-wiki', array('wiki.wiki_name' => 'user-wiki.wiki_name', 'user-wiki.user_username' => $username));
-   		//Comprobamos que existe y devolvemos el id de conexión
    		if(!$query->result())
    			return array();
    		else
