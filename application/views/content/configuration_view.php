@@ -44,7 +44,18 @@ echo form_open('configuration_form');
 </tr>
 <tr>
 	<td><?=form_label(lang('voc.i18n_select_filter'), 'select_filter');?></td>
-	<td><?=form_dropdown('select_filter', $filters);?><?=form_submit(array('id' => 'create_filter', 'value' => lang('voc.i18n_create_filter'), 'class' => 'next'));?></td>
+	<td><?=form_dropdown('select_filter', $filters);?><?=form_submit(array('id' => 'add_filter', 'value' => lang('voc.i18n_add_filter'), 'class' => 'next'));?></td>
+</tr>
+<tr>
+	<th colspan = "2"><?=lang('voc.i18n_data_source');?></th>
+</tr>
+<tr>
+	<td><?=form_label(lang('voc.i18n_add_wiki'), 'add_wiki');?></td>
+	<td><?=form_submit('add_wiki', lang('voc.i18n_add_wiki'));?></td>
+</tr>
+<tr>
+	<td><?=form_label(lang('voc.i18n_add_color'), 'add_color');?></td>
+	<td><?=form_submit('add_color', lang('voc.i18n_add_color'));?></td>
 </tr>
 <tr>
 	<th colspan = "2">

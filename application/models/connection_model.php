@@ -34,8 +34,8 @@ class Connection_model extends CI_Model{
    	}
    	
    	function new_connection($server, $name, $user, $password){
-   	   	$check = $this->db->query("select * from connection where connection_server == $server and connection_name == $name and connection_user == $user");
-   		if($check->result()->num_rows() != 0)
+   	   	$check = $this->db->query("select * from connection where connection_server = '$server' and connection_name = '$name' and connection_user = '$user'");
+   		if($check->result())
    			return "new_connection(): ERR_ALREADY_EXISTS";
    		else{
    			$sql = array('connection_id' => "",
@@ -44,7 +44,7 @@ class Connection_model extends CI_Model{
    				'connection_user' => "$user",
    				'connection_password' => "$password"
    			);
-					$this->db->insert('Connection', $sql);
+					$this->db->insert('connection', $sql);
 	
 			if($this->db->affected_rows() != 1) 
 				return "new_connection(): ERR_AFFECTED_ROWS (".$this->db->affected_rows().")";
@@ -54,8 +54,8 @@ class Connection_model extends CI_Model{
 	}
 	
 	function connect($id){
-		$query = $this->db->query("select * from connection where connection_id == $id");
-   		if($query->result()->num_rows() == 0)
+		$query = $this->db->query("select * from connection where connection_id = '$id'");
+   		if(!$query->result())
    			return "connect(): ERR_NONEXISTENT";
    		else{
    			$result = $query->result();
@@ -92,8 +92,8 @@ class Connection_model extends CI_Model{
    	}
    	
    	function delete_connection($id){
-   		$check = $this->db->query("select * from connection where connection_id == $id");
-   		if($check->result()->num_rows() == 0)
+   		$check = $this->db->query("select * from connection where connection_id = '$id'");
+   		if(!$check->result())
    			return "delete_connection(): ERR_NONEXISTENT";
    		else
    		 	$this->db->delete('connection', array('connection_id' => $id)); 

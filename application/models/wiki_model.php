@@ -45,7 +45,7 @@ class Wiki_model extends CI_Model{
    	
    	private function wconnection($wikiname){
    		//Consultamos la conexión
-   		$query = $this->db->query("select wiki_connection from wiki where wiki_name == $wikiname");
+   		$query = $this->db->query("select wiki_connection from wiki where wiki_name = '$wikiname'");
    		
    		//Comprobamos que existe y devolvemos el id de conexión
    		if(!$query->result())
@@ -57,13 +57,13 @@ class Wiki_model extends CI_Model{
    	
    	function get_wiki_list($username = 'default'){
 		//Consultamos la conexión
-   		$query = $this->db->get_where('wiki, user-wiki', array('wiki.wiki_name' => 'user-wiki.wiki_name', 'user-wiki.user_username' => $username));
+   		$query = $this->db->query("select * from wiki, `user-wiki` where wiki.wiki_name = `user-wiki`.wiki_name and `user-wiki`.user_username = '$username'");
    		if(!$query->result())
    			return array();
    		else
    			foreach($query->result() as $row)
-   				$wikis[$row->wiki_name] = $row->wiki_name;
-   				
+   				$wikis[] = $row->wiki_name;
+   		
    		return $wikis;
    	}
    	
@@ -76,8 +76,8 @@ class Wiki_model extends CI_Model{
    			return "new_wiki(): $my_con";
    		
    		//Consultamos si la wiki ya existe, si es así devolvemos error
-   		$check = $this->db->query("select * from wiki where wiki_name == $wikiname");
-   		if($check->result()->num_rows() != 0)
+   		$check = $this->db->query("select * from wiki where wiki_name = '$wikiname'");
+   		if($check->result())
    			return "new_wiki(): ERR_ALREADY_EXISTS";
    		else{
    			//Creamos el array a insertar, con la info de la wiki e insertamos
@@ -90,8 +90,6 @@ class Wiki_model extends CI_Model{
 			//Si no hay error de inserción, devolvemos el id de la wiki
 			if($this->db->affected_rows() != 1) 
 				return "new_wiki(): ERR_AFFECTED_ROWS (".$this->db->affected_rows().")";
-			else
-				return  $this->db->insert_id();
 		}
    	}
    	
@@ -130,39 +128,39 @@ class Wiki_model extends CI_Model{
 		
 		if($type == 'page'){
 			//Título de categoría, número de páginas y número de subcategorías para página en concreto
-   			$cdata = $link->query("SELECT cat_title, cat_pages, cat_subcats FROM category, categorylinks, revision WHERE cl_from = $filtername AND cl_to = cat_title AND $filtername IN (SELECT DISTINCT rev_page FROM revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b) ORDER BY cat_title ASC") -> result();
+   			$cdata = $link->query("SELECT cat_title, cat_pages, cat_subcats FROM category, categorylinks, revision WHERE cl_from = '$filtername' AND cl_to = cat_title AND '$filtername' IN (SELECT DISTINCT rev_page FROM revision WHERE rev_timestamp>='$date_range_a' AND rev_timestamp<='$date_range_b') ORDER BY cat_title ASC") -> result();
    			
-   			$cdata1 = $link->query("SELECT cat_title, sum(cat_pages) as totalpages FROM category, categorylinks, revision WHERE cl_from = $filtername AND cl_to = cat_title AND $filtername IN (SELECT DISTINCT rev_page FROM revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b) GROUP BY cat_title") -> result();
+   			$cdata1 = $link->query("SELECT cat_title, sum(cat_pages) as totalpages FROM category, categorylinks, revision WHERE cl_from = '$filtername' AND cl_to = cat_title AND '$filtername' IN (SELECT DISTINCT rev_page FROM revision WHERE rev_timestamp>='$date_range_a' AND rev_timestamp<='$date_range_b') GROUP BY cat_title") -> result();
    			
    			//Número de ediciones, bytes y visitas para página en concreto
-   			$cdata2 = $link->query("SELECT cl_to, count(rev_id) as edits, page_len as bytes, page_counter as visits FROM page, categorylinks, revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_page = page_id AND page_id = cl_from AND page_id = $filtername GROUP BY cl_to ORDER BY cl_to ASC") -> result();
+   			$cdata2 = $link->query("SELECT cl_to, count(rev_id) as edits, page_len as bytes, page_counter as visits FROM page, categorylinks, revision WHERE rev_timestamp>='$date_range_a' AND rev_timestamp<='$date_range_b' AND rev_page = page_id AND page_id = cl_from AND page_id = '$filtername' GROUP BY cl_to ORDER BY cl_to ASC") -> result();
    			
    			//Total de ediciones, bytes y visitas para página en concreto
-   			$totals = $link->query("SELECT cl_to, count(rev_id) as totaledits, sum(page_len) as totalbytes, sum(page_counter) as totalvisits FROM revision, categorylinks, page WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND page_id = rev_page AND  rev_page = cl_from AND cl_to in (SELECT cl_to FROM categorylinks WHERE cl_from = $filtername) GROUP BY cl_to ORDER BY cl_to ASC") -> result();
+   			$totals = $link->query("SELECT cl_to, count(rev_id) as totaledits, sum(page_len) as totalbytes, sum(page_counter) as totalvisits FROM revision, categorylinks, page WHERE rev_timestamp>='$date_range_a' AND rev_timestamp<='$date_range_b' AND page_id = rev_page AND  rev_page = cl_from AND cl_to in (SELECT cl_to FROM categorylinks WHERE cl_from = '$filtername') GROUP BY cl_to ORDER BY cl_to ASC") -> result();
    		}
    		else if($type == 'user'){
    			//Título de categoría, número de páginas y número de subcategorías para usuario en concreto
-			$cdata = $link->query("SELECT DISTINCT cat_title, cat_pages, cat_subcats FROM categorylinks, category, revision WHERE cl_to = cat_title AND cl_from IN (SELECT DISTINCT rev_page FROM revision WHERE rev_user = $filtername AND rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b)") -> result();
+			$cdata = $link->query("SELECT DISTINCT cat_title, cat_pages, cat_subcats FROM categorylinks, category, revision WHERE cl_to = cat_title AND cl_from IN (SELECT DISTINCT rev_page FROM revision WHERE rev_user = '$filtername' AND rev_timestamp>='$date_range_a' AND rev_timestamp<='$date_range_b')") -> result();
 			
-			$cdata1 = $link->query("SELECT cat_title, sum(cat_pages) as totalpages FROM category WHERE $filtername IN (SELECT DISTINCT rev_user FROM revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b) GROUP BY cat_title") -> result();
+			$cdata1 = $link->query("SELECT cat_title, sum(cat_pages) as totalpages FROM category WHERE '$filtername' IN (SELECT DISTINCT rev_user FROM revision WHERE rev_timestamp>='$date_range_a' AND rev_timestamp<='$date_range_b') GROUP BY cat_title") -> result();
    		
    			//Número de ediciones, bytes y visitas para usuario en concreto
-   			$cdata2 = $link->query("SELECT cl_to, count(rev_id) as edits, page_len as bytes, page_counter as visits FROM categorylinks, revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_user = $filtername AND rev_page = cl_from GROUP BY cl_to ORDER BY cl_to ASC") -> result();
+   			$cdata2 = $link->query("SELECT cl_to, count(rev_id) as edits, page_len as bytes, page_counter as visits FROM categorylinks, revision WHERE rev_timestamp>='$date_range_a' AND rev_timestamp<='$date_range_b' AND rev_user = '$filtername' AND rev_page = cl_from GROUP BY cl_to ORDER BY cl_to ASC") -> result();
    			
    			//Total de ediciones, bytes y visitas para usuario en concreto
-   			$totals = $link->query("SELECT cl_to, count(rev_id) as totaledits, sum(page_len) as totalbytes, sum(page_counter) as totalvisits FROM revision, categorylinks WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_user = $filtername AND cl_from = rev_page AND cl_to GROUP BY cl_to ORDER BY cl_to ASC") -> result();
+   			$totals = $link->query("SELECT cl_to, count(rev_id) as totaledits, sum(page_len) as totalbytes, sum(page_counter) as totalvisits FROM revision, categorylinks WHERE rev_timestamp>='$date_range_a' AND rev_timestamp<='$date_range_b' AND rev_user = '$filtername' AND cl_from = rev_page AND cl_to GROUP BY cl_to ORDER BY cl_to ASC") -> result();
 		}
 		else{
 			//Realizamos consultas según filtrado
-			$cdata = $link->query("SELECT DISTINCT cat_title, cat_pages, cat_subcats FROM categorylinks, category, revision WHERE cl_to = cat_title AND cl_from IN (SELECT DISTINCT rev_page FROM revision WHERE rev_user = $filtername AND rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b)") -> result();
+			$cdata = $link->query("SELECT DISTINCT cat_title, cat_pages, cat_subcats FROM categorylinks, category, revision WHERE cl_to = cat_title AND cl_from IN (SELECT DISTINCT rev_page FROM revision WHERE rev_user = '$filtername' AND rev_timestamp>='$date_range_a' AND rev_timestamp<='$date_range_b')") -> result();
 			
-			$cdata1 = $link->query("SELECT cat_title, sum(cat_pages) as totalpages FROM category, categorylinks, revision WHERE cl_to == cat_title AND cl_from IN (SELECT DISTINCT rev_page FROM revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b) GROUP BY cat_title") -> result();
+			$cdata1 = $link->query("SELECT cat_title, sum(cat_pages) as totalpages FROM category, categorylinks, revision WHERE cl_to = cat_title AND cl_from IN (SELECT DISTINCT rev_page FROM revision WHERE rev_timestamp>='$date_range_a' AND rev_timestamp<='$date_range_b') GROUP BY cat_title") -> result();
    		
    			//Número de ediciones, bytes y visitas
-   			$cdata2 = $link->query("SELECT cl_to, count(rev_id) as edits, sum(page_len) as bytes, sum(page_counter) as visits FROM page, categorylinks, revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_page == page_id AND page_id == cl_from GROUP BY cl_to ORDER BY cl_to ASC") -> result();
+   			$cdata2 = $link->query("SELECT cl_to, count(rev_id) as edits, sum(page_len) as bytes, sum(page_counter) as visits FROM page, categorylinks, revision WHERE rev_timestamp>='$date_range_a' AND rev_timestamp<='$date_range_b' AND rev_page = page_id AND page_id = cl_from GROUP BY cl_to ORDER BY cl_to ASC") -> result();
    			
    			//Total de ediciones, bytes y visitas
-   			$totals = $link->query("SELECT cl_to, count(rev_id) as totaledits, sum(page_len) as totalbytes, sum(page_counter) as totalvisits FROM page, categorylinks, revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_page == page_id AND page_id == cl_from ORDER BY cl_to ASC") -> result();
+   			$totals = $link->query("SELECT cl_to, count(rev_id) as totaledits, sum(page_len) as totalbytes, sum(page_counter) as totalvisits FROM page, categorylinks, revision WHERE rev_timestamp>='$date_range_a' AND rev_timestamp<='$date_range_b' AND rev_page = page_id AND page_id = cl_from ORDER BY cl_to ASC") -> result();
 		}
    		
    		//Formamos los vectores a devolver con los datos de las consultas
@@ -230,15 +228,15 @@ class Wiki_model extends CI_Model{
 		//Realizamos consultas según filtrado
 		if($type == 'page'){
 			//nombre de imagen, descripcion, fecha y hora de subida, tamaño y usuario para página en concreto
-   			$cdata = $link->query("SELECT img_name, img_user_text, img_timestamp, img_size, img_user FROM image, imagelinks WHERE img_name == il_to AND il_from == $filtername ORDER BY img_name ASC") -> result();
+   			$cdata = $link->query("SELECT img_name, img_user_text, img_timestamp, img_size, img_user FROM image, imagelinks WHERE img_name = il_to AND il_from = '$filtername' ORDER BY img_name ASC") -> result();
    		}
    		else if($type == 'user'){
    			//nombre de imagen, descripcion, fecha y hora de subida, tamaño y usuario para usuario en concreto
-			$cdata = $link->query("SELECT img_name, img_user_text, img_timestamp, img_size, img_user FROM image WHERE img_user == $filtername ORDER BY img_name ASC") -> result();
+			$cdata = $link->query("SELECT img_name, img_user_text, img_timestamp, img_size, img_user FROM image WHERE img_user = '$filtername' ORDER BY img_name ASC") -> result();
 		}
 		else if($type == 'category'){
    			//nombre de imagen, descripcion, fecha y hora de subida, tamaño y usuario para categoría en concreto
-			$cdata = $link->query("SELECT img_name, img_user_text, img_timestamp, img_size, img_user FROM image, imagelinks, categorylinks WHERE img_name == il_to AND il_from == cl_from AND cl_to == $filtername ORDER BY img_name ASC") -> result();
+			$cdata = $link->query("SELECT img_name, img_user_text, img_timestamp, img_size, img_user FROM image, imagelinks, categorylinks WHERE img_name = il_to AND il_from = cl_from AND cl_to = '$filtername' ORDER BY img_name ASC") -> result();
 		}
 		else{
 			//nombre de imagen, descripcion, fecha y hora de subida, tamaño y usuario
@@ -292,62 +290,62 @@ class Wiki_model extends CI_Model{
 		
 		if($type == 'page'){
 			//Nombre de usuario, nombre real y fecha de registro para una página en concreto
-   			$cdata = $link->query("SELECT user_name, user_real_name, user_registration FROM user, revision WHERE user_id == rev_user AND rev_page == $filtername AND rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b ORDER BY user_name ASC") -> result();
+   			$cdata = $link->query("SELECT user_name, user_real_name, user_registration FROM user, revision WHERE user_id == rev_user AND rev_page == '$filtername' AND rev_timestamp>='$date_range_a' AND rev_timestamp<='$date_range_b' ORDER BY user_name ASC") -> result();
    			
    			//Número de ediciones y bytes para página en concreto
-   			$cdata2 = $link->query("SELECT user_name, count(rev_id) as edits, sum(rev_len) as bytes FROM user, revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_page == $filtername AND rev_user == user_id GROUP BY user_name ORDER BY user_name ASC") -> result();
+   			$cdata2 = $link->query("SELECT user_name, count(rev_id) as edits, sum(rev_len) as bytes FROM user, revision WHERE rev_timestamp>='$date_range_a' AND rev_timestamp<='$date_range_b' AND rev_page == '$filtername' AND rev_user == user_id GROUP BY user_name ORDER BY user_name ASC") -> result();
    			
    			//Este no se usará, lo creamos para poder incluirlo en el resultado y mantener la estructura del array devuelto
    			$cdata22 = array();
    			
    			//Número de uploads para página en concreto
-   			$cdata3 = $link->query("SELECT user_name, count(img_id) FROM user, image, imagelinks WHERE user_id == img_user AND img_name == il_to AND il_from == $filtername AND img_timestamp>=$date_range_a AND img_timestamp<=$date_range_b GROUP BY user_name ORDER BY user_name ASC") -> result();
+   			$cdata3 = $link->query("SELECT user_name, count(img_id) FROM user, image, imagelinks WHERE user_id == img_user AND img_name == il_to AND il_from == '$filtername' AND img_timestamp>='$date_range_a' AND img_timestamp<='$date_range_b' GROUP BY user_name ORDER BY user_name ASC") -> result();
    			
    			//Total de ediciones y bytes para página en concreto
-   			$totals = $link->query("SELECT user_name, count(rev_id) as totaledits, page_len as totalbytes FROM user, page, revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_page == page_id AND page_id == $filtername AND rev_user == user_id ORDER BY user_name LIMIT 1") -> result();
+   			$totals = $link->query("SELECT user_name, count(rev_id) as totaledits, page_len as totalbytes FROM user, page, revision WHERE rev_timestamp>='$date_range_a' AND rev_timestamp<='$date_range_b' AND rev_page == page_id AND page_id == '$filtername' AND rev_user == user_id ORDER BY user_name LIMIT 1") -> result();
    			
    			//Número de uploads para página en concreto
-   			$totaluploads = $link->query("SELECT count(img_id) as totalimages FROM page, image, imagelinks WHERE img_timestamp>=$date_range_a AND img_timestamp<=$date_range_b AND img_name == il_to AND il_from == $filtername LIMIT 1") -> result();
+   			$totaluploads = $link->query("SELECT count(img_id) as totalimages FROM page, image, imagelinks WHERE img_timestamp>='$date_range_a' AND img_timestamp<='$date_range_b' AND img_name == il_to AND il_from == '$filtername' LIMIT 1") -> result();
    		}
    		else if($type == 'category'){
 			//Nombre de usuario, nombre real y fecha de registro para una categoría en concreto
-   			$cdata = $link->query("SELECT user_name, user_real_name, user_registration FROM user, revision, categorylinks WHERE user_id == rev_user AND rev_page == cl_from AND cl_to == $filtername AND rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b ORDER BY user_name ASC") -> result();
+   			$cdata = $link->query("SELECT user_name, user_real_name, user_registration FROM user, revision, categorylinks WHERE user_id == rev_user AND rev_page == cl_from AND cl_to == '$filtername' AND rev_timestamp>='$date_range_a' AND rev_timestamp<='$date_range_b' ORDER BY user_name ASC") -> result();
    			
    			//Número de ediciones y bytes para categoría en concreto
-   			$cdata2 = $link->query("SELECT user_name, count(rev_id) as edits, sum(rev_len) as bytes FROM user, revision, categorylinks WHERE rev_user == user_id AND rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_page == cl_from AND cl_to == $filtername GROUP BY user_name ORDER BY user_name ASC") -> result();
+   			$cdata2 = $link->query("SELECT user_name, count(rev_id) as edits, sum(rev_len) as bytes FROM user, revision, categorylinks WHERE rev_user == user_id AND rev_timestamp>='$date_range_a' AND rev_timestamp<='$date_range_b' AND rev_page == cl_from AND cl_to == '$filtername' GROUP BY user_name ORDER BY user_name ASC") -> result();
    			
    			//Número de ediciones y bytes de artículos para categoría en concreto
-   			$cdata22 = $link->query("SELECT user_name, count(rev_id) as edits, sum(rev_len) as bytes FROM user, revision, categorylinks, page WHERE rev_user == user_id AND rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_page == cl_from AND cl_to == $filtername AND rev_page == page_id AND page_namespace == 0 GROUP BY user_name ORDER BY user_name ASC") -> result();
+   			$cdata22 = $link->query("SELECT user_name, count(rev_id) as edits, sum(rev_len) as bytes FROM user, revision, categorylinks, page WHERE rev_user == user_id AND rev_timestamp>='$date_range_a' AND rev_timestamp<='$date_range_b' AND rev_page == cl_from AND cl_to == '$filtername' AND rev_page == page_id AND page_namespace == 0 GROUP BY user_name ORDER BY user_name ASC") -> result();
    			
-   			$cdata22 = $link->query("SELECT user_name, count(rev_id) as edits, sum(rev_len) as bytes FROM user, revision, page WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_page == $filtername AND rev_user == user_id AND rev_page == page_id AND page_namespace == 0 GROUP BY user_name ORDER BY user_name ASC") -> result();
+   			$cdata22 = $link->query("SELECT user_name, count(rev_id) as edits, sum(rev_len) as bytes FROM user, revision, page WHERE rev_timestamp>='$date_range_a' AND rev_timestamp<='$date_range_b' AND rev_page == '$filtername' AND rev_user == user_id AND rev_page == page_id AND page_namespace == 0 GROUP BY user_name ORDER BY user_name ASC") -> result();
    			
    			//Número de uploads para categoría en concreto
-   			$cdata3 = $link->query("SELECT user_name, count(img_id) FROM user, image, imagelinks, categorylinks, revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_user == user_id AND user_id == img_user AND img_name == il_to AND il_from == cl_from AND cl_to == $filtername AND img_timestamp>=$date_range_a AND img_timestamp<=$date_range_b GROUP BY user_name ORDER BY user_name ASC") -> result();
+   			$cdata3 = $link->query("SELECT user_name, count(img_id) FROM user, image, imagelinks, categorylinks, revision WHERE rev_timestamp>='$date_range_a' AND rev_timestamp<='$date_range_b' AND rev_user == user_id AND user_id == img_user AND img_name == il_to AND il_from == cl_from AND cl_to == '$filtername' AND img_timestamp>='$date_range_a' AND img_timestamp<='$date_range_b' GROUP BY user_name ORDER BY user_name ASC") -> result();
    			
    			//Total de ediciones y bytes para categoría en concreto
-   			$totals = $link->query("SELECT user_name, count(rev_id) as totaledits, sum(page_len) as totalbytes FROM user, page, revision, categorylinks WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_page == page_id AND page_id == cl_from AND cl_to == $filtername AND rev_user == user_id ORDER BY user_name LIMIT 1") -> result();
+   			$totals = $link->query("SELECT user_name, count(rev_id) as totaledits, sum(page_len) as totalbytes FROM user, page, revision, categorylinks WHERE rev_timestamp>='$date_range_a' AND rev_timestamp<='$date_range_b' AND rev_page == page_id AND page_id == cl_from AND cl_to == '$filtername' AND rev_user == user_id ORDER BY user_name LIMIT 1") -> result();
    			
    			//Número de uploads para categoría en concreto
-   			$totaluploads = $link->query("SELECT user_name, count(img_id) as totalimages FROM user, categorylinks, image, imagelinks, revision WHERE img_name == il_to AND il_from == cl_from AND cl_to == $filtername AND img_timestamp>=$date_range_a AND img_timestamp<=$date_range_b AND img_user == user_id  LIMIT 1") -> result();
+   			$totaluploads = $link->query("SELECT user_name, count(img_id) as totalimages FROM user, categorylinks, image, imagelinks, revision WHERE img_name == il_to AND il_from == cl_from AND cl_to == '$filtername' AND img_timestamp>='$date_range_a' AND img_timestamp<='$date_range_b' AND img_user == user_id  LIMIT 1") -> result();
    		}
 		else{
 			//Nombre de usuario, nombre real y fecha de registro
-   			$cdata = $link->query("SELECT user_name, user_real_name, user_registration FROM user, revision WHERE user_id == rev_user AND rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b ORDER BY user_name ASC") -> result();
+   			$cdata = $link->query("SELECT user_name, user_real_name, user_registration FROM user, revision WHERE user_id == rev_user AND rev_timestamp>='$date_range_a' AND rev_timestamp<='$date_range_b' ORDER BY user_name ASC") -> result();
    			
    			//Número de ediciones y bytes
-   			$cdata2 = $link->query("SELECT user_name, count(rev_id) as edits, sum(rev_len) as bytes FROM user, revision WHERE rev_user == user_id AND rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b GROUP BY user_name ORDER BY user_name ASC") -> result();
+   			$cdata2 = $link->query("SELECT user_name, count(rev_id) as edits, sum(rev_len) as bytes FROM user, revision WHERE rev_user == user_id AND rev_timestamp>='$date_range_a' AND rev_timestamp<='$date_range_b' GROUP BY user_name ORDER BY user_name ASC") -> result();
    			
    			//Número de ediciones y bytes de artículos
-   			$cdata22 = $link->query("SELECT user_name, count(rev_id) as edits, sum(rev_len) as bytes FROM user, revision, page WHERE rev_user == user_id AND rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b GROUP BY user_name AND rev_page == page_id AND page_namespace == 0 ORDER BY user_name ASC") -> result();
+   			$cdata22 = $link->query("SELECT user_name, count(rev_id) as edits, sum(rev_len) as bytes FROM user, revision, page WHERE rev_user == user_id AND rev_timestamp>='$date_range_a' AND rev_timestamp<='$date_range_b' GROUP BY user_name AND rev_page == page_id AND page_namespace == 0 ORDER BY user_name ASC") -> result();
    			
    			//Número de uploads
-   			$cdata3 = $link->query("SELECT user_name, count(img_id) as images FROM user, image WHERE user_id == img_user AND img_timestamp>=$date_range_a AND img_timestamp<=$date_range_b GROUP BY user_name ORDER BY user_name ASC") -> result();
+   			$cdata3 = $link->query("SELECT user_name, count(img_id) as images FROM user, image WHERE user_id == img_user AND img_timestamp>='$date_range_a' AND img_timestamp<='$date_range_b' GROUP BY user_name ORDER BY user_name ASC") -> result();
    			
    			//Total de ediciones y bytes
-   			$totals = $link->query("SELECT user_name, count(rev_id) as totaledits, sum(page_len) as totalbytes FROM user, page, revision WHERE rev_timestamp>=$date_range_a AND rev_timestamp<=$date_range_b AND rev_page == page_id AND rev_user == user_id ORDER BY user_name") -> result();
+   			$totals = $link->query("SELECT user_name, count(rev_id) as totaledits, sum(page_len) as totalbytes FROM user, page, revision WHERE rev_timestamp>='$date_range_a' AND rev_timestamp<='$date_range_b' AND rev_page == page_id AND rev_user == user_id ORDER BY user_name") -> result();
    			
    			//Número de uploads
-   			$totaluploads = $link->query("SELECT user_name, count(img_id) as totalimages FROM user, image WHERE img_timestamp>=$date_range_a AND img_timestamp<=$date_range_b AND img_user == user_id ORDER BY user_name") -> result();
+   			$totaluploads = $link->query("SELECT user_name, count(img_id) as totalimages FROM user, image WHERE img_timestamp>='$date_range_a' AND img_timestamp<='$date_range_b' AND img_user == user_id ORDER BY user_name") -> result();
    		}
    		
    		//Formamos los vectores a devolver con los datos de las consultas

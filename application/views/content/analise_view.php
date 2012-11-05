@@ -22,7 +22,7 @@ echo "<h1>".lang('voc.i18n_analise')."</h1></br>";
 <?=form_open()?>
 <table id = "bodytable">
 	<tr>
-		<th colspan = "2"><?=lang('voc.i18n_sources')?></th>
+		<th colspan = "2"><?=lang('voc.i18n_data_source')?></th>
 	</tr>
 	<tr>
 		<td><?=lang('voc.i18n_wiki')?></td>
@@ -58,4 +58,5 @@ echo "<h1>".lang('voc.i18n_analise')."</h1></br>";
 		<th colspan = "2"><?=form_submit('analise_submit', lang('voc.i18n_analise'));?></th>
 	</tr>
 </table>
+
 <?= form_close() ?>

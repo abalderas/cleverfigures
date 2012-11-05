@@ -31,7 +31,7 @@ class Dbforge_model extends CI_Model{
 		
 		//Creating tables
 		$this->db = $this->load->database('main_db', TRUE);
-		$this->db->query("CREATE TABLE user ( user_username VARCHAR(20) NOT NULL, user_password VARCHAR(50) NOT NULL, user_last_session INT(50) NOT NULL, user_realname VARCHAR(50) NOT NULL, user_email VARCHAR(30) NOT NULL, user_language VARCHAR(10) NOT NULL, KEY user_username (user_username) ) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
+		$this->db->query("CREATE TABLE user ( user_username VARCHAR(20) NOT NULL, user_password VARCHAR(50) NOT NULL, user_last_session INT(50) NOT NULL, user_realname VARCHAR(50) NOT NULL, user_email VARCHAR(30) NOT NULL, user_language VARCHAR(10) NOT NULL, user_filter VARCHAR(20) NOT NULL, KEY user_username (user_username) ) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
 			
 		$this->db->query("CREATE TABLE `wiki` ( `wiki_id` INT(9) UNSIGNED NOT NULL AUTO_INCREMENT, `wiki_name` VARCHAR(50) NOT NULL, `wiki_connection` INT(6) NOT NULL, KEY `wiki_id` (`wiki_id`) ) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
 			
@@ -62,20 +62,8 @@ class Dbforge_model extends CI_Model{
 		
 		$this->db->query("CREATE TABLE `user-analisis` ( `user_username` VARCHAR(20) NOT NULL, `analisis_id` INT(15) NOT NULL, KEY `user_username` (`user_username`) ) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
 		
+		$this->db->query("CREATE TABLE `user-filter` ( `user_username` VARCHAR(20) NOT NULL, `filter_name` VARCHAR(20) NOT NULL, KEY `user_username` (`user_username`) ) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
 		
-// 		$fields = array(
-//                         'user_name' => array(
-//                                                  'type' =>'VARCHAR',
-//                                                  'constraint' => '20'
-//                                           ),
-//                         'filter_id' => array(
-//                                                  'type' =>'INT',
-//                                                  'constraint' => 15
-//                                           )
-// 		);
-// 		$this->dbforge->add_field($fields);
-// 		$this->dbforge->add_key('user_name');
-// 		$this->dbforge->create_table('user-filter');
-//		$this->dbforge->create_table('filter');
+		$this->db->query("CREATE TABLE `filter` ( `filter_id` VARCHAR(20) NOT NULL, `filter_type` VARCHAR(20) NOT NULL, `filter_name` VARCHAR(20) NOT NULL, KEY `filter_id` (`filter_id`) ) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
    	}
 }

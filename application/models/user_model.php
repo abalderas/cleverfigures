@@ -58,8 +58,8 @@ class User_model extends CI_Model{
    	}
    	
    	function relate_wiki($wikiname){
-   		$query = $this->db->query("select * from wiki where wiki_name == $wikiname");
-   		if($query->result()->num_rows() != 0){
+   		$query = $this->db->query("select * from wiki where wiki_name = '$wikiname'");
+   		if($query->result()){
    			$sql = array('user_username' => $this->session->userdata('username'),
    					'wiki_name' => "$wikiname"
    				);
@@ -75,8 +75,8 @@ class User_model extends CI_Model{
    	}
    	
    	function relate_color($colorname){
-   		$query = $this->db->query("select * from color where color_name == $colorname");
-   		if($query->result()->num_rows() != 0){
+   		$query = $this->db->query("select * from color where color_name = '$colorname'");
+   		if($query->result()){
    			$sql = array('user_username' => $this->session->userdata('username'),
    					'color_name' => "$colorname"
    				);
@@ -92,8 +92,8 @@ class User_model extends CI_Model{
    	}
    	
    	function relate_analisis($analisis){
-   		$query = $this->db->query("select * from analisis where analisis_id == $analisis");
-   		if($query->result()->num_rows() != 0){
+   		$query = $this->db->query("select * from analisis where analisis_id = '$analisis'");
+   		if($query->result()){
    			$sql = array('user_username' => "$this->user_username",
    					'analisis_id' => "$analisis",
    				);

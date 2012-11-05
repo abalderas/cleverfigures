@@ -42,7 +42,7 @@ class Color_model extends CI_Model{
    	
    	private function wconnection($colorname){
    		//Consultamos la conexión
-   		$query = $this->db->query("select color_connection from color where color_name == $colorname");
+   		$query = $this->db->query("select color_connection from color where color_name = '$colorname'");
    		
    		//Comprobamos que existe y devolvemos el id de conexión
    		if($check->result()->num_rows() == 0)
@@ -54,7 +54,7 @@ class Color_model extends CI_Model{
    	
    	function get_color_list($username){
 		//Consultamos la conexión
-   		$query = $this->db->get_where('color, user-color', array('color.color_name' => 'user-color.color_name', 'user-color.user_username' => $username));
+   		$query = $this->db->query("select * from color, `user-color` where color.color_name = `user-color`.color_name and `user-color`.user_username = '$username'");
    		
    		//Comprobamos que existe y devolvemos el id de conexión
    		if(!$query->result())
@@ -75,14 +75,14 @@ class Color_model extends CI_Model{
    			return "new_color(): $my_con";
    		
    		//Consultamos si la fuente ya existe, si es así devolvemos error
-   		$check = $this->db->query("select * from color where color_name == $colorname");
-   		if($check->result()->num_rows() != 0)
+   		$check = $this->db->query("select * from color where color_name = '$colorname'");
+   		if($check->result())
    			return "new_color(): ERR_ALREADY_EXISTS";
    		else{
    			//Creamos el array a insertar, con la info de la fuente e insertamos
    			$sql = array('color_id' => "",
    				'color_name' => "$colorname",
-   				'color_connection' => "$my_con"
+   				'color_connection' => $my_con
    				);
 			$this->db->insert('color', $sql);
 		
@@ -124,15 +124,15 @@ class Color_model extends CI_Model{
 		
 		//Aplicamos los filtros
 		if($type == 'user'){
-   			$cdata = $link->query("SELECT eva_user, count(eva_id) as neval FROM evaluaciones WHERE eva_user == $filtername AND eva_time >= $date_range_a AND eva_time <= $date_range_b LIMIT 1")->result();
-   			$cdata2 = $link->query("SELECT eva_user, avg(ee_nota) as avg_mark FROM evaluaciones, evaluaciones-entregables WHERE evaluaciones-entregables.eva_id == evaluaciones.eva_id AND eva_user == $filtername AND eva_time >= $date_range_a AND eva_time <= $date_range_b LIMIT 1")->result();
-   			$cdata3 = $link->query("SELECT eva_user, count(rep_id) as replies_in FROM evaluaciones, replies WHERE rep_id == eva_id AND eva_user == $filtername AND eva_time >= $date_range_a AND eva_time <= $date_range_b LIMIT 1")->result();
-   			$cdata4 = $link->query("SELECT eva_user, count(rep_id) as replies_out FROM evaluaciones, replies WHERE rep_id == eva_id AND eva_revisor == $filtername AND eva_time >= $date_range_a AND eva_time <= $date_range_b LIMIT 1")->result();
+   			$cdata = $link->query("SELECT eva_user, count(eva_id) as neval FROM evaluaciones WHERE eva_user = '$filtername' AND eva_time >= '$date_range_a' AND eva_time <= '$date_range_b' LIMIT 1")->result();
+   			$cdata2 = $link->query("SELECT eva_user, avg(ee_nota) as avg_mark FROM evaluaciones, evaluaciones-entregables WHERE evaluaciones-entregables.eva_id = evaluaciones.eva_id AND eva_user = '$filtername' AND eva_time >= '$date_range_a' AND eva_time <= '$date_range_b' LIMIT 1")->result();
+   			$cdata3 = $link->query("SELECT eva_user, count(rep_id) as replies_in FROM evaluaciones, replies WHERE rep_id = eva_id AND eva_user = '$filtername' AND eva_time >= '$date_range_a' AND eva_time <= $date_range_b LIMIT 1")->result();
+   			$cdata4 = $link->query("SELECT eva_user, count(rep_id) as replies_out FROM evaluaciones, replies WHERE rep_id = eva_id AND eva_revisor = '$filtername' AND eva_time >= '$date_range_a' AND eva_time <= $date_range_b LIMIT 1")->result();
    		}
    		else{
-			$cdata = $link->query("SELECT eva_user, count(eva_id) as neval FROM evaluaciones WHERE eva_time >= $date_range_a AND eva_time <= $date_range_b GROUP BY eva_user")->result();
-   			$cdata2 = $link->query("SELECT eva_user, avg(ee_nota) as avg_mark FROM evaluaciones, evaluaciones-entregables WHERE evaluaciones-entregables.eva_id == evaluaciones.eva_id AND eva_time >= $date_range_a AND eva_time <= $date_range_b GROUP BY eva_user")->result();
-   			$cdata3 = $link->query("SELECT eva_user, count(rep_id) as replies_in FROM evaluaciones, replies WHERE rep_id == eva_id AND eva_time >= $date_range_a AND eva_time <= $date_range_b GROUP BY eva_user")->result();
+			$cdata = $link->query("SELECT eva_user, count(eva_id) as neval FROM evaluaciones WHERE eva_time >= '$date_range_a' AND eva_time <= '$date_range_b' GROUP BY eva_user")->result();
+   			$cdata2 = $link->query("SELECT eva_user, avg(ee_nota) as avg_mark FROM evaluaciones, evaluaciones-entregables WHERE evaluaciones-entregables.eva_id = evaluaciones.eva_id AND eva_time >= '$date_range_a' AND eva_time <= '$date_range_b' GROUP BY eva_user")->result();
+   			$cdata3 = $link->query("SELECT eva_user, count(rep_id) as replies_in FROM evaluaciones, replies WHERE rep_id = eva_id AND eva_time >= '$date_range_a' AND eva_time <= '$date_range_b' GROUP BY eva_user")->result();
    		}
    		
    		//Formamos las variables a devolver con los datos de las consultas y devolvemos los datos
@@ -172,10 +172,10 @@ class Color_model extends CI_Model{
 		
 		//Aplicamos los filtros
 		if($type == 'user'){
-   			$cdata2 = $linkc->query("SELECT eva_revision, avg(ee_nota) as average FROM evaluaciones, evaluaciones_entregables WHERE eva_id == evaluaciones_entregables.eva_id AND eva_user == $filtername GROUP BY eva_revision") -> result();
+   			$cdata2 = $linkc->query("SELECT eva_revision, avg(ee_nota) as average FROM evaluaciones, evaluaciones_entregables WHERE eva_id = evaluaciones_entregables.eva_id AND eva_user = '$filtername' GROUP BY eva_revision") -> result();
    		}
    		else{
-			$cdata2 = $linkc->query("SELECT eva_revision, avg(ee_nota) as average FROM evaluaciones, evaluaciones_entregables WHERE eva_id == evaluaciones_entregables.eva_id GROUP BY eva_revision") -> result();
+			$cdata2 = $linkc->query("SELECT eva_revision, avg(ee_nota) as average FROM evaluaciones, evaluaciones_entregables WHERE eva_id = evaluaciones_entregables.eva_id GROUP BY eva_revision") -> result();
    		}
    		
    		//Formamos las variables a devolver con los datos de las consultas y devolvemos los datos
@@ -224,7 +224,7 @@ class Color_model extends CI_Model{
 		
 		if($type == 'user'){
 			//Fecha y bytes para un usuario concreto
-   			$cdata = $link->query("SELECT eva_time FROM evaluaciones WHERE eva_user == $filtername AND eva_time >= $date_range_a AND eva_time <= $date_range_b ORDER BY eva_time ASC") -> result();
+   			$cdata = $link->query("SELECT eva_time FROM evaluaciones WHERE eva_user = '$filtername' AND eva_time >= '$date_range_a' AND eva_time <= '$date_range_b' ORDER BY eva_time ASC") -> result();
    		}/*
    		else if($type == 'page'){
 			//Fecha y bytes para una página concreta
@@ -240,7 +240,7 @@ class Color_model extends CI_Model{
    		}*/
 		else{
 			//Fecha y bytes totales
-   			$cdata = $link->query("SELECT eva_time FROM evaluaciones WHERE eva_time >= $date_range_a AND eva_time <= $date_range_b ORDER BY eva_time ASC") -> result();
+   			$cdata = $link->query("SELECT eva_time FROM evaluaciones WHERE eva_time >= '$date_range_a' AND eva_time <= '$date_range_b' ORDER BY eva_time ASC") -> result();
    		}
    		
    		//Formamos los vectores a devolver con los datos de las consultas
@@ -253,7 +253,7 @@ class Color_model extends CI_Model{
    	
    	function delete_color($colorname){
    		//Comprobamos que existe y devuelve error si no
-   		$check = $this->db->query("select * from color where color_name == $colorname");
+   		$check = $this->db->query("select * from color where color_name = '$colorname'");
    		if($check->result()->num_rows() == 0)
    			return "delete_color(): NONEXISTENT";
    		else
