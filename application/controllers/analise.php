@@ -25,12 +25,13 @@ class Analise extends CI_Controller {
       		parent::__construct();
       		$this->load->model('wiki_model');
       		$this->load->model('color_model');
+      		$this->load->model('filter_model');
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	
    	function index(){
 		$datah = array('title' => lang('voc.i18n_analise'));
-		$adata = array('wikis' => $this->wiki_model->get_wiki_list($this->session->userdata('username')), 'colors' => $this->color_model->get_color_list($this->session->userdata('username')), 'filters' => array() /*PENDIENTE!!!!!!!!!*/);
+		$adata = array('wikis' => $this->wiki_model->get_wiki_list($this->session->userdata('username')), 'colors' => $this->color_model->get_color_list($this->session->userdata('username')), 'filters' => $this->filter_model->get_filter_list($this->session->userdata('username')));
 		
 		$this->load->view('templates/header_view', $datah);
 		$this->load->view('content/analise_view', $adata);

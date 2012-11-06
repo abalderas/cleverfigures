@@ -44,7 +44,7 @@ class Add_wiki extends CI_Controller {
 		$this->form_validation->set_rules('dbpassword', lang('voc.i18n_dbpassword'), 'required|xss_clean');
 		$this->form_validation->set_rules('dbuser', lang('voc.i18n_dbuser'), 'required|alpha_dash|xss_clean');
 
-		//If invalid form, reload database config view
+		//If invalid form, reload view
 		if ($this->form_validation->run() == FALSE){
 			$datah = array('title' => lang('voc.i18n_add_wiki'));
 			$this->load->view('templates/header_view', $datah);
@@ -60,7 +60,7 @@ class Add_wiki extends CI_Controller {
 				$this->load->view('content/add_wiki_view', $error);
 				$this->load->view('templates/footer_view');
 			}
-			//Else, save connection data and load next step
+			//Else, save wiki and load configuration view
 			else{
 				//Saving database
 				$this->wiki_model->new_wiki($_POST['wiki_name'], $_POST['dbserver'], $_POST['dbname'], $_POST['dbuser'], $_POST['dbpassword']);

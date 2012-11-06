@@ -51,10 +51,6 @@ echo "<h1>".lang('voc.i18n_analise')."</h1></br>";
 		<td><?=form_dropdown('select_filter', $filters);?></td>
 	</tr>
 	<tr>
-		<td><?=lang('voc.i18n_filter_name')?></td>
-		<td><?=form_input('filter_name');?></td>
-	</tr>
-	<tr>
 		<th colspan = "2"><?=form_submit('analise_submit', lang('voc.i18n_analise'));?></th>
 	</tr>
 </table>

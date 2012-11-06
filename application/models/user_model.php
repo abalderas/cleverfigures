@@ -91,6 +91,23 @@ class User_model extends CI_Model{
    			return "relate_color(): ERR_ALREADY_EXISTS";
    	}
    	
+   	function relate_filter($id){
+		$query = $this->db->query("select * from filter where filter_id = '$id'");
+   		if($query->result()){
+   			$sql = array('user_username' => $this->session->userdata('username'),
+   					'filter_id' => "$id"
+   				);
+	
+			$this->db->insert('user-filter', $sql);
+		
+			if($this->db->affected_rows() != 1) 
+				return "relate_filter(): ERR_AFFECTED_ROWS";
+			else return TRUE;
+		}
+   		else
+   			return "relate_filter(): ERR_ALREADY_EXISTS";
+   	}
+   	
    	function relate_analisis($analisis){
    		$query = $this->db->query("select * from analisis where analisis_id = '$analisis'");
    		if($query->result()){

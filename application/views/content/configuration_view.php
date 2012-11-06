@@ -28,7 +28,6 @@ echo form_open('configuration_form');
                 'russian' => lang('voc.i18n_russian'),
                 'german' => lang('voc.i18n_german'),
              );
-        $filters=array(); //CUIDADO!!!! SOLO PARA PRUEBAS!!! ELIMINAR!!! <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 ?>
 
 <table id = "bodytable">
@@ -44,7 +43,7 @@ echo form_open('configuration_form');
 </tr>
 <tr>
 	<td><?=form_label(lang('voc.i18n_select_filter'), 'select_filter');?></td>
-	<td><?=form_dropdown('select_filter', $filters);?><?=form_submit(array('id' => 'add_filter', 'value' => lang('voc.i18n_add_filter'), 'class' => 'next'));?></td>
+	<td><?=form_dropdown('select_filter', $filters);?><?=form_submit('add_filter', lang('voc.i18n_add_filter'));?></td>
 </tr>
 <tr>
 	<th colspan = "2"><?=lang('voc.i18n_data_source');?></th>
@@ -59,8 +58,8 @@ echo form_open('configuration_form');
 </tr>
 <tr>
 	<th colspan = "2">
-	<?=form_submit(array('id' => 'save_conf', 'value' => lang('voc.i18n_save_conf'), 'class' => 'next'));?>
-	<?=form_submit(array('id' => 'cancel_conf', 'value' => lang('voc.i18n_cancel_conf'), 'class' => 'next'));?>
+	<?=form_submit(array('name' => 'save_conf', 'value' => lang('voc.i18n_save_conf'), 'class' => 'next'));?>
+	<?=form_submit(array('name' => 'cancel_conf', 'value' => lang('voc.i18n_cancel_conf'), 'class' => 'next'));?>
 	</th>
 </tr>
 </table>

@@ -44,7 +44,7 @@ class Add_color extends CI_Controller {
 		$this->form_validation->set_rules('dbpassword', lang('voc.i18n_dbpassword'), 'required|xss_clean');
 		$this->form_validation->set_rules('dbuser', lang('voc.i18n_dbuser'), 'required|alpha_dash|xss_clean');
 
-		//If invalid form, reload database config view
+		//If invalid form, reload view
 		if ($this->form_validation->run() == FALSE){
 			$datah = array('title' => lang('voc.i18n_add_color'));
 			$this->load->view('templates/header_view', $datah);
@@ -60,7 +60,7 @@ class Add_color extends CI_Controller {
 				$this->load->view('content/add_color_view', $error);
 				$this->load->view('templates/footer_view');
 			}
-			//Else, save connection data and load next step
+			//Else, save color and load configuration view
 			else{
 				//Saving database
 				$this->color_model->new_color($_POST['color_name'], $_POST['dbserver'], $_POST['dbname'], $_POST['dbuser'], $_POST['dbpassword']);

@@ -19,59 +19,65 @@
 
 
 
-class Create_database_form extends CI_Controller {
+class Add_filter extends CI_Controller {
 
-	function Create_database_form(){
+	function Add_filter(){
       		parent::__construct();
-		$this->load->model('analisis_model');
-		$this->load->model('user_analisis_model');
-		$this->load->model('dbforge_model');
-		$this->load->model('dbconfig_model');
-		$this->load->helper('file');
-		$this->load->dbutil();
+		$this->load->model('filter_model');
+		$this->load->model('user_model');
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
-   	private function test_connection(){
-		$db = @mysqli_connect($_POST['dbserver'], $_POST['dbuser'], $_POST['dbpassword'], $_POST['dbname'], TRUE);
-		if($db)
-			return TRUE;
-		else
-			return FALSE;
+   	
+   	private function test_dates($datea, $dateb){
+		if ($datea > $dateb) return false;
+		return true;
 	}
-	
-	function index(){
+   	
+   	function index(){
 	
 		//Form validation rules
-		$this->form_validation->set_rules('dbname', lang('voc.i18n_dbname'), 'required|alpha_dash|xss_clean');
-		$this->form_validation->set_rules('dbserver', lang('voc.i18n_dbserver'), 'required|alpha_dash|xss_clean');
-		$this->form_validation->set_rules('dbpassword', lang('voc.i18n_dbpassword'), 'required|xss_clean');
-		$this->form_validation->set_rules('dbuser', lang('voc.i18n_dbuser'), 'required|alpha_dash|xss_clean');
+		$this->form_validation->set_rules('filterid', lang('voc.i18n_filter_id'), 'required|alpha_dash|xss_clean');
+		$this->form_validation->set_rules('filter_type', lang('voc.i18n_filter_type'), 'required|xss_clean');
+		$this->form_validation->set_rules('filter_name', lang('voc.i18n_filter_name'), 'xss_clean');
+		$this->form_validation->set_rules('date_range_a', lang('voc.i18n_date_range_a'), 'xss_clean');
+		$this->form_validation->set_rules('date_range_b', lang('voc.i18n_date_range_b'), 'xss_clean');
 
 		//If invalid form, reload database config view
 		if ($this->form_validation->run() == FALSE){
-			$datah = array('title' => lang('voc.i18n_installation'));
+			$datah = array('title' => lang('voc.i18n_add_filter'));
 			$this->load->view('templates/header_view', $datah);
-			$this->load->view('content/dbconfig_view');
+			$this->load->view('content/add_filter_view');
 			$this->load->view('templates/footer_view');
+			die('validation');
 		}
 		else{
-			//If connection failure with given data, reload and show error
-			if(!$this->test_connection()){
-				$datah = array('title' => lang('voc.i18n_installation'));
-				$error = array('connection_error'=> lang('voc.i18n_connection_error'));
+			//If dates failure with given data, reload and show error
+			if(!$this->test_dates(strtotime($_POST['date_range_a']), strtotime($_POST['date_range_b']))){
+				$datah = array('title' => lang('voc.i18n_add_filter'));
+				$error = array('date_error'=> lang('voc.i18n_date_error'));
 				$this->load->view('templates/header_view', $datah);
-				$this->load->view('content/dbconfig_view', $error);
+				$this->load->view('content/add_filter_view', $error);
 				$this->load->view('templates/footer_view');
 			}
-			//Else, save connection data and load next step
+			//If type dropdown set to 'All' and then name specified
+			else if(($_POST['filter_type'] == 0) && $_POST['filter_name']){
+				$datah = array('title' => lang('voc.i18n_add_filter'));
+				$error = array('type_error'=> lang('voc.i18n_type_error'));
+				$this->load->view('templates/header_view', $datah);
+				$this->load->view('content/add_filter_view', $error);
+				$this->load->view('templates/footer_view');
+			}
+			//Else, save filter data and load configuration view
 			else{
 				//Saving connection database & creating tables
-				$this->dbconfig_model->config_database($_POST['dbname'], $_POST['dbserver'], $_POST['dbuser'], $_POST['dbpassword']);
-				$this->dbforge_model->build_database();
+				$this->filter_model->new_filter($_POST['filterid'], $_POST['filter_type'], $_POST['filter_name'], strtotime($_POST['date_range_a']), strtotime($_POST['date_range_b']));
+				$this->user_model->relate_filter($_POST['filterid']);
 				
-				$datah = array('title' => lang('voc.i18n_installation'));
+				$datah = array('title' => lang('voc.i18n_configuration'));
+				$confdata = array('filters' => $this->filter_model->get_filter_list($this->session->userdata('username')));
+				
 				$this->load->view('templates/header_view', $datah);
-				$this->load->view('content/installation2_view');
+				$this->load->view('content/configuration_view', $confdata);
 				$this->load->view('templates/footer_view');
 			}
 		}

@@ -62,8 +62,8 @@ class Dbforge_model extends CI_Model{
 		
 		$this->db->query("CREATE TABLE `user-analisis` ( `user_username` VARCHAR(20) NOT NULL, `analisis_id` INT(15) NOT NULL, KEY `user_username` (`user_username`) ) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
 		
-		$this->db->query("CREATE TABLE `user-filter` ( `user_username` VARCHAR(20) NOT NULL, `filter_name` VARCHAR(20) NOT NULL, KEY `user_username` (`user_username`) ) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
+		$this->db->query("CREATE TABLE `user-filter` ( `user_username` VARCHAR(20) NOT NULL, `filter_id` VARCHAR(20) NOT NULL, KEY `user_username` (`user_username`) ) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
 		
-		$this->db->query("CREATE TABLE `filter` ( `filter_id` VARCHAR(20) NOT NULL, `filter_type` VARCHAR(20) NOT NULL, `filter_name` VARCHAR(20) NOT NULL, KEY `filter_id` (`filter_id`) ) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
+		$this->db->query("CREATE TABLE `filter` ( `ref` INT(9) UNSIGNED NOT NULL AUTO_INCREMENT, `filter_id` VARCHAR(20) NOT NULL, `filter_type` VARCHAR(20) NOT NULL, `filter_name` VARCHAR(20) NOT NULL, `filter_date_a` VARCHAR(50) NOT NULL, `filter_date_b` VARCHAR(50) NOT NULL, KEY `ref` (`ref`) ) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
    	}
 }

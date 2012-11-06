@@ -23,11 +23,13 @@ class Configure extends CI_Controller {
       		parent::__construct();
       		$this->load->model('wiki_model');
       		$this->load->model('color_model');
+      		$this->load->model('filter_model');
    	}
    	
 	function index(){
-      		$confdata = array('wikis' => $this->wiki_model->get_wiki_list($this->session->userdata('username')), 'colors' => $this->color_model->get_color_list($this->session->userdata('username')));
 		$datah = array('title' => lang('voc.i18n_configuration'));
+      		$confdata = array('filters' => $this->filter_model->get_filter_list($this->session->userdata('username')));
+				
 		$this->load->view('templates/header_view', $datah);
 		$this->load->view('content/configuration_view', $confdata);
 		$this->load->view('templates/footer_view');
