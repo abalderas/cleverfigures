@@ -69,7 +69,7 @@ class Configuration_form extends CI_Controller {
 		else if($this->input->post('cancel_conf')){
 			$datah = array('title' => lang('voc.i18n_configuration'));
 			$this->load->view('templates/header_view', $datah);
-			$this->load->view('content/configuration_view');
+			$this->load->view('content/teacher_view');
 			$this->load->view('templates/footer_view');
 		}
 	}
