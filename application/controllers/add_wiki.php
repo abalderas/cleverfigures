@@ -25,6 +25,7 @@ class Add_wiki extends CI_Controller {
       		parent::__construct();
 		$this->load->model('wiki_model');
 		$this->load->model('user_model');
+		$this->load->model('filter_model');
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	private function test_connection(){
@@ -66,9 +67,13 @@ class Add_wiki extends CI_Controller {
 				$this->wiki_model->new_wiki($_POST['wiki_name'], $_POST['dbserver'], $_POST['dbname'], $_POST['dbuser'], $_POST['dbpassword']);
 				$this->user_model->relate_wiki($_POST['wiki_name']);
 				
+				$filters = array(0 => lang('voc.i18n_no_filter'));
+				$filters = array_merge($filters, $this->filter_model->get_filter_list($this->session->userdata('username')));
+				$confdata = array('filters' => $filters);
+      		
 				$datah = array('title' => lang('voc.i18n_installation'));
 				$this->load->view('templates/header_view', $datah);
-				$this->load->view('content/configuration_view');
+				$this->load->view('content/configuration_view', $confdata);
 				$this->load->view('templates/footer_view');
 			}
 		}

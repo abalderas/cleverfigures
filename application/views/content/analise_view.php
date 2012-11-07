@@ -19,7 +19,7 @@
 echo "<h1>".lang('voc.i18n_analise')."</h1></br>";
 ?>
 
-<?=form_open()?>
+<?=form_open('analisis_form')?>
 <table id = "bodytable">
 	<tr>
 		<th colspan = "2"><?=lang('voc.i18n_data_source')?></th>

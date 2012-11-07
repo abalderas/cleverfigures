@@ -28,7 +28,9 @@ class Configure extends CI_Controller {
    	
 	function index(){
 		$datah = array('title' => lang('voc.i18n_configuration'));
-      		$confdata = array('filters' => $this->filter_model->get_filter_list($this->session->userdata('username')));
+		$filters = array(0 => lang('voc.i18n_no_filter'));
+		$filters = array_merge($filters, $this->filter_model->get_filter_list($this->session->userdata('username')));
+      		$confdata = array('filters' => $filters);
 				
 		$this->load->view('templates/header_view', $datah);
 		$this->load->view('content/configuration_view', $confdata);

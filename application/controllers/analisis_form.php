@@ -19,28 +19,33 @@
 
 
 
-class Analise extends CI_Controller {
+class Analisis_form extends CI_Controller {
 
-	function Analise(){
+	function Analisis_form(){
       		parent::__construct();
       		$this->load->model('wiki_model');
       		$this->load->model('color_model');
       		$this->load->model('filter_model');
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
+   	private function analise($analisis_data){
+		set_time_limit (0);
+		echo "PROCESS";
+   	}
    	
    	function index(){
-		$datah = array('title' => lang('voc.i18n_analise'));
+		$adata = array('wiki' => $_POST['select_wiki'], 
+				'color' => $_POST['select_color'], 
+				'date_range_a' => $_POST['select_date_range_a'], 
+				'date_range_b' => $_POST['select_date_range_b'], 
+				'filter' => $_POST['select_filter']
+			);
+		$datah = array('title' => lang('voc.i18n_analising'));
 		
-		$colors = array(0 => lang('voc.i18n_no_color'));
-		$colors = array_merge($colors, $this->color_model->get_color_list($this->session->userdata('username')));
+		echo $this->load->view('templates/header_view', $datah, true);
+		echo $this->load->view('content/analising_view', $adata, true);
+		echo $this->load->view('templates/footer_view', true);
 		
-		$filters = array(0 => lang('voc.i18n_no_filter'));
-		$filters = array_merge($filters, $this->filter_model->get_filter_list($this->session->userdata('username')));
-		$adata = array('wikis' => $this->wiki_model->get_wiki_list($this->session->userdata('username')), 'colors' => $colors, 'filters' => $filters);
-		
-		$this->load->view('templates/header_view', $datah);
-		$this->load->view('content/analise_view', $adata);
-		$this->load->view('templates/footer_view');
+		$this->analise($adata);
 	}
 }
