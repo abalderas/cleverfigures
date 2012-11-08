@@ -1,0 +1,8 @@
+estructura de bd de assessmw
+qué guardar en la bd
+lenguaje no cambiaba dinámicamente
+quitar index.php de la url
+sesión no se mantenía -> mentira: no se estaba guardando correctamente (array)
+error  Cannot modify header information - headers already sent by (output started at /opt/lampp/htdocs/cleverfigures/application/models/connection_model.php:20) porque no puede haber nada antes del tag <? en los ficheros php
+error the action you requested is not allowed por csrf_protection en config.php
+las cookies de codeigniter no sufren cambios hasta cargar el controlador siguiente

@@ -1,0 +1,302 @@
+/*
+<<Copyright 2013 Alvaro Almagro Doello>>
+
+This file is part of CleverFigures.
+
+CleverFigures is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+CleverFigures is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/* GENERAL SETTINGS */
+
+body
+{
+background-color:#EAF2ff;
+font-family:"Trebuchet MS";
+height:98%;
+}
+
+h1
+{
+text-transform: uppercase; 
+color:#A7C942;
+font-family:"Trebuchet MS";
+text-align:center;
+}
+p
+{
+font-family:"Trebuchet MS";
+font-size:16px;
+}
+
+img{
+  display:block;
+  margin:0 auto 0 auto;
+}
+
+a:link {
+  color:#A7C942;
+  font-weight:bold;
+  text-decoration:none;
+}
+a:visited {
+  color:lightpurple;
+  font-weight:bold;
+  text-decoration:none;
+}
+a:hover {
+  color:green;
+  font-weight:bold;
+  text-decoration:none;
+}
+a:active {
+  color:white;
+  text-decoration:none;
+}
+
+em{
+	color:red;
+	font-size:0.8em;
+}
+
+#wrap{
+	min-height: 93%;
+	width: 100%;
+	padding-top:65px;
+	margin: 0 auto -35px; /* the bottom margin is the negative value of the footer's height */
+	position: relative;
+}
+
+#bodytable
+{
+font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+min-width:30%;
+margin-left: auto;
+margin-right: auto;
+border:1px solid #A7C942;
+table-layout: fixed;
+}
+
+#bodytable td, #bodytable th 
+{
+font-size:1em;
+border:1px solid #98bf21;
+padding:3px 7px 2px 7px;
+}
+
+#bodytable th 
+{
+font-size:1em;
+padding-top:5px;
+padding-bottom:4px;
+background-color:#A7C942;
+color:#ffffff;
+}
+
+#bodytable td 
+{
+color:#000000;
+text-align:left;
+background-color:#EAF2D3;
+height:29px;
+}
+
+/* INSTALLATION AND LOGIN FORMS */
+
+#formins {
+	table-layout: fixed;
+	text-align:left;
+	font-size:1.2em;
+	border:1px solid #A7C942;
+	font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+	margin: auto;
+	border-radius: 10px;
+	min-width:500px;
+}
+
+#formins tr{
+border: 1px solid #ffffff;
+}
+
+#formins td, #formins th 
+{
+font-size:1em;
+height:50px;
+padding:3px 7px 2px 7px;
+border-radius: 10px;
+}
+
+#formins th 
+{
+font-size:1em;
+text-align:center;
+padding-top:5px;
+padding-bottom:4px;
+color:#ffffff;
+text-transform: uppercase;
+text-shadow: 0.1em 0.1em 0.2em black;
+background-color:#A7C942;
+}
+
+#formins td 
+{
+font-size:1em;
+}
+
+#formins select{
+	font-size:1.2em;
+	padding-left:5px;
+	text-align:left;
+	width:100%;
+}
+
+#formins input{
+	font-size:1.2em;
+	padding-left:5px;
+	text-align:left;
+}
+
+#formins input.next{
+	font-size:1.2em;
+	padding-left:5px;
+	text-align:left;
+	font-weight:bold;
+	border:1px solid #EAF2D3;
+	color:#ffffff;
+	background-color:#A7C942;
+	text-transform: uppercase;
+	text-shadow: 0.1em 0.1em 0.2em black;
+}
+
+#formins input.next:hover{
+	font-size:1.3em;
+	padding-left:5px;
+	text-align:left;
+	font-weight:bold;
+	border:1px solid #EAF2D3;
+	color:#ffffff;
+	background-color:#A7C942;
+	text-transform: uppercase;
+	text-shadow: 0.1em 0.1em 0.2em black;
+	cursor:pointer;
+}
+
+/* HEADER MENU */
+
+#menu
+{
+position:fixed;
+left:0px;
+top:0px;
+z-index:1;
+font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+width:100%;
+height:30px;
+table-layout: fixed;
+border-collapse:collapse;
+text-align:center;
+}
+
+#menu a:link {
+  color:white;
+  text-decoration:none;
+}
+#menu a:visited {
+  color:lightpurple;
+  text-decoration:none;
+}
+#menu a:hover {
+  color:A7C942;
+  text-decoration:none;
+}
+#menu a:active {
+  color:white;
+  text-decoration:none;
+}
+
+#menu td, #menu th 
+{
+font-size:1em;
+border:0px solid black;
+padding:3px 7px 2px 7px;
+}
+
+#menu th 
+{
+font-size:1em;
+text-align:center;
+padding-top:5px;
+padding-bottom:4px;
+background-color:#424242;
+color:#ffffff;
+}
+
+#menu un
+{
+color:#878787;
+font-style:italic;
+}
+
+/* FOOTER  */
+
+#footer
+{
+font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+width:100%;
+height:35px;
+border-collapse:collapse;
+text-align:center;
+table-layout: fixed;
+position: absolute;
+bottom: 0px;
+text-shadow: 0.1em 0.1em 0.2em black;
+}
+
+#footer td, #footer th 
+{
+font-size:1em;
+padding:3px 7px 2px 7px;
+}
+
+#footer th 
+{
+font-size:1em;
+padding-top:5px;
+padding-bottom:4px;
+background-color:#A7C942;
+color:#ffffff;
+}
+
+#footer td 
+{
+color:#000000;
+background-color:#EAF2D3;
+}
+
+#footer a:link {
+  color:white;
+  text-decoration:none;
+}
+#footer a:visited {
+  color:lightpurple;
+  text-decoration:none;
+}
+#footer a:hover {
+  color:white;
+  font-size:110%;
+  text-decoration:none;
+}
+#footer a:active {
+  color:white;
+  text-decoration:none;
+}
