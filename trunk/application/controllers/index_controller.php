@@ -32,6 +32,7 @@ class Index_controller extends CI_Controller {
    	
 	private function first_time(){
 		$dbs = $this->dbutil->list_databases();
+		print_r($dbs);
 		if(count($dbs) > 1) return false;
 		return true;
 	}
