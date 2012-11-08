@@ -31,11 +31,6 @@ echo form_open('create_database_form');
 		<th colspan = "2" ><?=lang('voc.i18n_config_database')?></th>
 	</tr>
 	<tr>
-		<td class="fieldbox"><?=lang('voc.i18n_dbname')?>:</td>
-		<td><?= form_input('dbname') ?></td>
-	</tr>
-	<?php if(form_error('dbname')) echo "<tr><td colspan = \"2\"><em>".form_error('dbname')."</em></td></tr>"; ?>
-	<tr>
 		<td class="fieldbox"><?=lang('voc.i18n_dbserver')?>:</td>
 		<td><?= form_input('dbserver') ?></td>
 	</tr>

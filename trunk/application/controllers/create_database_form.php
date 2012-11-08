@@ -32,7 +32,7 @@ class Create_database_form extends CI_Controller {
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	private function test_connection(){
-		$db = @mysqli_connect($_POST['dbserver'], $_POST['dbuser'], $_POST['dbpassword'], $_POST['dbname'], TRUE);
+		$db = @mysqli_connect($_POST['dbserver'], $_POST['dbuser'], $_POST['dbpassword']);
 		if($db)
 			return TRUE;
 		else
@@ -42,7 +42,6 @@ class Create_database_form extends CI_Controller {
 	function index(){
 	
 		//Form validation rules
-		$this->form_validation->set_rules('dbname', lang('voc.i18n_dbname'), 'required|alpha_dash|xss_clean');
 		$this->form_validation->set_rules('dbserver', lang('voc.i18n_dbserver'), 'required|alpha_dash|xss_clean');
 		$this->form_validation->set_rules('dbpassword', lang('voc.i18n_dbpassword'), 'required|xss_clean');
 		$this->form_validation->set_rules('dbuser', lang('voc.i18n_dbuser'), 'required|alpha_dash|xss_clean');
@@ -66,8 +65,8 @@ class Create_database_form extends CI_Controller {
 			//Else, save connection data and load next step
 			else{
 				//Saving connection database & creating tables
-				$this->dbconfig_model->config_database($_POST['dbname'], $_POST['dbserver'], $_POST['dbuser'], $_POST['dbpassword']);
-				$this->dbforge_model->build_database();
+				$this->dbconfig_model->config_database('cleverfigures', $_POST['dbserver'], $_POST['dbuser'], $_POST['dbpassword']);
+				$this->dbforge_model->build_database('cleverfigures', $_POST['dbserver'], $_POST['dbuser'], $_POST['dbpassword']);
 				
 				$datah = array('title' => lang('voc.i18n_installation'));
 				$this->load->view('templates/header_view', $datah);

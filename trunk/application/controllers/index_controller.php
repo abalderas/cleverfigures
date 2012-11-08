@@ -32,16 +32,18 @@ class Index_controller extends CI_Controller {
    	
 	private function first_time(){
 		$dbs = $this->dbutil->list_databases();
-		print_r($dbs);
-		if(count($dbs) > 1) return false;
-		return true;
+		if(!array_search('cleverfigures', $dbs)) return true;
+		return false;
 	}
 	
 	function index(){
-	
+			
 		//If first time running CleverFigures,load installation
 		if($this->first_time()){
-		
+			
+			//Just in case something strange happens, clear the session
+			$this->session->sess_destroy();
+			
 			//Loading installation
 			$datah = array('title' => lang('voc.i18n_installation'));
 			$this->load->view('templates/header_view', $datah);

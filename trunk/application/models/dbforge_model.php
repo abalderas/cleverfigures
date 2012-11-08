@@ -27,9 +27,16 @@ class Dbforge_model extends CI_Model{
    	   	$this->load->dbforge();
    	}
    	
-   	function build_database(){
+   	function build_database($dbname, $dbserver, $dbuser, $dbpassword){
 		
-		//Creating tables
+		//Creating database
+		$con = mysql_connect($dbserver,$dbuser,$dbpassword);
+		if (!$con)
+			die('Could not connect: ' . mysql_error());
+
+		if (!mysql_query("CREATE DATABASE $dbname",$con))
+			die ("Error creating database: " . mysql_error());
+
 		$this->db = $this->load->database('main_db', TRUE);
 		$this->db->query("CREATE TABLE user ( user_username VARCHAR(20) NOT NULL, user_password VARCHAR(50) NOT NULL, user_last_session INT(50) NOT NULL, user_realname VARCHAR(50) NOT NULL, user_email VARCHAR(30) NOT NULL, user_language VARCHAR(10) NOT NULL, user_filter VARCHAR(20) NOT NULL, KEY user_username (user_username) ) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
 			
