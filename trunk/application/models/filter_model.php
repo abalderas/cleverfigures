@@ -60,13 +60,19 @@ class Filter_model extends CI_Model{
 			default: return false;
 		}
 	}
-   	function new_filter($id, $type, $name, $datea, $dateb){
+   	function new_filter($data){
    		$sql = array('ref' => "",
-   			'filter_id' => "$id",
-   			'filter_type' => "$type",
-   			'filter_name' => "$name",
-   			'filter_date_a' => "$datea",
-   			'filter_date_b' => "$dateb"
+   			'filter_id' => $data['id'],
+   			'filter_user' => $data['user'],
+   			'filter_username' => $data['username'],
+   			'filter_page' => $data['page'],
+   			'filter_pagename' => $data['pagename'],
+   			'filter_category' => $data['category'],
+   			'filter_categoryname' => $data['categoryname'],
+   			'filter_criteria' => $data['criteria'],
+   			'filter_criterianame' => $data['criterianame'],
+   			'filter_date_a' => $data['datea'],
+   			'filter_date_b' => $data['dateb']
    			);
 		$this->db->insert('filter', $sql);
 		
@@ -74,6 +80,56 @@ class Filter_model extends CI_Model{
 		if($this->db->affected_rows() != 1) 
 			return "new_filter(): ERR_AFFECTED_ROWS (".$this->db->affected_rows().")";
    	}	
+   	
+   	function user($id){
+		$query = $this->db->query("select filter_user, filter_username from filter where filter_id = '$id'");
+		foreach($query->result() as $row){
+			if($row->filter_user == true)
+				return $row->filter_username;
+			return false;
+		}
+   	}
+   	
+   	function page($id){
+		$query = $this->db->query("select filter_page, filter_pagename from filter where filter_id = '$id'");
+		foreach($query->result() as $row){
+			if($row->filter_page == true)
+				return $row->filter_pagename;
+			return false;
+		}
+	}
+	
+   	function category($id){
+		$query = $this->db->query("select filter_category, filter_categoryname from filter where filter_id = '$id'");
+		foreach($query->result() as $row){
+			if($row->filter_category == true)
+				return $row->filter_categoryname;
+			return false;
+		}
+	}
+	
+   	function criteria($id){
+		$query = $this->db->query("select filter_criteria, filter_criterianame from filter where filter_id = '$id'");
+		foreach($query->result() as $row){
+			if($row->filter_criteria == true)
+				return $row->filter_criterianame;
+			return false;
+		}
+   	}
+   	
+   	function firstdate($id){
+		$query = $this->db->query("select filter_date_a from filter where filter_id = '$id'");
+		foreach($query->result() as $row){
+			return $row->filter_date_a;
+		}
+   	}
+   	
+   	function lastdate($id){
+		$query = $this->db->query("select filter_date_b from filter where filter_id = '$id'");
+		foreach($query->result() as $row){
+			return $row->filter_date_b;
+		}
+   	}
    	
    	function delete_filter($id){
    		//Comprobamos que existe y devuelve error si no

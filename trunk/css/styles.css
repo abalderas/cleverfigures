@@ -80,7 +80,7 @@ em{
 #bodytable
 {
 font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
-min-width:30%;
+min-width:800;
 margin-left: auto;
 margin-right: auto;
 border:1px solid #A7C942;
@@ -212,12 +212,11 @@ text-align:center;
   text-decoration:none;
 }
 #menu a:visited {
-  color:lightpurple;
-  text-decoration:none;
 }
 #menu a:hover {
-  color:A7C942;
-  text-decoration:none;
+	text-shadow: 0.1em 0.1em 0.2em black;
+	color:#A7C942;
+	text-decoration:none;
 }
 #menu a:active {
   color:white;
