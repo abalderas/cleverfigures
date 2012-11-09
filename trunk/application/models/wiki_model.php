@@ -154,10 +154,9 @@ class Wiki_model extends CI_Model{
    			$pageedits_per[$row->page_name][$row->rev_timestamp] = 0;
    			$pagebytes_per[$row->page_name][$row->rev_timestamp] = 0;
    			
-   			$totaledits = 0;
+   			$totaledits[$row->rev_timestamp] = 0;
 			$totalvisits = 0;
-			$aux_bytes = 0;
-			$totalbytes = 0;
+			$totalbytes[$row->rev_timestamp] = 0;
    		}
    			
    		
@@ -173,27 +172,26 @@ class Wiki_model extends CI_Model{
 			//User information
 			$userrealname[$row->user_name] = $row->user_real_name;
    			$userreg[$row->user_name] = $row->user_registration;
-   			$useredits[$row->user_name][$row->rev_timestamp] = array_sum($useredits[$row->user_name]) + 1;
-   			$userbytes[$row->user_name][$row->rev_timestamp] = array_sum($userbytes[$row->user_name]) + $row->rev_len;
-   			if ($row->page_namespace == 0) $useredits_art[$row->user_name][$row->rev_timestamp] = array_sum($useredits_art[$row->user_name]) + 1;
-   			if ($row->page_namespace == 0) $userbytes_art[$row->user_name][$row->rev_timestamp] = array_sum($userbytes_art[$row->user_name]) + $row->rev_len;
+   			if (!isset($useredits[$row->user_name][$row->rev_timestamp])) $useredits[$row->user_name][$row->rev_timestamp] = array_sum($useredits[$row->user_name]) + 1;
+   			if (!isset($userbytes[$row->user_name][$row->rev_timestamp])) $userbytes[$row->user_name][$row->rev_timestamp] = array_sum($userbytes[$row->user_name]) + $row->rev_len;
+   			if ($row->page_namespace == 0 && !!isset($useredits_art[$row->user_name][$row->rev_timestamp])) $useredits_art[$row->user_name][$row->rev_timestamp] = array_sum($useredits_art[$row->user_name]) + 1;
+   			if ($row->page_namespace == 0 && !!isset($userbytes_art[$row->user_name][$row->rev_timestamp])) $userbytes_art[$row->user_name][$row->rev_timestamp] = array_sum($userbytes_art[$row->user_name]) + $row->rev_len;
 
 			//Page information
 			$pagenamespace[$row->page_title] = $row->page_namespace;
-			$pageedits[$row->page_title][$row->rev_timestamp] = array_sum($pageedits[$row->page_title]) + 1;
-   			$pagebytes[$row->page_title][$row->rev_timestamp] = array_sum($pagebytes[$row->page_title]) + $row->rev_len;
+			$pageedits[$row->page_title][$row->rev_timestamp] = array_sum($pageedits[$row->page_title]) + 1;		//MAL, hay dos filas por cada revision y sumaria dos, hacer como arriba
+   			$pagebytes[$row->page_title][$row->rev_timestamp] = array_sum($pagebytes[$row->page_title]) + $row->rev_len;	//MAL, hay dos filas por cada revision y sumaria dos
    			$pagevisits[$row->page_title] = $row->page_counter;
 	
 			//Some auxiliar arrays to calculate total values
 			$aux_edits[$row->rev_id] = 1;
 			$aux_pages[$row->page_title] = 1;
-			$aux_bytes[$row->rev_timestamp] = array_sum($aux_bytes) + $row->rev_len;
 			
 			//Calculating total values
 			$totaledits[$row->rev_timestamp] = array_sum($aux_edits);
 			$totalvisits = array_sum($pagevisits);
 			$totalpages[$row->rev_timestamp] = array_sum($aux_pages);
-			$totalbytes[$row->rev_timestamp] = array_sum();
+			$totalbytes[$row->rev_timestamp] = array_sum($totalbytes) + $row->rev_len;
 			
    		}
    		
@@ -215,7 +213,7 @@ class Wiki_model extends CI_Model{
    			}
    		}
    		
-   		foreach(array_keys($pagenamespace) as $pageykey){
+   		foreach(array_keys($pagenamespace) as $pageykey){//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 			foreach(array_keys($pageedits[$categorykey]) as $datekey){
 				$pageedits_per[$pagekey][$datekey] = $pageedits[$pagekey][$datekey] / $totaledits[$datekey];
 				$pagebytes_per[$pagekey][$datekey] = $pagebytes[$pagekey][$datekey] / $totalbytes[$datekey];
@@ -242,46 +240,37 @@ class Wiki_model extends CI_Model{
 		//If there is information about uploads
    		if($query->result()){
    		
-			//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 			foreach($query->result() as $row){
    		
-				$useruploads[$row->user_name] = $row->images;
-				$pageuploads[$row->page_name] = $row->uploads;		
-				$catuploads[$row->cl_to][img_timestamp] = 
+				$userupsize[$row->user_name][$row->img_timestamp] = 0;
+				$pageupsize[$row->page_title][$row->img_timestamp] = 0;
+				$catupsize[$row->cl_to][$row->img_timestamp] = 0;
+			}
+			
+			foreach($query->result() as $row){
+   		
+				$useruploads[$row->user_name][$row->img_timestamp] = $row->img_name;
+				$userupsize[$row->user_name][$row->img_timestamp] = array_sum($userupsize[$row->user_name]) + $row->img_size;
+				
+				$pageuploads[$row->page_title][$row->img_timestamp] = $row->img_name;		
+				$pageupsize[$row->page_title][$row->img_timestamp] = array_sum($pageupsize[$row->page_title]) + $row->img_size;
+				
+				$catuploads[$row->cl_to][$row->img_timestamp] = $row->img_name;
+				$catupsize[$row->cl_to][$row->img_timestamp] = array_sum($catupsize[$row->cl_to]) + $row->img_size;
+				
+				$aux_up[$row->img_name] = 1;
+				$aux_upsize[] = 
+				
+				$totaluploads[$row->img_timestamp] = array_sum($aux_up);
+				$totalupsize[$row->img_timestamp] =
 			}
    			
-			foreach($query->result() as $row){
-   			
-				$catpages[$row->cl_to][$row->rev_timestamp] = true;
-//    				$catpages_per[$row->cl_to] = $catpages[$row->cl_to] / $row->totalpages;
-				$catedits[$row->cl_to][$row->rev_timestamp] = true;
-				$catbytes[$row->cl_to][$row->rev_timestamp] = $row->rev_len;
-				$catvisits[$row->cl_to] += $row->page_counter;
-//    				$catedits_per[$row->cl_to] = $catedits[$row->cl_to]/$row->totaledits;
-//    				$catbytes_per[$row->cl_to] = $catbytes[$row->cl_to]/$row->totalbytes;
-//    				$catvisits_per[$row->cl_to] = $catvisits[$row->cl_to]/$row->totalvisits;
-
-				$userrealname[$row->user_name] = $row->user_real_name;		//nombre real
-				$userreg[$row->user_name] = $row->user_registration;		//fecha de registro
-				$useredits[$row->user_name][$row->rev_timestamp] = true;				//número de ediciones
-				$userbytes[$row->user_name][$row->rev_timestamp] = $row->rev_len;			//bytes
-				if ($row->page_namespace == 0) $useredits_art[$row->user_name][$row->rev_timestamp] = true;			//número de ediciones de artículos
-				if ($row->page_namespace == 0) $userbytes_art[$row->user_name][$row->rev_timestamp] = $row->rev_len;			//bytes de artículos
-//    				$useruploads[$row->user_name] = $row->images;			//número de visitas
-//    				$useredits_per[$row->user_name] = $useredits[$row->user_name]/$row->totaledits;			//porcentaje de ediciones sobre el total (depende del filtro)
-//    				$userbytes_per[$row->user_name] = $userbytes[$row->user_name]/$row->totalbytes;			//porcentaje de bytes sobre el total (depende del filtro)
-//    				$useredits_art_per[$row->user_name] = $useredits_art[$row->user_name]/$row->totaledits;		//porcentaje de ediciones sobre el total (depende del filtro)
-//    				$userbytes_art_per[$row->user_name] = $userbytes_art[$row->user_name]/$row->totalbytes;		//porcentaje de bytes sobre el total (depende del filtro)
-//    				$useruploads_per[$row->user_name] = $useruploads[$row->user_name]/$row->totalimages;
-
-				$pagenamespace[$row->page_name] = $row->page_namespace;		//nombre real
-				$pageedits[$row->page_name][$row->rev_timestamp] = true;			//número de ediciones
-				$pagebytes[$row->page_name][$row->rev_timestamp] = $row->rev_len;			//bytes
-				$pagevisits[$row->page_name] = $row->page_counter;			//número de visitas
-//    				$pageuploads[$row->page_name] = $row->uploads;			//número de uploads
-//    				$pageedits_per[$row->page_name] = $pageedits[$row->page_name]/$row->totaledits;		//porcentaje de ediciones sobre el total (depende del filtro)
-//    				$pagebytes_per[$row->page_name] = $pagebytes[$row->page_name]/$row->totalbytes;		//porcentaje de bytes sobre el total (depende del filtro)
-//    				$pageuploads_per[$row->page_name] = $pageuploads[$row->page_name]/$row->totalvisits;	//porcentaje de visitas sobre el total (depende del filtro)
+   			foreach(array_keys($catpages) as $categorykey){
+				foreach(array_keys($catpages[$categorykey]) as $datekey){
+					$catpages_per[$categorykey][$datekey] = $catpages[$categorykey][$datekey] / $totalpages[$datekey];
+					$catedits_per[$categorykey][$datekey] = $catedits[$categorykey][$datekey] / $totaledits[$datekey];
+					$catbytes_per[$categorykey][$datekey] = $catbytes[$categorykey][$datekey] / $totalbytes[$datekey];
+				}
 			}
    		}
    	}
