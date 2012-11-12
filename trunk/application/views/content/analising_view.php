@@ -20,10 +20,10 @@ echo "<h1>".lang('voc.i18n_analising')."</h1></br>";
 
 ?>
 
-<table border = "0" cellpadding = "0" cellspacing = "0" align = "center">
+<!--<table border = "0" cellpadding = "0" cellspacing = "0" align = "center">
 <tr>
 
-<td align = "center" width="128" height="128" background="images/loading/loading.gif"><!--Progreso--></td>
+<td align = "center" width="128" height="128" background="images/loading/loading.gif"></td>
 
 </tr>
-</table>
+</table>-->

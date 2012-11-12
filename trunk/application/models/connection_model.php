@@ -82,15 +82,6 @@ class Connection_model extends CI_Model{
 		}
 	}
    	
-   	function get_query($link, $query_string){
-   		$query = $link->query($query_string);
-   		return $query->result();
-   	}
-   	
-   	function make_insert($link, $table, $insert_array){
-   		$link->insert_string($table, $insert_array);
-   	}
-   	
    	function delete_connection($id){
    		$check = $this->db->query("select * from connection where connection_id = '$id'");
    		if(!$check->result())

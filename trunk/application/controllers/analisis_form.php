@@ -30,7 +30,17 @@ class Analisis_form extends CI_Controller {
    	}
    	private function analise($analisis_data){
 		set_time_limit (0);
-		echo "PROCESS";
+		if($analisis_data['filter'] != lang('voc.i18n_no_filter'))
+		else{
+		
+		//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< problema de fechas, unix, mysql, human...
+		//la llamada al fetch necesita dos fechas mysql
+			$start = microtime(true);
+			
+			$wiki_result = $this->wiki_model->fetch($analisis_data['wiki'], false, $analisis['date_range_a'], $analisis_data['date_range_b']);
+			
+			printf("Performed in %.02f seconds.", (microtime(true)-$start));
+		}
    	}
    	
    	function index(){

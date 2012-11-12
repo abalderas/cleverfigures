@@ -52,9 +52,9 @@ class Wiki_model extends CI_Model{
    		
    		//Comprobamos que existe y devolvemos el id de conexión
    		if(!$query->result())
-   			return "connection(): ERR_NONEXISTENT";
+   			return "wconnection(): ERR_NONEXISTENT";
    		else
-   			foreach($check->result() as $row)
+   			foreach($query->result() as $row)
    				return $row->wiki_connection;
    	}
    	
@@ -65,7 +65,7 @@ class Wiki_model extends CI_Model{
    			return array();
    		else
    			foreach($query->result() as $row)
-   				$wikis[] = $row->wiki_name;
+   				$wikis[$row->wiki_name] = $row->wiki_name;
    		
    		return $wikis;
    	}
@@ -95,25 +95,41 @@ class Wiki_model extends CI_Model{
 				return "new_wiki(): ERR_AFFECTED_ROWS (".$this->db->affected_rows().")";
 		}
    	}
-   	function fetch($wikiname, $filter){
+   	function fetch($wikiname, $filter = false, $datea = false, $dateb = false){
+   	
+		//Checking that we have reference dates. Two options: 
+		//they come with the filter or they are manually 
+		//specified as parameters
+		if(!$filter && (!$datea || !$dateb)) return "fetch(): no dates specified.";
+		
+		echo "Connecting to database...</br>";
 		//Connecting to the wiki database
    		$link = $this->connection_model->connect($this->wconnection($wikiname));
    		
-   		//Setting filter parameters according to the specified filter
-   		$filteruser = $this->filter_model->user($filter)? $this->filter_model->user($filter) : "";
-   		$filterpage = $this->filter_model->page($filter)? $this->filter_model->page($filter) : "";
-   		$filtercategory = $this->filter_model->category($filter)? $this->filter_model->category($filter) : "";
-   		$fd = $this->filter_model->firstdate($filter);
-   		$ld = $this->filter_model->lastdate($filter);
+   		echo "Applying filters...</br>";
+   		//Applying filters
+   		if($filter){
+			//Setting filter parameters according to the specified filter
+			$filteruser = $this->filter_model->user($filter)? $this->filter_model->user($filter) : false;
+			$filterpage = $this->filter_model->page($filter)? $this->filter_model->page($filter) : false;
+			$filtercategory = $this->filter_model->category($filter)? $this->filter_model->category($filter) : false;
+			$fd = $this->filter_model->firstdate($filter);
+			$ld = $this->filter_model->lastdate($filter);
+   		}
+   		else{
+			$fd = $datea;
+			$ld = $dateb;
+   		}
    		
+   		echo "Querying database for general information...</br>";
    		//Creating query string for the general query
    		$qstr = "select rev_id, rev_page, page_title, page_counter, page_namespace, user_name, user_real_name, user_email, user_registration, rev_timestamp, cl_to, cat_pages, rev_len from revision, user, page, categorylinks, category where rev_page = page_id and rev_user = user_id and page_id = cl_from and cl_to = cat_title";
    		
-   		if($filteruser)
+   		if(isset($filteruser))
 			$qstr = $qstr . " and user_name = '$filteruser'";
-		if($filterpage)
+		if(isset($filterpage))
 			$qstr = $qstr . " and page_title = '$filterpage'";
-		if($filtercategory)
+		if(isset($filtercategory))
 			$qstr = $qstr . " and cl_to = '$filtercategory'";
 		
 		$qstr = $qstr . " and rev_timestamp >= '$fd'";
@@ -127,11 +143,12 @@ class Wiki_model extends CI_Model{
    		if(!$query->result()) 
 			return false;
    		
+   		echo "Storing information...</br>";
    		//Initializing arrays for storing information
    		foreach($query->result() as $row){
    		
 			$catpages[$row->cl_to] = 0;
-   			$catpages_per[$row->cl_to] = 0;
+   			$catpages_per[$row->cl_to][$row->rev_timestamp] = 0;
    			$catedits[$row->cl_to][$row->rev_timestamp] = 0;
    			$catbytes[$row->cl_to][$row->rev_timestamp] = 0;
    			$catvisits[$row->cl_to] = 0;
@@ -148,11 +165,11 @@ class Wiki_model extends CI_Model{
    			$useredits_art_per[$row->user_name][$row->rev_timestamp] = 0;
    			$userbytes_art_per[$row->user_name][$row->rev_timestamp] = 0;
    			
-			$pageedits[$row->page_name][$row->rev_timestamp] = 0;
-   			$pagebytes[$row->page_name][$row->rev_timestamp] = 0;
-   			$pagevisits[$row->page_name] = 0;
-   			$pageedits_per[$row->page_name][$row->rev_timestamp] = 0;
-   			$pagebytes_per[$row->page_name][$row->rev_timestamp] = 0;
+			$pageedits[$row->page_title][$row->rev_timestamp] = 0;
+   			$pagebytes[$row->page_title][$row->rev_timestamp] = 0;
+   			$pagevisits[$row->page_title] = 0;
+   			$pageedits_per[$row->page_title][$row->rev_timestamp] = 0;
+   			$pagebytes_per[$row->page_title][$row->rev_timestamp] = 0;
    			
    			$totaledits[$row->rev_timestamp] = 0;
 			$totalvisits = 0;
@@ -162,6 +179,8 @@ class Wiki_model extends CI_Model{
    		
    		//Storing classified information in arrays
    		foreach($query->result() as $row){
+   			//The query returns some repeated rows due to belonging to different categories, so when adding values we need to
+   			//check that the array cell is not initialized yet, this is : if(!isset($array))...
    			
    			//Category iformation
 			$catpages[$row->cl_to] = $row->cat_pages;
@@ -174,13 +193,13 @@ class Wiki_model extends CI_Model{
    			$userreg[$row->user_name] = $row->user_registration;
    			if (!isset($useredits[$row->user_name][$row->rev_timestamp])) $useredits[$row->user_name][$row->rev_timestamp] = array_sum($useredits[$row->user_name]) + 1;
    			if (!isset($userbytes[$row->user_name][$row->rev_timestamp])) $userbytes[$row->user_name][$row->rev_timestamp] = array_sum($userbytes[$row->user_name]) + $row->rev_len;
-   			if ($row->page_namespace == 0 && !!isset($useredits_art[$row->user_name][$row->rev_timestamp])) $useredits_art[$row->user_name][$row->rev_timestamp] = array_sum($useredits_art[$row->user_name]) + 1;
-   			if ($row->page_namespace == 0 && !!isset($userbytes_art[$row->user_name][$row->rev_timestamp])) $userbytes_art[$row->user_name][$row->rev_timestamp] = array_sum($userbytes_art[$row->user_name]) + $row->rev_len;
+   			if ($row->page_namespace == 0 && !isset($useredits_art[$row->user_name][$row->rev_timestamp])) $useredits_art[$row->user_name][$row->rev_timestamp] = array_sum($useredits_art[$row->user_name]) + 1;
+   			if ($row->page_namespace == 0 && !isset($userbytes_art[$row->user_name][$row->rev_timestamp])) $userbytes_art[$row->user_name][$row->rev_timestamp] = array_sum($userbytes_art[$row->user_name]) + $row->rev_len;
 
 			//Page information
 			$pagenamespace[$row->page_title] = $row->page_namespace;
-			$pageedits[$row->page_title][$row->rev_timestamp] = array_sum($pageedits[$row->page_title]) + 1;		//MAL, hay dos filas por cada revision y sumaria dos, hacer como arriba
-   			$pagebytes[$row->page_title][$row->rev_timestamp] = array_sum($pagebytes[$row->page_title]) + $row->rev_len;	//MAL, hay dos filas por cada revision y sumaria dos
+			if (!isset($pageedits[$row->page_title][$row->rev_timestamp])) $pageedits[$row->page_title][$row->rev_timestamp] = array_sum($pageedits[$row->page_title]) + 1;
+   			if (!isset($pagebytes[$row->page_title][$row->rev_timestamp])) $pagebytes[$row->page_title][$row->rev_timestamp] = array_sum($pagebytes[$row->page_title]) + $row->rev_len;
    			$pagevisits[$row->page_title] = $row->page_counter;
 	
 			//Some auxiliar arrays to calculate total values
@@ -197,10 +216,13 @@ class Wiki_model extends CI_Model{
    		
    		//Calculating percentages
    		foreach(array_keys($catpages) as $categorykey){
-			foreach(array_keys($catpages[$categorykey]) as $datekey){
-				$catpages_per[$categorykey][$datekey] = $catpages[$categorykey][$datekey] / $totalpages[$datekey];
-				$catedits_per[$categorykey][$datekey] = $catedits[$categorykey][$datekey] / $totaledits[$datekey];
-				$catbytes_per[$categorykey][$datekey] = $catbytes[$categorykey][$datekey] / $totalbytes[$datekey];
+			foreach(array_keys($catedits[$categorykey]) as $datekey){
+				$catpages_per[$categorykey][$datekey] = 
+				$catpages[$categorykey] / $totalpages[$datekey];
+				$catedits_per[$categorykey][$datekey] = 
+				$catedits[$categorykey][$datekey] / $totaledits[$datekey];
+				$catbytes_per[$categorykey][$datekey] = 
+				$catbytes[$categorykey][$datekey] / $totalbytes[$datekey];
    			}
    		}
    		
@@ -213,21 +235,22 @@ class Wiki_model extends CI_Model{
    			}
    		}
    		
-   		foreach(array_keys($pagenamespace) as $pageykey){//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-			foreach(array_keys($pageedits[$categorykey]) as $datekey){
+   		foreach(array_keys($pagenamespace) as $pagekey){
+			foreach(array_keys($pageedits[$pagekey]) as $datekey){
 				$pageedits_per[$pagekey][$datekey] = $pageedits[$pagekey][$datekey] / $totaledits[$datekey];
 				$pagebytes_per[$pagekey][$datekey] = $pagebytes[$pagekey][$datekey] / $totalbytes[$datekey];
    			}
    		}
    		
+   		echo "Querying database for uploads information...</br>";
    		//Creating query string for the uploads query
    		$qstr = "select img_name, user_name, img_timestamp, img_size, page_title, cl_to from image, page, user, imagelinks, categorylinks where img_name = il_to and il_from = page_id and page_id = cl_from and img_user = user_id";
    		
-   		if($filteruser)
+   		if(isset($filteruser))
 			$qstr = $qstr . " and user_name = '$filteruser'";
-		if($filterpage)
+		if(isset($filterpage))
 			$qstr = $qstr . " and page_title = '$filterpage'";
-		if($filtercategory)
+		if(isset($filtercategory))
 			$qstr = $qstr . " and cl_to = '$filtercategory'";
 		
 		$qstr = $qstr . " and img_timestamp >= '$fd'";
@@ -239,106 +262,123 @@ class Wiki_model extends CI_Model{
 		
 		//If there is information about uploads
    		if($query->result()){
-   		
+   		echo "Uploads found. Storing uploads information...</br>";
+			//Initializing arrays
 			foreach($query->result() as $row){
    		
 				$userupsize[$row->user_name][$row->img_timestamp] = 0;
 				$pageupsize[$row->page_title][$row->img_timestamp] = 0;
 				$catupsize[$row->cl_to][$row->img_timestamp] = 0;
+				$totaluploads[$row->img_timestamp] = 0;
+				$totalupsize[$row->img_timestamp] = 0;
 			}
 			
 			foreach($query->result() as $row){
    		
 				$useruploads[$row->user_name][$row->img_timestamp] = $row->img_name;
-				$userupsize[$row->user_name][$row->img_timestamp] = array_sum($userupsize[$row->user_name]) + $row->img_size;
+				if(!isset($userupsize[$row->user_name][$row->img_timestamp])) $userupsize[$row->user_name][$row->img_timestamp] = array_sum($userupsize[$row->user_name]) + $row->img_size;
 				
 				$pageuploads[$row->page_title][$row->img_timestamp] = $row->img_name;		
-				$pageupsize[$row->page_title][$row->img_timestamp] = array_sum($pageupsize[$row->page_title]) + $row->img_size;
+				if(!isset($pageupsize[$row->page_title][$row->img_timestamp])) $pageupsize[$row->page_title][$row->img_timestamp] = array_sum($pageupsize[$row->page_title]) + $row->img_size;
 				
 				$catuploads[$row->cl_to][$row->img_timestamp] = $row->img_name;
-				$catupsize[$row->cl_to][$row->img_timestamp] = array_sum($catupsize[$row->cl_to]) + $row->img_size;
+				if(!isset($catupsize[$row->cl_to][$row->img_timestamp])) $catupsize[$row->cl_to][$row->img_timestamp] = array_sum($catupsize[$row->cl_to]) + $row->img_size;
 				
 				$aux_up[$row->img_name] = 1;
-				$aux_upsize[] = 
+				$aux_upsize[$row->img_name] = $row->img_size;
 				
 				$totaluploads[$row->img_timestamp] = array_sum($aux_up);
-				$totalupsize[$row->img_timestamp] =
+				if($totalupsize[$row->img_timestamp] == 0) $totalupsize[$row->img_timestamp] = array_sum($aux_upsize);
 			}
-   			
-   			foreach(array_keys($catpages) as $categorykey){
-				foreach(array_keys($catpages[$categorykey]) as $datekey){
-					$catpages_per[$categorykey][$datekey] = $catpages[$categorykey][$datekey] / $totalpages[$datekey];
-					$catedits_per[$categorykey][$datekey] = $catedits[$categorykey][$datekey] / $totaledits[$datekey];
-					$catbytes_per[$categorykey][$datekey] = $catbytes[$categorykey][$datekey] / $totalbytes[$datekey];
+			
+   			foreach(array_keys($useruploads) as $userkey){
+				foreach(array_keys($useruploads[$userkey]) as $datekey){
+					$useruploads_per[$userkey][$datekey] = $useruploads[$userkey][$datekey] / $totaluploads[$datekey];
+					$userupsize_per[$userkey][$datekey] = $userupsize[$userkey][$datekey] / $totalupsize[$datekey];
 				}
 			}
-   		}
-   	}
-   	
-   	function fetch_images($wikiname, $date_range_a = 'default', $date_range_b = 'default', $filter_page = 'total', $filter_user = 'total', $filter_category = 'total'){
-   	
-   		//Establecemos conexión con la base de datos de la wiki
-   		$link = $this->connection_model->connect($this->wconnection($wikiname));
-   		
-   		//Establecemos filtros de fecha
-   		if($date_range_a == 'default'){
-   			$initial_date = $link->query($link, "SELECT rev_timestamp FROM revision ORDER BY rev_timestamp ASC LIMIT 1")->result();
-   			if($initial_date->num_rows() != 0)
-   				foreach ($initial_date as $row)
-   					$date_range_a = $row -> rev_timestamp;
-   			else
-   				return "fetch_categories(): ERR_NONEXISTENT";
-   		}
-   		
-   		if($date_range_b == 'default')
-   			$date_range_b = date('Y-m-d H:i:s', now());
-   		
-   		//Establecemos filtros de usuario o página.
-		if($filter_user != 'total'){
-			$type = 'user';
-			$filtername = $filter_user;
-		}
-		else if($filter_page != 'total'){
-			$type = 'page';
-			$filtername = $filter_page;
-		}
-		else if($filter_category != 'total'){
-			$type = 'category';
-			$filtername = $filter_category;
-		}
-		else{
-			$type = 'total';
-			$filtername = 'total';
-		}
-		
-		//Realizamos consultas según filtrado
-		if($type == 'page'){
-			//nombre de imagen, descripcion, fecha y hora de subida, tamaño y usuario para página en concreto
-   			$cdata = $link->query("SELECT img_name, img_user_text, img_timestamp, img_size, img_user FROM image, imagelinks WHERE img_name = il_to AND il_from = '$filtername' ORDER BY img_name ASC") -> result();
-   		}
-   		else if($type == 'user'){
-   			//nombre de imagen, descripcion, fecha y hora de subida, tamaño y usuario para usuario en concreto
-			$cdata = $link->query("SELECT img_name, img_user_text, img_timestamp, img_size, img_user FROM image WHERE img_user = '$filtername' ORDER BY img_name ASC") -> result();
-		}
-		else if($type == 'category'){
-   			//nombre de imagen, descripcion, fecha y hora de subida, tamaño y usuario para categoría en concreto
-			$cdata = $link->query("SELECT img_name, img_user_text, img_timestamp, img_size, img_user FROM image, imagelinks, categorylinks WHERE img_name = il_to AND il_from = cl_from AND cl_to = '$filtername' ORDER BY img_name ASC") -> result();
-		}
-		else{
-			//nombre de imagen, descripcion, fecha y hora de subida, tamaño y usuario
-			$cdata = $link->query("SELECT img_name, img_user_text, img_timestamp, img_size, img_user FROM image ORDER BY img_name ASC") -> result();
-		}
-   		
-   		//Formamos los vectores a devolver con los datos de las consultas
-   		foreach($cdata as $row){
-   			$imgsizes[$row->img_name] = $row->img_size;
-   			$imgtimes[$row->img_name] = $row->img_timestamp;	
-   			$imgusers[$row->img_name] = $row->img_user;
-   			$imgtexts[$row->img_name] = $row->img_user_text;
+			
+			foreach(array_keys($pageuploads) as $pagekey){
+				foreach(array_keys($pageuploads[$pagekey]) as $datekey){
+					$pageuploads_per[$pagekey][$datekey] = $pageuploads[$pagekey][$datekey] / $totaluploads[$datekey];
+					$pageupsize_per[$pagekey][$datekey] = $pageupsize[$pagekey][$datekey] / $totalupsize[$datekey];
+				}
+			}
+			
+			foreach(array_keys($catuploads) as $catkey){
+				foreach(array_keys($catuploads[$catkey]) as $datekey){
+					$catuploads_per[$catkey][$datekey] = $catuploads[$catkey][$datekey] / $totaluploads[$datekey];
+					$catupsize_per[$catkey][$datekey] = $catupsize[$catkey][$datekey] / $totalupsize[$datekey];
+				}
+			}
+			
+			echo "Analisis completed.</br>";
+			
+			return array(	  'catpages' => $catpages
+					, 'catpages_per' => $catpages_per
+					, 'catedits' => $catedits
+					, 'catedits_per' => $catedits_per
+					, 'catbytes' => $catbytes
+					, 'catbytes_per' => $catbytes_per
+					, 'catvisits' => $catvisits
+					, 'catvisits_per' => $catvisits_per
+					, 'useredits' => $useredits
+					, 'useredits_art' => $useredits_art
+					, 'useredits_art_per' => $useredits_art_per
+					, 'useredits_per' => $useredits_per
+					, 'userbytes' => $userbytes
+					, 'userbytes_art' => $userbytes_art
+					, 'userbytes_art_per' => $userbytes_art_per
+					, 'userbytes_per' => $userbytes_per
+					, 'pageedits' => $pageedits
+					, 'pageedits_per' => $pageedits_per
+					, 'totaledits' => $totaledits
+					, 'totalvisits' => $totalvisits
+					, 'totalbytes' => $totalbytes
+					, 'useruploads' => $useruploads
+					, 'useruploads_per' => $useruploads_per
+					, 'userupsize' => $userupsize
+					, 'userupsize_per' => $userupsize_per
+					, 'pageuploads' => $pageuploads
+					, 'pageuploads_per' => $pageuploads_per
+					, 'pageupsize' => $pageupsize
+					, 'pageupsize_per' => $pageupsize_per
+					, 'catuploads' => $catuploads
+					, 'catuploads_per' => $catuploads_per
+					, 'catupsize' => $catupsize
+					, 'catupsize_per' => $catupsize_per
+					, 'totaluploads' => $totaluploads
+					, 'totalupsize' => $totalupsize
+				);
    		}
    		
-   		//Devolvemos conjunto de vectores con índices definidos
-   		return array('imgsizes' => $imgsizes, 'imgtimes' => $imgtimes, 'imgusers' => $imgusers, 'imgtexts' => $imgtexts, 'filtertype' => $type, 'filtername' => $filtername);
+   		echo "Uploads not found.</br>";
+   		echo "Analisis completed.</br>";
+   		
+   		return array(	  'catpages' => $catpages
+				, 'catpages_per' => $catpages_per
+				, 'catedits' => $catedits
+				, 'catedits_per' => $catedits_per
+				, 'catbytes' => $catbytes
+				, 'catbytes_per' => $catbytes_per
+				, 'catvisits' => $catvisits
+				, 'catvisits_per' => $catvisits_per
+				, 'useredits' => $useredits
+				, 'useredits_art' => $useredits_art
+				, 'useredits_art_per' => $useredits_art_per
+				, 'useredits_per' => $useredits_per
+				, 'userbytes' => $userbytes
+				, 'userbytes_art' => $userbytes_art
+				, 'userbytes_art_per' => $userbytes_art_per
+				, 'userbytes_per' => $userbytes_per
+				, 'pageedits' => $pageedits
+				, 'pageedits_per' => $pageedits_per
+				, 'totaledits' => $totaledits
+				, 'totalvisits' => $totalvisits
+				, 'totalbytes' => $totalbytes
+			);
+   		
+   		
    	}
    	
    	function delete_wiki($wikiname){
