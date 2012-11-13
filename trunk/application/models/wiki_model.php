@@ -45,7 +45,7 @@ class Wiki_model extends CI_Model{
 		$cf =& get_instance();
 		$cf->load->model('filter_model');
    	}
-   	
+	
    	private function wconnection($wikiname){
    		//Consultamos la conexión
    		$query = $this->db->query("select wiki_connection from wiki where wiki_name = '$wikiname'");
@@ -145,93 +145,146 @@ class Wiki_model extends CI_Model{
 			return false;
    		
    		echo "Storing information...</br>";
-   		//Initializing arrays for storing information
+//    		//Initializing arrays for storing information
    		foreach($query->result() as $row){
-   		
-			$catpages[$row->cl_to] = 0;
-   			$catpages_per[$row->cl_to][$row->rev_timestamp] = 0;
-   			$catedits_aux[$row->cl_to] = 0;
-   			$catedits[$row->cl_to][$row->rev_timestamp] = 0;
-   			$catbytes[$row->cl_to][$row->rev_timestamp] = 0;
-   			$catvisits[$row->cl_to] = 0;
-   			$catedits_per[$row->cl_to][$row->rev_timestamp] = 0;
-   			$catbytes_per[$row->cl_to][$row->rev_timestamp] = 0;
-   			$catvisits_per[$row->cl_to] = 0;
-   			
-   			$useredits[$row->user_name][$row->rev_timestamp] = 0;
-   			$userbytes[$row->user_name][$row->rev_timestamp] = 0;
-   			$useredits_art[$row->user_name][$row->rev_timestamp] = 0;
-   			$userbytes_art[$row->user_name][$row->rev_timestamp] = 0;
-   			$useredits_per[$row->user_name][$row->rev_timestamp] = 0;
-   			$userbytes_per[$row->user_name][$row->rev_timestamp] = 0;
-   			$useredits_art_per[$row->user_name][$row->rev_timestamp] = 0;
-   			$userbytes_art_per[$row->user_name][$row->rev_timestamp] = 0;
-   			
-			$pageedits[$row->page_title][$row->rev_timestamp] = 0;
-   			$pagebytes[$row->page_title][$row->rev_timestamp] = 0;
-   			$pagevisits[$row->page_title] = 0;
-   			$pageedits_per[$row->page_title][$row->rev_timestamp] = 0;
-   			$pagebytes_per[$row->page_title][$row->rev_timestamp] = 0;
-   			
-   			$totaledits[$row->rev_timestamp] = 0;
-			$totalvisits = 0;
-			$totalbytes[$row->rev_timestamp] = 0;
-			$totalbytes_aux = 0;
+//    		
+// 			$catpages[$row->cl_to] = 0;
+//    			$catpages_per[$row->cl_to][$row->rev_timestamp] = 0;
+//    			$catedits_aux[$row->cl_to] = 0;
+//    			$catedits[$row->cl_to][$row->rev_timestamp] = 0;
+//    			$catbytes[$row->cl_to][$row->rev_timestamp] = 0;
+//    			$catvisits[$row->cl_to] = 0;
+//    			$catedits_per[$row->cl_to][$row->rev_timestamp] = 0;
+//    			$catbytes_per[$row->cl_to][$row->rev_timestamp] = 0;
+//    			$catvisits_per[$row->cl_to] = 0;
+//    			
+//    			$useredits[$row->user_name][$row->rev_timestamp] = 0;
+//    			$userbytes[$row->user_name][$row->rev_timestamp] = 0;
+//    			$useredits_art[$row->user_name][$row->rev_timestamp] = 0;
+//    			$userbytes_art[$row->user_name][$row->rev_timestamp] = 0;
+//    			$useredits_per[$row->user_name][$row->rev_timestamp] = 0;
+//    			$userbytes_per[$row->user_name][$row->rev_timestamp] = 0;
+//    			$useredits_art_per[$row->user_name][$row->rev_timestamp] = 0;
+//    			$userbytes_art_per[$row->user_name][$row->rev_timestamp] = 0;
+//    			
+// 			$pageedits[$row->page_title][$row->rev_timestamp] = 0;
+//    			$pagebytes[$row->page_title][$row->rev_timestamp] = 0;
+//    			$pagevisits[$row->page_title] = 0;
+//    			$pageedits_per[$row->page_title][$row->rev_timestamp] = 0;
+//    			$pagebytes_per[$row->page_title][$row->rev_timestamp] = 0;
+//    			
+//    			$totaledits[$row->rev_timestamp] = 0;
+// 			$totalvisits = 0;
+// 			$totalbytes[$row->rev_timestamp] = 0;
+// 			$totalbytes_aux = 0;
+
+			$usereditscount[$row->user_name] = 0;
+			$userbytescount[$row->user_name] = 0;
+			$usereditscount_art[$row->user_name] = 0;
+			$userbytescount_art[$row->user_name] = 0;
+			$pageeditscount[$row->page_title] = 0;
+			$pagebytescount[$row->page_title] = 0;
+			$pageeditscount_art[$row->page_title] = 0;
+			$pagebytescount_art[$row->page_title] = 0;
+			$cateditscount[$row->cl_to] = 0;
+			$catbytescount[$row->cl_to] = 0;
+			$totalbytescount = 0;
+			
+			$pagebytes[$row->page_title] = array();
+			$pagebytes_art[$row->page_title] = array();
+			$userpage[$row->user_name] = array();
+			$usercat[$row->user_name] = array();
+			$pageuser[$row->page_title] = array();
+			$pagecat[$row->page_title] = array();
+			$catuser[$row->cl_to] = array();
+			$catpage[$row->cl_to] = array();
+			$totalbytes[$row->rev_timestamp] = array();
    		}
-   			
+   		
+   		
    		//Storing classified information in arrays
    		foreach($query->result() as $row){
-   			//The query returns some repeated rows due to belonging to different categories, so when adding values we need to
-   			//check that the array cell is not initialized yet, this is : if(!isset($array))...
    			
-   			$userpage[$row->user_name][] = $row->page_title;
-   			$userpage = array_unique($userpage[$row->user_name]);
-   			$pageuser[$row->page_title][] = $row->user_name;
-   			$pageuser = array_unique($pageuser[$row->page_title]);
-   			$usercat[$row->user_name][] = $row->cl_to;
-   			$usercat = array_unique($usercat[$row->user_name]);
-   			$catuser[$row->cl_to][] = $row->user_name;
-   			$catuser = array_unique($catuser[$row->cl_to]);
-   			$pagecat[$row->page_title][] = $row->cl_to;
-   			$pagecat = array_unique($pagecat[$row->page_title]);
-   			$catpage[$row->cl_to][] = $row->page_title;
-   			$catpage = array_unique($catpage[$row->cl_to]);
+   			//RELATION ARRAYS
    			
-   			//Category iformation
-			$catpages[$row->cl_to][$row->rev_timestamp] = count($catpage[$row->cl_to]);
-   			$catedits_aux[$row->cl_to] += 1;
-   			$catedits[$row->cl_to][$row->rev_timestamp] = $catedits_aux[$row->cl_to];
-   			//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-   			$bytesbalance = (isset($catbytes[$row->cl_to][$row->rev_timestamp]))? $row->rev_len - $catbytes[$row->cl_to][$row->rev_timestamp] : $row->rev_len;
-   			
-   			$catbytes[$row->cl_to][$row->rev_timestamp] += array_search($row->page_title, $pagebucket)? 
-   			$catbytes[$row->cl_to][$row->rev_timestamp] = $row->rev_len;
-   			$catvisits[$row->cl_to] += $row->page_counter;
+   			$userpage[$row->user_name][$row->page_title] = true;
+   			$pageuser[$row->page_title][$row->user_name] = true;
+   			$usercat[$row->user_name][$row->cl_to] = true;
+   			$catuser[$row->cl_to][$row->user_name] = true;
+   			$pagecat[$row->page_title][$row->cl_to] = true;
+   			$catpage[$row->cl_to][$row->page_title] = true;
 
-			//User information
-			$userrealname[$row->user_name] = $row->user_real_name;
-   			$userreg[$row->user_name] = $row->user_registration;
-   			
-   			if (!isset($useredits[$row->user_name][$row->rev_timestamp])) 
-				$useredits[$row->user_name][$row->rev_timestamp] = array_sum($useredits[$row->user_name]) + 1;
-   			if (!isset($userbytes[$row->user_name][$row->rev_timestamp])) 
-				$userbytes[$row->user_name][$row->rev_timestamp] = array_sum($userbytes[$row->user_name]) + $row->rev_len;
-   			if ($row->page_namespace == 0 && !isset($useredits_art[$row->user_name][$row->rev_timestamp])) 
-				$useredits_art[$row->user_name][$row->rev_timestamp] = array_sum($useredits_art[$row->user_name]) + 1;
-   			if ($row->page_namespace == 0 && !isset($userbytes_art[$row->user_name][$row->rev_timestamp])) 
-				$userbytes_art[$row->user_name][$row->rev_timestamp] = array_sum($userbytes_art[$row->user_name]) + $row->rev_len;
-
-			//Page information
-			$pagenamespace[$row->page_title] = $row->page_namespace;
+			//USER INFORMATION
 			
-			if (!isset($pageedits[$row->page_title][$row->rev_timestamp])) 
-				$pageedits[$row->page_title][$row->rev_timestamp] = array_sum($pageedits[$row->page_title]) + 1;
-   			if (!isset($pagebytes[$row->page_title][$row->rev_timestamp])) 
-				$pagebytes[$row->page_title][$row->rev_timestamp] = array_sum($pagebytes[$row->page_title]) + $row->rev_len;
-				
-   			$pagevisits[$row->page_title] = $row->page_counter;
+			$userpagecount[$row->user_name][$row->rev_timestamp] = count($userpage[$row->user_name]);	// Pages per user/date
+			$usercatcount[$row->user_name][$row->rev_timestamp] = count($usercat[$row->user_name]);		// Categories per user/date
+			$userrealname[$row->user_name] = $row->user_real_name;						// Getting user real names
+   			$userreg[$row->user_name] = $row->user_registration;						// Getting user registration dates
+   			$usereditscount[$row->user_name] += 1;								// Count of the total editions per user
+   			$useredits[$row->user_name][$row->rev_timestamp] = $usereditscount[$row->user_name];		// Editions per user & date
+   			$userbytescount[$row->user_name] += 								// Count of the total of bytes added/modified by the user:
+				end($pagebytes[$row->page_title]) ? 							// 	if previous length exists adds (existing length - previous length). Can be positive or negative
+					$row->rev_len - end($pagebytes[$row->page_title]) : 				// 	if removing content. Else, just adds the new length.
+					$row->rev_len;
+   			reset($pagebytes[$row->page_title]);								// Setting the pointer to the first element again, just to avoid future errors
+   			$userbytes[$row->user_name][$row->rev_timestamp] = $userbytescount[$row->user_name];		// Bytes by user $ date
+   			
+   			if ($row->page_namespace == 0){										// If article
+				$usereditscount_art[$row->user_name] += 1;							// 	Count total article editions per user
+				$useredits_art[$row->user_name][$row->rev_timestamp] = $usereditscount_art[$row->user_name];	// 	Editions of article per user/date
+				$userbytescount_art[$row->user_name] += 							// 	Count total bytes per user
+					end($pagebytes_art[$row->page_title]) ? 
+						$row->rev_len - end($pagebytes_art[$row->page_title]) : 
+						$row->rev_len;
+				reset($pagebytes_art[$row->page_title]);								// Setting the pointer to the first element again, just to avoid future errors
+				$userbytes_art[$row->user_name][$row->rev_timestamp] = $userbytescount_art[$row->user_name];	// 	Bytes per user/date
+			}
+			
+			
+			//CATEGORY INFORMATION
+			
+			$catpages[$row->cl_to][$row->rev_timestamp] = count($catpage[$row->cl_to]);
+			$catusercount[$row->cl_to][$row->rev_timestamp] = count($catuser[$row->cl_to]);
+   			$cateditscount[$row->cl_to] += 1;
+   			$catedits[$row->cl_to][$row->rev_timestamp] = $cateditscount[$row->cl_to];
+   			if(end($pagebytes[$row->page_title])) echo "A la categoria ".$row->cl_to." se le suma: ".($row->rev_len - end($pagebytes[$row->page_title]))."</br>";
+   			else echo "no hay end. A la categoría ".$row->cl_to." se le suma: ".$row->rev_len."</br>";
+   			$catbytescount[$row->cl_to] += 							// Count total bytes per user
+				end($pagebytes[$row->page_title]) ? 
+					$row->rev_len - end($pagebytes[$row->page_title]) : 
+					$row->rev_len;
+   			$catbytes[$row->cl_to][$row->rev_timestamp] = $catbytescount[$row->cl_to];
+
+   			
+			//PAGE INFORMATION
+			
+			$pageusercount[$row->page_title][$row->rev_timestamp] = count($pageuser[$row->page_title]);	// Users per page/date
+			$pagecatcount[$row->page_title][$row->rev_timestamp] = count($pagecat[$row->page_title]);	// Categories per page/date
+			$pagenamespace[$row->page_title] = $row->page_namespace;					// Getting namespaces per page
+			$pageeditscount[$row->page_title] += 1;								// Count of the total editions per page
+			$pageedits[$row->page_title][$row->rev_timestamp] = $pageeditscount[$row->page_title];		// Editions per page/date
+   			$pagevisits[$row->page_title] = $row->page_counter;						// Total visits per page
+			$pagebytescount[$row->page_title] += 								// Count of the total of bytes added/modified in the page
+				end($pagebytes[$row->page_title]) ? 							// 	if previous length exists adds (existing length - previous length). Can be positive or negative
+					$row->rev_len - end($pagebytes[$row->page_title]) : 				// 	if removing content. Else, just adds the new length.
+					$row->rev_len;
+			reset($pagebytes[$row->page_title]);								// Setting the pointer to the first element again, just to avoid future errors
+   			$pagebytes[$row->page_title][$row->rev_timestamp] = $pagebytescount[$row->page_title];		// Bytes per page/date
 	
-			//Some auxiliar arrays to calculate total values
+			if ($row->page_namespace == 0){										// If article
+				$pageeditscount_art[$row->page_title] += 1;							// 	Count total article editions per user
+				$pageedits_art[$row->page_title][$row->rev_timestamp] = $pageeditscount_art[$row->page_title];	// 	Editions of article per user/date
+				$pagebytescount_art[$row->page_title] += 							// 	Count total bytes per user
+					end($pagebytes_art[$row->page_title]) ? 
+						$row->rev_len - end($pagebytes_art[$row->page_title]) : 
+						$row->rev_len;
+				reset($pagebytes_art[$row->page_title]);								// Setting the pointer to the first element again, just to avoid future errors
+				$pagebytes_art[$row->user_name][$row->rev_timestamp] = $pagebytescount_art[$row->page_title];	// 	Bytes per user/date
+			}
+   			
+   			
+			//TOTAL INFORMATION
+			
 			$aux_edits[$row->rev_id] = 1;
 			$aux_pages[$row->page_title] = 1;
 			
@@ -239,34 +292,38 @@ class Wiki_model extends CI_Model{
 			$totaledits[$row->rev_timestamp] = array_sum($aux_edits);
 			$totalvisits = array_sum($pagevisits);
 			$totalpages[$row->rev_timestamp] = array_sum($aux_pages);
-			$totalbytes[$row->rev_timestamp] += $bytesbalance;
-			
+			$totalbytescount += 
+				end($pagebytes[$row->page_title]) ? 
+					$row->rev_len - end($pagebytes[$row->page_title]) : 
+					$row->rev_len;
+			reset($pagebytes[$row->page_title]);
+			$totalbytes[$row->rev_timestamp] = $totalbytescount;
    		}
    		
    		//Calculating percentages
-   		foreach(array_keys($catpages) as $categorykey){
-			foreach(array_keys($catedits[$categorykey]) as $datekey){
-				$catpages_per[$categorykey][$datekey] = $catpages[$categorykey] / $totalpages[$datekey] * 100;
-				$catedits_per[$categorykey][$datekey] = $catedits[$categorykey][$datekey] / $totaledits[$datekey] * 100;
-				$catbytes_per[$categorykey][$datekey] = $catbytes[$categorykey][$datekey] / $totalbytes[$datekey] * 100;
-   			}
-   		}
-   		
-   		foreach(array_keys($userrealname) as $userkey){
-			foreach(array_keys($useredits[$userkey]) as $datekey){
-				$useredits_per[$userkey][$datekey] = $useredits[$userkey][$datekey] / $totaledits[$datekey] * 100;
-				$userbytes_per[$userkey][$datekey] = $userbytes[$userkey][$datekey] / $totalbytes[$datekey] * 100;
-				$useredits_art_per[$userkey][$datekey] = $useredits_art[$userkey][$datekey] / $totaledits[$datekey] * 100;
-				$userbytes_art_per[$userkey][$datekey] = $userbytes_art[$userkey][$datekey] / $totalbytes[$datekey] * 100;
-   			}
-   		}
-   		
-   		foreach(array_keys($pagenamespace) as $pagekey){
-			foreach(array_keys($pageedits[$pagekey]) as $datekey){
-				$pageedits_per[$pagekey][$datekey] = $pageedits[$pagekey][$datekey] / $totaledits[$datekey] * 100;
-				$pagebytes_per[$pagekey][$datekey] = $pagebytes[$pagekey][$datekey] / $totalbytes[$datekey] * 100;
-   			}
-   		}
+//    		foreach(array_keys($catpages) as $categorykey){
+// 			foreach(array_keys($catedits[$categorykey]) as $datekey){
+// 				$catpages_per[$categorykey][$datekey] = $catpages[$categorykey] / $totalpages[$datekey] * 100;
+// 				$catedits_per[$categorykey][$datekey] = $catedits[$categorykey][$datekey] / $totaledits[$datekey] * 100;
+// 				$catbytes_per[$categorykey][$datekey] = $catbytes[$categorykey][$datekey] / $totalbytes[$datekey] * 100;
+//    			}
+//    		}
+//    		
+//    		foreach(array_keys($userrealname) as $userkey){
+// 			foreach(array_keys($useredits[$userkey]) as $datekey){
+// 				$useredits_per[$userkey][$datekey] = $useredits[$userkey][$datekey] / $totaledits[$datekey] * 100;
+// 				$userbytes_per[$userkey][$datekey] = $userbytes[$userkey][$datekey] / $totalbytes[$datekey] * 100;
+// 				$useredits_art_per[$userkey][$datekey] = $useredits_art[$userkey][$datekey] / $totaledits[$datekey] * 100;
+// 				$userbytes_art_per[$userkey][$datekey] = $userbytes_art[$userkey][$datekey] / $totalbytes[$datekey] * 100;
+//    			}
+//    		}
+//    		
+//    		foreach(array_keys($pagenamespace) as $pagekey){
+// 			foreach(array_keys($pageedits[$pagekey]) as $datekey){
+// 				$pageedits_per[$pagekey][$datekey] = $pageedits[$pagekey][$datekey] / $totaledits[$datekey] * 100;
+// 				$pagebytes_per[$pagekey][$datekey] = $pagebytes[$pagekey][$datekey] / $totalbytes[$datekey] * 100;
+//    			}
+//    		}
    		
    		echo "Querying database for uploads information...</br>";
    		//Creating query string for the uploads query
@@ -340,39 +397,38 @@ class Wiki_model extends CI_Model{
 			
 			echo "Analisis completed.</br>";
 			
-			return array(	  'catpages' => $catpages
-					, 'catpages_per' => $catpages_per
+			return array(	  'catpagecount' => $catpages
+// 					, 'catpages_per' => $catpages_per
 					, 'catedits' => $catedits
-					, 'catedits_per' => $catedits_per
+// 					, 'catedits_per' => $catedits_per
 					, 'catbytes' => $catbytes
-					, 'catbytes_per' => $catbytes_per
-					, 'catvisits' => $catvisits
-					, 'catvisits_per' => $catvisits_per
+// 					, 'catbytes_per' => $catbytes_per
+// 					, 'catvisits_per' => $catvisits_per
 					, 'useredits' => $useredits
 					, 'useredits_art' => $useredits_art
-					, 'useredits_art_per' => $useredits_art_per
-					, 'useredits_per' => $useredits_per
+// 					, 'useredits_art_per' => $useredits_art_per
+// 					, 'useredits_per' => $useredits_per
 					, 'userbytes' => $userbytes
 					, 'userbytes_art' => $userbytes_art
-					, 'userbytes_art_per' => $userbytes_art_per
-					, 'userbytes_per' => $userbytes_per
+// 					, 'userbytes_art_per' => $userbytes_art_per
+// 					, 'userbytes_per' => $userbytes_per
 					, 'pageedits' => $pageedits
-					, 'pageedits_per' => $pageedits_per
+// 					, 'pageedits_per' => $pageedits_per
 					, 'totaledits' => $totaledits
 					, 'totalvisits' => $totalvisits
 					, 'totalbytes' => $totalbytes
 					, 'useruploads' => $useruploads
-					, 'useruploads_per' => $useruploads_per
-					, 'userupsize' => $userupsize
-					, 'userupsize_per' => $userupsize_per
+// 					, 'useruploads_per' => $useruploads_per
+// 					, 'userupsize' => $userupsize
+// 					, 'userupsize_per' => $userupsize_per
 					, 'pageuploads' => $pageuploads
-					, 'pageuploads_per' => $pageuploads_per
+// 					, 'pageuploads_per' => $pageuploads_per
 					, 'pageupsize' => $pageupsize
-					, 'pageupsize_per' => $pageupsize_per
+// 					, 'pageupsize_per' => $pageupsize_per
 					, 'catuploads' => $catuploads
-					, 'catuploads_per' => $catuploads_per
+// 					, 'catuploads_per' => $catuploads_per
 					, 'catupsize' => $catupsize
-					, 'catupsize_per' => $catupsize_per
+// 					, 'catupsize_per' => $catupsize_per
 					, 'totaluploads' => $totaluploads
 					, 'totalupsize' => $totalupsize
 				);
@@ -382,23 +438,23 @@ class Wiki_model extends CI_Model{
    		echo "Analisis completed.</br>";
    		
    		return array(	  'catpages' => $catpages
-				, 'catpages_per' => $catpages_per
+// 				, 'catpages_per' => $catpages_per
 				, 'catedits' => $catedits
-				, 'catedits_per' => $catedits_per
+// 				, 'catedits_per' => $catedits_per
 				, 'catbytes' => $catbytes
-				, 'catbytes_per' => $catbytes_per
+// 				, 'catbytes_per' => $catbytes_per
 				, 'catvisits' => $catvisits
-				, 'catvisits_per' => $catvisits_per
+// 				, 'catvisits_per' => $catvisits_per
 				, 'useredits' => $useredits
 				, 'useredits_art' => $useredits_art
-				, 'useredits_art_per' => $useredits_art_per
-				, 'useredits_per' => $useredits_per
+// 				, 'useredits_art_per' => $useredits_art_per
+// 				, 'useredits_per' => $useredits_per
 				, 'userbytes' => $userbytes
 				, 'userbytes_art' => $userbytes_art
-				, 'userbytes_art_per' => $userbytes_art_per
-				, 'userbytes_per' => $userbytes_per
+// 				, 'userbytes_art_per' => $userbytes_art_per
+// 				, 'userbytes_per' => $userbytes_per
 				, 'pageedits' => $pageedits
-				, 'pageedits_per' => $pageedits_per
+// 				, 'pageedits_per' => $pageedits_per
 				, 'totaledits' => $totaledits
 				, 'totalvisits' => $totalvisits
 				, 'totalbytes' => $totalbytes
