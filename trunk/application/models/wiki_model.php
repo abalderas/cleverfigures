@@ -100,6 +100,7 @@ class Wiki_model extends CI_Model{
 		//Checking that we have reference dates. Two options: 
 		//they come with the filter or they are manually 
 		//specified as parameters
+		
 		if(!$filter && (!$datea || !$dateb)) return "fetch(): no dates specified.";
 		
 		echo "Connecting to database...</br>";
@@ -149,6 +150,7 @@ class Wiki_model extends CI_Model{
    		
 			$catpages[$row->cl_to] = 0;
    			$catpages_per[$row->cl_to][$row->rev_timestamp] = 0;
+   			$catedits_aux[$row->cl_to] = 0;
    			$catedits[$row->cl_to][$row->rev_timestamp] = 0;
    			$catbytes[$row->cl_to][$row->rev_timestamp] = 0;
    			$catvisits[$row->cl_to] = 0;
@@ -174,32 +176,59 @@ class Wiki_model extends CI_Model{
    			$totaledits[$row->rev_timestamp] = 0;
 			$totalvisits = 0;
 			$totalbytes[$row->rev_timestamp] = 0;
+			$totalbytes_aux = 0;
    		}
    			
-   		
    		//Storing classified information in arrays
    		foreach($query->result() as $row){
    			//The query returns some repeated rows due to belonging to different categories, so when adding values we need to
    			//check that the array cell is not initialized yet, this is : if(!isset($array))...
    			
+   			$userpage[$row->user_name][] = $row->page_title;
+   			$userpage = array_unique($userpage[$row->user_name]);
+   			$pageuser[$row->page_title][] = $row->user_name;
+   			$pageuser = array_unique($pageuser[$row->page_title]);
+   			$usercat[$row->user_name][] = $row->cl_to;
+   			$usercat = array_unique($usercat[$row->user_name]);
+   			$catuser[$row->cl_to][] = $row->user_name;
+   			$catuser = array_unique($catuser[$row->cl_to]);
+   			$pagecat[$row->page_title][] = $row->cl_to;
+   			$pagecat = array_unique($pagecat[$row->page_title]);
+   			$catpage[$row->cl_to][] = $row->page_title;
+   			$catpage = array_unique($catpage[$row->cl_to]);
+   			
    			//Category iformation
-			$catpages[$row->cl_to] = $row->cat_pages;
-   			$catedits[$row->cl_to][$row->rev_timestamp] = array_sum($catedits[$row->cl_to]) + 1;
-   			$catbytes[$row->cl_to][$row->rev_timestamp] = array_sum($catbytes[$row->cl_to]) + $row->rev_len;
+			$catpages[$row->cl_to][$row->rev_timestamp] = count($catpage[$row->cl_to]);
+   			$catedits_aux[$row->cl_to] += 1;
+   			$catedits[$row->cl_to][$row->rev_timestamp] = $catedits_aux[$row->cl_to];
+   			//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+   			$bytesbalance = (isset($catbytes[$row->cl_to][$row->rev_timestamp]))? $row->rev_len - $catbytes[$row->cl_to][$row->rev_timestamp] : $row->rev_len;
+   			
+   			$catbytes[$row->cl_to][$row->rev_timestamp] += array_search($row->page_title, $pagebucket)? 
+   			$catbytes[$row->cl_to][$row->rev_timestamp] = $row->rev_len;
    			$catvisits[$row->cl_to] += $row->page_counter;
 
 			//User information
 			$userrealname[$row->user_name] = $row->user_real_name;
    			$userreg[$row->user_name] = $row->user_registration;
-   			if (!isset($useredits[$row->user_name][$row->rev_timestamp])) $useredits[$row->user_name][$row->rev_timestamp] = array_sum($useredits[$row->user_name]) + 1;
-   			if (!isset($userbytes[$row->user_name][$row->rev_timestamp])) $userbytes[$row->user_name][$row->rev_timestamp] = array_sum($userbytes[$row->user_name]) + $row->rev_len;
-   			if ($row->page_namespace == 0 && !isset($useredits_art[$row->user_name][$row->rev_timestamp])) $useredits_art[$row->user_name][$row->rev_timestamp] = array_sum($useredits_art[$row->user_name]) + 1;
-   			if ($row->page_namespace == 0 && !isset($userbytes_art[$row->user_name][$row->rev_timestamp])) $userbytes_art[$row->user_name][$row->rev_timestamp] = array_sum($userbytes_art[$row->user_name]) + $row->rev_len;
+   			
+   			if (!isset($useredits[$row->user_name][$row->rev_timestamp])) 
+				$useredits[$row->user_name][$row->rev_timestamp] = array_sum($useredits[$row->user_name]) + 1;
+   			if (!isset($userbytes[$row->user_name][$row->rev_timestamp])) 
+				$userbytes[$row->user_name][$row->rev_timestamp] = array_sum($userbytes[$row->user_name]) + $row->rev_len;
+   			if ($row->page_namespace == 0 && !isset($useredits_art[$row->user_name][$row->rev_timestamp])) 
+				$useredits_art[$row->user_name][$row->rev_timestamp] = array_sum($useredits_art[$row->user_name]) + 1;
+   			if ($row->page_namespace == 0 && !isset($userbytes_art[$row->user_name][$row->rev_timestamp])) 
+				$userbytes_art[$row->user_name][$row->rev_timestamp] = array_sum($userbytes_art[$row->user_name]) + $row->rev_len;
 
 			//Page information
 			$pagenamespace[$row->page_title] = $row->page_namespace;
-			if (!isset($pageedits[$row->page_title][$row->rev_timestamp])) $pageedits[$row->page_title][$row->rev_timestamp] = array_sum($pageedits[$row->page_title]) + 1;
-   			if (!isset($pagebytes[$row->page_title][$row->rev_timestamp])) $pagebytes[$row->page_title][$row->rev_timestamp] = array_sum($pagebytes[$row->page_title]) + $row->rev_len;
+			
+			if (!isset($pageedits[$row->page_title][$row->rev_timestamp])) 
+				$pageedits[$row->page_title][$row->rev_timestamp] = array_sum($pageedits[$row->page_title]) + 1;
+   			if (!isset($pagebytes[$row->page_title][$row->rev_timestamp])) 
+				$pagebytes[$row->page_title][$row->rev_timestamp] = array_sum($pagebytes[$row->page_title]) + $row->rev_len;
+				
    			$pagevisits[$row->page_title] = $row->page_counter;
 	
 			//Some auxiliar arrays to calculate total values
@@ -210,35 +239,32 @@ class Wiki_model extends CI_Model{
 			$totaledits[$row->rev_timestamp] = array_sum($aux_edits);
 			$totalvisits = array_sum($pagevisits);
 			$totalpages[$row->rev_timestamp] = array_sum($aux_pages);
-			$totalbytes[$row->rev_timestamp] = array_sum($totalbytes) + $row->rev_len;
+			$totalbytes[$row->rev_timestamp] += $bytesbalance;
 			
    		}
    		
    		//Calculating percentages
    		foreach(array_keys($catpages) as $categorykey){
 			foreach(array_keys($catedits[$categorykey]) as $datekey){
-				$catpages_per[$categorykey][$datekey] = 
-				$catpages[$categorykey] / $totalpages[$datekey];
-				$catedits_per[$categorykey][$datekey] = 
-				$catedits[$categorykey][$datekey] / $totaledits[$datekey];
-				$catbytes_per[$categorykey][$datekey] = 
-				$catbytes[$categorykey][$datekey] / $totalbytes[$datekey];
+				$catpages_per[$categorykey][$datekey] = $catpages[$categorykey] / $totalpages[$datekey] * 100;
+				$catedits_per[$categorykey][$datekey] = $catedits[$categorykey][$datekey] / $totaledits[$datekey] * 100;
+				$catbytes_per[$categorykey][$datekey] = $catbytes[$categorykey][$datekey] / $totalbytes[$datekey] * 100;
    			}
    		}
    		
    		foreach(array_keys($userrealname) as $userkey){
 			foreach(array_keys($useredits[$userkey]) as $datekey){
-				$useredits_per[$userkey][$datekey] = $useredits[$userkey][$datekey] / $totaledits[$datekey];
-				$userbytes_per[$userkey][$datekey] = $userbytes[$userkey][$datekey] / $totalbytes[$datekey];
-				$useredits_art_per[$userkey][$datekey] = $useredits_art[$userkey][$datekey] / $totaledits[$datekey];
-				$userbytes_art_per[$userkey][$datekey] = $userbytes_art[$userkey][$datekey] / $totalbytes[$datekey];
+				$useredits_per[$userkey][$datekey] = $useredits[$userkey][$datekey] / $totaledits[$datekey] * 100;
+				$userbytes_per[$userkey][$datekey] = $userbytes[$userkey][$datekey] / $totalbytes[$datekey] * 100;
+				$useredits_art_per[$userkey][$datekey] = $useredits_art[$userkey][$datekey] / $totaledits[$datekey] * 100;
+				$userbytes_art_per[$userkey][$datekey] = $userbytes_art[$userkey][$datekey] / $totalbytes[$datekey] * 100;
    			}
    		}
    		
    		foreach(array_keys($pagenamespace) as $pagekey){
 			foreach(array_keys($pageedits[$pagekey]) as $datekey){
-				$pageedits_per[$pagekey][$datekey] = $pageedits[$pagekey][$datekey] / $totaledits[$datekey];
-				$pagebytes_per[$pagekey][$datekey] = $pagebytes[$pagekey][$datekey] / $totalbytes[$datekey];
+				$pageedits_per[$pagekey][$datekey] = $pageedits[$pagekey][$datekey] / $totaledits[$datekey] * 100;
+				$pagebytes_per[$pagekey][$datekey] = $pagebytes[$pagekey][$datekey] / $totalbytes[$datekey] * 100;
    			}
    		}
    		
@@ -293,22 +319,22 @@ class Wiki_model extends CI_Model{
 			
    			foreach(array_keys($useruploads) as $userkey){
 				foreach(array_keys($useruploads[$userkey]) as $datekey){
-					$useruploads_per[$userkey][$datekey] = $useruploads[$userkey][$datekey] / $totaluploads[$datekey];
-					$userupsize_per[$userkey][$datekey] = $userupsize[$userkey][$datekey] / $totalupsize[$datekey];
+					$useruploads_per[$userkey][$datekey] = $useruploads[$userkey][$datekey] / $totaluploads[$datekey] * 100;
+					$userupsize_per[$userkey][$datekey] = $userupsize[$userkey][$datekey] / $totalupsize[$datekey] * 100;
 				}
 			}
 			
 			foreach(array_keys($pageuploads) as $pagekey){
 				foreach(array_keys($pageuploads[$pagekey]) as $datekey){
-					$pageuploads_per[$pagekey][$datekey] = $pageuploads[$pagekey][$datekey] / $totaluploads[$datekey];
-					$pageupsize_per[$pagekey][$datekey] = $pageupsize[$pagekey][$datekey] / $totalupsize[$datekey];
+					$pageuploads_per[$pagekey][$datekey] = $pageuploads[$pagekey][$datekey] / $totaluploads[$datekey] * 100;
+					$pageupsize_per[$pagekey][$datekey] = $pageupsize[$pagekey][$datekey] / $totalupsize[$datekey] * 100;
 				}
 			}
 			
 			foreach(array_keys($catuploads) as $catkey){
 				foreach(array_keys($catuploads[$catkey]) as $datekey){
-					$catuploads_per[$catkey][$datekey] = $catuploads[$catkey][$datekey] / $totaluploads[$datekey];
-					$catupsize_per[$catkey][$datekey] = $catupsize[$catkey][$datekey] / $totalupsize[$datekey];
+					$catuploads_per[$catkey][$datekey] = $catuploads[$catkey][$datekey] / $totaluploads[$datekey] * 100;
+					$catupsize_per[$catkey][$datekey] = $catupsize[$catkey][$datekey] / $totalupsize[$datekey] * 100;
 				}
 			}
 			

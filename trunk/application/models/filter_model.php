@@ -46,7 +46,7 @@ class Filter_model extends CI_Model{
    			return array();
    		else
    			foreach($query->result() as $row)
-   				$filters[] = $row->filter_id;
+   				$filters[$row->filter_id] = $row->filter_id;
    		
    		return $filters;
    	}

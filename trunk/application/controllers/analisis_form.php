@@ -26,19 +26,42 @@ class Analisis_form extends CI_Controller {
       		$this->load->model('wiki_model');
       		$this->load->model('color_model');
       		$this->load->model('filter_model');
+      		$this->load->helper('date');
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
+   	
+   	private function time_php2sql($unixtime){
+		return gmdate("Y-m-d H:i:s", $unixtime);
+	}
+
+	function displayTree($array) {
+	$output = "";
+     $newline = "<br>";
+     foreach($array as $key => $value) {    //cycle through each item in the array as key => value pairs
+         if (is_array($value) || is_object($value)) {        //if the VALUE is an array, then
+            //call it out as such, surround with brackets, and recursively call displayTree.
+             $value = "Array()" . $newline . "(<ul>" . $this->displayTree($value) . "</ul>)" . $newline;
+         }
+        //if value isn't an array, it must be a string. output its' key and value.
+        $output .= "[$key] => " . $value . $newline;
+     }
+     return $output;
+     }
    	private function analise($analisis_data){
 		set_time_limit (0);
-		if($analisis_data['filter'] != lang('voc.i18n_no_filter'))
+		if($analisis_data['filter'] != lang('voc.i18n_no_filter')){
+			$start = microtime(true);
+			echo "flores1: ". $analisis_data['datea'];
+			$wiki_result = $this->wiki_model->fetch($analisis_data['wiki'], $analisis_data['filter']);
+			
+			printf("Performed in %.02f seconds.", (microtime(true)-$start));
+		}
 		else{
-		
-		//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< problema de fechas, unix, mysql, human...
-		//la llamada al fetch necesita dos fechas mysql
 			$start = microtime(true);
 			
-			$wiki_result = $this->wiki_model->fetch($analisis_data['wiki'], false, $analisis['date_range_a'], $analisis_data['date_range_b']);
+			$wiki_result = $this->wiki_model->fetch($analisis_data['wiki'], false, $this->time_php2sql(strtotime($analisis_data['date_range_a'])), $this->time_php2sql(strtotime($analisis_data['date_range_b'])));
 			
+			echo $this->displayTree($wiki_result);
 			printf("Performed in %.02f seconds.", (microtime(true)-$start));
 		}
    	}

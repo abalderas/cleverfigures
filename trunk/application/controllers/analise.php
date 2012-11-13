@@ -35,7 +35,7 @@ class Analise extends CI_Controller {
 		$colors = array(0 => lang('voc.i18n_no_color'));
 		$colors = array_merge($colors, $this->color_model->get_color_list($this->session->userdata('username')));
 		
-		$filters = array(0 => lang('voc.i18n_no_filter'));
+		$filters = array(lang('voc.i18n_no_filter') => lang('voc.i18n_no_filter'));
 		$filters = array_merge($filters, $this->filter_model->get_filter_list($this->session->userdata('username')));
 		$adata = array('wikis' => $this->wiki_model->get_wiki_list($this->session->userdata('username')), 'colors' => $colors, 'filters' => $filters);
 		
