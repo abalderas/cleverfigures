@@ -88,7 +88,7 @@ class User_model extends CI_Model{
 			else return TRUE;
 		}
    		else
-   			return "relate_color(): ERR_ALREADY_EXISTS";
+   			die( "relate_color(): ERR_ALREADY_EXISTS");
    	}
    	
    	function relate_filter($id){

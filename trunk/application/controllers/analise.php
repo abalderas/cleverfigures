@@ -37,7 +37,11 @@ class Analise extends CI_Controller {
 		
 		$filters = array(lang('voc.i18n_no_filter') => lang('voc.i18n_no_filter'));
 		$filters = array_merge($filters, $this->filter_model->get_filter_list($this->session->userdata('username')));
-		$adata = array('wikis' => $this->wiki_model->get_wiki_list($this->session->userdata('username')), 'colors' => $colors, 'filters' => $filters);
+		
+		$wikis = array(lang('voc.i18n_no_wiki') => lang('voc.i18n_no_wiki')); 
+		$wikis = array_merge($wikis, $this->wiki_model->get_wiki_list($this->session->userdata('username')));
+		
+		$adata = array('wikis' => $wikis, 'colors' => $colors, 'filters' => $filters);
 		
 		$this->load->view('templates/header_view', $datah);
 		$this->load->view('content/analise_view', $adata);

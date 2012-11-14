@@ -51,7 +51,6 @@ class Analisis_form extends CI_Controller {
 		set_time_limit (0);
 		if($analisis_data['filter'] != lang('voc.i18n_no_filter')){
 			$start = microtime(true);
-			echo "flores1: ". $analisis_data['datea'];
 			$wiki_result = $this->wiki_model->fetch($analisis_data['wiki'], $analisis_data['filter']);
 			
 			printf("Performed in %.02f seconds.", (microtime(true)-$start));
@@ -60,8 +59,9 @@ class Analisis_form extends CI_Controller {
 			$start = microtime(true);
 			
 			$wiki_result = $this->wiki_model->fetch($analisis_data['wiki'], false, $this->time_php2sql(strtotime($analisis_data['date_range_a'])), $this->time_php2sql(strtotime($analisis_data['date_range_b'])));
-			
+			$assess_result = $this->color_model->fetch($analisis_data['color']);
 			echo $this->displayTree($wiki_result);
+			echo $this->displayTree($assess_result);
 			printf("Performed in %.02f seconds.", (microtime(true)-$start));
 		}
    	}
