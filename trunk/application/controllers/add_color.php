@@ -70,7 +70,7 @@ class Add_color extends CI_Controller {
 				
 				$filters = array(0 => lang('voc.i18n_no_filter'));
 				$filters = array_merge($filters, $this->filter_model->get_filter_list($this->session->userdata('username')));
-				$confdata = array('filters' => $filters);
+				$confdata = array('filters' => $filters, 'userdefaultfilter' => $this->user_model->default_filter($this->session->userdata('username')));
 		
 				$datah = array('title' => lang('voc.i18n_installation'));
 				$this->load->view('templates/header_view', $datah);

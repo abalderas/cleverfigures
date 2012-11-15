@@ -62,21 +62,21 @@ class Filter_model extends CI_Model{
 	}
    	function new_filter($data){
    		$sql = array('ref' => "",
-   			'filter_id' => $data['id'],
-   			'filter_user' => $data['user'],
-   			'filter_username' => $data['username'],
-   			'filter_page' => $data['page'],
-   			'filter_pagename' => $data['pagename'],
-   			'filter_category' => $data['category'],
-   			'filter_categoryname' => $data['categoryname'],
-   			'filter_criteria' => $data['criteria'],
-   			'filter_criterianame' => $data['criterianame'],
+   			'filter_id' => $data['filterid'],
+   			'filter_user' => $data['filterusercheck'],
+   			'filter_username' => $data['filteruser'],
+   			'filter_page' => $data['filterpagecheck'],
+   			'filter_pagename' => $data['filterpage'],
+   			'filter_category' => $data['filtercategorycheck'],
+   			'filter_categoryname' => $data['filtercategory'],
+   			'filter_criteria' => $data['filtercriteriacheck'],
+   			'filter_criterianame' => $data['filtercriteria'],
    			'filter_date_a' => $data['datea'],
    			'filter_date_b' => $data['dateb']
    			);
 		$this->db->insert('filter', $sql);
 		
-		//Si no hay error de inserción, devolvemos el id de la wiki
+		//Si no hay error de inserción, devolvemos el id
 		if($this->db->affected_rows() != 1) 
 			return "new_filter(): ERR_AFFECTED_ROWS (".$this->db->affected_rows().")";
    	}	

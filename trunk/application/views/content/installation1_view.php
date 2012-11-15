@@ -22,11 +22,11 @@ echo img('images/logo/logotrans.png');
 echo br();
 
 $languages = array(
-           	'spanish'  => lang('voc.i18n_spanish'),
-                'english'    => lang('voc.i18n_english'),
-                'french'   => lang('voc.i18n_french'),
-                'russian' => lang('voc.i18n_russian'),
-                'german' => lang('voc.i18n_german'),
+           	//'spanish'  => lang('voc.i18n_spanish'),
+                'english'    => lang('voc.i18n_english')
+                //'french'   => lang('voc.i18n_french'),
+                //'russian' => lang('voc.i18n_russian'),
+                //'german' => lang('voc.i18n_german'),
              );
 ?>
             

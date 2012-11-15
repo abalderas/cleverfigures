@@ -25,6 +25,7 @@ class Configuration_form extends CI_Controller {
       		parent::__construct();
       		$this->load->database();
       		$this->load->model('filter_model');
+      		$this->load->model('user_model');
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	
@@ -52,14 +53,16 @@ class Configuration_form extends CI_Controller {
 			
 		else if($this->input->post('save_conf')){
 			$lang = $_POST['select_language'];
-			$filter = $this->filter_model->str_type($_POST['select_filter']);
+			$filter = $_POST['select_filter'];
 			$user = $this->session->userdata('username');
 			
 			$this->session->set_userdata(array('language' => $lang));
 			$this->db->query("UPDATE user SET user_language='$lang', user_filter='$filter' WHERE user_username='$user'");
 			
 			$datah = array('title' => lang('voc.i18n_configuration'));
-			$confdata = array('filters' => $this->filter_model->get_filter_list($this->session->userdata('username')));
+			$filters = array(0 => lang('voc.i18n_no_filter'));
+			$filters = array_merge($filters, $this->filter_model->get_filter_list($this->session->userdata('username')));
+			$confdata = array('filters' => $filters, 'userdefaultfilter' => $this->user_model->default_filter($this->session->userdata('username')));
 			
 			$this->load->view('templates/header_view', $datah);
 			$this->load->view('content/configuration_view', $confdata);
@@ -68,6 +71,7 @@ class Configuration_form extends CI_Controller {
 		
 		else if($this->input->post('cancel_conf')){
 			$datah = array('title' => lang('voc.i18n_configuration'));
+			
 			$this->load->view('templates/header_view', $datah);
 			$this->load->view('content/teacher_view');
 			$this->load->view('templates/footer_view');

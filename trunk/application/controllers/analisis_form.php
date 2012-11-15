@@ -29,41 +29,36 @@ class Analisis_form extends CI_Controller {
       		$this->load->helper('date');
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
-   	
-   	private function time_php2sql($unixtime){
-		return gmdate("Y-m-d H:i:s", $unixtime);
-	}
 
 	function displayTree($array) {
-	$output = "";
-     $newline = "<br>";
-     foreach($array as $key => $value) {    //cycle through each item in the array as key => value pairs
-         if (is_array($value) || is_object($value)) {        //if the VALUE is an array, then
-            //call it out as such, surround with brackets, and recursively call displayTree.
-             $value = "Array()" . $newline . "(<ul>" . $this->displayTree($value) . "</ul>)" . $newline;
-         }
-        //if value isn't an array, it must be a string. output its' key and value.
-        $output .= "[$key] => " . $value . $newline;
-     }
-     return $output;
-     }
+		$output = "";
+		$newline = "<br>";
+		foreach($array as $key => $value) {    //cycle through each item in the array as key => value pairs
+			if (is_array($value) || is_object($value)) {        //if the VALUE is an array, then
+				//call it out as such, surround with brackets, and recursively call displayTree.
+				$value = "Array()" . $newline . "(<ul>" . $this->displayTree($value) . "</ul>)" . $newline;
+			}
+			//if value isn't an array, it must be a string. output its' key and value.
+			$output .= "[$key] => " . $value . $newline;
+		}
+		return $output;
+	}
+	
    	private function analise($analisis_data){
 		set_time_limit (0);
+		$wiki_result = array();
+		$assess_result = array();
+		
 		if($analisis_data['filter'] != lang('voc.i18n_no_filter')){
-			$start = microtime(true);
 			$wiki_result = $this->wiki_model->fetch($analisis_data['wiki'], $analisis_data['filter']);
-			
-			printf("Performed in %.02f seconds.", (microtime(true)-$start));
+			if($analisis_data['color'] != lang('voc.i18n_no_color')) $assess_result = $this->color_model->fetch($analisis_data['color'], $analisis_data['filter']);
 		}
 		else{
-			$start = microtime(true);
-			
-			$wiki_result = $this->wiki_model->fetch($analisis_data['wiki'], false, $this->time_php2sql(strtotime($analisis_data['date_range_a'])), $this->time_php2sql(strtotime($analisis_data['date_range_b'])));
-			$assess_result = $this->color_model->fetch($analisis_data['color']);
-			echo $this->displayTree($wiki_result);
-			echo $this->displayTree($assess_result);
-			printf("Performed in %.02f seconds.", (microtime(true)-$start));
+			$wiki_result = $this->wiki_model->fetch($analisis_data['wiki'], false, $analisis_data['date_range_a'], $analisis_data['date_range_b']);
+			if($analisis_data['color'] != lang('voc.i18n_no_color')) $assess_result = $this->color_model->fetch($analisis_data['color']);
 		}
+		
+		return array('wiki' => $wiki_result, 'amw' => $assess_result);
    	}
    	
    	function index(){
@@ -79,6 +74,11 @@ class Analisis_form extends CI_Controller {
 		echo $this->load->view('content/analising_view', $adata, true);
 		echo $this->load->view('templates/footer_view', true);
 		
-		$this->analise($adata);
+		$start = microtime(true);
+		
+		$result = $this->analise($adata);
+		
+		printf("Performed in %.02f seconds.</br>", (microtime(true)-$start));
+		echo $this->displayTree($result);
 	}
 }

@@ -46,6 +46,19 @@ class Wiki_model extends CI_Model{
 		$cf->load->model('filter_model');
    	}
 	
+	private function time_php2sql($unixtime){
+		return gmdate("YmdHis", $unixtime);
+	}
+	
+	private function lang_date($date){
+// 		if($this->session->userdata('language') == 'english' or $this->session->userdata('language') == 'german')
+// 			return $date;
+// 		else{
+			list($day, $month, $year) = sscanf($date, '%d/%d/%d');
+			return $month."/".$day."/".$year;
+// 		}
+	}
+	
    	private function wconnection($wikiname){
    		//Consultamos la conexión
    		$query = $this->db->query("select wiki_connection from wiki where wiki_name = '$wikiname'");
@@ -140,18 +153,19 @@ class Wiki_model extends CI_Model{
 			$qstr = $qstr . " and page_title = '$filterpage'";
 		if(isset($filtercategory) and $filtercategory)
 			$qstr = $qstr . " and cl_to = '$filtercategory'";
-		
-		$qstr = $qstr . " and rev_timestamp >= '$fd'";
-		$qstr = $qstr . " and rev_timestamp <= '$ld'";
+			
+		$qstr = $qstr . " and rev_timestamp >= '".$this->time_php2sql(strtotime($this->lang_date($fd)))."'";
+		$qstr = $qstr . " and rev_timestamp <= '".$this->time_php2sql(strtotime($this->lang_date($ld)))."'";
 		$qstr = $qstr . " order by rev_timestamp asc";
+		
 		
 		//Querying database
    		$query = $link->query($qstr);
    		
    		//If no results then return false
    		if(!$query->result()) 
-			return false;
-   		
+			die ("ERROR");
+			
    		echo "Storing information...</br>";
 //    		//Initializing arrays for storing information
    		foreach($query->result() as $row){
@@ -322,15 +336,15 @@ class Wiki_model extends CI_Model{
    		//Creating query string for the uploads query
    		$qstr = "select img_name, user_name, img_timestamp, img_size, page_title, cl_to from image, page, user, imagelinks, categorylinks where img_name = il_to and il_from = page_id and page_id = cl_from and img_user = user_id";
    		
-   		if(isset($filteruser))
+   		if(isset($filteruser) and $filteruser)
 			$qstr = $qstr . " and user_name = '$filteruser'";
-		if(isset($filterpage))
+		if(isset($filterpage) and $filterpage)
 			$qstr = $qstr . " and page_title = '$filterpage'";
-		if(isset($filtercategory))
+		if(isset($filtercategory) and $filtercategory)
 			$qstr = $qstr . " and cl_to = '$filtercategory'";
 		
-		$qstr = $qstr . " and img_timestamp >= '$fd'";
-		$qstr = $qstr . " and img_timestamp <= '$ld'";
+		$qstr = $qstr . " and img_timestamp >= '".$this->time_php2sql(strtotime($this->lang_date($fd)))."'";
+		$qstr = $qstr . " and img_timestamp <= '".$this->time_php2sql(strtotime($this->lang_date($ld)))."'";
 		$qstr = $qstr . " order by img_timestamp asc";
 		
 		//Querying database
@@ -341,7 +355,7 @@ class Wiki_model extends CI_Model{
    		echo "Uploads found. Storing uploads information...</br>";
 			//Initializing arrays
 			foreach($query->result() as $row){
-   		
+			
 				$userupsize[$row->user_name][$row->img_timestamp] = 0;
 				$pageupsize[$row->page_title][$row->img_timestamp] = 0;
 				$catupsize[$row->cl_to][$row->img_timestamp] = 0;
@@ -370,7 +384,6 @@ class Wiki_model extends CI_Model{
 					$userimages[$row->user_name][$row->img_timestamp] = $row->img_name;
 					$userupsize[$row->user_name][$row->img_timestamp] = $userupsizecount[$row->user_name];
 				}
-				
 				
 				//PAGE UPLOAD INFORMATION
 				if(!array_search($row->img_name, $imgbucket)){

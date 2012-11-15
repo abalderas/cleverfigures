@@ -1,3 +1,4 @@
+<html>
 <!--
 <<Copyright 2013 Alvaro Almagro Doello>>
 
@@ -17,8 +18,6 @@ You should have received a copy of the GNU General Public License
 along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-
-<html>
 <head>
 	<!--Title structure: CleverFigures | PageName-->
 	<title> CleverFigures | <?=$title?> </title>

@@ -35,14 +35,29 @@ echo form_open('add_filter');
 	</tr>
 	<?php if(form_error('filterid')) echo "<tr><td colspan = \"2\"><em>".form_error('filterid')."</em></td></tr>"; ?>
 	<tr>
-		<td><?=lang('voc.i18n_filter_type')?>:</td>
-		<td><?= form_dropdown('filter_type', array(lang('voc.i18n_all'), lang('voc.i18n_user'), lang('voc.i18n_page'), lang('voc.i18n_category'))) ?><?= form_input('filter_name') ?></td>
+		<td><?=form_checkbox('filterusercheck', 'filterusercheck', FALSE); ?><?=lang('voc.i18n_filter_by_user')?>:</td>
+		<td><?= form_input('filteruser') ?></td>
 	</tr>
-	<?php if(form_error('filter_type')) echo "<tr><td colspan = \"2\"><em>".form_error('filter_type')."</em></td></tr>"; ?>
+	<?php if(form_error('filteruser')) echo "<tr><td colspan = \"2\"><em>".form_error('filteruser')."</em></td></tr>"; ?>
+	<tr>
+		<td><?=form_checkbox('filterpagecheck', 'filterpagecheck', FALSE); ?><?=lang('voc.i18n_filter_by_page')?>:</td>
+		<td><?= form_input('filterpage') ?></td>
+	</tr>
+	<?php if(form_error('filterpage')) echo "<tr><td colspan = \"2\"><em>".form_error('filterpage')."</em></td></tr>"; ?>
+	<tr>
+		<td><?=form_checkbox('filtercategorycheck', 'filtercategorycheck', FALSE); ?><?=lang('voc.i18n_filter_by_category')?>:</td>
+		<td><?= form_input('filtercategory') ?></td>
+	</tr>
+	<?php if(form_error('filtercategory')) echo "<tr><td colspan = \"2\"><em>".form_error('filtercategory')."</em></td></tr>"; ?>
+	<tr>
+		<td><?=form_checkbox('filtercriteriacheck', 'filtercriteriacheck', FALSE); ?><?=lang('voc.i18n_filter_by_criteria')?>:</td>
+		<td><?= form_input('filtercriteria') ?></td>
+	</tr>
+	<?php if(form_error('filtercriteria')) echo "<tr><td colspan = \"2\"><em>".form_error('filtercriteria')."</em></td></tr>"; ?>
 	<tr>
 		<td><?=lang('voc.i18n_dates')?>:</td>
-		<td><? echo lang('voc.i18n_from'); echo form_input(array('id' => 'date_range_a', 'name' => 'date_range_a', 'value' => lang('voc.i18n_date_range_a'))); ?>
-		    <? echo lang('voc.i18n_to'); echo form_input(array('id' => 'date_range_b', 'name' => 'date_range_b', 'value' => lang('voc.i18n_date_range_b'))); ?></td>
+		<td><? echo lang('voc.i18n_from')." "; echo form_input(array('id' => 'date_range_a', 'name' => 'date_range_a', 'value' => lang('voc.i18n_date_range_a'))); ?>
+		    <? echo " ".lang('voc.i18n_to')." "; echo form_input(array('id' => 'date_range_b', 'name' => 'date_range_b', 'value' => lang('voc.i18n_date_range_b'))); ?></td>
 	</tr>
 	
 	<?php if(isset($date_error)) echo "<tr><td colspan = \"2\"><em>$date_error</em></td></tr>"; ?>

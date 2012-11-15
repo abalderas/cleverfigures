@@ -97,7 +97,7 @@ class Color_model extends CI_Model{
 		}
    	}
    	
-   	function fetch($colorname, $filter = false){
+   	function fetch($colorname, $wikiname, $filter = false){
    	
 		//Checking that we have reference dates. Two options: 
 		//they come with the filter or they are manually 
@@ -113,6 +113,11 @@ class Color_model extends CI_Model{
 			//Setting filter parameters according to the specified filter
 			$filteruser = $this->filter_model->user($filter);
 			$filtercriteria = $this->filter_model->criteria($filter);
+			
+			$linkwiki = $this->connection_model->connect($this->wconnection($wikiname));
+			$querid = $linkwiki->query("select user_id from user where user_name = '$filteruser'");
+			foreach($querid as $row)
+				$filteruser = $row->user_id;
    		}
    		
    		echo "Querying database for assess information...</br>";
@@ -131,7 +136,7 @@ class Color_model extends CI_Model{
    		
    		//If no results then return false
    		if(!$query->result()) 
-			return false;
+			die('ERROR');;
    		
    		echo "Storing assess information...</br>";
    		//Storing classified information in arrays 

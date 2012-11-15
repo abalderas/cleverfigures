@@ -37,10 +37,12 @@ class Add_filter extends CI_Controller {
 	
 		//Form validation rules
 		$this->form_validation->set_rules('filterid', lang('voc.i18n_filter_id'), 'required|alpha_dash|xss_clean');
-		$this->form_validation->set_rules('filter_type', lang('voc.i18n_filter_type'), 'required|xss_clean');
-		$this->form_validation->set_rules('filter_name', lang('voc.i18n_filter_name'), 'xss_clean');
-		$this->form_validation->set_rules('date_range_a', lang('voc.i18n_date_range_a'), 'xss_clean');
-		$this->form_validation->set_rules('date_range_b', lang('voc.i18n_date_range_b'), 'xss_clean');
+		if(isset($_POST['filterusercheck'])) $this->form_validation->set_rules('filteruser', lang('voc.i18n_filter_type'), 'xss_clean');
+		if(isset($_POST['filterpagecheck'])) $this->form_validation->set_rules('filterpage', lang('voc.i18n_filter_type'), 'xss_clean');
+		if(isset($_POST['filtercategorycheck'])) $this->form_validation->set_rules('filtercategory', lang('voc.i18n_filter_type'), 'xss_clean');
+		if(isset($_POST['filterccriteriacheck'])) $this->form_validation->set_rules('filtercriteria', lang('voc.i18n_filter_type'), 'xss_clean');
+		$this->form_validation->set_rules('date_range_a', lang('voc.i18n_date_range_a'), 'required|xss_clean');
+		$this->form_validation->set_rules('date_range_b', lang('voc.i18n_date_range_b'), 'required|xss_clean');
 
 		//If invalid form, reload database config view
 		if ($this->form_validation->run() == FALSE){
@@ -48,7 +50,6 @@ class Add_filter extends CI_Controller {
 			$this->load->view('templates/header_view', $datah);
 			$this->load->view('content/add_filter_view');
 			$this->load->view('templates/footer_view');
-			die('validation');
 		}
 		else{
 			//If dates failure with given data, reload and show error
@@ -59,24 +60,79 @@ class Add_filter extends CI_Controller {
 				$this->load->view('content/add_filter_view', $error);
 				$this->load->view('templates/footer_view');
 			}
-			//If type dropdown set to 'All' and then name specified
-			else if(($_POST['filter_type'] == 0) && $_POST['filter_name']){
+			//If checkbox is true but no name specified
+			else if((isset($_POST['filterusercheck'])) && $_POST['filteruser'] == ""){
 				$datah = array('title' => lang('voc.i18n_add_filter'));
-				$error = array('type_error'=> lang('voc.i18n_type_error'));
+				$error = array('filteruser_error'=> lang('voc.i18n_filteruser_error'));
+				$this->load->view('templates/header_view', $datah);
+				$this->load->view('content/add_filter_view', $error);
+				$this->load->view('templates/footer_view');
+			}
+			else if((isset($_POST['filterpagecheck'])) && $_POST['filterpage'] == ""){
+				$datah = array('title' => lang('voc.i18n_add_filter'));
+				$error = array('filterpage_error'=> lang('voc.i18n_filterpage_error'));
+				$this->load->view('templates/header_view', $datah);
+				$this->load->view('content/add_filter_view', $error);
+				$this->load->view('templates/footer_view');
+			}
+			else if((isset($_POST['filtercategorycheck'])) && $_POST['filtercategory'] == ""){
+				$datah = array('title' => lang('voc.i18n_add_filter'));
+				$error = array('filtercategory_error'=> lang('voc.i18n_filtercategory_error'));
+				$this->load->view('templates/header_view', $datah);
+				$this->load->view('content/add_filter_view', $error);
+				$this->load->view('templates/footer_view');
+			}
+			else if((isset($_POST['filtercriteriacheck'])) && $_POST['filtercriteria'] == ""){
+				$datah = array('title' => lang('voc.i18n_add_filter'));
+				$error = array('filtercriteria_error'=> lang('voc.i18n_filtercriteria_error'));
 				$this->load->view('templates/header_view', $datah);
 				$this->load->view('content/add_filter_view', $error);
 				$this->load->view('templates/footer_view');
 			}
 			//Else, save filter data and load configuration view
 			else{
-				//Saving connection database & creating tables
-				$this->filter_model->new_filter($_POST['filterid'], $_POST['filter_type'], $_POST['filter_name'], strtotime($_POST['date_range_a']), strtotime($_POST['date_range_b']));
-				$this->user_model->relate_filter($_POST['filterid']);
+				$filterdata = array('filterid' => $_POST['filterid'], 'datea' => $_POST['date_range_a'], 'dateb' => $_POST['date_range_b']);
+				
+				if((isset($_POST['filterusercheck']))){
+					$filterdata['filterusercheck'] = true;
+					$filterdata['filteruser'] = $_POST['filteruser'];
+				}
+				else{
+					$filterdata['filterusercheck'] = false;
+					$filterdata['filteruser'] = "";
+				}
+				if((isset($_POST['filterpagecheck']))){
+					$filterdata['filterpagecheck'] = true;
+					$filterdata['filterpage'] = $_POST['filterpage'];
+				}
+				else{
+					$filterdata['filterpagecheck'] = false;
+					$filterdata['filterpage'] = "";
+				}
+				if((isset($_POST['filtercategorycheck']))){
+					$filterdata['filtercategorycheck'] = true;
+					$filterdata['filtercategory'] = $_POST['filtercategory'];
+				}
+				else{
+					$filterdata['filtercategorycheck'] = false;
+					$filterdata['filtercategory'] = "";
+				}
+				if((isset($_POST['filtercriteriacheck']))){
+					$filterdata['filtercriteriacheck'] = true;
+					$filterdata['filtercriteria'] = $_POST['filtercriteria'];
+				}
+				else{
+					$filterdata['filtercriteriacheck'] = false;
+					$filterdata['filtercriteria'] = "";
+				}
+				
+				$this->filter_model->new_filter($filterdata);
+				$this->user_model->relate_filter($filterdata['filterid']);
 				
 				$datah = array('title' => lang('voc.i18n_configuration'));
 				$filters = array(0 => lang('voc.i18n_no_filter'));
 				$filters = array_merge($filters, $this->filter_model->get_filter_list($this->session->userdata('username')));
-				$confdata = array('filters' => $filters);
+				$confdata = array('filters' => $filters, 'userdefaultfilter' => $this->user_model->default_filter($this->session->userdata('username')));
 				
 				$this->load->view('templates/header_view', $datah);
 				$this->load->view('content/configuration_view', $confdata);

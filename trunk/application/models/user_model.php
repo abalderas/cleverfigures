@@ -38,12 +38,23 @@ class User_model extends CI_Model{
    					'user_last_session' => $date,
    					'user_realname' => $rname,
    					'user_email' => $mail,
-   					'user_language' => $this->config->item('language')
+   					'user_language' => $this->config->item('language'),
+   					'user_filter' => ""
    				);
 	
 			$this->db->insert('user', $sql);
 		}
    	}
+   	
+   	function default_filter($uname){
+		$query = $this->db->get_where('user', array('user_username' => $uname));
+		if($query->result()) 
+			foreach($query->result() as $user)
+				return $user->user_filter;
+		else {return "default_filter(): ERR_NONEXISTENT";}
+   	}
+   	
+   	function default_language(){}
    	
    	function update_last_session($uname){
    		$data = array('user_last_session' => now());

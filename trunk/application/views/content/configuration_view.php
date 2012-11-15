@@ -22,11 +22,11 @@ echo "<h1>".lang('voc.i18n_configuration')."</h1></br>";
 echo form_open('configuration_form');
 
 	$languages = array(
-           	'spanish'  => lang('voc.i18n_spanish'),
-                'english'    => lang('voc.i18n_english'),
-                'french'   => lang('voc.i18n_french'),
-                'russian' => lang('voc.i18n_russian'),
-                'german' => lang('voc.i18n_german'),
+           	//'spanish'  => lang('voc.i18n_spanish'),
+                'english'    => lang('voc.i18n_english')
+                //'french'   => lang('voc.i18n_french'),
+                //'russian' => lang('voc.i18n_russian'),
+                //'german' => lang('voc.i18n_german'),
              );
 ?>
 
@@ -43,7 +43,7 @@ echo form_open('configuration_form');
 </tr>
 <tr>
 	<td><?=form_label(lang('voc.i18n_select_filter'), 'select_filter');?></td>
-	<td><?=form_dropdown('select_filter', $filters);?><?=form_submit('add_filter', lang('voc.i18n_add_filter'));?></td>
+	<td><?=form_dropdown('select_filter', $filters, $userdefaultfilter);?><?=form_submit('add_filter', lang('voc.i18n_add_filter'));?></td>
 </tr>
 <tr>
 	<th colspan = "2"><?=lang('voc.i18n_data_source');?></th>
