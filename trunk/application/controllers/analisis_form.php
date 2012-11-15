@@ -55,7 +55,7 @@ class Analisis_form extends CI_Controller {
 		}
 		else{
 			$wiki_result = $this->wiki_model->fetch($analisis_data['wiki'], false, $analisis_data['date_range_a'], $analisis_data['date_range_b']);
-			if($analisis_data['color'] != lang('voc.i18n_no_color')) $assess_result = $this->color_model->fetch($analisis_data['color']);
+			if($analisis_data['color'] != lang('voc.i18n_no_color')) $assess_result = $this->color_model->fetch($analisis_data['color'], $analisis_data['wiki']);
 		}
 		
 		return array('wiki' => $wiki_result, 'amw' => $assess_result);
@@ -64,8 +64,8 @@ class Analisis_form extends CI_Controller {
    	function index(){
 		$adata = array('wiki' => $_POST['select_wiki'], 
 				'color' => $_POST['select_color'], 
-				'date_range_a' => $_POST['select_date_range_a'], 
-				'date_range_b' => $_POST['select_date_range_b'], 
+				'date_range_a' => $_POST['select_date_range_a'],
+				'date_range_b' => $_POST['select_date_range_b'],
 				'filter' => $_POST['select_filter']
 			);
 		$datah = array('title' => lang('voc.i18n_analising'));
