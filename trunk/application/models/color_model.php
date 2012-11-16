@@ -97,39 +97,21 @@ class Color_model extends CI_Model{
 		}
    	}
    	
-   	function fetch($colorname, $wikiname, $filter = false){
+   	function fetch($colorname){
    	
 		//Checking that we have reference dates. Two options: 
 		//they come with the filter or they are manually 
 		//specified as parameters
 		
 		echo "Connecting to assess database...</br>";
+		ob_flush(); flush();
 		//Connecting to the wiki database
    		$link = $this->connection_model->connect($this->wconnection($colorname));
    		
-   		echo "Applying filters...</br>";
-   		//Applying filters
-   		if($filter){
-			//Setting filter parameters according to the specified filter
-			$filteruser = $this->filter_model->user($filter);
-			$filtercriteria = $this->filter_model->criteria($filter);
-			
-			$linkwiki = $this->connection_model->connect($this->wconnection($wikiname));
-			$querid = $linkwiki->query("select user_id from user where user_name = '$filteruser'");
-			foreach($querid as $row)
-				$filteruser = $row->user_id;
-   		}
-   		
    		echo "Querying database for assess information...</br>";
+		ob_flush(); flush();
    		//Creating query string
-   		$qstr = "select eva_user, eva_revisor, eva_revision, ent_entregable, ee_nota, ee_comentario from entregables, evaluaciones, evaluaciones_entregables where evaluaciones_entregables.eva_id = evaluaciones.eva_id and evaluaciones_entregables.ent_id = entregables.ent_id";
-   		
-   		if(isset($filteruser) and $filteruser)
-			$qstr = $qstr . " and eva_user = '$filteruser'";
-		if(isset($filtercriteria) and $filtercriteria)
-			$qstr = $qstr . " and ent_entregable = '$filtercriteria'";
-		
-		$qstr = $qstr . " order by eva_user asc";
+   		$qstr = "select eva_user, eva_revisor, eva_revision, ent_entregable, ee_nota, ee_comentario from entregables, evaluaciones, evaluaciones_entregables where evaluaciones_entregables.eva_id = evaluaciones.eva_id and evaluaciones_entregables.ent_id = entregables.ent_id order by eva_user asc";
 		
 		//Querying database
    		$query = $link->query($qstr);
@@ -139,6 +121,7 @@ class Color_model extends CI_Model{
 			die('ERROR');;
    		
    		echo "Storing assess information...</br>";
+		ob_flush(); flush();
    		//Storing classified information in arrays 
    		foreach($query->result() as $row){
    			
@@ -190,6 +173,7 @@ class Color_model extends CI_Model{
    		}
    		
    		echo "Assess analisis completed.</br>";
+		ob_flush(); flush();
    		
    		return array(	'usermark' => $usermark
 				, 'useraverage' => $useraverage

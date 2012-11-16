@@ -46,17 +46,12 @@ class Analisis_form extends CI_Controller {
 	
    	private function analise($analisis_data){
 		set_time_limit (0);
+		
 		$wiki_result = array();
 		$assess_result = array();
 		
-		if($analisis_data['filter'] != lang('voc.i18n_no_filter')){
-			$wiki_result = $this->wiki_model->fetch($analisis_data['wiki'], $analisis_data['filter']);
-			if($analisis_data['color'] != lang('voc.i18n_no_color')) $assess_result = $this->color_model->fetch($analisis_data['color'], $analisis_data['filter']);
-		}
-		else{
-			$wiki_result = $this->wiki_model->fetch($analisis_data['wiki'], false, $analisis_data['date_range_a'], $analisis_data['date_range_b']);
-			if($analisis_data['color'] != lang('voc.i18n_no_color')) $assess_result = $this->color_model->fetch($analisis_data['color'], $analisis_data['wiki']);
-		}
+		$wiki_result = $this->wiki_model->fetch($analisis_data['wiki']);
+		if($analisis_data['color'] != lang('voc.i18n_no_color')) $assess_result = $this->color_model->fetch($analisis_data['color']);
 		
 		return array('wiki' => $wiki_result, 'amw' => $assess_result);
    	}
@@ -73,12 +68,16 @@ class Analisis_form extends CI_Controller {
 		echo $this->load->view('templates/header_view', $datah, true);
 		echo $this->load->view('content/analising_view', $adata, true);
 		echo $this->load->view('templates/footer_view', true);
+		ob_flush(); flush();
 		
 		$start = microtime(true);
 		
 		$result = $this->analise($adata);
 		
+		ob_flush(); flush();
+		
 		printf("Performed in %.02f seconds.</br>", (microtime(true)-$start));
-		echo $this->displayTree($result);
+		ob_flush(); flush();
+// 		echo $this->displayTree($result);
 	}
 }

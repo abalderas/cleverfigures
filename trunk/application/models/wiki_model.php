@@ -116,48 +116,17 @@ class Wiki_model extends CI_Model{
 		return $res;
    	}
    	
-   	function fetch($wikiname, $filter = false, $datea = false, $dateb = false){
-   	
-		//Checking that we have reference dates. Two options: 
-		//they come with the filter or they are manually 
-		//specified as parameters
-		
-		if(!$filter && (!$datea || !$dateb)) return "fetch(): no dates specified.";
+   	function fetch($wikiname){
 		
 		echo "Connecting to database...</br>";
+		ob_flush(); flush();
 		//Connecting to the wiki database
    		$link = $this->connection_model->connect($this->wconnection($wikiname));
    		
-   		echo "Applying filters...</br>";
-   		//Applying filters
-   		if($filter){
-			//Setting filter parameters according to the specified filter
-			$filteruser = $this->filter_model->user($filter);
-			$filterpage = $this->filter_model->page($filter);
-			$filtercategory = $this->filter_model->category($filter);
-			$fd = $this->filter_model->firstdate($filter);
-			$ld = $this->filter_model->lastdate($filter);
-   		}
-   		else{
-			$fd = $datea;
-			$ld = $dateb;
-   		}
-   		
    		echo "Querying database for general information...</br>";
+   		ob_flush(); flush();
    		//Creating query string for the general query
-   		$qstr = "select rev_id, rev_page, page_title, page_counter, page_namespace, page_is_new, user_id, user_name, user_real_name, user_email, user_registration, rev_timestamp, cl_to, cat_pages, rev_len from revision, user, page, categorylinks, category where rev_page = page_id and rev_user = user_id and page_id = cl_from and cl_to = cat_title";
-   		
-   		if(isset($filteruser) and $filteruser)
-			$qstr = $qstr . " and user_name = '$filteruser'";
-		if(isset($filterpage) and $filterpage)
-			$qstr = $qstr . " and page_title = '$filterpage'";
-		if(isset($filtercategory) and $filtercategory)
-			$qstr = $qstr . " and cl_to = '$filtercategory'";
-			
-		$qstr = $qstr . " and rev_timestamp >= '".$this->time_php2sql(strtotime($this->lang_date($fd)))."'";
-		$qstr = $qstr . " and rev_timestamp <= '".$this->time_php2sql(strtotime($this->lang_date($ld)))."'";
-		$qstr = $qstr . " order by rev_timestamp asc";
-		
+   		$qstr = "select rev_id, rev_page, page_title, page_counter, page_namespace, page_is_new, user_id, user_name, user_real_name, user_email, user_registration, rev_timestamp, cl_to, cat_pages, rev_len from revision, user, page, categorylinks, category where rev_page = page_id and rev_user = user_id and page_id = cl_from and cl_to = cat_title order by rev_timestamp asc";		
 		
 		//Querying database
    		$query = $link->query($qstr);
@@ -167,7 +136,8 @@ class Wiki_model extends CI_Model{
 			die ("ERROR");
 			
    		echo "Storing information...</br>";
-//    		//Initializing arrays for storing information
+   		ob_flush(); flush();
+   		//Initializing arrays for storing information
    		foreach($query->result() as $row){
     		
  			$usereditscount[$row->user_name] = 0;
@@ -333,19 +303,9 @@ class Wiki_model extends CI_Model{
    		}
    		
    		echo "Querying database for uploads information...</br>";
+   		ob_flush(); flush();
    		//Creating query string for the uploads query
-   		$qstr = "select img_name, user_name, img_timestamp, img_size, page_title, cl_to from image, page, user, imagelinks, categorylinks where img_name = il_to and il_from = page_id and page_id = cl_from and img_user = user_id";
-   		
-   		if(isset($filteruser) and $filteruser)
-			$qstr = $qstr . " and user_name = '$filteruser'";
-		if(isset($filterpage) and $filterpage)
-			$qstr = $qstr . " and page_title = '$filterpage'";
-		if(isset($filtercategory) and $filtercategory)
-			$qstr = $qstr . " and cl_to = '$filtercategory'";
-		
-		$qstr = $qstr . " and img_timestamp >= '".$this->time_php2sql(strtotime($this->lang_date($fd)))."'";
-		$qstr = $qstr . " and img_timestamp <= '".$this->time_php2sql(strtotime($this->lang_date($ld)))."'";
-		$qstr = $qstr . " order by img_timestamp asc";
+   		$qstr = "select img_name, user_name, img_timestamp, img_size, page_title, cl_to from image, page, user, imagelinks, categorylinks where img_name = il_to and il_from = page_id and page_id = cl_from and img_user = user_id order by img_timestamp asc";
 		
 		//Querying database
 		$query = $link->query($qstr);
@@ -353,6 +313,7 @@ class Wiki_model extends CI_Model{
 		//If there is information about uploads
    		if($query->result()){
    		echo "Uploads found. Storing uploads information...</br>";
+   		ob_flush(); flush();
 			//Initializing arrays
 			foreach($query->result() as $row){
 			
@@ -434,6 +395,7 @@ class Wiki_model extends CI_Model{
 			}
 			
 			echo "Analisis completed.</br>";
+			ob_flush(); flush();
 			
 			return array(	  'catpages' => $catpages
 					, 'catpages_per' => $catpages_per
@@ -496,7 +458,9 @@ class Wiki_model extends CI_Model{
    		}
    		
    		echo "Uploads not found.</br>";
+   		ob_flush(); flush();
    		echo "Analisis completed.</br>";
+   		ob_flush(); flush();
    		
    		return array(	  'catpages' => $catpages
 				, 'catpages_per' => $catpages_per
