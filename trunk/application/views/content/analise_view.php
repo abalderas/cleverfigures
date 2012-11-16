@@ -33,24 +33,6 @@ echo "<h1>".lang('voc.i18n_analise')."</h1></br>";
 		<td><?=form_dropdown('select_color', $colors);?></td>
 	</tr>
 	<tr>
-		<th colspan = "2"><?=lang('voc.i18n_dates')?></th>
-	</tr>
-	<tr>
-		<td><?=lang('voc.i18n_date_range_a')?></td>
-		<td><?=form_input('select_date_range_a');?></td>
-	</tr>
-	<tr>
-		<td><?=lang('voc.i18n_date_range_b')?></td>
-		<td><?=form_input('select_date_range_b');?></td>
-	</tr>
-	<tr>
-		<th colspan = "2"><?=lang('voc.i18n_filters')?></th>
-	</tr>
-	<tr>
-		<td><?=lang('voc.i18n_filter_by')?></td>
-		<td><?=form_dropdown('select_filter', $filters);?></td>
-	</tr>
-	<tr>
 		<th colspan = "2"><?=form_submit('analise_submit', lang('voc.i18n_analise'));?></th>
 	</tr>
 </table>

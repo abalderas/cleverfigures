@@ -56,6 +56,7 @@ $lang['voc.i18n_generate'] = "Generate Report";
 $lang['voc.i18n_generate_pdf'] = "Generate PDF";
 $lang['voc.i18n_german'] = "German";
 $lang['voc.i18n_go_to_login'] = "Go to Login";
+$lang['voc.i18n_here'] = "here";
 $lang['voc.i18n_incorrect_login'] = "Incorrect Data";
 $lang['voc.i18n_installation'] = "Installation";
 $lang['voc.i18n_installation_end'] = "Installation finished. ¿Shorter than you expected? Enjoy the CleverFigures experience!!";

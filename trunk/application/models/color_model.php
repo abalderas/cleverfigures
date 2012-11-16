@@ -103,6 +103,7 @@ class Color_model extends CI_Model{
 		//they come with the filter or they are manually 
 		//specified as parameters
 		
+		echo ">> Assess analisis started.</br>";
 		echo "Connecting to assess database...</br>";
 		ob_flush(); flush();
 		//Connecting to the wiki database
@@ -172,7 +173,7 @@ class Color_model extends CI_Model{
 			$totalrevisor	[$row->eva_revision] = $row->eva_revisor;
    		}
    		
-   		echo "Assess analisis completed.</br>";
+   		echo ">> Assess analisis accomplished.</br>";
 		ob_flush(); flush();
    		
    		return array(	'usermark' => $usermark

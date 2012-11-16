@@ -46,7 +46,7 @@ class Dbforge_model extends CI_Model{
 			
 		$this->db->query("CREATE TABLE `connection` ( `connection_id` INT(9) UNSIGNED NOT NULL AUTO_INCREMENT, `connection_name` VARCHAR(30) NOT NULL, `connection_server` VARCHAR(30) NOT NULL, `connection_user` VARCHAR(20) NOT NULL, `connection_password` VARCHAR(50) NOT NULL, KEY `connection_id` (`connection_id`) ) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
 
-		$this->db->query("CREATE TABLE `analisis` ( `analisis_id` INT(9) UNSIGNED NOT NULL AUTO_INCREMENT, `analisis_date` VARCHAR(50) NOT NULL, `analisis_wiki_name` VARCHAR(30) NOT NULL, `analisis_color_name` VARCHAR(30) NOT NULL, `analisis_date_range_a` VARCHAR(50) NOT NULL, `analisis_date_range_b` VARCHAR(50) NOT NULL, KEY `analisis_id` (`analisis_id`) ) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
+		$this->db->query("CREATE TABLE `analisis` ( `analisis_id` INT(9) UNSIGNED NOT NULL AUTO_INCREMENT, `analisis_date` VARCHAR(50) NOT NULL, `analisis_wiki_name` VARCHAR(30) NOT NULL, `analisis_color_name` VARCHAR(30) NOT NULL, `analisis_data` TEXT KEY `analisis_id` (`analisis_id`) ) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
 		
 		$this->db->query("CREATE TABLE `wgeneral` ( `wgen_id` INT(9) UNSIGNED NOT NULL AUTO_INCREMENT, `wgen_total_views` INT(9) NOT NULL, `wgen_total_edits` INT(9) NOT NULL, `wgen_good_articles` INT(9) NOT NULL, `wgen_total_pages` INT(9) NOT NULL, `wgen_users` INT(9) NOT NULL, `wgen_active_users` INT(9) NOT NULL, `wgen_admins` INT(9) NOT NULL, `wgen_images` INT(9) NOT NULL, `wgen_analisis` INT(9) NOT NULL, KEY `wgen_id` (`wgen_id`) ) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
 			

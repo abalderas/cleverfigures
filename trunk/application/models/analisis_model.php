@@ -31,39 +31,14 @@ class Analisis_model extends CI_Model{
 		$ci->load->model('wiki_model');
    	}
    	
-   	function perform_analisis($wikiname, $colorname = 'default', $date_range_a = 'default', $date_range_b = 'default', $filter_user = 'default', $filter_page = 'default', $filter_category = 'default'){
-   	
-		//Creamos el nombre del análisis, compuesto de la fecha, la wiki, el color y el usuario.
-		$formato = 'DATE_W3C';
-		$tiempo = time();
-		$analisis = standard_date($formato, $tiempo).$wikiname.$colorname.$this->session->userdata('user_username'); 
-
-		//Realizamos el análisis
-		if($result = gettype($this->merging_model->merge_save_users($wikiname, $analisis, $colorname, $date_range_a, $date_range_b, $filter_page, $filter_category)) != "boolean")
-			die($result);
+   	function save_analisis($wikiname, $colorname = "", $data, $date){
 		
-		if($result = gettype($this->merging_model->save_pages($wikiname, $analisis, $colorname, $date_range_a, $date_range_b, $filter_user)) != "boolean")
-			die($result);
-		
-		if($result = gettype($this->merging_model->save_categories($wikiname, $analisis, $colorname, $date_range_a, $date_range_b, $filter_page, $filter_user)) != "boolean")
-			die($result);
-		
-		if($result = gettype($this->merging_model->save_images($wikiname, $analisis, $colorname, $date_range_a, $date_range_b, $filter_user, $filter_page, $filter_category)) != "boolean")
-			die($result);
-		
-		if($result = gettype($this->wiki_model->fetch_general_stats($wikiname, $analisis)) != "boolean")
-			die($result);
-		
-		//TO_DO: graficos
-		
-		//Una vez terminado, registramos el análisis.
 		$sql = array(
-			'analisis_id' => $analisis,
-   			'analisis_date' => standard_date($formato, $tiempo),
+			'analisis_id' => "",
+   			'analisis_date' => $date,
    			'analisis_wiki_name' => $wikiname,
    			'analisis_color_name' => $colorname,
-   			'analisis_date_range_a' => $date_range_a,
-   			'analisis_date_range_b' => $date_range_b
+   			'analisis_data' => serialize($data)
    			);
    				
 		$this->db->insert('analisis', $sql);
@@ -71,9 +46,6 @@ class Analisis_model extends CI_Model{
 		//Comprobamos que la insertación se hizo con éxito
 		if($this->db->affected_rows() != 1) 
 			return "perform_analisis(): ERR_AFFECTED_ROWS (".$this->db->affected_rows().")";
-			
-		//Devolvemos el nombre del analisis
-		return $analisis;
    	}
    	
    	function delete_analisis($analisis){
