@@ -24,8 +24,8 @@ class Index_controller extends CI_Controller {
 	function Index_controller(){
       		parent::__construct();
 		$this->load->model('analisis_model');
-		$this->load->model('user_analisis_model');
 		$this->load->model('dbforge_model');
+		$this->load->model('user_model');
 		$this->load->dbutil();
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
@@ -56,29 +56,18 @@ class Index_controller extends CI_Controller {
 			if($this->session->userdata('username')){
 				$datah = array('title' => lang('voc.i18n_teacher_view'));
 				
-				if($analist = $this->user_analisis_model->get_analisis_list($this->session->userdata('username'))){
-				foreach($analist as $row){
-					$datanalisis = $this->analisis->get_analisis_data($row->analisis_id);
-					
-					foreach($datanalisis as $row){
-						$adate[] = $row->analisis_date;
-						$awiki[] = $row->analisis_wiki_id;
-						$acolor[] = $row->analisis_color_id;
-						$arangea[] = $row->analisis_date_range_a;
-						$arangeb[] = $row->analisis_date_range_b;
-					}
+				foreach($this->user_model->get_analisis_list($this->session->userdata('username')) as $analisis){
+					$adata = $this->analisis_model->get_analisis_data($analisis);
+					$adate[] = $analisis;
+					$awiki[] = $adata['awiki'];
+					$acolor[] = $adata['acolor'];
 				}
-				$datat = array('adate' => $adate, 'awiki' => $awiki, 'acolor' => $acolor, 'arangea' => $arangea, 'arangeb' => $arangeb);
 			
+				$tdata = array('adate' => $adate, 'awiki' => $awiki, 'acolor' => $acolor);
+				
 				$this->load->view('templates/header_view', $datah);
-				$this->load->view('content/teacher_view', $datat);
+				$this->load->view('content/teacher_view', $tdata);
 				$this->load->view('templates/footer_view');
-				}
-				else{
-					$this->load->view('templates/header_view', $datah);
-					$this->load->view('content/teacher_view');
-					$this->load->view('templates/footer_view');
-				}
 			}
 			else{
 				//If it exists user

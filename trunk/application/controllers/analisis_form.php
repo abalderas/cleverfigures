@@ -65,7 +65,6 @@ class Analisis_form extends CI_Controller {
 		
 		echo $this->load->view('templates/header_view', $datah, true);
 		echo $this->load->view('content/analising_view', $adata, true);
-		echo $this->load->view('templates/footer_view', true);
 		ob_flush(); flush();
 		
 		$start = microtime(true);
@@ -74,16 +73,17 @@ class Analisis_form extends CI_Controller {
 		
 		ob_flush(); flush();
 		
-		printf("Performed in %.02f seconds.</br>", (microtime(true)-$start));
+		printf("Performed in %.02f seconds. Loading charts...</br>", (microtime(true)-$start));
 		ob_flush(); flush();
 		
-		$timestamp = now();
+		//$timestamp = now();
 		
-		$this->analisis_model->save_analisis($_POST['select_wiki'], isset($_POST['select_color'])? $_POST['select_color'] : false, $result, $timestamp);
-		$this->user_model->relate_analisis($timestamp);
+		//$this->analisis_model->save_analisis($_POST['select_wiki'], isset($_POST['select_color'])? $_POST['select_color'] : false, $result, $timestamp);
+		//$this->user_model->relate_analisis($timestamp);
 		
 		echo "<b>Analisis saved. You can view the results ".anchor('teacher',lang('voc.i18n_here')).".</b>";
 		
-		$this->load->view('content/check_results_view', $result);
+		echo $this->load->view('content/check_results_view', $result);
+		echo $this->load->view('templates/footer_view', true);
 	}
 }

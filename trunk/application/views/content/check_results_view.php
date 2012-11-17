@@ -16,11 +16,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<?include('application/libraries/Chart.php')?>
 <?="<h1>".lang('voc.i18n_check_results')."</h1></br>"?>
 
 <!-- CHARTS SCRIPTS -->
-
+			
 <script type='text/javascript' src='http://www.google.com/jsapi'></script>
 	<script type='text/javascript'>
 		google.load('visualization', '1', {'packages':['annotatedtimeline']});
@@ -32,13 +31,13 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			data.addRows([
 			<?
 				foreach(array_keys($wiki['totaledits']) as $key){
-				echo "[new Date(".date('Y', $key).", ".date('m', $key)." ,".date('d', $key)."), ".$wiki['totaledits'][$key]."]";
-				if($wiki['totaledits'][$key] != end($wiki['totaledits'])) echo ",";
+					echo "[new Date(".date('Y', $key).", ".date('m', $key)." ,".date('d', $key)."), ".$wiki['totaledits'][$key]."]";
+					if($key != end(array_keys($wiki['totaledits']))) echo ",";
 				}
 			?>
 			]);
 
-			var chartedits = new google.visualization.AnnotatedTimeLine(document.getElementById('totaledits'));
+			var chartedits = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotaledits'));
 			chartedits.draw(data, {displayAnnotations: true});
 			
 			
@@ -48,31 +47,73 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			data2.addRows([
 			<?
 				foreach(array_keys($wiki['totalbytes']) as $key){
-				echo "[new Date(".date('Y', $key).", ".date('m', $key)." ,".date('d', $key)."), ".$wiki['totalbytes'][$key]."]";
-				if($wiki['totalbytes'][$key] != end($wiki['totalbytes'])) echo ",";
+					echo "[new Date(".date('Y', $key).", ".date('m', $key)." ,".date('d', $key)."), ".$wiki['totalbytes'][$key]."]";
+					if($key != end(array_keys($wiki['totalbytes']))) echo ",";
 				}
 			?>
 			]);
 
-			var chartbytes = new google.visualization.AnnotatedTimeLine(document.getElementById('totalbytes'));
+			var chartbytes = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalbytes'));
 			chartbytes.draw(data2, {displayAnnotations: true});
+			
+			var data3 = new google.visualization.DataTable();
+			data3.addColumn('date', 'Date');
+			data3.addColumn('number', '#Pages');
+			data3.addRows([
+			<?
+				foreach(array_keys($wiki['totalpages']) as $key){
+					echo "[new Date(".date('Y', $key).", ".date('m', $key)." ,".date('d', $key)."), ".$wiki['totalpages'][$key]."]";
+					if($key != end(array_keys($wiki['totalpages']))) echo ",";
+				}
+			?>
+			]);
+
+			var chartpages = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalpages'));
+			chartpages.draw(data3, {displayAnnotations: true});
+			
+			var data4 = new google.visualization.DataTable();
+			data4.addColumn('date', 'Date');
+			data4.addColumn('number', '#Users');
+			data4.addRows([
+			<?
+				foreach(array_keys($wiki['totalusers']) as $key){
+					echo "[new Date(".date('Y', $key).", ".date('m', $key)." ,".date('d', $key)."), ".$wiki['totalusers'][$key]."]";
+					if($key != end(array_keys($wiki['totalusers']))) echo ",";
+				}
+			?>
+			]);
+
+			var chartusers = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalusers'));
+			chartusers.draw(data4, {displayAnnotations: true});
 		}
 	</script>
 
 <!-- CHARTS -->
 
-	<table>
+	<table id = "resultstable">
 	<tr>
-		<th><?="<h3>".lang('voc.i18n_edits_evolution')."</h3>"?></th>
+		<th><?=lang('voc.i18n_edits_evolution')?></th>
 	</tr>
 	<tr>
-		<td><div id='totaledits' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotaledits' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
-		<th><?="<h3>".lang('voc.i18n_content_evolution')."</h3>"?></th>
+		<th><?=lang('voc.i18n_content_evolution')?></th>
 	</tr>
 	<tr>
-		<td><div id='totalbytes' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalbytes' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
+	</tr>
+	<tr>
+		<th><?=lang('voc.i18n_pages')?></th>
+	</tr>
+	<tr>
+		<td><div id='charttotalpages' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
+	</tr>
+	<tr>
+		<th><?=lang('voc.i18n_users')?></th>
+	</tr>
+	<tr>
+		<td><div id='charttotalusers' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	</table>
 	<?/*
