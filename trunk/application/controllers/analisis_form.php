@@ -27,7 +27,7 @@ class Analisis_form extends CI_Controller {
       		$this->load->model('color_model');
       		$this->load->model('filter_model');
       		$this->load->model('analisis_model');
-      		$this->load->helper('date');
+      		$this->load->model('user_model');
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
 
@@ -77,8 +77,13 @@ class Analisis_form extends CI_Controller {
 		printf("Performed in %.02f seconds.</br>", (microtime(true)-$start));
 		ob_flush(); flush();
 		
-		$this->analisis_model->save_analisis($_POST['select_wiki'], isset($_POST['select_color'])? $_POST['select_color'] : false, $result);
+		$timestamp = now();
+		
+		$this->analisis_model->save_analisis($_POST['select_wiki'], isset($_POST['select_color'])? $_POST['select_color'] : false, $result, $timestamp);
+		$this->user_model->relate_analisis($timestamp);
 		
 		echo "<b>Analisis saved. You can view the results ".anchor('teacher',lang('voc.i18n_here')).".</b>";
+		
+		$this->load->view('content/check_results_view', $result);
 	}
 }

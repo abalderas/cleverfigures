@@ -23,12 +23,24 @@ class Teacher extends CI_Controller {
       		parent::__construct();
       		$this->load->model('wiki_model');
       		$this->load->model('color_model');
+      		$this->load->model('user_model');
+      		$this->load->model('analisis_model');
    	}
    	
 	function index(){
+		
+		foreach($this->user_model->get_analisis_list($this->session->userdata('username')) as $analisis){
+			$adata = $this->analisis_model->get_analisis_data($analisis);
+			$adate[] = $analisis;
+			$awiki[] = $adata['awiki'];
+			$acolor[] = $adata['acolor'];
+		}
+		
+		$tdata = array('adate' => $adate, 'awiki' => $awiki, 'acolor' => $acolor);
       		$datah = array('title' => lang('voc.i18n_teacher_view'));
+      		
 		$this->load->view('templates/header_view', $datah);
-		$this->load->view('content/teacher_view');
+		$this->load->view('content/teacher_view', $tdata);
 		$this->load->view('templates/footer_view');
 	}
 } 

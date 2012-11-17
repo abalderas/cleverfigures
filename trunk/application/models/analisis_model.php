@@ -25,6 +25,7 @@ class Analisis_model extends CI_Model{
    	function Analisis_model(){
    	   	parent::__construct();
    	   	$this->load->database();
+   	   	$this->load->helper('file');
    	   	$co =& get_instance();
 		$co->load->model('merging_model');
 		$ci =& get_instance();
@@ -37,15 +38,17 @@ class Analisis_model extends CI_Model{
 			'analisis_id' => "",
    			'analisis_date' => $date,
    			'analisis_wiki_name' => $wikiname,
-   			'analisis_color_name' => $colorname,
-   			'analisis_data' => serialize($data)
+   			'analisis_color_name' => $colorname
    			);
    				
 		$this->db->insert('analisis', $sql);
 		
-		//Comprobamos que la insertación se hizo con éxito
+		//Checking no errors
 		if($this->db->affected_rows() != 1) 
 			return "perform_analisis(): ERR_AFFECTED_ROWS (".$this->db->affected_rows().")";
+			
+		//Saving serialized data in file
+		write_file('analisis/'."$date".'.dat', serialize($data));
    	}
    	
    	function delete_analisis($analisis){
@@ -62,10 +65,11 @@ class Analisis_model extends CI_Model{
 		$this->db->delete('wgeneral', array('wgen_analisis' => $analisis));
    	}
    	
-   	function get_analisis_data($analisis){
-		$data = $this->db->get_where('analisis', array('analisis_id' => $analisis));
+   	function get_analisis_data($date){
+		$data = $this->db->get_where('analisis', array('analisis_date' => $date));
 		if(!$data->result())
 			return false;
-		return $data->result();
+		foreach($data->result() as $row)
+			return array('awiki' => $row->analisis_wiki_name, 'acolor' => $row->analisis_color_name);
    	}
 }

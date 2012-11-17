@@ -30,11 +30,11 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	if(isset($adate))
 		for($i = 0; $i < count($adate); $i++){
 			echo "<tr>";
-				echo "<td>".$adate[$i]."</td>";
+				echo "<td>".unix_to_human($adate[$i])."</td>";
 				echo "<td>".$awiki[$i]."</td>";
 				echo "<td>".$acolor[$i]."</td>";
 				form_open('options_form');
-				echo "<td>".form_submit('view', lang('voc.i18n_view'))." ".form_submit('download',lang('voc.i18n_download'))." ".form_submit('delete', lang('voc.i18n_delete'))."</td>";
+				echo "<td>".form_submit('view', lang('voc.i18n_view'))." ".form_submit('delete', lang('voc.i18n_delete'))."</td>";
 				form_close();
 			echo "</tr>";
 		}
