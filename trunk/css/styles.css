@@ -23,7 +23,7 @@ body
 {
 background-color:#EAF2ff;
 font-family:"Trebuchet MS";
-height:98%;
+height:100%;
 }
 
 h1
@@ -70,11 +70,10 @@ em{
 }
 
 #wrap{
-	min-height: 93%;
+	height: 100%;
 	width: 100%;
 	padding-top:65px;
-	margin: 0 auto -35px; /* the bottom margin is the negative value of the footer's height */
-	position: relative;
+	margin-bottom:35px;
 }
 
 #bodytable
@@ -117,7 +116,12 @@ height:29px;
 	margin-left: auto;
 	margin-right: auto;
 	text-align: center;
-	z-index: 5;
+	border: solid 1px black;
+}
+
+#resultstable td, #resultstable th{
+	border: solid 1px black;
+	padding:10px;
 }
 
 /* INSTALLATION AND LOGIN FORMS */
@@ -204,11 +208,6 @@ font-size:1em;
 
 #menu
 {
-position:fixed;
-z-index: 10;
-left:0px;
-top:0px;
-z-index:1;
 font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
 width:100%;
 height:30px;
@@ -261,19 +260,20 @@ font-style:italic;
 #footer
 {
 font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
-width:100%;
+width:300px;
 height:35px;
-border-collapse:collapse;
 text-align:center;
 table-layout: fixed;
-position: absolute;
-bottom: 0px;
+margin-top:50px;
+margin-left:auto;
+margin-right:auto;
 text-shadow: 0.1em 0.1em 0.2em black;
 }
 
 #footer td, #footer th 
 {
 font-size:1em;
+border-radius:10px;
 padding:3px 7px 2px 7px;
 }
 

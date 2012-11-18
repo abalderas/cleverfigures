@@ -54,7 +54,7 @@ class Analisis_form extends CI_Controller {
 		$wiki_result = $this->wiki_model->fetch($analisis_data['wiki']);
 		if($analisis_data['color'] != lang('voc.i18n_no_color')) $assess_result = $this->color_model->fetch($analisis_data['color']);
 		
-		return array('wiki' => $wiki_result, 'amw' => $assess_result);
+		return array('wiki' => $wiki_result, 'color' => $assess_result);
    	}
    	
    	function index(){
@@ -81,7 +81,7 @@ class Analisis_form extends CI_Controller {
 		//$this->analisis_model->save_analisis($_POST['select_wiki'], isset($_POST['select_color'])? $_POST['select_color'] : false, $result, $timestamp);
 		//$this->user_model->relate_analisis($timestamp);
 		
-		echo "<b>Analisis saved. You can view the results ".anchor('teacher',lang('voc.i18n_here')).".</b>";
+		//echo "<b>Analisis saved. You can view the results ".anchor('teacher',lang('voc.i18n_here')).".</b>";
 		
 		echo $this->load->view('content/check_results_view', $result);
 		echo $this->load->view('templates/footer_view', true);

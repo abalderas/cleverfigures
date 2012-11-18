@@ -60,11 +60,11 @@ class Color_model extends CI_Model{
    		$query = $this->db->query("select * from color, `user-color` where color.color_name = `user-color`.color_name and `user-color`.user_username = '$username'");
    		
    		//Comprobamos que existe y devolvemos el id de conexión
-   		if(!$query->result()){echo "fuck ";
-   			return array();}
+   		if(!$query->result())
+   			return array();
    		else
-   			foreach($query->result() as $row){echo "fuck ";
-   				$colors[$row->color_name] = $row->color_name;}
+   			foreach($query->result() as $row)
+   				$colors[$row->color_name] = $row->color_name;
    				
    		return $colors;
    	}
@@ -112,7 +112,7 @@ class Color_model extends CI_Model{
    		echo "Querying database for assess information...</br>";
 		ob_flush(); flush();
    		//Creating query string
-   		$qstr = "select eva_user, eva_revisor, eva_revision, ent_entregable, ee_nota, ee_comentario from entregables, evaluaciones, evaluaciones_entregables where evaluaciones_entregables.eva_id = evaluaciones.eva_id and evaluaciones_entregables.ent_id = entregables.ent_id order by eva_user asc";
+   		$qstr = "select eva_user, eva_revisor, eva_revision, ent_entregable, ee_nota, ee_comentario from entregables, evaluaciones, evaluaciones_entregables where evaluaciones_entregables.eva_id = evaluaciones.eva_id and evaluaciones_entregables.ent_id = entregables.ent_id order by eva_revision asc";
 		
 		//Querying database
    		$query = $link->query($qstr);

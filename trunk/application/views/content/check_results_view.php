@@ -22,7 +22,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			
 <script type='text/javascript' src='http://www.google.com/jsapi'></script>
 	<script type='text/javascript'>
-		google.load('visualization', '1', {'packages':['annotatedtimeline']});
+		google.load('visualization', '1', {'packages':['annotatedtimeline', 'corechart']});
 		google.setOnLoadCallback(drawChart);
 		function drawChart() {
 			var data = new google.visualization.DataTable();
@@ -42,7 +42,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			
 			
 			var data2 = new google.visualization.DataTable();
-			data2.addColumn('date', 'Date');
+			data2.addColumn('datetime', 'Date');
 			data2.addColumn('number', 'Bytes');
 			data2.addRows([
 			<?
@@ -62,7 +62,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			data3.addRows([
 			<?
 				foreach(array_keys($wiki['totalpages']) as $key){
-					echo "[new Date(".date('Y', $key).", ".date('m', $key)." ,".date('d', $key)."), ".$wiki['totalpages'][$key]."]";
+					echo "[new Date(".date('Y', $key).", ".date('m', $key)." ,".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".$wiki['totalpages'][$key]."]";
 					if($key != end(array_keys($wiki['totalpages']))) echo ",";
 				}
 			?>
@@ -85,35 +85,198 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
 			var chartusers = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalusers'));
 			chartusers.draw(data4, {displayAnnotations: true});
+			
+			var data5 = new google.visualization.arrayToDataTable([
+				['Hour', 'Editions'],
+			<?
+				foreach(array_keys($wiki['totalactivityhour']) as $key){
+					echo "[".$key.", ".$wiki['totalactivityhour'][$key]."]";
+					if($key != end(array_keys($wiki['totalactivityhour']))) echo ",";
+				}
+			?>
+			]);
+			
+			var options = {
+				title: 'Activity per hour',
+				hAxis: {title: 'Hour', titleTextStyle: {color: 'green'}}
+			};
+
+			var charttotalactivityhour = new google.visualization.ColumnChart(document.getElementById('charttotalactivityhour'));
+			charttotalactivityhour.draw(data5, options);
+			
+			var data6 = new google.visualization.arrayToDataTable([
+				['Day', 'Editions'],
+			<?
+				foreach(array_keys($wiki['totalactivitywday']) as $key){
+					echo "['".$key."', ".$wiki['totalactivitywday'][$key]."]";
+					if($key != end(array_keys($wiki['totalactivitywday']))) echo ",";
+				}
+			?>
+			]);
+			
+			var options = {
+				title: 'Activity per day of the week',
+				hAxis: {title: 'Day', titleTextStyle: {color: 'green'}}
+			};
+
+			var charttotalactivitywday = new google.visualization.ColumnChart(document.getElementById('charttotalactivitywday'));
+			charttotalactivitywday.draw(data6, options);
+			
+			var data7 = new google.visualization.arrayToDataTable([
+				['Week', 'Editions'],
+			<?
+				foreach(array_keys($wiki['totalactivityweek']) as $key){
+					echo "['".$key."', ".$wiki['totalactivityweek'][$key]."]";
+					if($key != end(array_keys($wiki['totalactivityweek']))) echo ",";
+				}
+			?>
+			]);
+			
+			var options = {
+				title: 'Activity per week',
+				hAxis: {title: 'Week', titleTextStyle: {color: 'green'}}
+			};
+
+			var charttotalactivityweek = new google.visualization.ColumnChart(document.getElementById('charttotalactivityweek'));
+			charttotalactivityweek.draw(data7, options);
+			
+			var data8 = new google.visualization.arrayToDataTable([
+				['Month', 'Editions'],
+			<?
+				foreach(array_keys($wiki['totalactivitymonth']) as $key){
+					echo "['".$key."', ".$wiki['totalactivitymonth'][$key]."]";
+					if($key != end(array_keys($wiki['totalactivitymonth']))) echo ",";
+				}
+			?>
+			]);
+			
+			var options = {
+				title: 'Activity per month',
+				hAxis: {title: 'Month', titleTextStyle: {color: 'green'}}
+			};
+
+			var charttotalactivitymonth = new google.visualization.ColumnChart(document.getElementById('charttotalactivitymonth'));
+			charttotalactivitymonth.draw(data8, options);
+			
+			var data9 = new google.visualization.arrayToDataTable([
+				['Year', 'Editions'],
+			<?
+				foreach(array_keys($wiki['totalactivityyear']) as $key){
+					echo "['".$key."', ".$wiki['totalactivityyear'][$key]."]";
+					if($key != end(array_keys($wiki['totalactivityyear']))) echo ",";
+				}
+			?>
+			]);
+			
+			var options = {
+				title: 'Activity per year',
+				hAxis: {title: 'Year', titleTextStyle: {color: 'green'}}
+			};
+
+			var charttotalactivityyear = new google.visualization.ColumnChart(document.getElementById('charttotalactivityyear'));
+			charttotalactivityyear.draw(data9, options);
+			
+			var data10 = new google.visualization.DataTable();
+			data10.addColumn('date', 'Date');
+			data10.addColumn('number', '#Uploads');
+			data10.addRows([
+			<?
+				foreach(array_keys($wiki['totaluploads']) as $key){
+					echo "[new Date(".date('Y', $key).", ".date('m', $key)." ,".date('d', $key)."), ".$wiki['totaluploads'][$key]."]";
+					if($key != end(array_keys($wiki['totaluploads']))) echo ",";
+				}
+			?>
+			]);
+
+			var charttotaluploads = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotaluploads'));
+			charttotaluploads.draw(data10, {displayAnnotations: true});
+			
+			var data11 = new google.visualization.DataTable();
+			data11.addColumn('date', 'Date');
+			data11.addColumn('number', 'Upload Bytes');
+			data11.addRows([
+			<?
+				foreach(array_keys($wiki['totalupsize']) as $key){
+					echo "[new Date(".date('Y', $key).", ".date('m', $key)." ,".date('d', $key)."), ".$wiki['totalupsize'][$key]."]";
+					if($key != end(array_keys($wiki['totalupsize']))) echo ",";
+				}
+			?>
+			]);
+
+			var charttotalupsize = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalupsize'));
+			charttotalupsize.draw(data11, {displayAnnotations: true});
+			
+			var data12 = new google.visualization.DataTable();
+			data12.addColumn('date', 'Date');
+			data12.addColumn('number', 'Average Mark');
+			data12.addRows([
+			<?
+				foreach(array_keys($color['totalaverage']) as $key){
+					echo "[new Date(".
+					date('Y', $wiki['revisiondate'][$key]).", ".
+					date('m', $wiki['revisiondate'][$key])." ,".
+					date('d', $wiki['revisiondate'][$key])."), ".
+					$color['totalaverage'][$key]."]";
+					if($key != end(array_keys($color['totalaverage']))) echo ",";
+				}
+			?>
+			]);
+
+			var charttotalquality = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalquality'));
+			charttotalquality.draw(data12, {displayAnnotations: true});
+			
 		}
 	</script>
 
 <!-- CHARTS -->
-
-	<table id = "resultstable">
+	<table id = "bodytable">
 	<tr>
 		<th><?=lang('voc.i18n_edits_evolution')?></th>
-	</tr>
-	<tr>
-		<td><div id='charttotaledits' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
-	</tr>
-	<tr>
 		<th><?=lang('voc.i18n_content_evolution')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalbytes' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotaledits' style='width: 600px; height: 400px; border: 0px; padding: 5px;'></div></td>
+		<td><div id='charttotalbytes' style='width: 600px; height: 400px; border: 0px; padding: 5px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_pages')?></th>
-	</tr>
-	<tr>
-		<td><div id='charttotalpages' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
-	</tr>
-	<tr>
 		<th><?=lang('voc.i18n_users')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalusers' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalpages' style='width: 600px; height: 400px; border: 0px; padding: 5px;'></div></td>
+		<td><div id='charttotalusers' style='width: 600px; height: 400px; border: 0px; padding: 5px;'></div></td>
+	</tr>
+	<tr>
+		<th><?=lang('voc.i18n_activity_hour')?></th>
+		<th><?=lang('voc.i18n_activity_wday')?></th>
+	</tr>
+	<tr>
+		<td><div id='charttotalactivityhour' style='width: 600px; height: 400px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalactivitywday' style='width: 600px; height: 400px; border: 0px; padding: 5px;'></div></td>
+	</tr>
+	<tr>
+		<th><?=lang('voc.i18n_activity_week')?></th>
+		<th><?=lang('voc.i18n_activity_month')?></th>
+	</tr>
+	<tr>
+		<td><div id='charttotalactivityweek' style='width: 600px; height: 400px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalactivitymonth' style='width: 600px; height: 400px; border: 0px; padding: 5px;'></div></td>
+	</tr>
+	<tr>
+		<th><?=lang('voc.i18n_activity_year')?></th>
+		<th><?=lang('voc.i18n_uploads')?></th>
+	</tr>
+	<tr>
+		<td><div id='charttotalactivityyear' style='width: 600px; height: 400px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotaluploads' style='width: 600px; height: 400px; border: 0px; padding: 5px;'></div></td>
+	</tr>
+	<tr>
+		<th><?=lang('voc.i18n_upsize')?></th>
+		<th><?=lang('voc.i18n_uploads')?></th>
+	</tr>
+	<tr>
+		<td><div id='charttotalupsize' style='width: 600px; height: 400px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalquality' style='width: 600px; height: 400px; border: 0px; padding: 5px;'></div></td>
 	</tr>
 	</table>
 	<?/*
