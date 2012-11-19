@@ -225,6 +225,31 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			var charttotalquality = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalquality'));
 			charttotalquality.draw(data12, {displayAnnotations: true});
 			
+			var data13 = new google.visualization.DataTable();
+			data13.addColumn('datetime', 'Date');
+			data13.addColumn('number', 'Bytes X Quality');
+			data13.addRows([
+			<?
+				foreach(array_keys($color['totalmark']) as $key){
+					$date = $wiki['revisiondate'][$key];
+					$bytes = $wiki['totalbytes'][$date];
+					$mark = $color['totalaverage'][$key];
+					$result = $bytes + ($mark - 5) * ($bytes/5);
+					echo "[new Date(".
+					date('Y', $date).", ".
+					date('m', $date)." ,".
+					date('d', $date)." ,".
+					date('H', $date)." ,".
+					date('i', $date)."), ".
+					$result."]";
+					if($key != end(array_keys($color['totalmark']))) echo ",";
+				}
+			?>
+			]);
+
+			var charttotalbytesxquality = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalbytesxquality'));
+			charttotalbytesxquality.draw(data13, {displayAnnotations: true});
+			
 		}
 	</script>
 
@@ -232,51 +257,81 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	<table id = "bodytable">
 	<tr>
 		<th><?=lang('voc.i18n_edits_evolution')?></th>
+	</tr>
+	<tr>
+		<td><div id='charttotaledits' style='width: 800px; height: 400px; border: 0px; padding: 5px;'></div></td>
+	</tr>
+	<tr>
 		<th><?=lang('voc.i18n_content_evolution')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotaledits' style='width: 600px; height: 400px; border: 0px; padding: 5px;'></div></td>
-		<td><div id='charttotalbytes' style='width: 600px; height: 400px; border: 0px; padding: 5px;'></div></td>
+		<td><div id='charttotalbytes' style='width: 800px; height: 400px; border: 0px; padding: 5px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_pages')?></th>
+	</tr>
+	<tr>
+		<td><div id='charttotalpages' style='width: 800px; height: 400px; border: 0px; padding: 5px;'></div></td>
+	</tr>
+	<tr>
 		<th><?=lang('voc.i18n_users')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalpages' style='width: 600px; height: 400px; border: 0px; padding: 5px;'></div></td>
-		<td><div id='charttotalusers' style='width: 600px; height: 400px; border: 0px; padding: 5px;'></div></td>
+		<td><div id='charttotalusers' style='width: 800px; height: 400px; border: 0px; padding: 5px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_activity_hour')?></th>
+	</tr>
+	<tr>
+		<td><div id='charttotalactivityhour' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
+	</tr>
+	<tr>
 		<th><?=lang('voc.i18n_activity_wday')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivityhour' style='width: 600px; height: 400px; border: 0px; padding: 0px;'></div></td>
-		<td><div id='charttotalactivitywday' style='width: 600px; height: 400px; border: 0px; padding: 5px;'></div></td>
+		<td><div id='charttotalactivitywday' style='width: 800px; height: 400px; border: 0px; padding: 5px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_activity_week')?></th>
+	</tr>
+	<tr>
+		<td><div id='charttotalactivityweek' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
+	</tr>
+	<tr>
 		<th><?=lang('voc.i18n_activity_month')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivityweek' style='width: 600px; height: 400px; border: 0px; padding: 0px;'></div></td>
-		<td><div id='charttotalactivitymonth' style='width: 600px; height: 400px; border: 0px; padding: 5px;'></div></td>
+		<td><div id='charttotalactivitymonth' style='width: 800px; height: 400px; border: 0px; padding: 5px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_activity_year')?></th>
+	</tr>
+	<tr>
+		<td><div id='charttotalactivityyear' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
+	</tr>
+	<tr>
 		<th><?=lang('voc.i18n_uploads')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivityyear' style='width: 600px; height: 400px; border: 0px; padding: 0px;'></div></td>
-		<td><div id='charttotaluploads' style='width: 600px; height: 400px; border: 0px; padding: 5px;'></div></td>
+		<td><div id='charttotaluploads' style='width: 800px; height: 400px; border: 0px; padding: 5px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_upsize')?></th>
-		<th><?=lang('voc.i18n_uploads')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalupsize' style='width: 600px; height: 400px; border: 0px; padding: 0px;'></div></td>
-		<td><div id='charttotalquality' style='width: 600px; height: 400px; border: 0px; padding: 5px;'></div></td>
+		<td><div id='charttotalupsize' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
+	</tr>
+	<tr>
+		<th><?=lang('voc.i18n_average_quality')?></th>
+	</tr>
+	<tr>
+		<td><div id='charttotalquality' style='width: 800px; height: 400px; border: 0px; padding: 5px;'></div></td>
+	</tr>
+	<tr>
+		<th><?=lang('voc.i18n_bytesxquality')?></th>
+	</tr>
+	<tr>
+		<td><div id='charttotalbytesxquality' style='width: 800px; height: 400px; border: 0px; padding: 5px;'></div></td>
 	</tr>
 	</table>
 	<?/*

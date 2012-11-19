@@ -50,7 +50,7 @@ a:link {
   text-decoration:none;
 }
 a:visited {
-  color:lightpurple;
+  color:white;
   font-weight:bold;
   text-decoration:none;
 }
@@ -228,8 +228,9 @@ text-align:center;
 	text-decoration:none;
 }
 #menu a:active {
-  color:white;
-  text-decoration:none;
+	text-shadow: 0.1em 0.1em 0.2em black;
+	color:#A7C942;
+	text-decoration:none;
 }
 
 #menu td, #menu th 

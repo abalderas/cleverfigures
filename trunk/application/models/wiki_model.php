@@ -110,10 +110,32 @@ class Wiki_model extends CI_Model{
 		}
    	}
    	
+   	function displayTree($array) {
+		$output = "";
+		$newline = "<br>";
+		foreach($array as $key => $value) {    //cycle through each item in the array as key => value pairs
+			if (is_array($value) || is_object($value)) {        //if the VALUE is an array, then
+				//call it out as such, surround with brackets, and recursively call displayTree.
+				$value = "Array()" . $newline . "(<ul>" . $this->displayTree($value) . "</ul>)" . $newline;
+			}
+			//if value isn't an array, it must be a string. output its' key and value.
+			$output .= "[".unix_to_human($key)."] => " . $value . $newline;
+		}
+		return $output;
+	}
+   	
    	private function last_psize_sum($pagebytes, $catpage, $category){
 		$res = 0;
 		foreach(array_keys($catpage[$category]) as $page)
 			$res += end($pagebytes[$page])?end($pagebytes[$page]):0;
+		return $res;
+   	}
+   	
+   	function array_back_sum($array, $limit){
+		$res = 0;
+		foreach(array_keys($array) as $key)
+			if($key <= $limit) $res += $array[$key];
+		
 		return $res;
    	}
    	
@@ -128,7 +150,7 @@ class Wiki_model extends CI_Model{
    		echo "Querying database for general information...</br>";
    		ob_flush(); flush();
    		//Creating query string for the general query
-   		$qstr = "select rev_id, rev_page, page_title, page_counter, page_namespace, page_is_new, user_id, user_name, user_real_name, user_email, user_registration, rev_timestamp, cl_to, cat_pages, rev_len from revision, user, page, categorylinks, category where rev_page = page_id and rev_user = user_id and page_id = cl_from and cl_to = cat_title order by rev_timestamp asc";		
+   		$qstr = "select rev_id, rev_page, page_title, page_counter, page_namespace, page_is_new, user_id, user_name, user_real_name, user_email, user_registration, rev_timestamp, rev_len from revision, user, page where rev_page = page_id and rev_user = user_id order by rev_timestamp asc";		
 		
 		//Querying database
    		$query = $link->query($qstr);
@@ -150,8 +172,6 @@ class Wiki_model extends CI_Model{
 			$pagebytescount[$row->page_title] = 0;
 			$pageeditscount_art[$row->page_title] = 0;
 			$pagebytescount_art[$row->page_title] = 0;
-			$cateditscount[$row->cl_to] = 0;
-			$catbytescount[$row->cl_to] = 0;
 			$totalbytescount = 0;
 			$usercreationcount[$row->user_name] = 0;
 			$useractivityhour[$row->user_name][date('H', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
@@ -164,11 +184,6 @@ class Wiki_model extends CI_Model{
 			$pageactivityweek[$row->page_title][date('W', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
 			$pageactivitymonth[$row->page_title][date('m', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
 			$pageactivityyear[$row->page_title][date('Y', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
-			$catactivityhour[$row->cl_to][date('H', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
-			$catactivitywday[$row->cl_to][date('w', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
-			$catactivityweek[$row->cl_to][date('W', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
-			$catactivitymonth[$row->cl_to][date('m', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
-			$catactivityyear[$row->cl_to][date('Y', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
 			$totalactivityhour[date('H', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
 			$totalactivitywday[date('D', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
 			$totalactivityweek[date('W', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
@@ -179,11 +194,7 @@ class Wiki_model extends CI_Model{
 			$pagebytes[$row->page_title] = array();
 			$pagebytes_art[$row->page_title] = array();
 			$userpage[$row->user_name] = array();
-			$usercat[$row->user_name] = array();
 			$pageuser[$row->page_title] = array();
-			$pagecat[$row->page_title] = array();
-			$catuser[$row->cl_to] = array();
-			$catpage[$row->cl_to] = array();
 			$totalbytes[$this->mwtime_to_unix($row->rev_timestamp)] = array();
 			$revbucket = array();
 			$usercreatedpages[$row->user_name]= array();
@@ -203,82 +214,170 @@ class Wiki_model extends CI_Model{
    			//RELATION ARRAYS
    			
    			$userpage[$row->user_name][$row->page_title] = true;
-   			$usercat [$row->user_name][$row->cl_to] = true;
-   			
    			$pageuser[$row->page_title][$row->user_name] = true;
-   			$pagecat [$row->page_title][$row->cl_to] = true;
+
+			//USER INFORMATION
+			
+			$userid			[$row->user_id] = $row->user_name;
+			$iduser			[$row->user_name] = $row->user_id;
+			$usereditscount		[$row->user_name] += 1;								// Counts the total editions per user
+			$userbytescount		[$row->user_name] += $row->rev_len - $LAST_PAGE_SIZE;
+			if($row->page_is_new == 1){
+				$usercreationcount[$row->user_name] += 1;							// Counts number of pages created by the user
+				$usercreatedpages[$row->user_name][] = $row->page_title;					// Strores pages created by the user
+			}
+				
+			$userpagecount		[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = count($userpage[$row->user_name]);	// Pages per user/date
+			
+			$useredits		[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $usereditscount[$row->user_name];	// Editions per user & date
+			$userbytes		[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $userbytescount[$row->user_name];	// Bytes by user $ date
+			
+			$userrealname		[$row->user_name] = $row->user_real_name;					// Getting user real names
+			$userreg		[$row->user_name] = $row->user_registration;					// Getting user registration dates
+				
+			if ($row->page_namespace == 0){											// If article
+				$usereditscount_art	[$row->user_name] += 1;								// Counts total article editions per user
+				$userbytescount_art	[$row->user_name] += $row->rev_len - $LAST_PAGE_SIZE;				// Counts total bytes per user 
+					
+				$useredits_art		[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $usereditscount_art[$row->user_name];	// Editions of article per user/date
+				$userbytes_art		[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $userbytescount_art[$row->user_name];	// Bytes per user/date
+			}
+				
+			$useractivityhour[$row->user_name][date('H', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
+			$useractivitywday[$row->user_name][date('w', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
+			$useractivityweek[$row->user_name][date('W', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
+			$useractivitymonth[$row->user_name][date('m', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
+			$useractivityyear[$row->user_name][date('Y', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
+			
+			
+			//PAGE INFORMATION
+			
+			$pageeditscount	[$row->page_title] += 1;							// Count of the total editions per page
+			$pagebytescount	[$row->page_title] += $row->rev_len - $LAST_PAGE_SIZE;				// Count of the total bytes per page
+				
+			$pageusercount	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = count($pageuser[$row->page_title]);	// Users per page/date
+				
+			$pageedits	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pageeditscount[$row->page_title];	// Editions per page/date
+			$pagebytes	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pagebytescount[$row->page_title];	// Bytes per page/date
+				
+			$pagenamespace	[$row->page_title] = $row->page_namespace;					// Getting namespaces per page
+			$pagevisits	[$row->page_title] = $row->page_counter;					// Total visits per page
+	
+			if ($row->page_namespace == 0){												// If article
+				$pageeditscount_art	[$row->page_title] += 1;								// Count total article editions per user
+				$pagebytescount_art	[$row->page_title] += $row->rev_len - $LAST_PAGE_SIZE;
+					
+				$pageedits_art		[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pageeditscount_art[$row->page_title];	// Editions of article per user/date
+				$pagebytes_art		[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pagebytescount_art[$row->page_title];	// Bytes per user/date
+			}
+				
+			$pageactivityhour[$row->page_title][date('H', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
+			$pageactivitywday[$row->page_title][date('w', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
+			$pageactivityweek[$row->page_title][date('W', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
+			$pageactivitymonth[$row->page_title][date('m', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
+			$pageactivityyear[$row->page_title][date('Y', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
    			
+   			
+			//TOTAL INFORMATION
+			$aux_edits [$row->rev_id] = 1;
+			$aux_pages [$row->page_title] = 1;
+			$aux_users [$row->user_name] = 1;
+			
+			$totalbytescount += $row->rev_len - $LAST_PAGE_SIZE;
+			
+			$totaledits[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_edits);
+			$totalpages[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_pages);
+			$totalusers[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_users);
+			$totalbytes[$this->mwtime_to_unix($row->rev_timestamp)] = $totalbytescount;
+			$totalvisits = array_sum($pagevisits);
+			$revisiondate[$row->rev_id] = $this->mwtime_to_unix($row->rev_timestamp);
+				
+			$totalactivityhour[date('H', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
+			$totalactivitywday[date('D', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
+			$totalactivityweek[date('W', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
+			$totalactivitymonth[date('M', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
+			$totalactivityyear[date('Y', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
+			
+			
+			//PERCENTAGES
+			
+			$useredits_per		[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $useredits	[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] / $totaledits[$this->mwtime_to_unix($row->rev_timestamp)];
+			$userbytes_per		[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $userbytes	[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] / $totalbytes[$this->mwtime_to_unix($row->rev_timestamp)];
+			if($row->page_namespace == 0){
+				$useredits_art_per	[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $useredits_art	[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] / $totaledits[$this->mwtime_to_unix($row->rev_timestamp)];
+				$userbytes_art_per	[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $userbytes_art	[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] / $totalbytes[$this->mwtime_to_unix($row->rev_timestamp)];
+			}
+			
+			$pageedits_per[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pageedits[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] / $totaledits[$this->mwtime_to_unix($row->rev_timestamp)];
+			$pagebytes_per[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pagebytes[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] / $totalbytes[$this->mwtime_to_unix($row->rev_timestamp)];
+			if($row->page_namespace == 0){
+				$pageedits_art_per	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pageedits_art	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] / $totaledits[$this->mwtime_to_unix($row->rev_timestamp)];
+				$pagebytes_art_per	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pagebytes_art	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] / $totalbytes[$this->mwtime_to_unix($row->rev_timestamp)];
+			}
+			
+			
+			//UPDATE REVISION BUCKET
+			
+			$revbucket[] = $row->rev_id;
+   		}
+   		
+   		echo "Querying database for category information...</br>";
+   		
+   		$qstr = "select rev_id, rev_page, page_title, page_counter, page_namespace, page_is_new, user_id, user_name, user_real_name, user_email, user_registration, rev_timestamp, cl_to, cat_pages, rev_len from revision, user, page, categorylinks, category where rev_page = page_id and rev_user = user_id and page_id = cl_from and cl_to = cat_title order by rev_timestamp asc";		
+		
+		//Querying database
+   		$query = $link->query($qstr);
+   		
+   		//If no results then return false
+   		if(!$query->result()) 
+			die ("ERROR");
+			
+   		echo "Storing category information...</br>";
+   		ob_flush(); flush();
+   		//Initializing arrays for storing information
+   		foreach($query->result() as $row){
+			
+ 			$cateditscount[$row->cl_to] = 0;
+			$catbytescount[$row->cl_to] = 0;
+			$catactivityhour[$row->cl_to][date('H', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
+			$catactivitywday[$row->cl_to][date('w', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
+			$catactivityweek[$row->cl_to][date('W', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
+			$catactivitymonth[$row->cl_to][date('m', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
+			$catactivityyear[$row->cl_to][date('Y', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
+			
+			
+			$usercat[$row->user_name] = array();
+			$pagecat[$row->page_title] = array();
+			$catuser[$row->cl_to] = array();
+			$catpage[$row->cl_to] = array();
+		}
+   		
+   		
+   		//Storing classified information in arrays
+   		
+   		//This loop clasifies all the data contained in the query (which ignores uploads info) in arrays that will be returned at the end of the function. 
+   		foreach($query->result() as $row){
+   			
+   			//USEFUL VARIABLES
+   			
+   			$LAST_PAGE_SIZE = ($row->page_is_new == 0) ? end($pagebytes[$row->page_title]) : 0;
+   			$LAST_PAGEBYTES_ARRAY = $pagebytes;
+   			
+   			//RELATION ARRAYS
+   			
+   			$usercat [$row->user_name][$row->cl_to] = true;
+   			$pagecat [$row->page_title][$row->cl_to] = true;
    			$catuser [$row->cl_to][$row->user_name] = true;
    			$catpage [$row->cl_to][$row->page_title] = true;
 
 			//USER INFORMATION
 			
-			if(!array_search($row->rev_id, $revbucket)){
-			
-				$userid			[$row->user_id] = $row->user_name;
-				$iduser			[$row->user_name] = $row->user_id;
-				$usereditscount		[$row->user_name] += 1;								// Counts the total editions per user
-				$userbytescount		[$row->user_name] += $row->rev_len - $LAST_PAGE_SIZE;
-				if($row->page_is_new == 1){
-					$usercreationcount[$row->user_name] += 1;							// Counts number of pages created by the user
-					$usercreatedpages[$row->user_name][] = $row->page_title;					// Strores pages created by the user
-				}
-				
-				$userpagecount		[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = count($userpage[$row->user_name]);	// Pages per user/date
-				$usercatcount		[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = count($usercat[$row->user_name]);	// Categories per user/date
-				
-				$useredits		[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $usereditscount[$row->user_name];	// Editions per user & date
-				$userbytes		[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $userbytescount[$row->user_name];	// Bytes by user $ date
-				
-				$userrealname		[$row->user_name] = $row->user_real_name;					// Getting user real names
-				$userreg		[$row->user_name] = $row->user_registration;					// Getting user registration dates
-				
-				if ($row->page_namespace == 0){											// If article
-					$usereditscount_art	[$row->user_name] += 1;								// Counts total article editions per user
-					$userbytescount_art	[$row->user_name] += $row->rev_len - $LAST_PAGE_SIZE;				// Counts total bytes per user 
-					
-					$useredits_art		[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $usereditscount_art[$row->user_name];	// Editions of article per user/date
-					$userbytes_art		[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $userbytescount_art[$row->user_name];	// Bytes per user/date
-				}
-				
-				$useractivityhour[$row->user_name][date('H', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-				$useractivitywday[$row->user_name][date('w', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-				$useractivityweek[$row->user_name][date('W', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-				$useractivitymonth[$row->user_name][date('m', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-				$useractivityyear[$row->user_name][date('Y', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-   			}
+			$usercatcount[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = count($usercat[$row->user_name]);	// Categories per user/date
 			
 			
 			//PAGE INFORMATION
 			
-			if(!array_search($row->rev_id, $revbucket)){
-				$pageeditscount	[$row->page_title] += 1;							// Count of the total editions per page
-				$pagebytescount	[$row->page_title] += $row->rev_len - $LAST_PAGE_SIZE;				// Count of the total bytes per page
-				
-				$pageusercount	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = count($pageuser[$row->page_title]);	// Users per page/date
-				$pagecatcount	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = count($pagecat[$row->page_title]);	// Categories per page/date
-				
-				$pageedits	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pageeditscount[$row->page_title];	// Editions per page/date
-				$pagebytes	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pagebytescount[$row->page_title];	// Bytes per page/date
-				
-				$pagenamespace	[$row->page_title] = $row->page_namespace;					// Getting namespaces per page
-				$pagevisits	[$row->page_title] = $row->page_counter;					// Total visits per page
-	
-				if ($row->page_namespace == 0){												// If article
-					$pageeditscount_art	[$row->page_title] += 1;								// Count total article editions per user
-					$pagebytescount_art	[$row->page_title] += $row->rev_len - $LAST_PAGE_SIZE;
-					
-					$pageedits_art		[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pageeditscount_art[$row->page_title];	// Editions of article per user/date
-					$pagebytes_art		[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pagebytescount_art[$row->page_title];	// Bytes per user/date
-				}
-				
-				$pageactivityhour[$row->page_title][date('H', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-				$pageactivitywday[$row->page_title][date('w', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-				$pageactivityweek[$row->page_title][date('W', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-				$pageactivitymonth[$row->page_title][date('m', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-				$pageactivityyear[$row->page_title][date('Y', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-   			}
-   			
+			$pagecatcount	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = count($pagecat[$row->page_title]);	// Categories per page/date   			
    			
 			//CATEGORY INFORMATION
 			
@@ -295,30 +394,6 @@ class Wiki_model extends CI_Model{
 			$catactivityweek[$row->cl_to][date('W', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
 			$catactivitymonth[$row->cl_to][date('m', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
 			$catactivityyear[$row->cl_to][date('Y', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-   			
-   			
-			//TOTAL INFORMATION
-			if(!array_search($row->rev_id, $revbucket)){
-				$aux_edits [$row->rev_id] = 1;
-				$aux_pages [$row->page_title] = 1;
-				$aux_users [$row->user_name] = 1;
-			
-				$totalbytescount += $row->rev_len - $LAST_PAGE_SIZE;
-			
-				$totaledits[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_edits);
-				$totalpages[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_pages);
-				$totalusers[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_users);
-				$totalbytes[$this->mwtime_to_unix($row->rev_timestamp)] = $totalbytescount;
-				$totalvisits = array_sum($pagevisits);
-				$revisiondate[$row->rev_id] = $this->mwtime_to_unix($row->rev_timestamp);
-				
-				$totalactivityhour[date('H', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-				$totalactivitywday[date('D', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-				$totalactivityweek[date('W', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-				$totalactivitymonth[date('M', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-				$totalactivityyear[date('Y', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-				
-			}
 			
 			
 			//PERCENTAGES
@@ -327,185 +402,13 @@ class Wiki_model extends CI_Model{
 			$catusers_per[$row->cl_to][$this->mwtime_to_unix($row->rev_timestamp)] = $catusers[$row->cl_to][$this->mwtime_to_unix($row->rev_timestamp)] / $totalusers[$this->mwtime_to_unix($row->rev_timestamp)];
 			$catedits_per[$row->cl_to][$this->mwtime_to_unix($row->rev_timestamp)] = $catedits[$row->cl_to][$this->mwtime_to_unix($row->rev_timestamp)] / $totaledits[$this->mwtime_to_unix($row->rev_timestamp)];
 			$catbytes_per[$row->cl_to][$this->mwtime_to_unix($row->rev_timestamp)] = $catbytes[$row->cl_to][$this->mwtime_to_unix($row->rev_timestamp)] / $totalbytes[$this->mwtime_to_unix($row->rev_timestamp)];
-			
-			if(!array_search($row->rev_id, $revbucket)){
-				$useredits_per		[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $useredits	[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] / $totaledits[$this->mwtime_to_unix($row->rev_timestamp)];
-				$userbytes_per		[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $userbytes	[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] / $totalbytes[$this->mwtime_to_unix($row->rev_timestamp)];
-				if($row->page_namespace == 0){
-					$useredits_art_per	[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $useredits_art	[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] / $totaledits[$this->mwtime_to_unix($row->rev_timestamp)];
-					$userbytes_art_per	[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $userbytes_art	[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] / $totalbytes[$this->mwtime_to_unix($row->rev_timestamp)];
-				}
-			
-				$pageedits_per[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pageedits[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] / $totaledits[$this->mwtime_to_unix($row->rev_timestamp)];
-				$pagebytes_per[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pagebytes[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] / $totalbytes[$this->mwtime_to_unix($row->rev_timestamp)];
-				if($row->page_namespace == 0){
-					$pageedits_art_per	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pageedits_art	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] / $totaledits[$this->mwtime_to_unix($row->rev_timestamp)];
-					$pagebytes_art_per	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pagebytes_art	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] / $totalbytes[$this->mwtime_to_unix($row->rev_timestamp)];
-				}
-			}
-			
-			
-			//UPDATE REVISION BUCKET
-			
-			$revbucket[] = $row->rev_id;
    		}
    		
-   		echo "Adding information from pages without category...</br>";
-   		ob_flush(); flush();
-   		
-   		$qstr = "select rev_id, rev_page, page_title, page_counter, page_namespace, page_is_new, user_id, user_name, user_real_name, user_email, user_registration, rev_timestamp, rev_len from revision, user, page where rev_page = page_id and rev_user = user_id and rev_id not in (select rev_id from revision, user, page, categorylinks, category where rev_page = page_id and rev_user = user_id and page_id = cl_from and cl_to = cat_title order by rev_timestamp asc) order by rev_timestamp asc";
-   		
-   		//Querying database
-   		$query = $link->query($qstr);
-   		
-   		//If no results then return false
-   		if(!$query->result()) 
-			die ("ERROR");
-   		
-   		foreach($query->result() as $row){
-			if(!isset($totalbytescount)) $totalbytescount = 0;
-			if(!isset($usereditscount[$row->user_name])) $usereditscount[$row->user_name] = 0;
-			if(!isset($userbytescount[$row->user_name])) $userbytescount[$row->user_name] = 0;
-			if(!isset($usereditscount_art[$row->user_name])) $usereditscount_art[$row->user_name] = 0;
-			if(!isset($userbytescount_art[$row->user_name])) $userbytescount_art[$row->user_name] = 0;
-			if(!isset($pageeditscount[$row->page_title])) $pageeditscount[$row->page_title] = 0;
-			if(!isset($pagebytescount[$row->page_title])) $pagebytescount[$row->page_title] = 0;
-			if(!isset($pageeditscount_art[$row->page_title])) $pageeditscount_art[$row->page_title] = 0;
-			if(!isset($pagebytescount_art[$row->page_title])) $pagebytescount_art[$row->page_title] = 0;
-			if(!isset($usercreationcount[$row->user_name])) $usercreationcount[$row->user_name] = 0;
-			if(!isset($useractivityhour[$row->user_name][date('H', $this->mwtime_to_unix($row->rev_timestamp))])) $useractivityhour[$row->user_name][date('H', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
-			if(!isset($useractivitywday[$row->user_name][date('w', $this->mwtime_to_unix($row->rev_timestamp))])) $useractivitywday[$row->user_name][date('w', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
-			if(!isset($useractivityweek[$row->user_name][date('W', $this->mwtime_to_unix($row->rev_timestamp))])) $useractivityweek[$row->user_name][date('W', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
-			if(!isset($useractivitymonth[$row->user_name][date('m', $this->mwtime_to_unix($row->rev_timestamp))])) $useractivitymonth[$row->user_name][date('m', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
-			if(!isset($useractivityyear[$row->user_name][date('Y', $this->mwtime_to_unix($row->rev_timestamp))])) $useractivityyear[$row->user_name][date('Y', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
-			if(!isset($pageactivityhour[$row->page_title][date('H', $this->mwtime_to_unix($row->rev_timestamp))])) $pageactivityhour[$row->page_title][date('H', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
-			if(!isset($pageactivitywday[$row->page_title][date('w', $this->mwtime_to_unix($row->rev_timestamp))])) $pageactivitywday[$row->page_title][date('w', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
-			if(!isset($pageactivityweek[$row->page_title][date('W', $this->mwtime_to_unix($row->rev_timestamp))])) $pageactivityweek[$row->page_title][date('W', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
-			if(!isset($pageactivitymonth[$row->page_title][date('m', $this->mwtime_to_unix($row->rev_timestamp))])) $pageactivitymonth[$row->page_title][date('m', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
-			if(!isset($pageactivityyear[$row->page_title][date('Y', $this->mwtime_to_unix($row->rev_timestamp))])) $pageactivityyear[$row->page_title][date('Y', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
-			if(!isset($totalactivityhour[date('H', $this->mwtime_to_unix($row->rev_timestamp))])) $totalactivityhour[date('H', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
-			if(!isset($totalactivitywday[date('D', $this->mwtime_to_unix($row->rev_timestamp))])) $totalactivitywday[date('D', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
-			if(!isset($totalactivityweek[date('W', $this->mwtime_to_unix($row->rev_timestamp))])) $totalactivityweek[date('W', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
-			if(!isset($totalactivitymonth[date('M', $this->mwtime_to_unix($row->rev_timestamp))])) $totalactivitymonth[date('M', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
-			if(!isset($totalactivityyear[date('Y', $this->mwtime_to_unix($row->rev_timestamp))])) $totalactivityyear[date('Y', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
-			if(!isset($pagebytes[$row->page_title])) $pagebytes[$row->page_title] = array();
-			if(!isset($pagebytes_art[$row->page_title])) $pagebytes_art[$row->page_title] = array();
-			if(!isset($userpage[$row->user_name])) $userpage[$row->user_name] = array();
-			if(!isset($pageuser[$row->page_title])) $pageuser[$row->page_title] = array();
-			if(!isset($totalbytes[$this->mwtime_to_unix($row->rev_timestamp)])) $totalbytes[$this->mwtime_to_unix($row->rev_timestamp)] = array();
-			if(!isset($usercreatedpages[$row->user_name])) $usercreatedpages[$row->user_name]= array();
-   		}
-   		
-   		foreach($query->result() as $row){
-   			
-   			//USEFUL VARIABLES
-   			
-   			$LAST_PAGE_SIZE = isset($pagebytes[$row->page_title]) ? end($pagebytes[$row->page_title]) : 0;
-   			$LAST_PAGEBYTES_ARRAY = $pagebytes;
-   			
-   			//RELATION ARRAYS
-   			
-   			$userpage[$row->user_name][$row->page_title] = true;
-   			$pageuser[$row->page_title][$row->user_name] = true;
-
-			//USER INFORMATION
-			
-			$userid	[$row->user_id] = $row->user_name;
-			$iduser	[$row->user_name] = $row->user_id;
-			
-			$usereditscount[$row->user_name] += 1;	
-			$userbytescount	[$row->user_name] += $row->rev_len - $LAST_PAGE_SIZE;
-				
-			$usereditscount_art	[$row->user_name] += 1;								// Counts total article editions per user
-			$userbytescount_art	[$row->user_name] += $row->rev_len - $LAST_PAGE_SIZE;				// Counts total bytes per user 
-			
-			$useredits_art		[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $usereditscount_art[$row->user_name];	// Editions of article per user/date
-			$userbytes_art		[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $userbytescount_art[$row->user_name];	// Bytes per user/date
-				
-			$usercreationcount[$row->user_name] += 1;									// Counts number of pages created by the user
-			$usercreatedpages[$row->user_name][] = $row->page_title;
-			
-			$userpagecount	[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = count($userpage[$row->user_name]);	// Pages per user/date
-			$useredits	[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $usereditscount[$row->user_name];	// Editions per user & date
-			$userbytes	[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $userbytescount[$row->user_name];	// Bytes by user $ date
-			$userrealname	[$row->user_name] = $row->user_real_name;								// Getting user real names
-			$userreg	[$row->user_name] = $row->user_registration;								// Getting user registration dates
-   			
-			$useractivityhour[$row->user_name][date('H', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-   			$useractivitywday[$row->user_name][date('w', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-   			$useractivityweek[$row->user_name][date('W', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-   			$useractivitymonth[$row->user_name][date('m', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-   			$useractivityyear[$row->user_name][date('Y', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-   			
-			
-			//PAGE INFORMATION
-			
-			$pageeditscount	[$row->page_title] += 1;							// Count of the total editions per page
-			$pagebytescount	[$row->page_title] += $row->rev_len - $LAST_PAGE_SIZE;				// Count of the total bytes per page
-			
-			$pageusercount	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = count($pageuser[$row->page_title]);	// Users per page/date
-			
-			$pageedits	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pageeditscount[$row->page_title];	// Editions per page/date
-			$pagebytes	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pagebytescount[$row->page_title];	// Bytes per page/date
-			
-			$pagenamespace	[$row->page_title] = $row->page_namespace;					// Getting namespaces per page
-			$pagevisits	[$row->page_title] = $row->page_counter;
-   									// If article
-			$pageeditscount_art	[$row->page_title] += 1;										// Count total article editions per user
-			$pagebytescount_art	[$row->page_title] += $row->rev_len - $LAST_PAGE_SIZE;
-				
-			$pageedits_art		[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pageeditscount_art[$row->page_title];	// Editions of article per user/date
-			$pagebytes_art		[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pagebytescount_art[$row->page_title];	// Bytes per user/date
-			
-   			$pageactivityhour[$row->page_title][date('H', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-   			$pageactivitywday[$row->page_title][date('w', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-   			$pageactivityweek[$row->page_title][date('W', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-   			$pageactivitymonth[$row->page_title][date('m', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-   			$pageactivityyear[$row->page_title][date('Y', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-   			
-			
-			//TOTAL INFORMATION
-			$aux_edits [$row->rev_id] = 1;
-			$aux_pages [$row->page_title] = 1;
-			$aux_users [$row->user_name] = 1;
-			
-			$totalbytescount += $row->rev_len - $LAST_PAGE_SIZE;
-			
-			$totaledits[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_edits);
-			//$totalpages[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_pages);
-			$totalusers[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_users);
-			$totalbytes[$this->mwtime_to_unix($row->rev_timestamp)] = $totalbytescount;
-			$totalvisits = array_sum($pagevisits);
-			$revisiondate[$row->rev_id] = $this->mwtime_to_unix($row->rev_timestamp);
-				
-			$totalactivityhour[date('H', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-   			$totalactivitywday[date('D', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-   			$totalactivityweek[date('W', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-   			$totalactivitymonth[date('M', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-   			$totalactivityyear[date('Y', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-   			
-			
-			//PERCENTAGES
-			
-			$useredits_per[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $useredits[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] / $totaledits[$this->mwtime_to_unix($row->rev_timestamp)];
-			$userbytes_per[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $userbytes[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] / $totalbytes[$this->mwtime_to_unix($row->rev_timestamp)];
-			if($row->page_namespace == 0){
-				$useredits_art_per[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $useredits_art[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] / $totaledits[$this->mwtime_to_unix($row->rev_timestamp)];
-				$userbytes_art_per[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $userbytes_art[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] / $totalbytes[$this->mwtime_to_unix($row->rev_timestamp)];
-			}
-			
-			$pageedits_per[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pageedits[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] / $totaledits[$this->mwtime_to_unix($row->rev_timestamp)];
-			$pagebytes_per[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pagebytes[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] / $totalbytes[$this->mwtime_to_unix($row->rev_timestamp)];
-			if($row->page_namespace == 0){
-				$pageedits_art_per[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pageedits_art[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] / $totaledits[$this->mwtime_to_unix($row->rev_timestamp)];
-				$pagebytes_art_per[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pagebytes_art[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] / $totalbytes[$this->mwtime_to_unix($row->rev_timestamp)];
-			}
-   		}
    		
    		echo "Querying database for uploads information...</br>";
    		ob_flush(); flush();
    		//Creating query string for the uploads query
-   		$qstr = "select img_name, user_name, img_timestamp, img_size, page_title, cl_to from image, page, user, imagelinks, categorylinks where img_name = il_to and il_from = page_id and page_id = cl_from and img_user = user_id order by img_timestamp asc";
+   		$qstr = "select img_name, user_name, img_timestamp, img_size, page_title from image, page, user, imagelinks where img_name = il_to and il_from = page_id and img_user = user_id order by img_timestamp asc";
 		
 		//Querying database
 		$query = $link->query($qstr);
@@ -519,84 +422,174 @@ class Wiki_model extends CI_Model{
 			
 				$userupsize[$row->user_name][$this->mwtime_to_unix($row->img_timestamp)] = 0;
 				$pageupsize[$row->page_title][$this->mwtime_to_unix($row->img_timestamp)] = 0;
-				$catupsize[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] = 0;
 				$totaluploads[$this->mwtime_to_unix($row->img_timestamp)] = 0;
 				$totalupsize[$this->mwtime_to_unix($row->img_timestamp)] = 0;
 				$useruploadscount[$row->user_name] = 0;
 				$pageuploadscount[$row->page_title] = 0;
-				$catuploadscount[$row->cl_to] = 0;
 				$userupsizecount[$row->user_name] = 0;
 				$pageupsizecount[$row->page_title] = 0;
-				$catupsizecount[$row->cl_to] = 0;
 				$totaluploadscount = 0;
 				$totalupsizecount = 0;
-				$imgbucket = array();
 				
 			}
 			
 			foreach($query->result() as $row){
 				
 				// USER UPLOAD INFORMATION
-				if(!array_search($row->img_name, $imgbucket)){
-					$useruploadscount[$row->user_name] += 1;
-					$userupsizecount[$row->user_name] += $row->img_size;
+				$useruploadscount[$row->user_name] += 1;
+				$userupsizecount[$row->user_name] += $row->img_size;
 				
-					$useruploads[$row->user_name][$this->mwtime_to_unix($row->img_timestamp)] = $useruploadscount[$row->user_name];
-					$userimages[$row->user_name][$this->mwtime_to_unix($row->img_timestamp)] = $row->img_name;
-					$userupsize[$row->user_name][$this->mwtime_to_unix($row->img_timestamp)] = $userupsizecount[$row->user_name];
-				}
+				$useruploads[$row->user_name][$this->mwtime_to_unix($row->img_timestamp)] = $useruploadscount[$row->user_name];
+				$userimages[$row->user_name][$this->mwtime_to_unix($row->img_timestamp)] = $row->img_name;
+				$userupsize[$row->user_name][$this->mwtime_to_unix($row->img_timestamp)] = $userupsizecount[$row->user_name];
 				
 				//PAGE UPLOAD INFORMATION
-				if(!array_search($row->img_name, $imgbucket)){
-					$pageuploadscount[$row->page_title] += 1;
-					$pageupsizecount[$row->page_title] += $row->img_size;
+				$pageuploadscount[$row->page_title] += 1;
+				$pageupsizecount[$row->page_title] += $row->img_size;
 				
-					$pageuploads[$row->page_title][$this->mwtime_to_unix($row->img_timestamp)] = $pageuploadscount[$row->page_title];
-					$pageimages[$row->page_title][$this->mwtime_to_unix($row->img_timestamp)] = $row->img_name;		
-					$pageupsize[$row->page_title][$this->mwtime_to_unix($row->img_timestamp)] = $pageupsizecount[$row->page_title];
-				}
-				
-				
-				//CATEGORY UPLOAD INFORMATION
-				$catuploadscount[$row->cl_to] += 1;
-				$catupsizecount[$row->cl_to] += $row->img_size;
-				
-				$catuploads[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] = $catuploadscount[$row->cl_to];
-				$catimages[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] = $row->img_name;
-				$catupsize[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] = $catupsizecount[$row->cl_to];
+				$pageuploads[$row->page_title][$this->mwtime_to_unix($row->img_timestamp)] = $pageuploadscount[$row->page_title];
+				$pageimages[$row->page_title][$this->mwtime_to_unix($row->img_timestamp)] = $row->img_name;		
+				$pageupsize[$row->page_title][$this->mwtime_to_unix($row->img_timestamp)] = $pageupsizecount[$row->page_title];
 				
 				
 				//TOTAL UPLOAD INFORMATION
-				if(!array_search($row->img_name, $imgbucket)){
-					$totaluploadscount += 1;
-					$totalupsizecount += $row->img_size;
+				$totaluploadscount += 1;
+				$totalupsizecount += $row->img_size;
 				
-					$totaluploads[$this->mwtime_to_unix($row->img_timestamp)] = $totaluploadscount;
-					$totalimages[$this->mwtime_to_unix($row->img_timestamp)] = $row->img_name;
-					$totalupsize[$this->mwtime_to_unix($row->img_timestamp)] = $totalupsizecount;
-				}
+				$totaluploads[$this->mwtime_to_unix($row->img_timestamp)] = $totaluploadscount;
+				$totalimages[$this->mwtime_to_unix($row->img_timestamp)] = $row->img_name;
+				$totalupsize[$this->mwtime_to_unix($row->img_timestamp)] = $totalupsizecount;
 				
 				//PERCENTAGES
-				if(!array_search($row->img_name, $imgbucket)){
-					$useruploads_per[$row->user_name][$this->mwtime_to_unix($row->img_timestamp)] = $useruploads[$row->user_name][$this->mwtime_to_unix($row->img_timestamp)] / $totaluploads[$this->mwtime_to_unix($row->img_timestamp)];
-					$userupsize_per[$row->user_name][$this->mwtime_to_unix($row->img_timestamp)] = $userupsize[$row->user_name][$this->mwtime_to_unix($row->img_timestamp)] / $totalupsize[$this->mwtime_to_unix($row->img_timestamp)];
+				$useruploads_per[$row->user_name][$this->mwtime_to_unix($row->img_timestamp)] = $useruploads[$row->user_name][$this->mwtime_to_unix($row->img_timestamp)] / $totaluploads[$this->mwtime_to_unix($row->img_timestamp)];
+				$userupsize_per[$row->user_name][$this->mwtime_to_unix($row->img_timestamp)] = $userupsize[$row->user_name][$this->mwtime_to_unix($row->img_timestamp)] / $totalupsize[$this->mwtime_to_unix($row->img_timestamp)];
 				
-					$pageuploads_per[$row->page_title][$this->mwtime_to_unix($row->img_timestamp)] = $pageuploads[$row->page_title][$this->mwtime_to_unix($row->img_timestamp)] / $totaluploads[$this->mwtime_to_unix($row->img_timestamp)];
-					$pageupsize_per[$row->page_title][$this->mwtime_to_unix($row->img_timestamp)] = $pageupsize[$row->page_title][$this->mwtime_to_unix($row->img_timestamp)] / $totalupsize[$this->mwtime_to_unix($row->img_timestamp)];
-				}
-				
-				$catuploads_per	[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] = $catuploads[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] / $totaluploads[$this->mwtime_to_unix($row->img_timestamp)];
-				$catupsize_per	[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] = $catupsize	[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] / $totalupsize [$this->mwtime_to_unix($row->img_timestamp)];
-				
-				
-				//UPDATE IMAGE BUCKET
-				
-				$imgbucket[] = $row->img_name;
+				$pageuploads_per[$row->page_title][$this->mwtime_to_unix($row->img_timestamp)] = $pageuploads[$row->page_title][$this->mwtime_to_unix($row->img_timestamp)] / $totaluploads[$this->mwtime_to_unix($row->img_timestamp)];
+				$pageupsize_per[$row->page_title][$this->mwtime_to_unix($row->img_timestamp)] = $pageupsize[$row->page_title][$this->mwtime_to_unix($row->img_timestamp)] / $totalupsize[$this->mwtime_to_unix($row->img_timestamp)];
 			}
 			
-			echo ">> Wiki analisis accomplished.</br>";
-			ob_flush(); flush();
 			
+			echo "Querying database for uploads information in categories...</br>";
+			
+			$qstr = "select img_name, user_name, img_timestamp, img_size, page_title, cl_to from image, page, user, imagelinks, categorylinks where img_name = il_to and il_from = page_id and page_id = cl_from and img_user = user_id order by img_timestamp asc";
+			
+			//Querying database
+			$query = $link->query($qstr);
+			if($query->result()){
+				echo "Uploads found. Storing uploads information in categories...</br>";
+				ob_flush(); flush();
+			
+				//Initializing arrays
+				foreach($query->result() as $row){
+			
+					$catupsize[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] = 0;
+					$catuploadscount[$row->cl_to] = 0;
+					$catupsizecount[$row->cl_to] = 0;
+				}
+			
+				foreach($query->result() as $row){
+				
+					//CATEGORY UPLOAD INFORMATION
+					$catuploadscount[$row->cl_to] += 1;
+					$catupsizecount[$row->cl_to] += $row->img_size;
+				
+					$catuploads[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] = $catuploadscount[$row->cl_to];
+					$catimages[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] = $row->img_name;
+					$catupsize[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] = $catupsizecount[$row->cl_to];
+				
+				
+					//PERCENTAGES
+					$catuploads_per	[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] = $catuploads[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] / $totaluploads[$this->mwtime_to_unix($row->img_timestamp)];
+					$catupsize_per	[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] = $catupsize	[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] / $totalupsize [$this->mwtime_to_unix($row->img_timestamp)];
+				}
+			
+				echo ">> Wiki analisis accomplished.</br>";
+				ob_flush(); flush();
+			
+				return array(	  'catpages' => $catpages
+						, 'catpages_per' => $catpages_per
+						, 'catusers' => $catusers
+						, 'catusers_per' => $catusers_per
+						, 'catedits' => $catedits
+						, 'catedits_per' => $catedits_per
+						, 'catbytes' => $catbytes
+						, 'catbytes_per' => $catbytes_per
+						, 'useredits' => $useredits
+						, 'useredits_art' => $useredits_art
+						, 'useredits_art_per' => $useredits_art_per
+						, 'useredits_per' => $useredits_per
+						, 'userbytes' => $userbytes
+						, 'userbytes_art' => $userbytes_art
+						, 'userbytes_art_per' => $userbytes_art_per
+						, 'userbytes_per' => $userbytes_per
+						, 'usercreationcount' => $usercreationcount
+						, 'usercreatedpages' => $usercreatedpages
+						, 'userpagecount' => $userpagecount
+						, 'usercatcount' => $usercatcount
+						, 'pageedits' => $pageedits
+						, 'pagebytes' => $pageedits
+						, 'pagebytes_art' => $pageedits_art
+						, 'pagebytes_per' => $pagebytes_per
+						, 'pagebytes_art_per' => $pagebytes_art_per
+						, 'pageedits_per' => $pageedits_per
+						, 'pageedits_art_per' => $pageedits_art_per
+						, 'pagenamespace' => $pagenamespace
+						, 'pagevisits' => $pagevisits
+						, 'totaledits' => $totaledits
+						, 'totalpages' => $totalpages
+						, 'totalusers' => $totalusers
+						, 'totalvisits' => $totalvisits
+						, 'totalbytes' => $totalbytes
+						, 'useruploads' => $useruploads
+						, 'useruploads_per' => $useruploads_per
+						, 'userupsize' => $userupsize
+						, 'userupsize_per' => $userupsize_per
+						, 'userimages' => $userimages
+						, 'pageuploads' => $pageuploads
+						, 'pageuploads_per' => $pageuploads_per
+						, 'pageupsize' => $pageupsize
+						, 'pageupsize_per' => $pageupsize_per
+						, 'pageimages' => $pageimages
+						, 'pageusercount' => $pageusercount
+						, 'pagecatcount' => $pagecatcount
+						, 'catuploads' => $catuploads
+						, 'catuploads_per' => $catuploads_per
+						, 'catupsize' => $catupsize
+						, 'catupsize_per' => $catupsize_per
+						, 'catimages' => $catimages
+						, 'totaluploads' => $totaluploads
+						, 'totalupsize' => $totalupsize
+						, 'totalimages' => $totalimages
+						, 'revisiondate' => $revisiondate
+						, 'userid' => $userid
+						, 'iduser' => $iduser
+						, 'useractivityhour' => $useractivityhour
+						, 'useractivitywday' => $useractivitywday
+						, 'useractivityweek' => $useractivityweek
+						, 'useractivitymonth' => $useractivitymonth
+						, 'useractivityyear' => $useractivityyear
+						, 'pageactivityhour' => $pageactivityhour
+						, 'pageactivitywday' => $pageactivitywday
+						, 'pageactivityweek' => $pageactivityweek
+						, 'pageactivitymonth' => $pageactivitymonth
+						, 'pageactivityyear' => $pageactivityyear
+						, 'catactivityhour' => $catactivityhour
+						, 'catactivitywday' => $catactivitywday
+						, 'catactivityweek' => $catactivityweek
+						, 'catactivitymonth' => $catactivitymonth
+						, 'catactivityyear' => $catactivityyear
+						, 'totalactivityhour' => $totalactivityhour
+						, 'totalactivitywday' => $totalactivitywday
+						, 'totalactivityweek' => $totalactivityweek
+						, 'totalactivitymonth' => $totalactivitymonth
+						, 'totalactivityyear' => $totalactivityyear
+					);
+			}
+			
+			echo "Uploads information in categories not found.</br>";
+			ob_flush(); flush();
+			echo ">> Wiki analisis accomplished.</br>";
+   		
 			return array(	  'catpages' => $catpages
 					, 'catpages_per' => $catpages_per
 					, 'catusers' => $catusers
@@ -643,11 +636,6 @@ class Wiki_model extends CI_Model{
 					, 'pageimages' => $pageimages
 					, 'pageusercount' => $pageusercount
 					, 'pagecatcount' => $pagecatcount
-					, 'catuploads' => $catuploads
-					, 'catuploads_per' => $catuploads_per
-					, 'catupsize' => $catupsize
-					, 'catupsize_per' => $catupsize_per
-					, 'catimages' => $catimages
 					, 'totaluploads' => $totaluploads
 					, 'totalupsize' => $totalupsize
 					, 'totalimages' => $totalimages
@@ -675,7 +663,7 @@ class Wiki_model extends CI_Model{
 					, 'totalactivitymonth' => $totalactivitymonth
 					, 'totalactivityyear' => $totalactivityyear
 				);
-   		}
+		}
    		
    		echo "Uploads not found.</br>";
    		ob_flush(); flush();
