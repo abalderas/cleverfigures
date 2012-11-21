@@ -29,18 +29,27 @@ class Teacher extends CI_Controller {
    	
 	function index(){
 		
-		foreach($this->user_model->get_analisis_list($this->session->userdata('username')) as $analisis){
-			$adata = $this->analisis_model->get_analisis_data($analisis);
-			$adate[] = $analisis;
-			$awiki[] = $adata['awiki'];
-			$acolor[] = $adata['acolor'];
+		if(!$this->session->userdata('username')){
+			$datah = array('title' => lang('voc.i18n_login'));
+			
+			$this->load->view('templates/header_view', $datah);
+			$this->load->view('content/login_view');
+			$this->load->view('templates/footer_view');
 		}
+		else{
+			foreach($this->user_model->get_analisis_list($this->session->userdata('username')) as $analisis){
+				$adata = $this->analisis_model->get_analisis_data($analisis);
+				$adate[] = $analisis;
+				$awiki[] = $adata['awiki'];
+				$acolor[] = $adata['acolor'];
+			}
 		
-		$tdata = array('adate' => $adate, 'awiki' => $awiki, 'acolor' => $acolor);
-      		$datah = array('title' => lang('voc.i18n_teacher_view'));
-      		
-		$this->load->view('templates/header_view', $datah);
-		$this->load->view('content/teacher_view', $tdata);
-		$this->load->view('templates/footer_view');
+			$tdata = array('adate' => $adate, 'awiki' => $awiki, 'acolor' => $acolor);
+			$datah = array('title' => lang('voc.i18n_teacher_view'));
+			
+			$this->load->view('templates/header_view', $datah);
+			$this->load->view('content/teacher_view', $tdata);
+			$this->load->view('templates/footer_view');
+		}
 	}
 } 

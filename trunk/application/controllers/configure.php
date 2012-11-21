@@ -28,15 +28,26 @@ class Configure extends CI_Controller {
    	}
    	
 	function index(){
-		$datah = array('title' => lang('voc.i18n_configuration'));
-		$filters = array(0 => lang('voc.i18n_no_filter'));
-		$filters = array_merge($filters, $this->filter_model->get_filter_list($this->session->userdata('username')));
-		$defaultfilter = $this->user_model->default_filter($this->session->userdata('username'));
+	
+		if(!$this->session->userdata('username')){
+			$datah = array('title' => lang('voc.i18n_login'));
+			
+			$this->load->view('templates/header_view', $datah);
+			$this->load->view('content/login_view');
+			$this->load->view('templates/footer_view');
+		}
+		else{
 		
-      		$confdata = array('filters' => $filters, 'userdefaultfilter' => $defaultfilter);
+			$datah = array('title' => lang('voc.i18n_configuration'));
+			$filters = array(0 => lang('voc.i18n_no_filter'));
+			$filters = array_merge($filters, $this->filter_model->get_filter_list($this->session->userdata('username')));
+			$defaultfilter = $this->user_model->default_filter($this->session->userdata('username'));
+		
+			$confdata = array('filters' => $filters, 'userdefaultfilter' => $defaultfilter);
 				
-		$this->load->view('templates/header_view', $datah);
-		$this->load->view('content/configuration_view', $confdata);
-		$this->load->view('templates/footer_view');
+			$this->load->view('templates/header_view', $datah);
+			$this->load->view('content/configuration_view', $confdata);
+			$this->load->view('templates/footer_view');
+		}
 	}
 } 

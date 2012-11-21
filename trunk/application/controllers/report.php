@@ -27,10 +27,21 @@ class Report extends CI_Controller {
    	}
 
 	function index(){
-		$datah = array('title' => lang('voc.i18n_analising'));
+	
+		if(!$this->session->userdata('username')){
+			$datah = array('title' => lang('voc.i18n_login'));
+			
+			$this->load->view('templates/header_view', $datah);
+			$this->load->view('content/login_view');
+			$this->load->view('templates/footer_view');
+		}
+		else{
 		
-		$this->load->view('templates/header_view', $datah);
-		$this->load->view('content/check_results_view', $result);
-		$this->load->view('templates/footer_view');
+			$datah = array('title' => lang('voc.i18n_analising'));
+		
+			$this->load->view('templates/header_view', $datah);
+			$this->load->view('content/check_results_view', $result);
+			$this->load->view('templates/footer_view');
+		}
 	}
 }

@@ -27,10 +27,21 @@ class About extends CI_Controller {
    	}
    	
    	function index(){
-		$datah = array('title' => lang('voc.i18n_about'));
-		
-		$this->load->view('templates/header_view', $datah);
-		$this->load->view('content/about_view');
-		$this->load->view('templates/footer_view');
+   	
+		if(!$this->session->userdata('username')){
+			$datah = array('title' => lang('voc.i18n_login'));
+			
+			$this->load->view('templates/header_view', $datah);
+			$this->load->view('content/login_view');
+			$this->load->view('templates/footer_view');
+		}
+		else{
+			
+			$datah = array('title' => lang('voc.i18n_about'));
+			
+			$this->load->view('templates/header_view', $datah);
+			$this->load->view('content/about_view');
+			$this->load->view('templates/footer_view');
+		}
 	}
 }

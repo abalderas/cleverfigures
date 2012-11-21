@@ -28,6 +28,7 @@ class Analisis_form extends CI_Controller {
       		$this->load->model('filter_model');
       		$this->load->model('analisis_model');
       		$this->load->model('user_model');
+      		$this->load->model('csv_model');
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
 
@@ -45,45 +46,54 @@ class Analisis_form extends CI_Controller {
 		return $output;
 	}
 	
-   	private function analise($analisis_data){
+   	private function analise($analisis_data, $name){
 		set_time_limit (0);
 		
 		$wiki_result = array();
 		$assess_result = array();
 		
-		$wiki_result = $this->wiki_model->fetch($analisis_data['wiki']);
-		if($analisis_data['color'] != lang('voc.i18n_no_color')) $assess_result = $this->color_model->fetch($analisis_data['color']);
-		
-		return array('wiki' => $wiki_result, 'color' => $assess_result);
+		$this->wiki_model->fetch($analisis_data['wiki'], $name);
+		if($analisis_data['color'] != lang('voc.i18n_no_color')) 
+			$this->color_model->fetch($analisis_data['color'], $analisis);
    	}
    	
    	function index(){
-		$adata = array('wiki' => $_POST['select_wiki'], 
-				'color' => $_POST['select_color']
-			);
-		$datah = array('title' => lang('voc.i18n_analising'));
+   	
+		if(!$this->session->userdata('username')){
+			$datah = array('title' => lang('voc.i18n_login'));
+			
+			$this->load->view('templates/header_view', $datah);
+			$this->load->view('content/login_view');
+			$this->load->view('templates/footer_view');
+		}
+		else{
 		
-		echo $this->load->view('templates/header_view', $datah, true);
-		echo $this->load->view('content/analising_view', $adata, true);
-		ob_flush(); flush();
-		
-		$start = microtime(true);
-		
-		$result = $this->analise($adata);
-		
-		ob_flush(); flush();
-		
-		printf("Performed in %.02f seconds. Loading charts...</br>", (microtime(true)-$start));
-		ob_flush(); flush();
-		
-		//$timestamp = now();
-		
-		//$this->analisis_model->save_analisis($_POST['select_wiki'], isset($_POST['select_color'])? $_POST['select_color'] : false, $result, $timestamp);
-		//$this->user_model->relate_analisis($timestamp);
-		
-		//echo "<b>Analisis saved. You can view the results ".anchor('teacher',lang('voc.i18n_here')).".</b>";
-		
-		echo $this->load->view('content/check_results_view', $result);
-		echo $this->load->view('templates/footer_view', true);
+			$adata = array('wiki' => $_POST['select_wiki'], 
+					'color' => $_POST['select_color']
+				);
+			$datah = array('title' => lang('voc.i18n_analising'));
+			
+			echo $this->load->view('templates/header_view', $datah, true);
+			echo $this->load->view('content/analising_view', $adata, true);
+			ob_flush(); flush();
+			
+			$start = microtime(true);
+			
+			$analisis = now();
+			$this->analise($adata, $analisis);
+			
+			ob_flush(); flush();
+			
+			printf("Performed in %.02f seconds. Loading charts...</br>", (microtime(true)-$start));
+			ob_flush(); flush();
+			
+			$this->analisis_model->save_analisis($_POST['select_wiki'], isset($_POST['select_color'])? $_POST['select_color'] : false, $analisis);
+			$this->user_model->relate_analisis($analisis);
+			
+			echo "<b>Analisis saved. You can view the results ".anchor('teacher',lang('voc.i18n_here')).".</b>";
+			
+			echo $this->load->view('content/check_results_view', $analisis);
+			echo $this->load->view('templates/footer_view', true);
+		}
 	}
 }

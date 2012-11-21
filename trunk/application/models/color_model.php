@@ -44,6 +44,15 @@ class Color_model extends CI_Model{
 		return array_sum($array) / count($array);
    	}
    	
+   	function countdim($array){
+		if (is_array(reset($array)))
+			$return = countdim(reset($array)) + 1;
+		else
+			$return = 1;
+
+		return $return;
+	}
+	
    	private function wconnection($colorname){
    		//Consultamos la conexión
    		$query = $this->db->query("select color_connection from color where color_name = '$colorname'");
@@ -97,7 +106,7 @@ class Color_model extends CI_Model{
 		}
    	}
    	
-   	function fetch($colorname){
+   	function fetch($colorname, $analisis){
    	
 		//Checking that we have reference dates. Two options: 
 		//they come with the filter or they are manually 
@@ -176,7 +185,7 @@ class Color_model extends CI_Model{
    		echo ">> Assess analisis accomplished.</br>";
 		ob_flush(); flush();
    		
-   		return array(	'usermark' => $usermark
+   		$analisis_data = array(	'usermark' => $usermark
 				, 'useraverage' => $useraverage
 				, 'usermaxvalue' => $usermaxvalue
 				, 'userminvalue' => $userminvalue
@@ -206,7 +215,14 @@ class Color_model extends CI_Model{
 				, 'totalrevisor' => $totalrevisor
 			);
    		
-   		
+   		foreach(array_keys($analisis_data) as $key => $array){
+			if($this->countdim($array) == 1)
+				$this->csv_model->new_csv_dim1($analisis, $key, $array, 'X', 'Y');
+			else if ($this->countdim($array) == 2)
+				$this->csv_model->new_csv_dim2($analisis, $key, $array, 'X', 'Y');
+		}
+				
+		return true;
    	}
    	
    	function delete_color($colorname){

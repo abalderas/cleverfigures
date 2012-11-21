@@ -38,43 +38,52 @@ class Add_wiki extends CI_Controller {
 	
 	function index(){
 	
-		//Form validation rules
-		$this->form_validation->set_rules('wiki_name', lang('voc.i18n_wiki_name'), 'required|alpha_dash|xss_clean');
-		$this->form_validation->set_rules('dbname', lang('voc.i18n_dbname'), 'required|alpha_dash|xss_clean');
-		$this->form_validation->set_rules('dbserver', lang('voc.i18n_dbserver'), 'required|alpha_dash|xss_clean');
-		$this->form_validation->set_rules('dbpassword', lang('voc.i18n_dbpassword'), 'required|xss_clean');
-		$this->form_validation->set_rules('dbuser', lang('voc.i18n_dbuser'), 'required|alpha_dash|xss_clean');
-
-		//If invalid form, reload view
-		if ($this->form_validation->run() == FALSE){
-			$datah = array('title' => lang('voc.i18n_add_wiki'));
+		if(!$this->session->userdata('username')){
+			$datah = array('title' => lang('voc.i18n_login'));
+			
 			$this->load->view('templates/header_view', $datah);
-			$this->load->view('content/add_wiki_view');
+			$this->load->view('content/login_view');
 			$this->load->view('templates/footer_view');
 		}
 		else{
-			//If connection failure with given data, reload and show error
-			if(!$this->test_connection()){
+			//Form validation rules
+			$this->form_validation->set_rules('wiki_name', lang('voc.i18n_wiki_name'), 'required|alpha_dash|xss_clean');
+			$this->form_validation->set_rules('dbname', lang('voc.i18n_dbname'), 'required|alpha_dash|xss_clean');
+			$this->form_validation->set_rules('dbserver', lang('voc.i18n_dbserver'), 'required|alpha_dash|xss_clean');
+			$this->form_validation->set_rules('dbpassword', lang('voc.i18n_dbpassword'), 'required|xss_clean');
+			$this->form_validation->set_rules('dbuser', lang('voc.i18n_dbuser'), 'required|alpha_dash|xss_clean');
+
+			//If invalid form, reload view
+			if ($this->form_validation->run() == FALSE){
 				$datah = array('title' => lang('voc.i18n_add_wiki'));
-				$error = array('connection_error'=> lang('voc.i18n_connection_error'));
 				$this->load->view('templates/header_view', $datah);
-				$this->load->view('content/add_wiki_view', $error);
+				$this->load->view('content/add_wiki_view');
 				$this->load->view('templates/footer_view');
 			}
-			//Else, save wiki and load configuration view
 			else{
-				//Saving database
-				$this->wiki_model->new_wiki($_POST['wiki_name'], $_POST['dbserver'], $_POST['dbname'], $_POST['dbuser'], $_POST['dbpassword']);
-				$this->user_model->relate_wiki($_POST['wiki_name']);
-				
-				$filters = array(0 => lang('voc.i18n_no_filter'));
-				$filters = array_merge($filters, $this->filter_model->get_filter_list($this->session->userdata('username')));
-				$confdata = array('filters' => $filters, 'userdefaultfilter' => $this->user_model->default_filter($this->session->userdata('username')));
-      		
-				$datah = array('title' => lang('voc.i18n_installation'));
-				$this->load->view('templates/header_view', $datah);
-				$this->load->view('content/configuration_view', $confdata);
-				$this->load->view('templates/footer_view');
+				//If connection failure with given data, reload and show error
+				if(!$this->test_connection()){
+					$datah = array('title' => lang('voc.i18n_add_wiki'));
+					$error = array('connection_error'=> lang('voc.i18n_connection_error'));
+					$this->load->view('templates/header_view', $datah);
+					$this->load->view('content/add_wiki_view', $error);
+					$this->load->view('templates/footer_view');
+				}
+				//Else, save wiki and load configuration view
+				else{
+					//Saving database
+					$this->wiki_model->new_wiki($_POST['wiki_name'], $_POST['dbserver'], $_POST['dbname'], $_POST['dbuser'], $_POST['dbpassword']);
+					$this->user_model->relate_wiki($_POST['wiki_name']);
+					
+					$filters = array(0 => lang('voc.i18n_no_filter'));
+					$filters = array_merge($filters, $this->filter_model->get_filter_list($this->session->userdata('username')));
+					$confdata = array('filters' => $filters, 'userdefaultfilter' => $this->user_model->default_filter($this->session->userdata('username')));
+			
+					$datah = array('title' => lang('voc.i18n_installation'));
+					$this->load->view('templates/header_view', $datah);
+					$this->load->view('content/configuration_view', $confdata);
+					$this->load->view('templates/footer_view');
+				}
 			}
 		}
 	}

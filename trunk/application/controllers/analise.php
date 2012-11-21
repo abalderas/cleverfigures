@@ -30,21 +30,32 @@ class Analise extends CI_Controller {
    	}
    	
    	function index(){
-		$datah = array('title' => lang('voc.i18n_analise'));
+   	
+		if(!$this->session->userdata('username')){
+			$datah = array('title' => lang('voc.i18n_login'));
+			
+			$this->load->view('templates/header_view', $datah);
+			$this->load->view('content/login_view');
+			$this->load->view('templates/footer_view');
+		}
+		else{
 		
-		$colors = array(0 => lang('voc.i18n_no_color'));
-		$colors = array_merge($colors, $this->color_model->get_color_list($this->session->userdata('username')));
-		
-		$filters = array(lang('voc.i18n_no_filter') => lang('voc.i18n_no_filter'));
-		$filters = array_merge($filters, $this->filter_model->get_filter_list($this->session->userdata('username')));
-		
-		$wikis = array(lang('voc.i18n_no_wiki') => lang('voc.i18n_no_wiki')); 
-		$wikis = array_merge($wikis, $this->wiki_model->get_wiki_list($this->session->userdata('username')));
-		
-		$adata = array('wikis' => $wikis, 'colors' => $colors, 'filters' => $filters);
-		
-		$this->load->view('templates/header_view', $datah);
-		$this->load->view('content/analise_view', $adata);
-		$this->load->view('templates/footer_view');
+			$datah = array('title' => lang('voc.i18n_analise'));
+			
+			$colors = array(0 => lang('voc.i18n_no_color'));
+			$colors = array_merge($colors, $this->color_model->get_color_list($this->session->userdata('username')));
+			
+			$filters = array(lang('voc.i18n_no_filter') => lang('voc.i18n_no_filter'));
+			$filters = array_merge($filters, $this->filter_model->get_filter_list($this->session->userdata('username')));
+			
+			$wikis = array(lang('voc.i18n_no_wiki') => lang('voc.i18n_no_wiki')); 
+			$wikis = array_merge($wikis, $this->wiki_model->get_wiki_list($this->session->userdata('username')));
+			
+			$adata = array('wikis' => $wikis, 'colors' => $colors, 'filters' => $filters);
+			
+			$this->load->view('templates/header_view', $datah);
+			$this->load->view('content/analise_view', $adata);
+			$this->load->view('templates/footer_view');
+		}
 	}
 }

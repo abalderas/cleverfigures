@@ -139,16 +139,32 @@ class Wiki_model extends CI_Model{
 		return $res;
    	}
    	
-   	function fetch($wikiname){
+   	function countdim($array){
+		if (is_array(reset($array)))
+			$return = $this->countdim(reset($array)) + 1;
+		else
+			$return = 1;
+
+		return $return;
+	}
+   	
+   	function fetch($wikiname, $analisis){
 		
+		//Creating directory to store data
+		
+		mkdir("analisis/$analisis");
+		
+		//Starting the analisis
 		echo ">> Analisis started. </br>";
 		echo "Connecting to database...</br>";
 		ob_flush(); flush();
+		
 		//Connecting to the wiki database
    		$link = $this->connection_model->connect($this->wconnection($wikiname));
    		
    		echo "Querying database for general information...</br>";
    		ob_flush(); flush();
+   		
    		//Creating query string for the general query
    		$qstr = "select rev_id, rev_page, page_title, page_counter, page_namespace, page_is_new, user_id, user_name, user_real_name, user_email, user_registration, rev_timestamp, rev_len from revision, user, page where rev_page = page_id and rev_user = user_id order by rev_timestamp asc";		
 		
@@ -157,10 +173,11 @@ class Wiki_model extends CI_Model{
    		
    		//If no results then return false
    		if(!$query->result()) 
-			die ("ERROR");
+			return false;
 			
    		echo "Storing information...</br>";
    		ob_flush(); flush();
+   		
    		//Initializing arrays for storing information
    		foreach($query->result() as $row){
 			
@@ -203,7 +220,7 @@ class Wiki_model extends CI_Model{
    		
    		//Storing classified information in arrays
    		
-   		//This loop clasifies all the data contained in the query (which ignores uploads info) in arrays that will be returned at the end of the function. 
+   		//This loop clasifies all the data contained in the query (which ignores uploads info) in arrays. 
    		foreach($query->result() as $row){
    			
    			//USEFUL VARIABLES
@@ -314,11 +331,6 @@ class Wiki_model extends CI_Model{
 				$pageedits_art_per	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pageedits_art	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] / $totaledits[$this->mwtime_to_unix($row->rev_timestamp)];
 				$pagebytes_art_per	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pagebytes_art	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] / $totalbytes[$this->mwtime_to_unix($row->rev_timestamp)];
 			}
-			
-			
-			//UPDATE REVISION BUCKET
-			
-			$revbucket[] = $row->rev_id;
    		}
    		
    		echo "Querying database for category information...</br>";
@@ -334,6 +346,7 @@ class Wiki_model extends CI_Model{
 			
    		echo "Storing category information...</br>";
    		ob_flush(); flush();
+   		
    		//Initializing arrays for storing information
    		foreach($query->result() as $row){
 			
@@ -355,7 +368,7 @@ class Wiki_model extends CI_Model{
    		
    		//Storing classified information in arrays
    		
-   		//This loop clasifies all the data contained in the query (which ignores uploads info) in arrays that will be returned at the end of the function. 
+   		//This loop clasifies categories data contained in the query (which ignores uploads info) in arrays. 
    		foreach($query->result() as $row){
    			
    			//USEFUL VARIABLES
@@ -407,6 +420,7 @@ class Wiki_model extends CI_Model{
    		
    		echo "Querying database for uploads information...</br>";
    		ob_flush(); flush();
+   		
    		//Creating query string for the uploads query
    		$qstr = "select img_name, user_name, img_timestamp, img_size, page_title from image, page, user, imagelinks where img_name = il_to and il_from = page_id and img_user = user_id order by img_timestamp asc";
 		
@@ -417,6 +431,7 @@ class Wiki_model extends CI_Model{
    		if($query->result()){
    		echo "Uploads found. Storing uploads information...</br>";
    		ob_flush(); flush();
+   		
 			//Initializing arrays
 			foreach($query->result() as $row){
 			
@@ -505,8 +520,8 @@ class Wiki_model extends CI_Model{
 			
 				echo ">> Wiki analisis accomplished.</br>";
 				ob_flush(); flush();
-			
-				return array(	  'catpages' => $catpages
+				
+				$analisis_data = array(	  'catpages' => $catpages
 						, 'catpages_per' => $catpages_per
 						, 'catusers' => $catusers
 						, 'catusers_per' => $catusers_per
@@ -522,6 +537,7 @@ class Wiki_model extends CI_Model{
 						, 'userbytes_art' => $userbytes_art
 						, 'userbytes_art_per' => $userbytes_art_per
 						, 'userbytes_per' => $userbytes_per
+						, 'userrealname' => $userrealname
 						, 'usercreationcount' => $usercreationcount
 						, 'usercreatedpages' => $usercreatedpages
 						, 'userpagecount' => $userpagecount
@@ -584,13 +600,22 @@ class Wiki_model extends CI_Model{
 						, 'totalactivitymonth' => $totalactivitymonth
 						, 'totalactivityyear' => $totalactivityyear
 					);
+					
+				foreach($analisis_data as $key => $array){
+					if($this->countdim($array) == 1)
+						$this->csv_model->new_csv_dim1($analisis, $key, $array, 'X', 'Y');
+					else if ($this->countdim($array) == 2)
+						$this->csv_model->new_csv_dim2($analisis, $key, $array, 'X', 'Y');
+				}
+				
+				return true;
 			}
 			
 			echo "Uploads information in categories not found.</br>";
 			ob_flush(); flush();
 			echo ">> Wiki analisis accomplished.</br>";
    		
-			return array(	  'catpages' => $catpages
+			$analisis_data = array(	  'catpages' => $catpages
 					, 'catpages_per' => $catpages_per
 					, 'catusers' => $catusers
 					, 'catusers_per' => $catusers_per
@@ -603,6 +628,7 @@ class Wiki_model extends CI_Model{
 					, 'useredits_art_per' => $useredits_art_per
 					, 'useredits_per' => $useredits_per
 					, 'userbytes' => $userbytes
+					, 'userrealname' => $userrealname
 					, 'userbytes_art' => $userbytes_art
 					, 'userbytes_art_per' => $userbytes_art_per
 					, 'userbytes_per' => $userbytes_per
@@ -663,6 +689,15 @@ class Wiki_model extends CI_Model{
 					, 'totalactivitymonth' => $totalactivitymonth
 					, 'totalactivityyear' => $totalactivityyear
 				);
+				
+			foreach($analisis_data as $key => $array){
+				if($this->countdim($array) == 1)
+					$this->csv_model->new_csv_dim1($analisis, $key, $array, 'X', 'Y');
+				else if ($this->countdim($array) == 2)
+					$this->csv_model->new_csv_dim2($analisis, $key, $array, 'X', 'Y');
+			}
+				
+			return true;
 		}
    		
    		echo "Uploads not found.</br>";
@@ -670,7 +705,7 @@ class Wiki_model extends CI_Model{
    		echo ">> Wiki analisis accomplished.</br>";
    		ob_flush(); flush();
    		
-   		return array(	  'catpages' => $catpages
+   		$analisis_data = array(	  'catpages' => $catpages
 				, 'catpages_per' => $catpages_per
 				, 'catusers' => $catusers
 				, 'catusers_per' => $catusers_per
@@ -684,6 +719,7 @@ class Wiki_model extends CI_Model{
 				, 'useredits_per' => $useredits_per
 				, 'userbytes' => $userbytes
 				, 'userbytes_art' => $userbytes_art
+				, 'userrealname' => $userrealname
 				, 'userbytes_art_per' => $userbytes_art_per
 				, 'userbytes_per' => $userbytes_per
 				, 'usercreationcount' => $usercreationcount
@@ -730,8 +766,15 @@ class Wiki_model extends CI_Model{
 				, 'totalactivitymonth' => $totalactivitymonth
 				, 'totalactivityyear' => $totalactivityyear
 			);
-   		
-   		
+			
+		foreach($analisis_data as $key => $array){
+			if($this->countdim($array) == 1)
+				$this->csv_model->new_csv_dim1($analisis, $key, $array, 'X', 'Y');
+			else if ($this->countdim($array) == 2)
+				$this->csv_model->new_csv_dim2($analisis, $key, $array, 'X', 'Y');
+		}
+			
+		return true;
    	}
    	
    	function delete_wiki($wikiname){

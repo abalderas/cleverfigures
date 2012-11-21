@@ -32,7 +32,7 @@ class Analisis_model extends CI_Model{
 		$ci->load->model('wiki_model');
    	}
    	
-   	function save_analisis($wikiname, $colorname = "", $data, $date){
+   	function save_analisis($wikiname, $colorname = "", $date){
 		
 		$sql = array(
 			'analisis_id' => "",
@@ -46,9 +46,6 @@ class Analisis_model extends CI_Model{
 		//Checking no errors
 		if($this->db->affected_rows() != 1) 
 			return "perform_analisis(): ERR_AFFECTED_ROWS (".$this->db->affected_rows().")";
-			
-		//Saving serialized data in file
-		write_file('analisis/'."$date".'.dat', serialize($data));
    	}
    	
    	function delete_analisis($analisis){
