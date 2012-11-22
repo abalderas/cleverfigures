@@ -32,7 +32,7 @@ class Analisis_model extends CI_Model{
 		$ci->load->model('wiki_model');
    	}
    	
-   	function save_analisis($wikiname, $colorname = "", $date){
+   	function resgister_analisis($wikiname, $colorname = "", $date){
 		
 		$sql = array(
 			'analisis_id' => "",

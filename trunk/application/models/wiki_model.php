@@ -119,7 +119,7 @@ class Wiki_model extends CI_Model{
 				$value = "Array()" . $newline . "(<ul>" . $this->displayTree($value) . "</ul>)" . $newline;
 			}
 			//if value isn't an array, it must be a string. output its' key and value.
-			$output .= "[".unix_to_human($key)."] => " . $value . $newline;
+			$output .= "[".$key."] => " . $value . $newline;
 		}
 		return $output;
 	}
@@ -517,9 +517,6 @@ class Wiki_model extends CI_Model{
 					$catuploads_per	[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] = $catuploads[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] / $totaluploads[$this->mwtime_to_unix($row->img_timestamp)];
 					$catupsize_per	[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] = $catupsize	[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] / $totalupsize [$this->mwtime_to_unix($row->img_timestamp)];
 				}
-			
-				echo ">> Wiki analisis accomplished.</br>";
-				ob_flush(); flush();
 				
 				$analisis_data = array(	  'catpages' => $catpages
 						, 'catpages_per' => $catpages_per
@@ -601,19 +598,23 @@ class Wiki_model extends CI_Model{
 						, 'totalactivityyear' => $totalactivityyear
 					);
 					
-				foreach($analisis_data as $key => $array){
-					if($this->countdim($array) == 1)
-						$this->csv_model->new_csv_dim1($analisis, $key, $array, 'X', 'Y');
-					else if ($this->countdim($array) == 2)
-						$this->csv_model->new_csv_dim2($analisis, $key, $array, 'X', 'Y');
+				foreach(array_keys($analisis_data) as $key){
+					if(gettype($analisis_data[$key]) == 'integer')
+						$this->csv_model->array_to_dim0($analisis, $key, $analisis_data[$key]);
+					else if($this->countdim($analisis_data[$key]) == 1)
+						$this->csv_model->array_to_dim1($analisis, $key, $analisis_data[$key], 'X', 'Y');
+					else if ($this->countdim($analisis_data[$key]) == 2)
+						$this->csv_model->array_to_dim2($analisis, $key, $analisis_data[$key], 'X', 'Y');
 				}
+				
+				echo ">> Wiki analisis accomplished.</br>";
+				ob_flush(); flush();
 				
 				return true;
 			}
 			
 			echo "Uploads information in categories not found.</br>";
 			ob_flush(); flush();
-			echo ">> Wiki analisis accomplished.</br>";
    		
 			$analisis_data = array(	  'catpages' => $catpages
 					, 'catpages_per' => $catpages_per
@@ -690,19 +691,22 @@ class Wiki_model extends CI_Model{
 					, 'totalactivityyear' => $totalactivityyear
 				);
 				
-			foreach($analisis_data as $key => $array){
-				if($this->countdim($array) == 1)
-					$this->csv_model->new_csv_dim1($analisis, $key, $array, 'X', 'Y');
-				else if ($this->countdim($array) == 2)
-					$this->csv_model->new_csv_dim2($analisis, $key, $array, 'X', 'Y');
+			foreach(array_keys($analisis_data) as $key){
+				if(gettype($analisis_data[$key]) == 'integer')
+					$this->csv_model->array_to_dim0($analisis, $key, $analisis_data[$key]);
+				else if($this->countdim($analisis_data[$key]) == 1)
+					$this->csv_model->array_to_dim1($analisis, $key, $analisis_data[$key], 'X', 'Y');
+				else if ($this->countdim($analisis_data[$key]) == 2)
+					$this->csv_model->array_to_dim2($analisis, $key, $analisis_data[$key], 'X', 'Y');
 			}
+				
+			echo ">> Wiki analisis accomplished.</br>";
+			ob_flush(); flush();
 				
 			return true;
 		}
    		
    		echo "Uploads not found.</br>";
-   		ob_flush(); flush();
-   		echo ">> Wiki analisis accomplished.</br>";
    		ob_flush(); flush();
    		
    		$analisis_data = array(	  'catpages' => $catpages
@@ -767,12 +771,17 @@ class Wiki_model extends CI_Model{
 				, 'totalactivityyear' => $totalactivityyear
 			);
 			
-		foreach($analisis_data as $key => $array){
-			if($this->countdim($array) == 1)
-				$this->csv_model->new_csv_dim1($analisis, $key, $array, 'X', 'Y');
-			else if ($this->countdim($array) == 2)
-				$this->csv_model->new_csv_dim2($analisis, $key, $array, 'X', 'Y');
+		foreach(array_keys($analisis_data) as $key){
+			if(gettype($analisis_data[$key]) == 'integer')
+				$this->csv_model->array_to_dim0($analisis, $key, $analisis_data[$key]);
+			else if($this->countdim($analisis_data[$key]) == 1)
+				$this->csv_model->array_to_dim1($analisis, $key, $analisis_data[$key], 'X', 'Y');
+			else if ($this->countdim($analisis_data[$key]) == 2)
+				$this->csv_model->array_to_dim2($analisis, $key, $analisis_data[$key], 'X', 'Y');
 		}
+				
+		echo ">> Wiki analisis accomplished.</br>";
+		ob_flush(); flush();
 			
 		return true;
    	}

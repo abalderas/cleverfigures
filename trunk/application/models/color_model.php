@@ -46,7 +46,7 @@ class Color_model extends CI_Model{
    	
    	function countdim($array){
 		if (is_array(reset($array)))
-			$return = countdim(reset($array)) + 1;
+			$return = $this->countdim(reset($array)) + 1;
 		else
 			$return = 1;
 
@@ -135,9 +135,6 @@ class Color_model extends CI_Model{
    		//Storing classified information in arrays 
    		foreach($query->result() as $row){
    			
-   			//USEFUL VARIABLES
-   			
-   			
    			//USER INFORMATION
 			
 			$usermark	[$row->eva_user][$row->eva_revision] = $row->ee_nota;
@@ -215,11 +212,11 @@ class Color_model extends CI_Model{
 				, 'totalrevisor' => $totalrevisor
 			);
    		
-   		foreach(array_keys($analisis_data) as $key => $array){
-			if($this->countdim($array) == 1)
-				$this->csv_model->new_csv_dim1($analisis, $key, $array, 'X', 'Y');
-			else if ($this->countdim($array) == 2)
-				$this->csv_model->new_csv_dim2($analisis, $key, $array, 'X', 'Y');
+   		foreach(array_keys($analisis_data) as $key){
+			if($this->countdim($analisis_data[$key]) == 1)
+				$this->csv_model->array_to_dim1($analisis, $key, $analisis_data[$key], 'X', 'Y');
+			else if ($this->countdim($analisis_data[$key]) == 2)
+				$this->csv_model->array_to_dim2($analisis, $key, $analisis_data[$key], 'X', 'Y');
 		}
 				
 		return true;

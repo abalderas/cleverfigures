@@ -339,43 +339,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	</tr>
 	</table>
 	
-	<table id = "bodytable">
-	<tr>
-		<th>User</th>
-		<th>Real Name</th>
-		<th>Editions</th>
-		<th>%</th>
-		<th>Editions in articles</th>
-		<th>%</th>
-		<th>Bytes</th>
-		<th>%</th>
-		<th>Bytes in articles</th>
-		<th>%</th>
-		<th>Uploads</th>
-		<th>%</th>
-		<th>Created Pages</th>
-	</tr>
-	<?
-		foreach(array_keys($wiki['iduser']) as $key){
-			echo "<tr>";
-			echo "<td>".$key."</td>";
-			echo "<td>".$wiki['userrealname'][$key]."</td>";
-			echo "<td>".end($wiki['useredits'][$key])."</td>";
-			echo "<td>".end($wiki['useredits_per'][$key])."</td>";
-			echo "<td>".end($wiki['useredits_art'][$key])."</td>";
-			echo "<td>".end($wiki['useredits_art_per'][$key])."</td>";
-			echo "<td>".end($wiki['userbytes'][$key])."</td>";
-			echo "<td>".end($wiki['userbytes_per'][$key])."</td>";
-			echo "<td>".end($wiki['userbytes_art'][$key])."</td>";
-			echo "<td>".end($wiki['userbytes_art_per'][$key])."</td>";
-			echo "<td>".end($wiki['useruploads'][$key])."</td>";
-			echo "<td>".end($wiki['useruploads_per'][$key])."</td>";
-			echo "<td>".$wiki['usercreationcount'][$key]."</td>";
-			echo "</tr>";
-		}
-	?>
-	</table>
+	<?=$infotables?>
 			
 <!-- [2] www.christophermonnat.com/2008/08/generating-pdf-files-using-codeigniter -->
-<!--[1] TO_DO: add more charts-->
 <!--[2] TO_DO: generate pdf-->
