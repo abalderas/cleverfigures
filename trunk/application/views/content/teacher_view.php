@@ -34,7 +34,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 				echo "<td>".$awiki[$i]."</td>";
 				echo "<td>".$acolor[$i]."</td>";
 				echo form_open('options_form');
-				echo "<label id = \"alabel\" type = \"hidden\" value = \"".$adate[$i]."\"></label>";
+				echo form_hidden('aname', $adate[$i]);
 				echo "<td>".form_submit('view', lang('voc.i18n_view'))." ".form_submit('delete', lang('voc.i18n_delete'))."</td>";
 				echo form_close();
 			echo "</tr>";

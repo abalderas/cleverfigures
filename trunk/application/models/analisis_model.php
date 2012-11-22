@@ -49,17 +49,18 @@ class Analisis_model extends CI_Model{
    	}
    	
    	function delete_analisis($analisis){
+		echo $analisis;
+		$check = $this->db->query("select analisis_date from analisis where analisis_date = '$analisis'");
+   		if(!$check->result())
+   			die( "delete_analisis(): ERR_NONEXISTENT");
 		
-		$check = $this->db->query("select analisis_id from analisis where analisis_id == $analisis");
-   		if($check->result()->num_rows() == 0)
-   			return "delete_analisis(): ERR_NONEXISTENT";
-   	
-		$this->db->delete('analisis', array('analisis_id' => $analisis));
-		$this->db->delete('wimage', array('wi_analisis' => $analisis));
-		$this->db->delete('wuser', array('wu_analisis' => $analisis));
-		$this->db->delete('wpage', array('wp_analisis' => $analisis));
-		$this->db->delete('wcategory', array('wc_analisis' => $analisis));
-		$this->db->delete('wgeneral', array('wgen_analisis' => $analisis));
+		$check = $this->db->query("DELETE FROM analisis WHERE analisis_date = '$analisis'");
+		$check = $this->db->query("DELETE FROM `user-analisis` WHERE analisis_date = '$analisis'");
+		
+		delete_files("analisis/$analisis/");
+		rmdir("analisis/$analisis/");
+		
+		return true;
    	}
    	
    	function get_analisis_data($date){
