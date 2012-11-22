@@ -600,11 +600,11 @@ class Wiki_model extends CI_Model{
 					
 				foreach(array_keys($analisis_data) as $key){
 					if(gettype($analisis_data[$key]) == 'integer')
-						$this->csv_model->array_to_dim0($analisis, $key, $analisis_data[$key]);
+						$this->csv_model->array_to_csv_dim0($analisis, $key, $analisis_data[$key]);
 					else if($this->countdim($analisis_data[$key]) == 1)
-						$this->csv_model->array_to_dim1($analisis, $key, $analisis_data[$key], 'X', 'Y');
+						$this->csv_model->array_to_csv_dim1($analisis, $key, $analisis_data[$key], 'X', 'Y');
 					else if ($this->countdim($analisis_data[$key]) == 2)
-						$this->csv_model->array_to_dim2($analisis, $key, $analisis_data[$key], 'X', 'Y');
+						$this->csv_model->array_to_csv_dim2($analisis, $key, $analisis_data[$key], 'X', 'Y');
 				}
 				
 				echo ">> Wiki analisis accomplished.</br>";
@@ -693,11 +693,11 @@ class Wiki_model extends CI_Model{
 				
 			foreach(array_keys($analisis_data) as $key){
 				if(gettype($analisis_data[$key]) == 'integer')
-					$this->csv_model->array_to_dim0($analisis, $key, $analisis_data[$key]);
+					$this->csv_model->array_to_csv_dim0($analisis, $key, $analisis_data[$key]);
 				else if($this->countdim($analisis_data[$key]) == 1)
-					$this->csv_model->array_to_dim1($analisis, $key, $analisis_data[$key], 'X', 'Y');
+					$this->csv_model->array_to_csv_dim1($analisis, $key, $analisis_data[$key], 'X', 'Y');
 				else if ($this->countdim($analisis_data[$key]) == 2)
-					$this->csv_model->array_to_dim2($analisis, $key, $analisis_data[$key], 'X', 'Y');
+					$this->csv_model->array_to_csv_dim2($analisis, $key, $analisis_data[$key], 'X', 'Y');
 			}
 				
 			echo ">> Wiki analisis accomplished.</br>";
@@ -773,11 +773,11 @@ class Wiki_model extends CI_Model{
 			
 		foreach(array_keys($analisis_data) as $key){
 			if(gettype($analisis_data[$key]) == 'integer')
-				$this->csv_model->array_to_dim0($analisis, $key, $analisis_data[$key]);
+				$this->csv_model->array_to_csv_dim0($analisis, $key, $analisis_data[$key]);
 			else if($this->countdim($analisis_data[$key]) == 1)
-				$this->csv_model->array_to_dim1($analisis, $key, $analisis_data[$key], 'X', 'Y');
+				$this->csv_model->array_to_csv_dim1($analisis, $key, $analisis_data[$key], 'X', 'Y');
 			else if ($this->countdim($analisis_data[$key]) == 2)
-				$this->csv_model->array_to_dim2($analisis, $key, $analisis_data[$key], 'X', 'Y');
+				$this->csv_model->array_to_csv_dim2($analisis, $key, $analisis_data[$key], 'X', 'Y');
 		}
 				
 		echo ">> Wiki analisis accomplished.</br>";

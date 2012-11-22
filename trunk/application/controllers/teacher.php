@@ -43,8 +43,12 @@ class Teacher extends CI_Controller {
 				$awiki[] = $adata['awiki'];
 				$acolor[] = $adata['acolor'];
 			}
-		
-			$tdata = array('adate' => $adate, 'awiki' => $awiki, 'acolor' => $acolor);
+			
+			if(isset($adata))
+				$tdata = array('adate' => $adate, 'awiki' => $awiki, 'acolor' => $acolor);
+			else
+				$tdata = array();
+				
 			$datah = array('title' => lang('voc.i18n_teacher_view'));
 			
 			$this->load->view('templates/header_view', $datah);

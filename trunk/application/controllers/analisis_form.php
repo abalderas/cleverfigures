@@ -84,17 +84,13 @@ class Analisis_form extends CI_Controller {
 			
 			ob_flush(); flush();
 			
-			printf("Performed in %.02f seconds. Loading charts...</br>", (microtime(true)-$start));
+			printf("Performed in %.02f seconds.</br>", (microtime(true)-$start));
 			ob_flush(); flush();
 			
 			$this->analisis_model->register_analisis($_POST['select_wiki'], isset($_POST['select_color'])? $_POST['select_color'] : false, $analisis);
 			$this->user_model->relate_analisis($analisis);
 			
 			echo "<b>Analisis saved. You can view the results ".anchor('teacher',lang('voc.i18n_here')).".</b>";
-			
-			$data =
-			
-			echo $this->load->view('content/check_results_view', $data);
 			echo $this->load->view('templates/footer_view', true);
 		}
 	}

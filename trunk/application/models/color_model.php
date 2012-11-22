@@ -214,9 +214,9 @@ class Color_model extends CI_Model{
    		
    		foreach(array_keys($analisis_data) as $key){
 			if($this->countdim($analisis_data[$key]) == 1)
-				$this->csv_model->array_to_dim1($analisis, $key, $analisis_data[$key], 'X', 'Y');
+				$this->csv_model->array_to_csv_dim1($analisis, $key, $analisis_data[$key], 'X', 'Y');
 			else if ($this->countdim($analisis_data[$key]) == 2)
-				$this->csv_model->array_to_dim2($analisis, $key, $analisis_data[$key], 'X', 'Y');
+				$this->csv_model->array_to_csv_dim2($analisis, $key, $analisis_data[$key], 'X', 'Y');
 		}
 				
 		return true;
