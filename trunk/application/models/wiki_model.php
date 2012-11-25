@@ -41,6 +41,7 @@ class Wiki_model extends CI_Model{
    	   	//Cargamos models necesarios
    	   	$ci =& get_instance();
 		$ci->load->model('connection_model');
+		$ci->load->helper('file');
 		
 		$cf =& get_instance();
 		$cf->load->model('filter_model');
@@ -597,20 +598,12 @@ class Wiki_model extends CI_Model{
 						, 'totalactivitymonth' => $totalactivitymonth
 						, 'totalactivityyear' => $totalactivityyear
 					);
-					
-				foreach(array_keys($analisis_data) as $key){
-					if(gettype($analisis_data[$key]) == 'integer')
-						$this->csv_model->array_to_csv_dim0($analisis, $key, $analisis_data[$key]);
-					else if($this->countdim($analisis_data[$key]) == 1)
-						$this->csv_model->array_to_csv_dim1($analisis, $key, $analisis_data[$key], 'X', 'Y');
-					else if ($this->countdim($analisis_data[$key]) == 2)
-						$this->csv_model->array_to_csv_dim2($analisis, $key, $analisis_data[$key], 'X', 'Y');
-				}
+				
 				
 				echo ">> Wiki analisis accomplished.</br>";
 				ob_flush(); flush();
 				
-				return true;
+				return $analisis_data;
 			}
 			
 			echo "Uploads information in categories not found.</br>";
@@ -691,19 +684,11 @@ class Wiki_model extends CI_Model{
 					, 'totalactivityyear' => $totalactivityyear
 				);
 				
-			foreach(array_keys($analisis_data) as $key){
-				if(gettype($analisis_data[$key]) == 'integer')
-					$this->csv_model->array_to_csv_dim0($analisis, $key, $analisis_data[$key]);
-				else if($this->countdim($analisis_data[$key]) == 1)
-					$this->csv_model->array_to_csv_dim1($analisis, $key, $analisis_data[$key], 'X', 'Y');
-				else if ($this->countdim($analisis_data[$key]) == 2)
-					$this->csv_model->array_to_csv_dim2($analisis, $key, $analisis_data[$key], 'X', 'Y');
-			}
 				
 			echo ">> Wiki analisis accomplished.</br>";
 			ob_flush(); flush();
 				
-			return true;
+			return $analisis_data;
 		}
    		
    		echo "Uploads not found.</br>";
@@ -771,19 +756,10 @@ class Wiki_model extends CI_Model{
 				, 'totalactivityyear' => $totalactivityyear
 			);
 			
-		foreach(array_keys($analisis_data) as $key){
-			if(gettype($analisis_data[$key]) == 'integer')
-				$this->csv_model->array_to_csv_dim0($analisis, $key, $analisis_data[$key]);
-			else if($this->countdim($analisis_data[$key]) == 1)
-				$this->csv_model->array_to_csv_dim1($analisis, $key, $analisis_data[$key], 'X', 'Y');
-			else if ($this->countdim($analisis_data[$key]) == 2)
-				$this->csv_model->array_to_csv_dim2($analisis, $key, $analisis_data[$key], 'X', 'Y');
-		}
-				
 		echo ">> Wiki analisis accomplished.</br>";
 		ob_flush(); flush();
 			
-		return true;
+		return $analisis_data;
    	}
    	
    	function delete_wiki($wikiname){

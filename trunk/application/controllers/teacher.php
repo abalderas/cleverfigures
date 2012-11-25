@@ -38,13 +38,12 @@ class Teacher extends CI_Controller {
 		}
 		else{
 			foreach($this->user_model->get_analisis_list($this->session->userdata('username')) as $analisis){
-				$adata = $this->analisis_model->get_analisis_data($analisis);
 				$adate[] = $analisis;
-				$awiki[] = $adata['awiki'];
-				$acolor[] = $adata['acolor'];
+				$awiki[] = $this->analisis_model->get_analisis_wiki($analisis);
+				$acolor[] = $this->analisis_model->get_analisis_color($analisis);
 			}
 			
-			if(isset($adata))
+			if(isset($adate))
 				$tdata = array('adate' => $adate, 'awiki' => $awiki, 'acolor' => $acolor);
 			else
 				$tdata = array();

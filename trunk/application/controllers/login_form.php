@@ -39,8 +39,8 @@ class Login_form extends CI_Controller {
 				foreach($this->user_model->get_analisis_list($this->session->userdata('username')) as $analisis){
 					$adata = $this->analisis_model->get_analisis_data($analisis);
 					$adate[] = $analisis;
-					$awiki[] = $adata['awiki'];
-					$acolor[] = $adata['acolor'];
+					$awiki[] = $this->analisis_model->get_analisis_wiki($analisis);
+					$acolor[] = $this->analisis_model->get_analisis_color($analisis);
 				}
 		
 				$tdata = array('adate' => $adate, 'awiki' => $awiki, 'acolor' => $acolor);

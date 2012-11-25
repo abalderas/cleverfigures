@@ -59,15 +59,31 @@ class Analisis_model extends CI_Model{
 		
 		delete_files("analisis/$analisis/");
 		rmdir("analisis/$analisis/");
+		unlink("analisis/$analisis.dat");
 		
 		return true;
    	}
    	
    	function get_analisis_data($date){
+		$data = $this->db->query("select * from analisis where analisis_date = '$date'");
+		if(!$data->result())
+			return false;
+		return unserialize(read_file("analisis/$date.dat"));
+   	}
+   	
+   	function get_analisis_wiki($date){
 		$data = $this->db->get_where('analisis', array('analisis_date' => $date));
 		if(!$data->result())
 			return false;
 		foreach($data->result() as $row)
-			return array('awiki' => $row->analisis_wiki_name, 'acolor' => $row->analisis_color_name);
+			return $row->analisis_wiki_name;
+   	}
+   	
+   	function get_analisis_color($date){
+		$data = $this->db->get_where('analisis', array('analisis_date' => $date));
+		if(!$data->result())
+			return false;
+		foreach($data->result() as $row)
+			return $row->analisis_color_name;
    	}
 }

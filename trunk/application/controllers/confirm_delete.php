@@ -50,11 +50,7 @@ class Confirm_delete extends CI_Controller {
 				redirect('teacher');
 			}
 			else if(isset($_POST['cancel'])){
-				$datah = array('title' => lang('voc.i18n_check_results'));
-				
-				$this->load->view('templates/header_view', $datah);
-				$this->load->view('content/check_results_view', $_POST['alabel']);
-				$this->load->view('templates/footer_view');
+				redirect('teacher');
 			}
 			else die('FATAL ERROR');
 		}

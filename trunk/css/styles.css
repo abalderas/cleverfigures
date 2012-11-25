@@ -109,20 +109,6 @@ background-color:#EAF2D3;
 min-height:29px;
 }
 
-#resultstable {
-	min-width: 800px;
-	table-layout: fixed;
-	margin-left: auto;
-	margin-right: auto;
-	text-align: center;
-	border: solid 1px black;
-}
-
-#resultstable td, #resultstable th{
-	border: solid 1px black;
-	padding:10px;
-}
-
 /* INSTALLATION AND LOGIN FORMS */
 
 #formins {
