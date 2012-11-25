@@ -52,11 +52,11 @@ class Analisis_form extends CI_Controller {
 		$wiki_result = array();
 		$assess_result = array();
 		
-		$wiki = $this->wiki_model->fetch($analisis_data['wiki'], $name);
+		$wiki_result = $this->wiki_model->fetch($analisis_data['wiki'], $name);
 		if($analisis_data['color'] != lang('voc.i18n_no_color')) 
-			$color = $this->color_model->fetch($analisis_data['color'], $name);
+			$assess_result = $this->color_model->fetch($analisis_data['color'], $name);
 			
-		write_file("analisis/$name.dat", serialize(array_merge($wiki, $color)));
+		write_file("analisis/$name.dat", serialize(array_merge($wiki_result, $assess_result)));
    	}
    	
    	function index(){
