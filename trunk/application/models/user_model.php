@@ -68,6 +68,12 @@ class User_model extends CI_Model{
 		$this->db->update('user', $data); 
    	}
    	
+   	function update_password($uname, $password){
+   		$data = array('user_password' => $lang);
+		$this->db->where('user_username', $uname);
+		$this->db->update('user', $data); 
+   	}
+   	
    	function get_analisis_list($uname){
 		$result = $this->db->query("select * from `user-analisis` where user_username = '$uname' order by analisis_date desc")->result();
 		
@@ -171,6 +177,16 @@ class User_model extends CI_Model{
       		}
       		else
          		return false;
+   	}
+   	
+   	//email
+   	function search_mail_user($mail){
+   		$query = $this -> db -> query("select user_username, user_password from user where user_email = '$mail'");
+       
+      		if($query->result())
+      			foreach($query->result() as $row)
+				return $row->user_username;
+      		return false;
    	}
    	
    	//save & delete methods

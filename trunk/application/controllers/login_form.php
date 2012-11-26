@@ -29,40 +29,49 @@ class Login_form extends CI_Controller {
    	}
    	
 	function index(){
-		//If logged in correctly
-		if($this->user_model->login($this->input->post('username'), $this->input->post('password'))){
-			//Get data for header
-			$datah = array('title' => lang('voc.i18n_teacher_view'));
+		if($_POST['forgot']){
+			$datah = array('title' => lang('voc.i18n_forgot_view'));
 			
-			//If there are analisis performed by he user
-			if($analist = $this->user_model->get_analisis_list($this->session->userdata('username'))){
-				foreach($this->user_model->get_analisis_list($this->session->userdata('username')) as $analisis){
-					$adata = $this->analisis_model->get_analisis_data($analisis);
-					$adate[] = $analisis;
-					$awiki[] = $this->analisis_model->get_analisis_wiki($analisis);
-					$acolor[] = $this->analisis_model->get_analisis_color($analisis);
-				}
-		
-				$tdata = array('adate' => $adate, 'awiki' => $awiki, 'acolor' => $acolor);
-			
-				//And give the data to the view
-				$this->load->view('templates/header_view', $datah);
-				$this->load->view('content/teacher_view', $tdata);
-				$this->load->view('templates/footer_view');
-			}
-			//Else, load view without data
-			else{
-				$this->load->view('templates/header_view', $datah);
-				$this->load->view('content/teacher_view');
-				$this->load->view('templates/footer_view');
-			}
-		}
-		//Else, reload login view showing error
-		else{
-			$datah = array('title' => lang('voc.i18n_login'));
 			$this->load->view('templates/header_view', $datah);
-			$this->load->view('content/login_view', array('error' => true));
+			$this->load->view('content/forgot_view');
 			$this->load->view('templates/footer_view');
+		}
+		else{
+			//If logged in correctly
+			if($this->user_model->login($this->input->post('username'), $this->input->post('password'))){
+				//Get data for header
+				$datah = array('title' => lang('voc.i18n_teacher_view'));
+			
+				//If there are analisis performed by he user
+				if($this->user_model->get_analisis_list($this->session->userdata('username'))){
+					foreach($this->user_model->get_analisis_list($this->session->userdata('username')) as $analisis){
+						$adata = $this->analisis_model->get_analisis_data($analisis);
+						$adate[] = $analisis;
+						$awiki[] = $this->analisis_model->get_analisis_wiki($analisis);
+						$acolor[] = $this->analisis_model->get_analisis_color($analisis);
+					}
+			
+					$tdata = array('adate' => $adate, 'awiki' => $awiki, 'acolor' => $acolor);
+				
+					//And give the data to the view
+					$this->load->view('templates/header_view', $datah);
+					$this->load->view('content/teacher_view', $tdata);
+					$this->load->view('templates/footer_view');
+				}
+				//Else, load view without data
+				else{
+					$this->load->view('templates/header_view', $datah);
+					$this->load->view('content/teacher_view');
+					$this->load->view('templates/footer_view');
+				}
+			}
+			//Else, reload login view showing error
+			else{
+				$datah = array('title' => lang('voc.i18n_login'));
+				$this->load->view('templates/header_view', $datah);
+				$this->load->view('content/login_view', array('error' => true));
+				$this->load->view('templates/footer_view');
+			}
 		}
 	}
 }  

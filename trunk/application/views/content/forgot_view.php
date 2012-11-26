@@ -24,29 +24,17 @@ echo img('images/logo/logotrans.png');
 echo br();
 ?>
 
-<?= form_open('login_form') ?>
+<?= form_open('forgot_form') ?>
 <table id = "formins">
 	<tr>
-		<th colspan = "2"><?= lang('voc.i18n_login')?></th>
+		<th><?= lang('voc.i18n_write_email')?></th>
 	</tr>
 	<tr>
-		<td><?=lang('voc.i18n_username')?></td>
-		<td><?= form_input('username') ?></td>
-	</tr>
-	<tr>
-		<td><?=lang('voc.i18n_password')?></td>
-		<td><?= form_password('password') ?></td>
-	</tr>
-	<? if(isset($error)) echo "<tr><td colspan=\"2\"><em>".lang('voc.i18n_incorrect_login')."</em><td></tr>";?>
-	<? if(isset($emailsent)) echo "<tr><td colspan=\"2\"><em>".lang('voc.i18n_email_sent')."</em><td></tr>";?>
-	<tr>
-		<th colspan="2">
-		<?= form_submit('submit', lang('voc.i18n_submit')) ?>
-		</th>
+		<td><?= form_input('email') ?></td>
 	</tr>
 	<tr>
 		<th colspan="2">
-		<?= form_submit('forgot', lang('voc.i18n_forgot_login_data')) ?>
+		<?= form_submit(array('id' => 'submit', 'value' => lang('voc.i18n_submit'), 'class' => 'next')) ?>
 		</th>
 	</tr>
 </table>

@@ -39,13 +39,6 @@ echo form_open('configuration_form');
 	<td><?=form_dropdown('select_language', $languages, 'english');?></td>
 </tr>
 <tr>
-	<th colspan = "2"><?=lang('voc.i18n_filters');?></th>
-</tr>
-<tr>
-	<td><?=form_label(lang('voc.i18n_select_filter'), 'select_filter');?></td>
-	<td><?=form_dropdown('select_filter', $filters, $userdefaultfilter);?><?=form_submit('add_filter', lang('voc.i18n_add_filter'));?></td>
-</tr>
-<tr>
 	<th colspan = "2"><?=lang('voc.i18n_data_source');?></th>
 </tr>
 <tr>
