@@ -275,45 +275,45 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			data.addRows([
 			<?
 				foreach(array_keys($data['useredits']) as $key){
-					echo "[".$key.",".
-						$data['userrealname'][$key].",".
-						end($data['useredits'][$key]).",".
-						end($data['useredits_per'][$key]).",".
-						(isset($data['useredits_art'][$key])?end($data['useredits_art'][$key]):"0").",".
-						(isset($data['useredits_art_per'][$key])?end($data['useredits_art_per'][$key]):"0").",".
-						end($data['userbytes'][$key]).",".
-						end($data['userbytes_per'][$key]).",".
-						(isset($data['userbytes_art'][$key])?end($data['userbytes_art'][$key]):"0").",".
-						(isset($data['userbytes_art_per'][$key])?end($data['userbytes_art_per'][$key]):"0").",";
+					echo "['".$key."','".
+						$data['userrealname'][$key]."',".
+						round(end($data['useredits'][$key]), 3).",".
+						round(end($data['useredits_per'][$key]), 3).",".
+						(isset($data['useredits_art'][$key])?round(end($data['useredits_art'][$key]), 3):"0").",".
+						(isset($data['useredits_art_per'][$key])?round(end($data['useredits_art_per'][$key]), 3):"0").",".
+						round(end($data['userbytes'][$key]), 3).",".
+						round(end($data['userbytes_per'][$key]), 3).",".
+						(isset($data['userbytes_art'][$key])?round(end($data['userbytes_art'][$key]), 3):"0").",".
+						(isset($data['userbytes_art_per'][$key])?round(end($data['userbytes_art_per'][$key]), 3):"0").",";
 					if(isset($data['useruploads'][$key])) 
-						echo end($data['useruploads'][$key]).",".end($data['useruploads_per'][$key]).",";
+						echo round(end($data['useruploads'][$key]), 3).",".
+							round(end($data['useruploads_per'][$key]), 3).",";
 					else
 						echo "0, 0, ";
 					
 					if(isset($data['useraverage'][$data['iduser'][$key]])) 
-						echo end($data['useraverage'][$data['iduser'][$key]]).",".
-							end($data['usermaxvalue'][$data['iduser'][$key]]).",".
-							end($data['userminvalue'][$data['iduser'][$key]]).",";
+						echo round(end($data['useraverage'][$data['iduser'][$key]]), 3).",".
+							round(end($data['usermaxvalue'][$data['iduser'][$key]]), 3).",".
+							round(end($data['userminvalue'][$data['iduser'][$key]]), 3).",";
 					else
 						echo "0, 0, 0, ";
 						
 					if(isset($data['revisoraverage'][$data['iduser'][$key]])) 
-						echo end($data['revisoraverage'][$data['iduser'][$key]]).",".
-							end($data['revisormaxvalue'][$data['iduser'][$key]]).",".
-							end($data['revisorminvalue'][$data['iduser'][$key]]);
+						echo round(end($data['revisoraverage'][$data['iduser'][$key]]), 3).",".
+							round(end($data['revisormaxvalue'][$data['iduser'][$key]]), 3).",".
+							round(end($data['revisorminvalue'][$data['iduser'][$key]]), 3);
 					else
 						echo "0, 0, 0";
-					echo "]";
+					echo "]\n";
 					
 					if($key != end(array_keys($data['useredits']))) echo ",";
 				}
 			?>
 			]);
 
+
 			var table = new google.visualization.Table(document.getElementById('user_table'));
 			table.draw(data, {showRowNumber: true});
-
-			
 		}
 	</script>
 
@@ -324,83 +324,92 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 		<th><?=lang('voc.i18n_edits_evolution')?></th>
 	</tr>
 	<tr>
-		<td id='charttotaledits' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></td>
+		<td><div id='charttotaledits' style='border: 0px; width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_content_evolution')?></th>
 	</tr>
 	<tr>
-		<td id='charttotalbytes' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></td>
+		<td><div id='charttotalbytes' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_pages')?></th>
 	</tr>
 	<tr>
-		<td id='charttotalpages' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></td>
+		<td><div id='charttotalpages' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_users')?></th>
 	</tr>
 	<tr>
-		<td id='charttotalusers' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></td>
+		<td><div id='charttotalusers' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_activity_hour')?></th>
 	</tr>
 	<tr>
-		<td id='charttotalactivityhour' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></td>
+		<td><div id='charttotalactivityhour' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_activity_wday')?></th>
 	</tr>
 	<tr>
-		<td id='charttotalactivitywday' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></td>
+		<td><div id='charttotalactivitywday' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_activity_week')?></th>
 	</tr>
 	<tr>
-		<td id='charttotalactivityweek' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></td>
+		<td><div id='charttotalactivityweek' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_activity_month')?></th>
 	</tr>
 	<tr>
-		<td id='charttotalactivitymonth' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></td>
+		<td><div id='charttotalactivitymonth' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_activity_year')?></th>
 	</tr>
 	<tr>
-		<td id='charttotalactivityyear' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></td>
+		<td><div id='charttotalactivityyear' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_uploads')?></th>
 	</tr>
 	<tr>
-		<td id='charttotaluploads' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></td>
+		<td><div id='charttotaluploads' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_upsize')?></th>
 	</tr>
 	<tr>
-		<td id='charttotalupsize' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></td>
+		<td><div id='charttotalupsize' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_average_quality')?></th>
 	</tr>
 	<tr>
-		<td id='charttotalquality' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></td>
+		<td><div id='charttotalquality' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_bytesxquality')?></th>
 	</tr>
 	<tr>
-		<td id='charttotalbytesxquality' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></td>
+		<td><div id='charttotalbytesxquality' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	</table>
 	
-	<div id = "user_table"></div>
+	<br><br>
+	
+	<table id = "usertable">
+	<tr>
+		<th><?=lang('voc.i18n_users')?></th>
+	</tr>
+	<tr>
+	<td><div id = "user_table"></div></td>
+	</tr>
+	</table>
 			
 <!-- [2] www.christophermonnat.com/2008/08/generating-pdf-files-using-codeigniter -->
 <!--[2] TO_DO: generate pdf-->
