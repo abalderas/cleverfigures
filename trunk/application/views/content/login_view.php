@@ -42,10 +42,6 @@ echo br();
 	<tr>
 		<th colspan="2">
 		<?= form_submit('submit', lang('voc.i18n_submit')) ?>
-		</th>
-	</tr>
-	<tr>
-		<th colspan="2">
 		<?= form_submit('forgot', lang('voc.i18n_forgot_login_data')) ?>
 		</th>
 	</tr>

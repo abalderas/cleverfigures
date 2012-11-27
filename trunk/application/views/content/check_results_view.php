@@ -22,7 +22,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			
 <script type='text/javascript' src='http://www.google.com/jsapi'></script>
 	<script type='text/javascript'>
-		google.load('visualization', '1', {'packages':['annotatedtimeline', 'corechart']});
+		google.load('visualization', '1', {'packages':['annotatedtimeline', 'corechart', 'table']});
 		google.setOnLoadCallback(drawChart);
 		function drawChart() {
 			var data = new google.visualization.DataTable();
@@ -253,6 +253,67 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			var charttotalbytesxquality = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalbytesxquality'));
 			charttotalbytesxquality.draw(data13, {displayAnnotations: false});
 			
+			var data = new google.visualization.DataTable();
+			data.addColumn('string', 'Nick');
+			data.addColumn('string', 'Name');
+			data.addColumn('number', 'Edits');
+			data.addColumn('number', 'Edits %');
+			data.addColumn('number', 'Edits in articles');
+			data.addColumn('number', 'Edits in articles %');
+			data.addColumn('number', 'Bytes');
+			data.addColumn('number', 'Bytes %');
+			data.addColumn('number', 'Bytes in articles');
+			data.addColumn('number', 'Bytes in articles %');
+			<? if(isset($data['useruploads'])) echo "data.addColumn('number', 'Uploads'),";?>
+			<? if(isset($data['useruploads'])) echo "data.addColumn('number', 'Uploads %'),";?>
+			data.addColumn('number', 'Average Mark');
+			data.addColumn('number', 'Maximum Mark');
+			data.addColumn('number', 'Minimum Mark');
+			data.addColumn('number', 'Average Mark as revisor');
+			data.addColumn('number', 'Maximum Mark as revisor');
+			data.addColumn('number', 'Minimum Mark as revisor');
+			data.addRows([
+			<?
+				foreach(array_keys($data['useredits']) as $key){
+					echo "[".$key.",".
+						$data['userrealname'][$key].",".
+						end($data['useredits'][$key]).",".
+						end($data['useredits_per'][$key]).",".
+						(isset($data['useredits_art'][$key])?end($data['useredits_art'][$key]):"0").",".
+						(isset($data['useredits_art_per'][$key])?end($data['useredits_art_per'][$key]):"0").",".
+						end($data['userbytes'][$key]).",".
+						end($data['userbytes_per'][$key]).",".
+						(isset($data['userbytes_art'][$key])?end($data['userbytes_art'][$key]):"0").",".
+						(isset($data['userbytes_art_per'][$key])?end($data['userbytes_art_per'][$key]):"0").",";
+					if(isset($data['useruploads'][$key])) 
+						echo end($data['useruploads'][$key]).",".end($data['useruploads_per'][$key]).",";
+					else
+						echo "0, 0, ";
+					
+					if(isset($data['useraverage'][$data['iduser'][$key]])) 
+						echo end($data['useraverage'][$data['iduser'][$key]]).",".
+							end($data['usermaxvalue'][$data['iduser'][$key]]).",".
+							end($data['userminvalue'][$data['iduser'][$key]]).",";
+					else
+						echo "0, 0, 0, ";
+						
+					if(isset($data['revisoraverage'][$data['iduser'][$key]])) 
+						echo end($data['revisoraverage'][$data['iduser'][$key]]).",".
+							end($data['revisormaxvalue'][$data['iduser'][$key]]).",".
+							end($data['revisorminvalue'][$data['iduser'][$key]]);
+					else
+						echo "0, 0, 0";
+					echo "]";
+					
+					if($key != end(array_keys($data['useredits']))) echo ",";
+				}
+			?>
+			]);
+
+			var table = new google.visualization.Table(document.getElementById('user_table'));
+			table.draw(data, {showRowNumber: true});
+
+			
 		}
 	</script>
 
@@ -339,7 +400,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	</tr>
 	</table>
 	
-	<?=$infotables?>
+	<div id = "user_table"></div>
 			
 <!-- [2] www.christophermonnat.com/2008/08/generating-pdf-files-using-codeigniter -->
 <!--[2] TO_DO: generate pdf-->

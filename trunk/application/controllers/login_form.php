@@ -29,7 +29,7 @@ class Login_form extends CI_Controller {
    	}
    	
 	function index(){
-		if($_POST['forgot']){
+		if(isset($_POST['forgot'])){
 			$datah = array('title' => lang('voc.i18n_forgot_view'));
 			
 			$this->load->view('templates/header_view', $datah);
