@@ -294,6 +294,8 @@ class Wiki_model extends CI_Model{
 			$pageactivityweek[$row->page_title][date('W', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
 			$pageactivitymonth[$row->page_title][date('m', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
 			$pageactivityyear[$row->page_title][date('Y', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
+			
+			$revisionpage[$row->page_title][$row->rev_id] = true; 
    			
    			
 			//TOTAL INFORMATION
@@ -408,6 +410,8 @@ class Wiki_model extends CI_Model{
 			$catactivityweek[$row->cl_to][date('W', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
 			$catactivitymonth[$row->cl_to][date('m', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
 			$catactivityyear[$row->cl_to][date('Y', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
+			
+			$revisioncategory[$row->cl_to][$row->rev_id] = true; 
 			
 			
 			//PERCENTAGES
@@ -597,6 +601,8 @@ class Wiki_model extends CI_Model{
 						, 'totalactivityweek' => $totalactivityweek
 						, 'totalactivitymonth' => $totalactivitymonth
 						, 'totalactivityyear' => $totalactivityyear
+						, 'revisionpage' => $revisionpage
+						, 'revisioncategory' => $revisioncategory
 					);
 				
 				
@@ -682,6 +688,8 @@ class Wiki_model extends CI_Model{
 					, 'totalactivityweek' => $totalactivityweek
 					, 'totalactivitymonth' => $totalactivitymonth
 					, 'totalactivityyear' => $totalactivityyear
+					, 'revisionpage' => $revisionpage
+					, 'revisioncategory' => $revisioncategory
 				);
 				
 				
@@ -754,6 +762,8 @@ class Wiki_model extends CI_Model{
 				, 'totalactivityweek' => $totalactivityweek
 				, 'totalactivitymonth' => $totalactivitymonth
 				, 'totalactivityyear' => $totalactivityyear
+				, 'revisionpage' => $revisionpage
+				, 'revisioncategory' => $revisioncategory
 			);
 			
 		echo ">> Wiki analisis accomplished.</br>";

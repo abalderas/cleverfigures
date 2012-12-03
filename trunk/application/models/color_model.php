@@ -18,15 +18,6 @@
 // along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
 
-
-
-//AVAILABLE METHODS
-// 	new_color()
-// 	fetch_evaluations()
-// 	wconnection()
-// 	delete_color()
-
-
 class Color_model extends CI_Model{
 	
 	
@@ -160,7 +151,7 @@ class Color_model extends CI_Model{
 			//REVISOR INFORMATION
 			
 			$revisormark	[$row->eva_revisor][$row->eva_revision] = $row->ee_nota;
-			$revisoraverage [$row->eva_revisor][$row->eva_revision] = $this->array_avg($criteriamark[$row->ent_entregable]);
+			$revisoraverage [$row->eva_revisor][$row->eva_revision] = $this->array_avg($revisormark[$row->eva_revisor]);
 			$revisormaxvalue[$row->eva_revisor][$row->eva_revision] = max($revisormark[$row->eva_revisor]);
 			$revisorminvalue[$row->eva_revisor][$row->eva_revision] = min($revisormark[$row->eva_revisor]);
 			$revisorcomment [$row->eva_revisor][$row->eva_revision] = $row->ee_comentario;

@@ -314,6 +314,59 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
 			var table = new google.visualization.Table(document.getElementById('user_table'));
 			table.draw(data, {showRowNumber: true});
+			
+// 			var pagedata = new google.visualization.DataTable();
+// 			data.addColumn('string', 'Name');
+// 			data.addColumn('string', 'Namespace');
+// 			data.addColumn('number', 'Edits');
+// 			data.addColumn('number', 'Edits %');
+// 			data.addColumn('number', 'Bytes');
+// 			data.addColumn('number', 'Bytes %');
+// 			<? //if(isset($data['pageuploads'])) echo "data.addColumn('number', 'Uploads'),";?>
+// 			<? //if(isset($data['pageuploads'])) echo "data.addColumn('number', 'Uploads %'),";?>
+// 			data.addColumn('number', 'Average Mark');
+// 			data.addColumn('number', 'Maximum Mark');
+// 			data.addColumn('number', 'Minimum Mark');
+// 			data.addColumn('number', 'Visits');
+// 			data.addColumn('number', 'Visits %');
+// 			data.addRows([
+// 			<? 
+// 				foreach(array_keys($data['pageedits']) as $key){
+// 					echo "['".$key."','".
+// 						$data['pagenamespace'][$key]."',".
+// 						round(end($data['pageedits'][$key]), 3).",".
+// 						round(end($data['pageedits_per'][$key]), 3).",".
+// 						round(end($data['pagebytes'][$key]), 3).",".
+// 						round(end($data['pagebytes_per'][$key]), 3).",".
+// 					if(isset($data['pageuploads'][$key])) 
+// 						echo round(end($data['pageuploads'][$key]), 3).",".
+// 							round(end($data['pageuploads_per'][$key]), 3).",";
+// 					else
+// 						echo "0, 0, ";
+// 					
+// 					if(isset($data['pageaverage'][$data['iduser'][$key]])) 
+// 						echo round(end($data['useraverage'][$data['iduser'][$key]]), 3).",".
+// 							round(end($data['usermaxvalue'][$data['iduser'][$key]]), 3).",".
+// 							round(end($data['userminvalue'][$data['iduser'][$key]]), 3).",";
+// 					else
+// 						echo "0, 0, 0, ";
+// 						
+// 					if(isset($data['revisoraverage'][$data['iduser'][$key]])) 
+// 						echo round(end($data['revisoraverage'][$data['iduser'][$key]]), 3).",".
+// 							round(end($data['revisormaxvalue'][$data['iduser'][$key]]), 3).",".
+// 							round(end($data['revisorminvalue'][$data['iduser'][$key]]), 3);
+// 					else
+// 						echo "0, 0, 0";
+// 					echo "]\n";
+// 					
+// 					if($key != end(array_keys($data['useredits']))) echo ",";
+// 				}
+// 			?>
+// 			]);
+// 
+// 
+// 			var table = new google.visualization.Table(document.getElementById('user_table'));
+// 			table.draw(data, {showRowNumber: true});
 		}
 	</script>
 
@@ -408,6 +461,17 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	</tr>
 	<tr>
 	<td><div id = "user_table"></div></td>
+	</tr>
+	</table>
+	
+	<br><br>
+	
+	<table id = "pagetable">
+	<tr>
+		<th><?=lang('voc.i18n_pages')?></th>
+	</tr>
+	<tr>
+	<td><div id = "pages_table"></div></td>
 	</tr>
 	</table>
 			
