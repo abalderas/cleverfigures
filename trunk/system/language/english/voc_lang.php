@@ -78,6 +78,7 @@ $lang['voc.i18n_installation_intro'] = "Welcome to CleverFigures installation pr
 $lang['voc.i18n_language'] = "Language";
 $lang['voc.i18n_license'] = "License";
 $lang['voc.i18n_login'] = "Log in";
+$lang['voc.i18n_must_choose_wiki'] = "You must choose a wiki to analise.";
 $lang['voc.i18n_next'] = "Next";
 $lang['voc.i18n_no_analisis'] = "No analisis performed.";
 $lang['voc.i18n_no_color'] = "No qualitative data source";

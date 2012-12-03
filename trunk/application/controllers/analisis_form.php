@@ -69,31 +69,51 @@ class Analisis_form extends CI_Controller {
 			$this->load->view('templates/footer_view');
 		}
 		else{
-		
-			$adata = array('wiki' => $_POST['select_wiki'], 
-					'color' => $_POST['select_color']
-				);
-			$datah = array('title' => lang('voc.i18n_analising'));
+			if($_POST['select_wiki'] != lang('voc.i18n_no_wiki')){
+				$adata = array('wiki' => $_POST['select_wiki'], 
+						'color' => $_POST['select_color']
+					);
+				$datah = array('title' => lang('voc.i18n_analising'));
 			
-			echo $this->load->view('templates/header_view', $datah, true);
-			echo $this->load->view('content/analising_view', $adata, true);
-			ob_flush(); flush();
+				echo $this->load->view('templates/header_view', $datah, true);
+				echo $this->load->view('content/analising_view', $adata, true);
+				ob_flush(); flush();
+				
+				$start = microtime(true);
 			
-			$start = microtime(true);
+				$analisis = now();
+				$this->analise($adata, $analisis);
 			
-			$analisis = now();
-			$this->analise($adata, $analisis);
+				ob_flush(); flush();
 			
-			ob_flush(); flush();
+				printf("Performed in %.02f seconds.</br>", (microtime(true)-$start));
+				ob_flush(); flush();
 			
-			printf("Performed in %.02f seconds.</br>", (microtime(true)-$start));
-			ob_flush(); flush();
+				$this->analisis_model->register_analisis($_POST['select_wiki'], isset($_POST['select_color'])? $_POST['select_color'] : false, $analisis);
+				$this->user_model->relate_analisis($analisis);
 			
-			$this->analisis_model->register_analisis($_POST['select_wiki'], isset($_POST['select_color'])? $_POST['select_color'] : false, $analisis);
-			$this->user_model->relate_analisis($analisis);
+				echo "<b>Analisis saved. You can view the results ".anchor('teacher',lang('voc.i18n_here')).".</b>";
+				echo $this->load->view('templates/footer_view', true);
+			}
+			else{
+				echo 	"<script language=\"javascript\" type=\"text/javascript\">
+						alert('".lang('voc.i18n_must_choose_wiki')."');
+					 </script>";
 			
-			echo "<b>Analisis saved. You can view the results ".anchor('teacher',lang('voc.i18n_here')).".</b>";
-			echo $this->load->view('templates/footer_view', true);
+				$datah = array('title' => lang('voc.i18n_analise'));
+			
+				$colors = array(lang('voc.i18n_no_color') => lang('voc.i18n_no_color'));
+				$colors = array_merge($colors, $this->color_model->get_color_list($this->session->userdata('username')));
+				
+				$wikis = array(lang('voc.i18n_no_wiki') => lang('voc.i18n_no_wiki')); 
+				$wikis = array_merge($wikis, $this->wiki_model->get_wiki_list($this->session->userdata('username')));
+				
+				$adata = array('wikis' => $wikis, 'colors' => $colors, 'filters' => $filters);
+				
+				$this->load->view('templates/header_view', $datah);
+				$this->load->view('content/analise_view', $adata);
+				$this->load->view('templates/footer_view');
+			}
 		}
 	}
 }

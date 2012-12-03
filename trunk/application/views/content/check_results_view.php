@@ -273,7 +273,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			data.addColumn('number', 'Maximum Mark as revisor');
 			data.addColumn('number', 'Minimum Mark as revisor');
 			data.addRows([
-			<?
+			<? 
 				foreach(array_keys($data['useredits']) as $key){
 					echo "['".$key."','".
 						$data['userrealname'][$key]."',".
