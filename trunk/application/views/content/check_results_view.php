@@ -264,8 +264,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			data.addColumn('number', 'Bytes %');
 			data.addColumn('number', 'Bytes in articles');
 			data.addColumn('number', 'Bytes in articles %');
-			<? if(isset($data['useruploads'])) echo "data.addColumn('number', 'Uploads'),";?>
-			<? if(isset($data['useruploads'])) echo "data.addColumn('number', 'Uploads %'),";?>
+			<? if(isset($data['useruploads'])) echo "data.addColumn('number', 'Uploads');";?>
+			<? if(isset($data['useruploads'])) echo "data.addColumn('number', 'Uploads %');";?>
 			data.addColumn('number', 'Average Mark');
 			data.addColumn('number', 'Maximum Mark');
 			data.addColumn('number', 'Minimum Mark');
@@ -315,58 +315,54 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			var table = new google.visualization.Table(document.getElementById('user_table'));
 			table.draw(data, {showRowNumber: true});
 			
-// 			var pagedata = new google.visualization.DataTable();
-// 			data.addColumn('string', 'Name');
-// 			data.addColumn('string', 'Namespace');
-// 			data.addColumn('number', 'Edits');
-// 			data.addColumn('number', 'Edits %');
-// 			data.addColumn('number', 'Bytes');
-// 			data.addColumn('number', 'Bytes %');
-// 			<? //if(isset($data['pageuploads'])) echo "data.addColumn('number', 'Uploads'),";?>
-// 			<? //if(isset($data['pageuploads'])) echo "data.addColumn('number', 'Uploads %'),";?>
-// 			data.addColumn('number', 'Average Mark');
-// 			data.addColumn('number', 'Maximum Mark');
-// 			data.addColumn('number', 'Minimum Mark');
-// 			data.addColumn('number', 'Visits');
-// 			data.addColumn('number', 'Visits %');
-// 			data.addRows([
-// 			<? 
-// 				foreach(array_keys($data['pageedits']) as $key){
-// 					echo "['".$key."','".
-// 						$data['pagenamespace'][$key]."',".
-// 						round(end($data['pageedits'][$key]), 3).",".
-// 						round(end($data['pageedits_per'][$key]), 3).",".
-// 						round(end($data['pagebytes'][$key]), 3).",".
-// 						round(end($data['pagebytes_per'][$key]), 3).",".
-// 					if(isset($data['pageuploads'][$key])) 
-// 						echo round(end($data['pageuploads'][$key]), 3).",".
-// 							round(end($data['pageuploads_per'][$key]), 3).",";
-// 					else
-// 						echo "0, 0, ";
-// 					
-// 					if(isset($data['pageaverage'][$data['iduser'][$key]])) 
-// 						echo round(end($data['useraverage'][$data['iduser'][$key]]), 3).",".
-// 							round(end($data['usermaxvalue'][$data['iduser'][$key]]), 3).",".
-// 							round(end($data['userminvalue'][$data['iduser'][$key]]), 3).",";
-// 					else
-// 						echo "0, 0, 0, ";
-// 						
-// 					if(isset($data['revisoraverage'][$data['iduser'][$key]])) 
-// 						echo round(end($data['revisoraverage'][$data['iduser'][$key]]), 3).",".
-// 							round(end($data['revisormaxvalue'][$data['iduser'][$key]]), 3).",".
-// 							round(end($data['revisorminvalue'][$data['iduser'][$key]]), 3);
-// 					else
-// 						echo "0, 0, 0";
-// 					echo "]\n";
-// 					
-// 					if($key != end(array_keys($data['useredits']))) echo ",";
-// 				}
-// 			?>
-// 			]);
-// 
-// 
-// 			var table = new google.visualization.Table(document.getElementById('user_table'));
-// 			table.draw(data, {showRowNumber: true});
+			var pagedata = new google.visualization.DataTable();
+			pagedata.addColumn('string', 'Name');
+			pagedata.addColumn('string', 'Namespace');
+			pagedata.addColumn('number', 'Edits');
+			pagedata.addColumn('number', 'Edits %');
+			pagedata.addColumn('number', 'Bytes');
+			pagedata.addColumn('number', 'Bytes %');
+			<? if(isset($data['pageuploads'])) echo "pagedata.addColumn('number', 'Uploads');";?>
+			<? if(isset($data['pageuploads'])) echo "pagedata.addColumn('number', 'Uploads %');";?>
+			pagedata.addColumn('number', 'Average Mark');
+			pagedata.addColumn('number', 'Maximum Mark');
+			pagedata.addColumn('number', 'Minimum Mark');
+			pagedata.addColumn('number', 'Visits');
+			pagedata.addColumn('number', 'Visits %');
+			pagedata.addRows([
+			<? 
+				foreach(array_keys($data['pageedits']) as $key){
+					echo "['".$key."','".
+						$data['pagenamespace'][$key]."',".
+						round(end($data['pageedits'][$key]), 3).",".
+						round(end($data['pageedits_per'][$key]), 3).",".
+						round(end($data['pagebytes'][$key]), 3).",".
+						round(end($data['pagebytes_per'][$key]), 3).",";
+					if(isset($data['pageuploads'][$key])) 
+						echo round(end($data['pageuploads'][$key]), 3).",".
+							round(end($data['pageuploads_per'][$key]), 3).",";
+					else
+						echo "0, 0, ";
+					
+					if(isset($data['pageaverage'][$key])) 
+						echo round(end($data['pageaverage'][$key]), 3).",".
+							round(end($data['pagemaxvalue'][$key]), 3).",".
+							round(end($data['pageminvalue'][$key]), 3).",";
+					else
+						echo "0, 0, 0, ";
+						
+					echo $data['pagevisits'][$key].", ".round($data['pagevisits'][$key] / array_sum($data['pagevisits']), 3);
+					
+					echo "]\n";
+					
+					if($key != end(array_keys($data['pageedits']))) echo ",";
+				}
+			?>
+			]);
+
+
+			var pagetable = new google.visualization.Table(document.getElementById('pages_table'));
+			pagetable.draw(pagedata, {showRowNumber: true});
 		}
 	</script>
 
