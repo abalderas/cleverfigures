@@ -43,11 +43,12 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			
 			var data2 = new google.visualization.DataTable();
 			data2.addColumn('datetime', 'Date');
-			data2.addColumn('number', 'Bytes');
+			data2.addColumn('number', 'Total Bytes');
+			data2.addColumn('number', 'Article Bytes');
 			data2.addRows([
 			<?
 				foreach(array_keys($data['totalbytes']) as $key){
-					echo "[new Date(".date('Y', $key).", ".date('m', $key)." ,".date('d', $key)."), ".$data['totalbytes'][$key]."]";
+					echo "[new Date(".date('Y', $key).", ".date('m', $key)." ,".date('d', $key)."), ".$data['totalbytes'][$key].", ".$data['totalbytes_art'][$key]."]";
 					if($key != end(array_keys($data['totalbytes']))) echo ",";
 				}
 			?>
