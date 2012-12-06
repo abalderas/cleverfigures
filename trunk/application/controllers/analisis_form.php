@@ -48,17 +48,30 @@ class Analisis_form extends CI_Controller {
 	
 	private function extra_info($wikidata, $colordata){
 		foreach(array_keys($wikidata['revisionpage']) as $key){
-			$pagemaxvalue[$key] = 0;
-			$pageminvalue[$key] = 10;
-			$pagenvalues[$key] = 0;
-			$pagevaluesum[$key] = 0;
-			
 			foreach(array_keys($wikidata['revisionpage'][$key]) as $revision){
 				if(isset($wikidata['revisionpage'][$key][$revision]) and isset($colordata['totalmark'][$revision])){
-					if($colordata['totalmark'][$revision] > $pagemaxvalue[$key])
-						$pagemaxvalue[$key] = $colordata['totalmark'][$revision];
-					if($colordata['totalmark'][$revision] < $pageminvalue[$key])
-						$pageminvalue[$key] = $colordata['totalmark'][$revision];
+					$pagemaxvalue[$key][$revision] = 0;
+					$pageminvalue[$key][$revision] = 10;
+					$pagenvalues[$key] = 0;
+					$pagevaluesum[$key] = 0;
+				}
+				else{
+					$pagemaxvalue[$key][$revision] = false;
+					$pageminvalue[$key][$revision] = false;
+					$pagenvalues[$key] = false;
+					$pagevaluesum[$key] = false;
+				}
+			}
+		}
+		
+		foreach(array_keys($wikidata['revisionpage']) as $key){
+			foreach(array_keys($wikidata['revisionpage'][$key]) as $revision){
+				if(isset($wikidata['revisionpage'][$key][$revision]) and isset($colordata['totalmark'][$revision])){
+					if($colordata['totalmark'][$revision] > $pagemaxvalue[$key][$revision])
+						$pagemaxvalue[$key][$revision] = $colordata['totalmark'][$revision];
+						
+					if($colordata['totalmark'][$revision] < $pageminvalue[$key][$revision])
+						$pageminvalue[$key][$revision] = $colordata['totalmark'][$revision];
 						
 					$pagenvalues[$key] += 1;
 					$pagevaluesum[$key] += $colordata['totalmark'][$revision];
@@ -106,8 +119,8 @@ class Analisis_form extends CI_Controller {
 		$wiki_result = $this->wiki_model->fetch($analisis_data['wiki'], $name);
 		if($analisis_data['color'] != lang('voc.i18n_no_color')){
 			$assess_result = $this->color_model->fetch($analisis_data['color'], $name);
-			
 			$extra = $this->extra_info($wiki_result, $assess_result);
+			
 			write_file("analisis/$name.dat", serialize(array_merge($wiki_result, $assess_result, $extra)));
 		}
 		else{
