@@ -226,6 +226,14 @@ class Wiki_model extends CI_Model{
 		$aux_edits_file = array();
 		$aux_edits_temp = array();
 		$aux_edits_cat = array();
+		
+		$aux_pages_art = array();
+		$aux_pages_talk = array();
+		$aux_pages_us = array();
+		$aux_pages_ustalk = array();
+		$aux_pages_file = array();
+		$aux_pages_temp = array();
+		$aux_pages_cat = array();
 			
    		//Storing classified information in arrays
    		
@@ -288,14 +296,6 @@ class Wiki_model extends CI_Model{
 				
 			$pagenamespace	[$row->page_title] = $row->page_namespace;					// Getting namespaces per page
 			$pagevisits	[$row->page_title] = $row->page_counter;					// Total visits per page
-	
-// 			if ($row->page_namespace == 0){												// If article
-// 				$pageeditscount_art	[$row->page_title] += 1;								// Count total article editions per user
-// 				$pagebytescount_art	[$row->page_title] += $row->rev_len - $LAST_PAGE_SIZE;
-// 					
-// 				$pageedits_art		[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pageeditscount_art[$row->page_title];	// Editions of article per user/date
-// 				$pagebytes_art		[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pagebytescount_art[$row->page_title];	// Bytes per user/date
-// 			}
 				
 			$pageactivityhour[$row->page_title][date('H', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
 			$pageactivitywday[$row->page_title][date('w', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
@@ -324,7 +324,24 @@ class Wiki_model extends CI_Model{
 				$aux_edits_cat [$row->rev_id] = 1;
 				
 			$aux_pages [$row->page_title] = 1;
+			if($row->page_namespace == 0) 
+				$aux_pages_art [$row->page_title] = 1;
+			if($row->page_namespace == 1) 
+				$aux_pages_talk [$row->page_title] = 1;
+			if($row->page_namespace == 2) 
+				$aux_pages_us [$row->page_title] = 1;
+			if($row->page_namespace == 3) 
+				$aux_pages_ustalk [$row->page_title] = 1;
+			if($row->page_namespace == 6) 
+				$aux_pages_file [$row->page_title] = 1;
+			if($row->page_namespace == 10) 
+				$aux_pages_temp [$row->page_title] = 1;
+			if($row->page_namespace == 14) 
+				$aux_pages_cat [$row->page_title] = 1;
+				
 			$aux_users [$row->user_name] = 1;
+			if($row->page_namespace == 0) 
+				$aux_users_art [$row->user_name] = 1;
 			
 			$totalbytescount += $row->rev_len - $LAST_PAGE_SIZE;
 			if($row->page_namespace == 0)
@@ -340,7 +357,17 @@ class Wiki_model extends CI_Model{
 			$totaledits_cat[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_edits_cat);
 			
 			$totalpages[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_pages);
+			$totalpages_art[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_pages_art);
+			$totalpages_talk[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_pages_talk);
+			$totalpages_us[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_pages_us);
+			$totalpages_ustalk[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_pages_ustalk);
+			$totalpages_file[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_pages_file);
+			$totalpages_temp[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_pages_temp);
+			$totalpages_cat[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_pages_cat);
+			
 			$totalusers[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_users);
+			$totalusers_art[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_users_art);
+			
 			$totalbytes[$this->mwtime_to_unix($row->rev_timestamp)] = $totalbytescount;
 			$totalbytes_art[$this->mwtime_to_unix($row->rev_timestamp)] = $totalbytesartcount;
 			$totalvisits = array_sum($pagevisits);
@@ -596,7 +623,15 @@ class Wiki_model extends CI_Model{
 						, 'totaledits_temp' => $totaledits_temp
 						, 'totaledits_cat' => $totaledits_cat
 						, 'totalpages' => $totalpages
+						, 'totalpages_art' => $totalpages_art
+						, 'totalpages_talk' => $totalpages_art
+						, 'totalpages_us' => $totalpages_us
+						, 'totalpages_ustalk' => $totalpages_ustalk
+						, 'totalpages_file' => $totalpages_file
+						, 'totalpages_temp' => $totalpages_temp
+						, 'totalpages_cat' => $totalpages_cat
 						, 'totalusers' => $totalusers
+						, 'totalusers_art' => $totalusers_art
 						, 'totalvisits' => $totalvisits
 						, 'totalbytes' => $totalbytes
 						, 'totalbytes_art' => $totalbytes_art
@@ -696,7 +731,15 @@ class Wiki_model extends CI_Model{
 					, 'totaledits_temp' => $totaledits_temp
 					, 'totaledits_cat' => $totaledits_cat
 					, 'totalpages' => $totalpages
+					, 'totalpages_art' => $totalpages_art
+					, 'totalpages_talk' => $totalpages_art
+					, 'totalpages_us' => $totalpages_us
+					, 'totalpages_ustalk' => $totalpages_ustalk
+					, 'totalpages_file' => $totalpages_file
+					, 'totalpages_temp' => $totalpages_temp
+					, 'totalpages_cat' => $totalpages_cat
 					, 'totalusers' => $totalusers
+					, 'totalusers_art' => $totalusers_art
 					, 'totalvisits' => $totalvisits
 					, 'totalbytes' => $totalbytes
 					, 'totalbytes_art' => $totalbytes_art
@@ -791,7 +834,15 @@ class Wiki_model extends CI_Model{
 				, 'totaledits_temp' => $totaledits_temp
 				, 'totaledits_cat' => $totaledits_cat
 				, 'totalpages' => $totalpages
+				, 'totalpages_art' => $totalpages_art
+				, 'totalpages_talk' => $totalpages_art
+				, 'totalpages_us' => $totalpages_us
+				, 'totalpages_ustalk' => $totalpages_ustalk
+				, 'totalpages_file' => $totalpages_file
+				, 'totalpages_temp' => $totalpages_temp
+				, 'totalpages_cat' => $totalpages_cat
 				, 'totalusers' => $totalusers
+				, 'totalusers_art' => $totalusers_art
 				, 'totalvisits' => $totalvisits
 				, 'totalbytes' => $totalbytes
 				, 'totalbytes_art' => $totalbytes_art

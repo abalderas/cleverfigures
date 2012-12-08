@@ -60,8 +60,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			
 			var data2 = new google.visualization.DataTable();
 			data2.addColumn('datetime', 'Date');
-			data2.addColumn('number', 'Total Bytes');
-			data2.addColumn('number', 'Article Bytes');
+			data2.addColumn('number', 'Total');
+			data2.addColumn('number', 'Article');
 			data2.addRows([
 			<?
 				foreach(array_keys($data['totalbytes']) as $key){
@@ -75,12 +75,28 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			chartbytes.draw(data2, {displayAnnotations: false});
 			
 			var data3 = new google.visualization.DataTable();
-			data3.addColumn('date', 'Date');
-			data3.addColumn('number', '#Pages');
+			data3.addColumn('datetime', 'Date');
+			data3.addColumn('number', 'Total');
+			data3.addColumn('number', 'Articles');
+			data3.addColumn('number', 'Talks');
+			data3.addColumn('number', 'Users');
+			data3.addColumn('number', 'User Talks');
+			data3.addColumn('number', 'Files');
+			data3.addColumn('number', 'Template');
+			data3.addColumn('number', 'Category');
 			data3.addRows([
 			<?
 				foreach(array_keys($data['totalpages']) as $key){
-					echo "[new Date(".date('Y', $key).", ".date('m', $key)." ,".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".$data['totalpages'][$key]."]";
+					echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
+					$data['totalpages'][$key].", ".
+					$data['totalpages_art'][$key].", ".
+					$data['totalpages_talk'][$key].", ".
+					$data['totalpages_us'][$key].", ".
+					$data['totalpages_ustalk'][$key].", ".
+					$data['totalpages_file'][$key].", ".
+					$data['totalpages_temp'][$key].", ".
+					$data['totalpages_cat'][$key].
+					"]";
 					if($key != end(array_keys($data['totalpages']))) echo ",";
 				}
 			?>
@@ -90,12 +106,16 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			chartpages.draw(data3, {displayAnnotations: false});
 			
 			var data4 = new google.visualization.DataTable();
-			data4.addColumn('date', 'Date');
-			data4.addColumn('number', '#Users');
+			data4.addColumn('datetime', 'Date');
+			data4.addColumn('number', 'Total');
+			data4.addColumn('number', 'Contributed to Articles');
 			data4.addRows([
 			<?
 				foreach(array_keys($data['totalusers']) as $key){
-					echo "[new Date(".date('Y', $key).", ".date('m', $key)." ,".date('d', $key)."), ".$data['totalusers'][$key]."]";
+					echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
+					$data['totalusers'][$key].", ".
+					$data['totalusers_art'][$key].
+					"]";
 					if($key != end(array_keys($data['totalusers']))) echo ",";
 				}
 			?>
@@ -391,79 +411,79 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 		<th><?=lang('voc.i18n_edits_evolution')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotaledits' style='border: 0px; width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotaledits' style='border: 0px; width: 1000px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_content_evolution')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalbytes' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalbytes' style='width: 1000px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_pages')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalpages' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalpages' style='width: 1000px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_users')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalusers' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalusers' style='width: 1000px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_activity_hour')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivityhour' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalactivityhour' style='width: 1000px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_activity_wday')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivitywday' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalactivitywday' style='width: 1000px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_activity_week')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivityweek' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalactivityweek' style='width: 1000px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_activity_month')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivitymonth' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalactivitymonth' style='width: 1000px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_activity_year')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivityyear' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalactivityyear' style='width: 1000px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_uploads')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotaluploads' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotaluploads' style='width: 1000px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_upsize')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalupsize' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalupsize' style='width: 1000px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_average_quality')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalquality' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalquality' style='width: 1000px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_bytesxquality')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalbytesxquality' style='width: 800px; height: 400px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalbytesxquality' style='width: 1000px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	</table>
 	
