@@ -219,7 +219,14 @@ class Wiki_model extends CI_Model{
 			$usercreatedpages[$row->user_name]= array();
    		}
    		
-   		
+   		$aux_edits_art = array();
+		$aux_edits_talk = array();
+		$aux_edits_us = array();
+		$aux_edits_ustalk = array();
+		$aux_edits_file = array();
+		$aux_edits_temp = array();
+		$aux_edits_cat = array();
+			
    		//Storing classified information in arrays
    		
    		//This loop clasifies all the data contained in the query (which ignores uploads info) in arrays. 
@@ -301,6 +308,21 @@ class Wiki_model extends CI_Model{
    			
 			//TOTAL INFORMATION
 			$aux_edits [$row->rev_id] = 1;
+			if($row->page_namespace == 0) 
+				$aux_edits_art [$row->rev_id] = 1;
+			if($row->page_namespace == 1) 
+				$aux_edits_talk [$row->rev_id] = 1;
+			if($row->page_namespace == 2) 
+				$aux_edits_us [$row->rev_id] = 1;
+			if($row->page_namespace == 3) 
+				$aux_edits_ustalk [$row->rev_id] = 1;
+			if($row->page_namespace == 6) 
+				$aux_edits_file [$row->rev_id] = 1;
+			if($row->page_namespace == 10) 
+				$aux_edits_temp [$row->rev_id] = 1;
+			if($row->page_namespace == 14) 
+				$aux_edits_cat [$row->rev_id] = 1;
+				
 			$aux_pages [$row->page_title] = 1;
 			$aux_users [$row->user_name] = 1;
 			
@@ -309,6 +331,14 @@ class Wiki_model extends CI_Model{
 				$totalbytesartcount += $row->rev_len - $LAST_PAGE_SIZE;
 			
 			$totaledits[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_edits);
+			$totaledits_art[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_edits_art);
+			$totaledits_talk[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_edits_talk);
+			$totaledits_us[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_edits_us);
+			$totaledits_ustalk[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_edits_ustalk);
+			$totaledits_file[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_edits_file);
+			$totaledits_temp[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_edits_temp);
+			$totaledits_cat[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_edits_cat);
+			
 			$totalpages[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_pages);
 			$totalusers[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_users);
 			$totalbytes[$this->mwtime_to_unix($row->rev_timestamp)] = $totalbytescount;
@@ -558,6 +588,13 @@ class Wiki_model extends CI_Model{
 						, 'pagenamespace' => $pagenamespace
 						, 'pagevisits' => $pagevisits
 						, 'totaledits' => $totaledits
+						, 'totaledits_art' => $totaledits_art
+						, 'totaledits_talk' => $totaledits_talk
+						, 'totaledits_us' => $totaledits_us
+						, 'totaledits_ustalk' => $totaledits_ustalk
+						, 'totaledits_file' => $totaledits_file
+						, 'totaledits_temp' => $totaledits_temp
+						, 'totaledits_cat' => $totaledits_cat
 						, 'totalpages' => $totalpages
 						, 'totalusers' => $totalusers
 						, 'totalvisits' => $totalvisits
@@ -651,6 +688,13 @@ class Wiki_model extends CI_Model{
 					, 'pagenamespace' => $pagenamespace
 					, 'pagevisits' => $pagevisits
 					, 'totaledits' => $totaledits
+					, 'totaledits_art' => $totaledits_art
+					, 'totaledits_talk' => $totaledits_talk
+					, 'totaledits_us' => $totaledits_us
+					, 'totaledits_ustalk' => $totaledits_ustalk
+					, 'totaledits_file' => $totaledits_file
+					, 'totaledits_temp' => $totaledits_temp
+					, 'totaledits_cat' => $totaledits_cat
 					, 'totalpages' => $totalpages
 					, 'totalusers' => $totalusers
 					, 'totalvisits' => $totalvisits
@@ -739,6 +783,13 @@ class Wiki_model extends CI_Model{
 				, 'pagenamespace' => $pagenamespace
 				, 'pagevisits' => $pagevisits
 				, 'totaledits' => $totaledits
+				, 'totaledits_art' => $totaledits_art
+				, 'totaledits_talk' => $totaledits_talk
+				, 'totaledits_us' => $totaledits_us
+				, 'totaledits_ustalk' => $totaledits_ustalk
+				, 'totaledits_file' => $totaledits_file
+				, 'totaledits_temp' => $totaledits_temp
+				, 'totaledits_cat' => $totaledits_cat
 				, 'totalpages' => $totalpages
 				, 'totalusers' => $totalusers
 				, 'totalvisits' => $totalvisits

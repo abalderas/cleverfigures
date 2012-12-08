@@ -27,11 +27,28 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 		function drawChart() {
 			var data = new google.visualization.DataTable();
 			data.addColumn('date', 'Date');
-			data.addColumn('number', 'Editions');
+			data.addColumn('number', 'Total');
+			data.addColumn('number', 'Articles');
+			data.addColumn('number', 'Talks');
+			data.addColumn('number', 'Users');
+			data.addColumn('number', 'User Talks');
+			data.addColumn('number', 'Files');
+			data.addColumn('number', 'Template');
+			data.addColumn('number', 'Category');
 			data.addRows([
 			<?
 				foreach(array_keys($data['totaledits']) as $key){
-					echo "[new Date(".date('Y', $key).", ".date('m', $key)." ,".date('d', $key)."), ".$data['totaledits'][$key]."]";
+					echo "[new Date(".date('Y', $key).", ".
+						date('m', $key)." ,".date('d', $key)."), ".
+						$data['totaledits'][$key].", ".
+						$data['totaledits_art'][$key].", ".
+						$data['totaledits_talk'][$key].", ".
+						$data['totaledits_us'][$key].", ".
+						$data['totaledits_ustalk'][$key].", ".
+						$data['totaledits_file'][$key].", ".
+						$data['totaledits_temp'][$key].", ".
+						$data['totaledits_cat'][$key].", ".
+						"]";
 					if($key != end(array_keys($data['totaledits']))) echo ",";
 				}
 			?>
