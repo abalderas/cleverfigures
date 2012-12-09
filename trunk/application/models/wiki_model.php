@@ -190,8 +190,6 @@ class Wiki_model extends CI_Model{
 			$pagebytescount[$row->page_title] = 0;
 			$pageeditscount_art[$row->page_title] = 0;
 			$pagebytescount_art[$row->page_title] = 0;
-			$totalbytescount = 0;
-			$totalbytesartcount = 0;
 			$usercreationcount[$row->user_name] = 0;
 			$useractivityhour[$row->user_name][date('H', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
 			$useractivitywday[$row->user_name][date('w', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
@@ -204,10 +202,17 @@ class Wiki_model extends CI_Model{
 			$pageactivitymonth[$row->page_title][date('m', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
 			$pageactivityyear[$row->page_title][date('Y', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
 			$totalactivityhour[date('H', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
+			$totalactivityhour_art[date('H', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
 			$totalactivitywday[date('D', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
 			$totalactivityweek[date('W', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
 			$totalactivitymonth[date('M', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
 			$totalactivityyear[date('Y', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
+			$totalactivitywday_art[date('D', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
+			$totalactivityweek_art[date('W', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
+			$totalactivitymonth_art[date('M', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
+			$totalactivityyear_art[date('Y', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
+			$totalbytes[$this->mwtime_to_unix($row->rev_timestamp)] = 0;
+			$totalbytes_art[$this->mwtime_to_unix($row->rev_timestamp)] = 0;
 			
 			
 			$pagebytes[$row->page_title] = array();
@@ -215,7 +220,6 @@ class Wiki_model extends CI_Model{
 			$userpage[$row->user_name] = array();
 			$pageuser[$row->page_title] = array();
 			$totalbytes[$this->mwtime_to_unix($row->rev_timestamp)] = array();
-			$revbucket = array();
 			$usercreatedpages[$row->user_name]= array();
    		}
    		
@@ -235,6 +239,11 @@ class Wiki_model extends CI_Model{
 		$aux_pages_temp = array();
 		$aux_pages_cat = array();
 			
+		$totalbytescount = 0;
+		$totalbytesartcount = 0;
+		
+		$revbucket = array();
+		
    		//Storing classified information in arrays
    		
    		//This loop clasifies all the data contained in the query (which ignores uploads info) in arrays. 
@@ -343,10 +352,6 @@ class Wiki_model extends CI_Model{
 			if($row->page_namespace == 0) 
 				$aux_users_art [$row->user_name] = 1;
 			
-			$totalbytescount += $row->rev_len - $LAST_PAGE_SIZE;
-			if($row->page_namespace == 0)
-				$totalbytesartcount += $row->rev_len - $LAST_PAGE_SIZE;
-			
 			$totaledits[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_edits);
 			$totaledits_art[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_edits_art);
 			$totaledits_talk[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_edits_talk);
@@ -368,16 +373,35 @@ class Wiki_model extends CI_Model{
 			$totalusers[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_users);
 			$totalusers_art[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_users_art);
 			
+			$tamdiff = $row->rev_len - $LAST_PAGE_SIZE;
+			$totalbytescount += $tamdiff;
+			if($row->page_namespace == 0)
+				$totalbytesartcount += $tamdiff;
 			$totalbytes[$this->mwtime_to_unix($row->rev_timestamp)] = $totalbytescount;
 			$totalbytes_art[$this->mwtime_to_unix($row->rev_timestamp)] = $totalbytesartcount;
+			
 			$totalvisits = array_sum($pagevisits);
 			$revisiondate[$row->rev_id] = $this->mwtime_to_unix($row->rev_timestamp);
 				
 			$totalactivityhour[date('H', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
+			if($row->page_namespace == 0)
+				$totalactivityhour_art[date('H', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
+				
 			$totalactivitywday[date('D', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
+			if($row->page_namespace == 0)
+				$totalactivitywday_art[date('D', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
+				
 			$totalactivityweek[date('W', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
+			if($row->page_namespace == 0)
+				$totalactivityweek_art[date('W', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
+				
 			$totalactivitymonth[date('M', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
+			if($row->page_namespace == 0)
+				$totalactivitymonth_art[date('M', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
+				
 			$totalactivityyear[date('Y', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
+			if($row->page_namespace == 0)
+				$totalactivityyear_art[date('Y', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
 			
 			
 			//PERCENTAGES
@@ -674,10 +698,15 @@ class Wiki_model extends CI_Model{
 						, 'catactivitymonth' => $catactivitymonth
 						, 'catactivityyear' => $catactivityyear
 						, 'totalactivityhour' => $totalactivityhour
+						, 'totalactivityhour_art' => $totalactivityhour_art
 						, 'totalactivitywday' => $totalactivitywday
+						, 'totalactivitywday_art' => $totalactivitywday_art
 						, 'totalactivityweek' => $totalactivityweek
+						, 'totalactivityweek_art' => $totalactivityweek_art
 						, 'totalactivitymonth' => $totalactivitymonth
+						, 'totalactivitymonth_art' => $totalactivitymonth_art
 						, 'totalactivityyear' => $totalactivityyear
+						, 'totalactivityyear_art' => $totalactivityyear_art
 						, 'revisionpage' => $revisionpage
 						, 'revisioncategory' => $revisioncategory
 					);
@@ -777,10 +806,15 @@ class Wiki_model extends CI_Model{
 					, 'catactivitymonth' => $catactivitymonth
 					, 'catactivityyear' => $catactivityyear
 					, 'totalactivityhour' => $totalactivityhour
+					, 'totalactivityhour_art' => $totalactivityhour_art
 					, 'totalactivitywday' => $totalactivitywday
+					, 'totalactivitywday_art' => $totalactivitywday_art
 					, 'totalactivityweek' => $totalactivityweek
+					, 'totalactivityweek_art' => $totalactivityweek_art
 					, 'totalactivitymonth' => $totalactivitymonth
+					, 'totalactivitymonth_art' => $totalactivitymonth_art
 					, 'totalactivityyear' => $totalactivityyear
+					, 'totalactivityyear_art' => $totalactivityyear_art
 					, 'revisionpage' => $revisionpage
 					, 'revisioncategory' => $revisioncategory
 				);
@@ -867,10 +901,15 @@ class Wiki_model extends CI_Model{
 				, 'catactivitymonth' => $catactivitymonth
 				, 'catactivityyear' => $catactivityyear
 				, 'totalactivityhour' => $totalactivityhour
+				, 'totalactivityhour_art' => $totalactivityhour_art
 				, 'totalactivitywday' => $totalactivitywday
+				, 'totalactivitywday_art' => $totalactivitywday_art
 				, 'totalactivityweek' => $totalactivityweek
+				, 'totalactivityweek_art' => $totalactivityweek_art
 				, 'totalactivitymonth' => $totalactivitymonth
+				, 'totalactivitymonth_art' => $totalactivitymonth_art
 				, 'totalactivityyear' => $totalactivityyear
+				, 'totalactivityyear_art' => $totalactivityyear_art
 				, 'revisionpage' => $revisionpage
 				, 'revisioncategory' => $revisioncategory
 			);

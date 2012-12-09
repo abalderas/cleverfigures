@@ -65,7 +65,10 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			data2.addRows([
 			<?
 				foreach(array_keys($data['totalbytes']) as $key){
-					echo "[new Date(".date('Y', $key).", ".date('m', $key)." ,".date('d', $key)."), ".$data['totalbytes'][$key].", ".$data['totalbytes_art'][$key]."]";
+					echo "[new Date(".date('Y', $key).", ".date('m', $key)." ,".date('d', $key)."), ".
+					$data['totalbytes'][$key].", ".
+					$data['totalbytes_art'][$key].
+					"]";
 					if($key != end(array_keys($data['totalbytes']))) echo ",";
 				}
 			?>
@@ -125,10 +128,13 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			chartusers.draw(data4, {displayAnnotations: false});
 			
 			var data5 = new google.visualization.arrayToDataTable([
-				['Hour', 'Editions'],
+				['Hour', 'Total', 'Articles'],
 			<?
 				foreach(array_keys($data['totalactivityhour']) as $key){
-					echo "[".$key.", ".$data['totalactivityhour'][$key]."]";
+					echo "[".$key.", ".
+					$data['totalactivityhour'][$key].", ".
+					$data['totalactivityhour_art'][$key].
+					"]";
 					if($key != end(array_keys($data['totalactivityhour']))) echo ",";
 				}
 			?>
@@ -143,10 +149,13 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			charttotalactivityhour.draw(data5, options);
 			
 			var data6 = new google.visualization.arrayToDataTable([
-				['Day', 'Editions'],
+				['Day', 'Total', 'Articles'],
 			<?
 				foreach(array_keys($data['totalactivitywday']) as $key){
-					echo "['".$key."', ".$data['totalactivitywday'][$key]."]";
+					echo "['".$key."', ".
+					$data['totalactivitywday'][$key].", ".
+					$data['totalactivitywday_art'][$key].
+					"]";
 					if($key != end(array_keys($data['totalactivitywday']))) echo ",";
 				}
 			?>
@@ -161,10 +170,13 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			charttotalactivitywday.draw(data6, options);
 			
 			var data7 = new google.visualization.arrayToDataTable([
-				['Week', 'Editions'],
+				['Week', 'Total', 'Articles'],
 			<?
 				foreach(array_keys($data['totalactivityweek']) as $key){
-					echo "['".$key."', ".$data['totalactivityweek'][$key]."]";
+					echo "['".$key."', ".
+					$data['totalactivityweek'][$key].", ".
+					$data['totalactivityweek_art'][$key].
+					"]";
 					if($key != end(array_keys($data['totalactivityweek']))) echo ",";
 				}
 			?>
@@ -179,10 +191,13 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			charttotalactivityweek.draw(data7, options);
 			
 			var data8 = new google.visualization.arrayToDataTable([
-				['Month', 'Editions'],
+				['Month', 'Total', 'Articles'],
 			<?
 				foreach(array_keys($data['totalactivitymonth']) as $key){
-					echo "['".$key."', ".$data['totalactivitymonth'][$key]."]";
+					echo "['".$key."', ".
+					$data['totalactivitymonth'][$key].", ".
+					$data['totalactivitymonth_art'][$key].
+					"]";
 					if($key != end(array_keys($data['totalactivitymonth']))) echo ",";
 				}
 			?>
@@ -197,10 +212,13 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			charttotalactivitymonth.draw(data8, options);
 			
 			var data9 = new google.visualization.arrayToDataTable([
-				['Year', 'Editions'],
+				['Year', 'Total', 'Articles'],
 			<?
 				foreach(array_keys($data['totalactivityyear']) as $key){
-					echo "['".$key."', ".$data['totalactivityyear'][$key]."]";
+					echo "['".$key."', ".
+					$data['totalactivityyear'][$key].", ".
+					$data['totalactivityyear_art'][$key].
+					"]";
 					if($key != end(array_keys($data['totalactivityyear']))) echo ",";
 				}
 			?>
