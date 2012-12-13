@@ -374,7 +374,9 @@ class Wiki_model extends CI_Model{
 			$totalusers_art[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_users_art);
 			
 			$tamdiff = $row->rev_len - $LAST_PAGE_SIZE;
+			
 			$totalbytesdiff[$this->mwtime_to_unix($row->rev_timestamp)] = $tamdiff;
+			
 			$totalbytescount += $tamdiff;
 			if($row->page_namespace == 0)
 				$totalbytesartcount += $tamdiff;
