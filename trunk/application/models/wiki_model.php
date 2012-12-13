@@ -374,6 +374,7 @@ class Wiki_model extends CI_Model{
 			$totalusers_art[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_users_art);
 			
 			$tamdiff = $row->rev_len - $LAST_PAGE_SIZE;
+			$totalbytesdiff[$this->mwtime_to_unix($row->rev_timestamp)] = $tamdiff;
 			$totalbytescount += $tamdiff;
 			if($row->page_namespace == 0)
 				$totalbytesartcount += $tamdiff;
@@ -382,6 +383,7 @@ class Wiki_model extends CI_Model{
 			
 			$totalvisits = array_sum($pagevisits);
 			$revisiondate[$row->rev_id] = $this->mwtime_to_unix($row->rev_timestamp);
+			$daterevision[$this->mwtime_to_unix($row->rev_timestamp)] = $row->rev_id;
 				
 			$totalactivityhour[date('H', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
 			if($row->page_namespace == 0)
@@ -680,6 +682,7 @@ class Wiki_model extends CI_Model{
 						, 'totalupsize' => $totalupsize
 						, 'totalimages' => $totalimages
 						, 'revisiondate' => $revisiondate
+						, 'daterevision' => $daterevision
 						, 'userid' => $userid
 						, 'iduser' => $iduser
 						, 'useractivityhour' => $useractivityhour
@@ -709,6 +712,7 @@ class Wiki_model extends CI_Model{
 						, 'totalactivityyear_art' => $totalactivityyear_art
 						, 'revisionpage' => $revisionpage
 						, 'revisioncategory' => $revisioncategory
+						, 'totalbytesdiff' => $totalbytesdiff
 					);
 				
 				
@@ -817,6 +821,8 @@ class Wiki_model extends CI_Model{
 					, 'totalactivityyear_art' => $totalactivityyear_art
 					, 'revisionpage' => $revisionpage
 					, 'revisioncategory' => $revisioncategory
+					, 'daterevision' => $daterevision
+					, 'totalbytesdiff' => $totalbytesdiff
 				);
 				
 				
@@ -912,6 +918,8 @@ class Wiki_model extends CI_Model{
 				, 'totalactivityyear_art' => $totalactivityyear_art
 				, 'revisionpage' => $revisionpage
 				, 'revisioncategory' => $revisioncategory
+				, 'daterevision' => $daterevision
+				, 'totalbytesdiff' => $totalbytesdiff
 			);
 			
 		echo ">> Wiki analisis accomplished.</br>";

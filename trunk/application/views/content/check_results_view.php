@@ -264,7 +264,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			
 			var data12 = new google.visualization.DataTable();
 			data12.addColumn('datetime', 'Date');
-			data12.addColumn('number', 'Average Mark');
+			data12.addColumn('number', 'Average Grade');
 			data12.addRows([
 			<?
 				foreach(array_keys($data['totalaverage']) as $key){
@@ -287,21 +287,25 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			var data13 = new google.visualization.DataTable();
 			data13.addColumn('datetime', 'Date');
 			data13.addColumn('number', 'Bytes X Quality');
+			data13.addColumn('number', 'Bytes');
 			data13.addRows([
 			<?
-				foreach(array_keys($data['totalmark']) as $key){
-					$date = $data['revisiondate'][$key];
-					$bytes = $data['totalbytes'][$date];
-					$mark = $data['totalaverage'][$key];
-					$result = $bytes + ($mark - 5) * ($bytes/5);
+				$result = 0;
+				foreach(array_keys($data['totalbytes']) as $date){
+					$rev = $data['daterevision'][$date];
+					$grade = isset($data['totalaverage'][$rev])? $data['totalaverage'][$rev] : 5;
+					
+					$result += $data['totalbytesdiff'][$date] + ($grade - 5) * ($data['totalbytesdiff'][$date]/5);
 					echo "[new Date(".
 					date('Y', $date).", ".
 					date('m', $date)." ,".
 					date('d', $date)." ,".
 					date('H', $date)." ,".
 					date('i', $date)."), ".
-					$result."]";
-					if($key != end(array_keys($data['totalmark']))) echo ",";
+					$result.", ".
+					$data['totalbytes'][$date].
+					"]";
+					if($date != end(array_keys($data['totalbytes']))) echo ",";
 				}
 			?>
 			]);
@@ -322,12 +326,12 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			data.addColumn('number', 'Bytes in articles %');
 			<? if(isset($data['useruploads'])) echo "data.addColumn('number', 'Uploads');";?>
 			<? if(isset($data['useruploads'])) echo "data.addColumn('number', 'Uploads %');";?>
-			data.addColumn('number', 'Average Mark');
-			data.addColumn('number', 'Maximum Mark');
-			data.addColumn('number', 'Minimum Mark');
-			data.addColumn('number', 'Average Mark as revisor');
-			data.addColumn('number', 'Maximum Mark as revisor');
-			data.addColumn('number', 'Minimum Mark as revisor');
+			data.addColumn('number', 'Average Grade');
+			data.addColumn('number', 'Maximum Grade');
+			data.addColumn('number', 'Minimum Grade');
+			data.addColumn('number', 'Average Grade as revisor');
+			data.addColumn('number', 'Maximum Grade as revisor');
+			data.addColumn('number', 'Minimum Grade as revisor');
 			data.addRows([
 			<? 
 				foreach(array_keys($data['useredits']) as $key){
@@ -380,9 +384,9 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			pagedata.addColumn('number', 'Bytes %');
 			<? if(isset($data['pageuploads'])) echo "pagedata.addColumn('number', 'Uploads');";?>
 			<? if(isset($data['pageuploads'])) echo "pagedata.addColumn('number', 'Uploads %');";?>
-			pagedata.addColumn('number', 'Average Mark');
-			pagedata.addColumn('number', 'Maximum Mark');
-			pagedata.addColumn('number', 'Minimum Mark');
+			pagedata.addColumn('number', 'Average Grade');
+			pagedata.addColumn('number', 'Maximum Grade');
+			pagedata.addColumn('number', 'Minimum Grade');
 			pagedata.addColumn('number', 'Visits');
 			pagedata.addColumn('number', 'Visits %');
 			pagedata.addRows([
