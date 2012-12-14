@@ -32,34 +32,22 @@ class Analisis_form extends CI_Controller {
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
 
-	function displayTree($array) {
-		$output = "";
-		$newline = "<br>";
-		foreach($array as $key => $value) {    //cycle through each item in the array as key => value pairs
-			if (is_array($value) || is_object($value)) {        //if the VALUE is an array, then
-				//call it out as such, surround with brackets, and recursively call displayTree.
-				$value = "Array()" . $newline . "(<ul>" . $this->displayTree($value) . "</ul>)" . $newline;
-			}
-			//if value isn't an array, it must be a string. output its' key and value.
-			$output .= "[$key] => " . $value . $newline;
+	private function standard_deviation($aValues, $bSample = false){
+		$fMean = array_sum($aValues) / count($aValues);
+		$fVariance = 0.0;
+		foreach ($aValues as $i){
+			$fVariance += pow($i - $fMean, 2);
 		}
-		return $output;
+		$fVariance /= ( $bSample ? count($aValues) - 1 : count($aValues) );
+		return (float) sqrt($fVariance);
 	}
 	
 	private function extra_info($wikidata, $colordata){
-		foreach(array_keys($wikidata['revisionpage']) as $key){
-			foreach(array_keys($wikidata['revisionpage'][$key]) as $revision){
+		foreach(array_keys($wikidata['revisionpage']) as $key){ //páginas
+			foreach(array_keys($wikidata['revisionpage'][$key]) as $revision){ //revisiones
 				if(isset($wikidata['revisionpage'][$key][$revision]) and isset($colordata['totalmark'][$revision])){
-					$pagemaxvalue[$key][$revision] = 0;
-					$pageminvalue[$key][$revision] = 10;
 					$pagenvalues[$key] = 0;
 					$pagevaluesum[$key] = 0;
-				}
-				else{
-					$pagemaxvalue[$key][$revision] = false;
-					$pageminvalue[$key][$revision] = false;
-					$pagenvalues[$key] = false;
-					$pagevaluesum[$key] = false;
 				}
 			}
 		}
@@ -67,15 +55,12 @@ class Analisis_form extends CI_Controller {
 		foreach(array_keys($wikidata['revisionpage']) as $key){
 			foreach(array_keys($wikidata['revisionpage'][$key]) as $revision){
 				if(isset($wikidata['revisionpage'][$key][$revision]) and isset($colordata['totalmark'][$revision])){
-					if($colordata['totalmark'][$revision] > $pagemaxvalue[$key][$revision])
-						$pagemaxvalue[$key][$revision] = $colordata['totalmark'][$revision];
-						
-					if($colordata['totalmark'][$revision] < $pageminvalue[$key][$revision])
-						$pageminvalue[$key][$revision] = $colordata['totalmark'][$revision];
-						
-					$pagenvalues[$key] += 1;
-					$pagevaluesum[$key] += $colordata['totalmark'][$revision];
-					$pageaveragevalue[$key][$revision] = $pagevaluesum[$key] / $pagenvalues[$key];
+					$pagegrades[$key][$revision] = $colordata['totalmark'][$revision];
+					
+					$pageaveragevalue[$key][$revision] = array_sum($pagegrades[$key]) / count($pagegrades[$key]);
+					$pagesd[$key][$revision] = $this->standard_deviation($pagegrades[$key]);
+					$pageminvalue[$key][$revision] = min($pagegrades[$key]);
+					$pagemaxvalue[$key][$revision] = max($pagegrades[$key]);
 				}
 			}
 		}
@@ -101,9 +86,10 @@ class Analisis_form extends CI_Controller {
 		}
 		
 		return array(
-			'pagemaxvalue' => $pagemaxvalue, 
-			'pageminvalue' => $pageminvalue, 
+			'pagesd' => $pagesd, 
 			'pageaveragevalue' => $pageaveragevalue, 
+			'pageminvalue' => $pageminvalue,
+			'pagemaxvalue' => $pagemaxvalue,
 			'catmaxvalue' => $catmaxvalue, 
 			'catminvalue' => $catminvalue, 
 			'cataveragevalue' => $cataveragevalue

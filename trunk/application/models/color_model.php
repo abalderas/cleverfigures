@@ -35,6 +35,16 @@ class Color_model extends CI_Model{
 		return array_sum($array) / count($array);
    	}
    	
+   	private function standard_deviation($aValues, $bSample = false){
+		$fMean = array_sum($aValues) / count($aValues);
+		$fVariance = 0.0;
+		foreach ($aValues as $i){
+			$fVariance += pow($i - $fMean, 2);
+		}
+		$fVariance /= ( $bSample ? count($aValues) - 1 : count($aValues) );
+		return (float) sqrt($fVariance);
+	}
+	
    	function countdim($array){
 		if (is_array(reset($array)))
 			$return = $this->countdim(reset($array)) + 1;
@@ -130,8 +140,9 @@ class Color_model extends CI_Model{
 			
 			$usermark	[$row->eva_user][$row->eva_revision] = $row->ee_nota;
 			$useraverage	[$row->eva_user][$row->eva_revision] = $this->array_avg($usermark[$row->eva_user]);
-			$usermaxvalue	[$row->eva_user][$row->eva_revision] = max($usermark[$row->eva_user]);
 			$userminvalue	[$row->eva_user][$row->eva_revision] = min($usermark[$row->eva_user]);
+			$usermaxvalue	[$row->eva_user][$row->eva_revision] = max($usermark[$row->eva_user]);
+			$usersd		[$row->eva_user][$row->eva_revision] = $this->standard_deviation($usermark[$row->eva_user]);
 			$usercriteria	[$row->eva_user][$row->eva_revision] = $row->ent_entregable;
 			$userrevisor	[$row->eva_user][$row->eva_revision] = $row->eva_revisor;
 			$usercomment	[$row->eva_user][$row->eva_revision] = $row->ee_comentario;
@@ -175,6 +186,7 @@ class Color_model extends CI_Model{
    		
    		$analisis_data = array(	'usermark' => $usermark
 				, 'useraverage' => $useraverage
+				, 'usersd' => $usersd
 				, 'usermaxvalue' => $usermaxvalue
 				, 'userminvalue' => $userminvalue
 				, 'usercriteria' => $usercriteria

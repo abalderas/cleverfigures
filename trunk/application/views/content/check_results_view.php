@@ -327,6 +327,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			<? if(isset($data['useruploads'])) echo "data.addColumn('number', 'Uploads');";?>
 			<? if(isset($data['useruploads'])) echo "data.addColumn('number', 'Uploads %');";?>
 			data.addColumn('number', 'Average Grade');
+			data.addColumn('number', 'Standard Deviation');
 			data.addColumn('number', 'Maximum Grade');
 			data.addColumn('number', 'Minimum Grade');
 			data.addColumn('number', 'Average Grade as revisor');
@@ -353,10 +354,11 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 					
 					if(isset($data['useraverage'][$data['iduser'][$key]])) 
 						echo round(end($data['useraverage'][$data['iduser'][$key]]), 3).",".
+							round(end($data['usersd'][$data['iduser'][$key]]), 3).",".
 							round(end($data['usermaxvalue'][$data['iduser'][$key]]), 3).",".
 							round(end($data['userminvalue'][$data['iduser'][$key]]), 3).",";
 					else
-						echo "0, 0, 0, ";
+						echo "0, 0, 0, 0, ";
 						
 					if(isset($data['revisoraverage'][$data['iduser'][$key]])) 
 						echo round(end($data['revisoraverage'][$data['iduser'][$key]]), 3).",".
@@ -377,7 +379,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			
 			var pagedata = new google.visualization.DataTable();
 			pagedata.addColumn('string', 'Name');
-			pagedata.addColumn('string', 'Namespace');
+			pagedata.addColumn('number', 'Namespace');
 			pagedata.addColumn('number', 'Edits');
 			pagedata.addColumn('number', 'Edits %');
 			pagedata.addColumn('number', 'Bytes');
@@ -385,15 +387,16 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			<? if(isset($data['pageuploads'])) echo "pagedata.addColumn('number', 'Uploads');";?>
 			<? if(isset($data['pageuploads'])) echo "pagedata.addColumn('number', 'Uploads %');";?>
 			pagedata.addColumn('number', 'Average Grade');
-			pagedata.addColumn('number', 'Maximum Grade');
-			pagedata.addColumn('number', 'Minimum Grade');
+			pagedata.addColumn('number', 'Standard Deviation');
+			pagedata.addColumn('number', 'Min Grade');
+			pagedata.addColumn('number', 'Max Grade');
 			pagedata.addColumn('number', 'Visits');
 			pagedata.addColumn('number', 'Visits %');
 			pagedata.addRows([
 			<? 
 				foreach(array_keys($data['pageedits']) as $key){
-					echo "['".$key."','".
-						$data['pagenamespace'][$key]."',".
+					echo "['".$key."', ".
+						$data['pagenamespace'][$key].", ".
 						round(end($data['pageedits'][$key]), 3).",".
 						round(end($data['pageedits_per'][$key]), 3).",".
 						round(end($data['pagebytes'][$key]), 3).",".
@@ -404,12 +407,13 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 					else
 						echo "0, 0, ";
 					
-					if(isset($data['pageaverage'][$key])) 
-						echo round(end($data['pageaverage'][$key]), 3).",".
-							round(end($data['pagemaxvalue'][$key]), 3).",".
-							round(end($data['pageminvalue'][$key]), 3).",";
+					if(isset($data['pageaveragevalue'][$key])) 
+						echo round(end($data['pageaveragevalue'][$key]), 3).",".
+							round(end($data['pagesd'][$key]), 3).",".
+							round(end($data['pageminvalue'][$key]), 3).",".
+							round(end($data['pagemaxvalue'][$key]), 3).",";
 					else
-						echo "0, 0, 0, ";
+						echo "0, 0, 0, 0, ";
 						
 					echo $data['pagevisits'][$key].", ".round($data['pagevisits'][$key] / array_sum($data['pagevisits']), 3);
 					
@@ -483,6 +487,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	<tr>
 		<td><div id='charttotalactivityyear' style='width: 1000px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
+	<? if (!isset($data['totaluploads'])) echo "<!--";?>
 	<tr>
 		<th><?=lang('voc.i18n_uploads')?></th>
 	</tr>
@@ -495,6 +500,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	<tr>
 		<td><div id='charttotalupsize' style='width: 1000px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
+	<? if (!isset($data['totaluploads'])) echo "-->";?>
+	<? if (!isset($data['totalaverage'])) echo "<!--";?>
 	<tr>
 		<th><?=lang('voc.i18n_average_quality')?></th>
 	</tr>
@@ -507,6 +514,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	<tr>
 		<td><div id='charttotalbytesxquality' style='width: 1000px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
+	<? if (!isset($data['totalaverage'])) echo "-->";?>
 	</table>
 	
 	<br><br>
