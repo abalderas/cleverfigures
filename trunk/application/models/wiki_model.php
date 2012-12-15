@@ -213,13 +213,18 @@ class Wiki_model extends CI_Model{
 			$totalactivityyear_art[date('Y', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
 			$totalbytes[$this->mwtime_to_unix($row->rev_timestamp)] = 0;
 			$totalbytes_art[$this->mwtime_to_unix($row->rev_timestamp)] = 0;
+			$totalbytes_talk[$this->mwtime_to_unix($row->rev_timestamp)] = 0;
+			$totalbytes_us[$this->mwtime_to_unix($row->rev_timestamp)] = 0;
+			$totalbytes_ustalk[$this->mwtime_to_unix($row->rev_timestamp)] = 0;
+			$totalbytes_file[$this->mwtime_to_unix($row->rev_timestamp)] = 0;
+			$totalbytes_temp[$this->mwtime_to_unix($row->rev_timestamp)] = 0;
+			$totalbytes_cat[$this->mwtime_to_unix($row->rev_timestamp)] = 0;
 			
 			
 			$pagebytes[$row->page_title] = array();
 			$pagebytes_art[$row->page_title] = array();
 			$userpage[$row->user_name] = array();
 			$pageuser[$row->page_title] = array();
-			$totalbytes[$this->mwtime_to_unix($row->rev_timestamp)] = array();
 			$usercreatedpages[$row->user_name]= array();
    		}
    		
@@ -241,8 +246,12 @@ class Wiki_model extends CI_Model{
 			
 		$totalbytescount = 0;
 		$totalbytesartcount = 0;
-		
-		$revbucket = array();
+		$totalbytestalkcount = 0;
+		$totalbytesuscount = 0;
+		$totalbytesustalkcount = 0;
+		$totalbytesfilecount = 0;
+		$totalbytestempcount = 0;
+		$totalbytescatcount = 0;
 		
    		//Storing classified information in arrays
    		
@@ -380,8 +389,27 @@ class Wiki_model extends CI_Model{
 			$totalbytescount += $tamdiff;
 			if($row->page_namespace == 0)
 				$totalbytesartcount += $tamdiff;
+			if($row->page_namespace == 1)
+				$totalbytestalkcount += $tamdiff;
+			if($row->page_namespace == 2)
+				$totalbytesuscount += $tamdiff;
+			if($row->page_namespace == 3)
+				$totalbytesustalkcount += $tamdiff;
+			if($row->page_namespace == 6)
+				$totalbytesfilecount += $tamdiff;
+			if($row->page_namespace == 10)
+				$totalbytestempcount += $tamdiff;
+			if($row->page_namespace == 14)
+				$totalbytescatcount += $tamdiff;
+				
 			$totalbytes[$this->mwtime_to_unix($row->rev_timestamp)] = $totalbytescount;
 			$totalbytes_art[$this->mwtime_to_unix($row->rev_timestamp)] = $totalbytesartcount;
+			$totalbytes_talk[$this->mwtime_to_unix($row->rev_timestamp)] = $totalbytestalkcount;
+			$totalbytes_us[$this->mwtime_to_unix($row->rev_timestamp)] = $totalbytesuscount;
+			$totalbytes_ustalk[$this->mwtime_to_unix($row->rev_timestamp)] = $totalbytesustalkcount;
+			$totalbytes_file[$this->mwtime_to_unix($row->rev_timestamp)] = $totalbytesfilecount;
+			$totalbytes_temp[$this->mwtime_to_unix($row->rev_timestamp)] = $totalbytestempcount;
+			$totalbytes_cat[$this->mwtime_to_unix($row->rev_timestamp)] = $totalbytescatcount;
 			
 			$totalvisits = array_sum($pagevisits);
 			$revisiondate[$row->rev_id] = $this->mwtime_to_unix($row->rev_timestamp);
@@ -663,6 +691,12 @@ class Wiki_model extends CI_Model{
 						, 'totalvisits' => $totalvisits
 						, 'totalbytes' => $totalbytes
 						, 'totalbytes_art' => $totalbytes_art
+						, 'totalbytes_talk' => $totalbytes_talk
+						, 'totalbytes_us' => $totalbytes_us
+						, 'totalbytes_ustalk' => $totalbytes_ustalk
+						, 'totalbytes_file' => $totalbytes_file
+						, 'totalbytes_temp' => $totalbytes_temp
+						, 'totalbytes_cat' => $totalbytes_cat
 						, 'useruploads' => $useruploads
 						, 'useruploads_per' => $useruploads_per
 						, 'userupsize' => $userupsize
@@ -778,6 +812,13 @@ class Wiki_model extends CI_Model{
 					, 'totalvisits' => $totalvisits
 					, 'totalbytes' => $totalbytes
 					, 'totalbytes_art' => $totalbytes_art
+					, 'totalbytes_art' => $totalbytes_art
+					, 'totalbytes_talk' => $totalbytes_talk
+					, 'totalbytes_us' => $totalbytes_us
+					, 'totalbytes_ustalk' => $totalbytes_ustalk
+					, 'totalbytes_file' => $totalbytes_file
+					, 'totalbytes_temp' => $totalbytes_temp
+					, 'totalbytes_cat' => $totalbytes_cat
 					, 'useruploads' => $useruploads
 					, 'useruploads_per' => $useruploads_per
 					, 'userupsize' => $userupsize
@@ -888,6 +929,13 @@ class Wiki_model extends CI_Model{
 				, 'totalvisits' => $totalvisits
 				, 'totalbytes' => $totalbytes
 				, 'totalbytes_art' => $totalbytes_art
+				, 'totalbytes_art' => $totalbytes_art
+				, 'totalbytes_talk' => $totalbytes_talk
+				, 'totalbytes_us' => $totalbytes_us
+				, 'totalbytes_ustalk' => $totalbytes_ustalk
+				, 'totalbytes_file' => $totalbytes_file
+				, 'totalbytes_temp' => $totalbytes_temp
+				, 'totalbytes_cat' => $totalbytes_cat
 				, 'pageusercount' => $pageusercount
 				, 'pagecatcount' => $pagecatcount
 				, 'revisiondate' => $revisiondate

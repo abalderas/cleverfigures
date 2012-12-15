@@ -25,17 +25,17 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 		google.load('visualization', '1', {'packages':['annotatedtimeline', 'corechart', 'table']});
 		google.setOnLoadCallback(drawChart);
 		function drawChart() {
-			var data = new google.visualization.DataTable();
-			data.addColumn('date', 'Date');
-			data.addColumn('number', 'Total');
-			data.addColumn('number', 'Articles');
-			data.addColumn('number', 'Talks');
-			data.addColumn('number', 'Users');
-			data.addColumn('number', 'User Talks');
-			data.addColumn('number', 'Files');
-			data.addColumn('number', 'Template');
-			data.addColumn('number', 'Category');
-			data.addRows([
+			var data1 = new google.visualization.DataTable();
+			data1.addColumn('date', 'Date');
+			data1.addColumn('number', 'Total');
+			data1.addColumn('number', 'Articles');
+			data1.addColumn('number', 'Talks');
+			data1.addColumn('number', 'Users');
+			data1.addColumn('number', 'User Talks');
+			data1.addColumn('number', 'Files');
+			data1.addColumn('number', 'Template');
+			data1.addColumn('number', 'Category');
+			data1.addRows([
 			<?
 				foreach(array_keys($data['totaledits']) as $key){
 					echo "[new Date(".date('Y', $key).", ".
@@ -55,19 +55,35 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			]);
 
 			var chartedits = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotaledits'));
-			chartedits.draw(data, {displayAnnotations: false});
+			chartedits.draw(data1, {
+				'displayAnnotations': false,
+				'fill': 30,
+                                'legendPosition': 'newRow',}
+                                );
 			
 			
 			var data2 = new google.visualization.DataTable();
 			data2.addColumn('datetime', 'Date');
 			data2.addColumn('number', 'Total');
 			data2.addColumn('number', 'Article');
+			data2.addColumn('number', 'Talks');
+			data2.addColumn('number', 'Users');
+			data2.addColumn('number', 'User Talks');
+			data2.addColumn('number', 'Files');
+			data2.addColumn('number', 'Templates');
+			data2.addColumn('number', 'Categories');
 			data2.addRows([
 			<?
 				foreach(array_keys($data['totalbytes']) as $key){
 					echo "[new Date(".date('Y', $key).", ".date('m', $key)." ,".date('d', $key)."), ".
 					$data['totalbytes'][$key].", ".
-					$data['totalbytes_art'][$key].
+					$data['totalbytes_art'][$key].", ".
+					$data['totalbytes_talk'][$key].", ".
+					$data['totalbytes_us'][$key].", ".
+					$data['totalbytes_ustalk'][$key].", ".
+					$data['totalbytes_file'][$key].", ".
+					$data['totalbytes_temp'][$key].", ".
+					$data['totalbytes_cat'][$key].
 					"]";
 					if($key != end(array_keys($data['totalbytes']))) echo ",";
 				}
@@ -75,7 +91,11 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			]);
 
 			var chartbytes = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalbytes'));
-			chartbytes.draw(data2, {displayAnnotations: false});
+			chartbytes.draw(data2, {
+				'displayAnnotations': false,
+				'fill': 30,
+                                'legendPosition': 'newRow',}
+                                );
 			
 			var data3 = new google.visualization.DataTable();
 			data3.addColumn('datetime', 'Date');
@@ -106,7 +126,11 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			]);
 
 			var chartpages = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalpages'));
-			chartpages.draw(data3, {displayAnnotations: false});
+			chartpages.draw(data3, {
+				'displayAnnotations': false,
+				'fill': 30,
+                                'legendPosition': 'newRow',}
+                                );
 			
 			var data4 = new google.visualization.DataTable();
 			data4.addColumn('datetime', 'Date');
@@ -125,14 +149,18 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			]);
 
 			var chartusers = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalusers'));
-			chartusers.draw(data4, {displayAnnotations: false});
+			chartusers.draw(data4, {
+				'displayAnnotations': false,
+				'fill': 30,
+                                'legendPosition': 'newRow',}
+                                );
 			
 			var data5 = new google.visualization.arrayToDataTable([
-				['Hour', 'Total', 'Articles'],
+				['Hour', 'Others', 'Articles'],
 			<?
 				foreach(array_keys($data['totalactivityhour']) as $key){
 					echo "[".$key.", ".
-					$data['totalactivityhour'][$key].", ".
+					($data['totalactivityhour'][$key]-$data['totalactivityhour_art'][$key]).", ".
 					$data['totalactivityhour_art'][$key].
 					"]";
 					if($key != end(array_keys($data['totalactivityhour']))) echo ",";
@@ -141,19 +169,19 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			]);
 			
 			var options = {
-				title: 'Activity per hour',
-				hAxis: {title: 'Hour', titleTextStyle: {data: 'green'}}
+				hAxis: {title: 'Hour', titleTextStyle: {data: 'green'}},
+				isStacked:true
 			};
 
 			var charttotalactivityhour = new google.visualization.ColumnChart(document.getElementById('charttotalactivityhour'));
 			charttotalactivityhour.draw(data5, options);
 			
 			var data6 = new google.visualization.arrayToDataTable([
-				['Day', 'Total', 'Articles'],
+				['Day', 'Others', 'Articles'],
 			<?
 				foreach(array_keys($data['totalactivitywday']) as $key){
 					echo "['".$key."', ".
-					$data['totalactivitywday'][$key].", ".
+					($data['totalactivitywday'][$key]-$data['totalactivitywday_art'][$key]).", ".
 					$data['totalactivitywday_art'][$key].
 					"]";
 					if($key != end(array_keys($data['totalactivitywday']))) echo ",";
@@ -162,19 +190,19 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			]);
 			
 			var options = {
-				title: 'Activity per day of the week',
-				hAxis: {title: 'Day', titleTextStyle: {data: 'green'}}
+				hAxis: {title: 'Day', titleTextStyle: {data: 'green'}},
+				isStacked:true
 			};
 
 			var charttotalactivitywday = new google.visualization.ColumnChart(document.getElementById('charttotalactivitywday'));
 			charttotalactivitywday.draw(data6, options);
 			
 			var data7 = new google.visualization.arrayToDataTable([
-				['Week', 'Total', 'Articles'],
+				['Week', 'Others', 'Articles'],
 			<?
 				foreach(array_keys($data['totalactivityweek']) as $key){
 					echo "['".$key."', ".
-					$data['totalactivityweek'][$key].", ".
+					($data['totalactivityweek'][$key] - $data['totalactivityweek_art'][$key]).", ".
 					$data['totalactivityweek_art'][$key].
 					"]";
 					if($key != end(array_keys($data['totalactivityweek']))) echo ",";
@@ -183,19 +211,19 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			]);
 			
 			var options = {
-				title: 'Activity per week',
-				hAxis: {title: 'Week', titleTextStyle: {data: 'green'}}
+				hAxis: {title: 'Week', titleTextStyle: {data: 'green'}},
+				isStacked:true
 			};
 
 			var charttotalactivityweek = new google.visualization.ColumnChart(document.getElementById('charttotalactivityweek'));
 			charttotalactivityweek.draw(data7, options);
 			
 			var data8 = new google.visualization.arrayToDataTable([
-				['Month', 'Total', 'Articles'],
+				['Month', 'Others', 'Articles'],
 			<?
 				foreach(array_keys($data['totalactivitymonth']) as $key){
 					echo "['".$key."', ".
-					$data['totalactivitymonth'][$key].", ".
+					($data['totalactivitymonth'][$key]-$data['totalactivitymonth_art'][$key]).", ".
 					$data['totalactivitymonth_art'][$key].
 					"]";
 					if($key != end(array_keys($data['totalactivitymonth']))) echo ",";
@@ -204,19 +232,19 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			]);
 			
 			var options = {
-				title: 'Activity per month',
-				hAxis: {title: 'Month', titleTextStyle: {data: 'green'}}
+				hAxis: {title: 'Month', titleTextStyle: {data: 'green'}},
+				isStacked:true
 			};
 
 			var charttotalactivitymonth = new google.visualization.ColumnChart(document.getElementById('charttotalactivitymonth'));
 			charttotalactivitymonth.draw(data8, options);
 			
 			var data9 = new google.visualization.arrayToDataTable([
-				['Year', 'Total', 'Articles'],
+				['Year', 'Others', 'Articles'],
 			<?
 				foreach(array_keys($data['totalactivityyear']) as $key){
 					echo "['".$key."', ".
-					$data['totalactivityyear'][$key].", ".
+					($data['totalactivityyear'][$key]-$data['totalactivityyear_art'][$key]).", ".
 					$data['totalactivityyear_art'][$key].
 					"]";
 					if($key != end(array_keys($data['totalactivityyear']))) echo ",";
@@ -225,8 +253,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			]);
 			
 			var options = {
-				title: 'Activity per year',
-				hAxis: {title: 'Year', titleTextStyle: {data: 'green'}}
+				hAxis: {title: 'Year', titleTextStyle: {data: 'green'}},
+				isStacked:true
 			};
 
 			var charttotalactivityyear = new google.visualization.ColumnChart(document.getElementById('charttotalactivityyear'));
@@ -245,7 +273,11 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			]);
 
 			var charttotaluploads = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotaluploads'));
-			charttotaluploads.draw(data10, {displayAnnotations: false});
+			charttotaluploads.draw(data10, {
+				'displayAnnotations': false,
+				'fill': 30,
+                                'legendPosition': 'newRow',}
+                                );
 			
 			var data11 = new google.visualization.DataTable();
 			data11.addColumn('date', 'Date');
@@ -260,7 +292,11 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			]);
 
 			var charttotalupsize = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalupsize'));
-			charttotalupsize.draw(data11, {displayAnnotations: false});
+			charttotalupsize.draw(data11, {
+				'displayAnnotations': false,
+				'fill': 30,
+                                'legendPosition': 'newRow',}
+                                );
 			
 			var data12 = new google.visualization.DataTable();
 			data12.addColumn('datetime', 'Date');
@@ -282,7 +318,11 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			]);
 
 			var charttotalquality = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalquality'));
-			charttotalquality.draw(data12, {displayAnnotations: false});
+			charttotalquality.draw(data12, {
+				'displayAnnotations': false,
+				'fill': 30,
+                                'legendPosition': 'newRow',}
+                                );
 			
 			var data13 = new google.visualization.DataTable();
 			data13.addColumn('datetime', 'Date');
@@ -311,7 +351,111 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			]);
 			
 			var charttotalbytesxquality = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalbytesxquality'));
-			charttotalbytesxquality.draw(data13, {displayAnnotations: false});
+			charttotalbytesxquality.draw(data13, {
+				'displayAnnotations': false,
+				'fill': 30,
+                                'legendPosition': 'newRow',}
+                                );
+			
+			var data14 = new google.visualization.DataTable();
+			data14.addColumn('number', 'Hour');
+			data14.addColumn('number', 'Quality');
+			data14.addRows([
+			<?
+				foreach(array_keys($data['totalmark']) as $revision){
+					$date = $data['revisiondate'][$revision];
+					$accum[date('H', $date)] = 0;
+					$nrevs[date('H', $date)] = 0;
+				}
+				
+				foreach(array_keys($data['totalmark']) as $revision){
+					$date = $data['revisiondate'][$revision];
+					$grade = $data['totalmark'][$revision];
+					$accum[date('H', $date)] += $grade;
+					$nrevs[date('H', $date)] += 1;
+				}
+				
+				foreach(array_keys($accum) as $hour){
+					echo "[".$hour.", ".($accum[$hour]/$nrevs[$hour])."]";
+					if($hour != end(array_keys($accum))) echo ",";
+				}
+			?>
+			]);
+			
+			var options = {
+				hAxis: {title: 'Hour', titleTextStyle: {data: 'green'}},
+				vAxis: {title: 'Quality', titleTextStyle: {data: 'green'}, minValue:0}
+			};
+			
+			var chartqualityhour = new google.visualization.ScatterChart(document.getElementById('qualityhourchart'));
+			chartqualityhour.draw(data14, options);
+			
+			var data15 = google.visualization.arrayToDataTable([
+				['Type', 	'Editions'],
+				['Articles', 	<?=end($data['totaledits_art'])?>],
+				['Talks', 	<?=end($data['totaledits_talk'])?>],
+				['Users', 	<?=end($data['totaledits_us'])?>],
+				['User Talks',	<?=end($data['totaledits_ustalk'])?>],
+				['Templates', 	<?=end($data['totaledits_temp'])?>],
+				['Categories', 	<?=end($data['totaledits_cat'])?>],
+				['Files', 	<?=end($data['totaledits_file'])?>]
+			]);
+			
+			new google.visualization.PieChart(document.getElementById('chartfinaledits'))
+				.draw(data15,{
+					chartArea:{width:"90%",height:"90%"},
+					legend:{position: 'none'},
+					is3D:true
+				});
+				
+			var data16 = google.visualization.arrayToDataTable([
+				['Type', 	'Bytes'],
+				['Articles', 	<?=end($data['totalbytes_art'])?>],
+				['Talks', 	<?=end($data['totalbytes_talk'])?>],
+				['Users', 	<?=end($data['totalbytes_us'])?>],
+				['User Talks',	<?=end($data['totalbytes_ustalk'])?>],
+				['Templates', 	<?=end($data['totalbytes_temp'])?>],
+				['Categories', 	<?=end($data['totalbytes_cat'])?>],
+				['Files', 	<?=end($data['totalbytes_file'])?>]
+			]);
+			
+			new google.visualization.PieChart(document.getElementById('chartfinalbytes'))
+				.draw(data16,{
+					chartArea:{width:"90%",height:"90%"},
+					legend:{position: 'none'},
+					is3D:true
+				});
+				
+			var data17 = google.visualization.arrayToDataTable([
+				['Type', 	'Pages'],
+				['Articles', 	<?=end($data['totalpages_art'])?>],
+				['Talks', 	<?=end($data['totalpages_talk'])?>],
+				['Users', 	<?=end($data['totalpages_us'])?>],
+				['User Talks',	<?=end($data['totalpages_ustalk'])?>],
+				['Templates', 	<?=end($data['totalpages_temp'])?>],
+				['Categories', 	<?=end($data['totalpages_cat'])?>],
+				['Files', 	<?=end($data['totalpages_file'])?>]
+			]);
+			
+			new google.visualization.PieChart(document.getElementById('chartfinalpages'))
+				.draw(data17,{
+					chartArea:{width:"90%",height:"90%"},
+					legend:{position: 'none'},
+					is3D:true
+				});
+				
+			var data18 = google.visualization.arrayToDataTable([
+				['Type', 				'Pages'],
+				['Contributed to Articles', 		<?=end($data['totalusers_art'])?>],
+				['Did not contribute to articles', 	<?=(end($data['totalusers']) - end($data['totalusers_art']))?>]
+			]);
+			
+			new google.visualization.PieChart(document.getElementById('chartfinalusers'))
+				.draw(data18,{
+					chartArea:{width:"90%",height:"90%"},
+					legend:{position: 'none'},
+					is3D:true
+				});
 			
 			var data = new google.visualization.DataTable();
 			data.addColumn('string', 'Nick');
@@ -432,73 +576,95 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
 	
 <!-- CHARTS -->
+
+	<table id = "bodytable">
+	<tr>
+		<th><?=lang('voc.i18n_edits')?></th>
+		<th><?=lang('voc.i18n_bytes')?></th>
+	</tr>
+	<tr>
+		<td><div id='chartfinaledits' style='width: 400px; height: 400px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='chartfinalbytes' style='width: 400px; height: 400px; border: 0px; padding: 0px;'></div></td>
+	</tr>
+	<tr>
+		<th><?=lang('voc.i18n_pages')?></th>
+		<th><?=lang('voc.i18n_users')?></th>
+	</tr>
+	<tr>
+		<td><div id='chartfinalpages' style='width: 400px; height: 400px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='chartfinalusers' style='width: 400px; height: 400px; border: 0px; padding: 0px;'></div></td>
+	</tr>
+	</table>
+	
+	<br><br>
+	
 	<table id = "bodytable">
 	<tr>
 		<th><?=lang('voc.i18n_edits_evolution')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotaledits' style='border: 0px; width: 1000px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotaledits' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_content_evolution')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalbytes' style='width: 1000px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalbytes' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_pages')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalpages' style='width: 1000px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalpages' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_users')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalusers' style='width: 1000px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalusers' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_activity_hour')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivityhour' style='width: 1000px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalactivityhour' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_activity_wday')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivitywday' style='width: 1000px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalactivitywday' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_activity_week')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivityweek' style='width: 1000px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalactivityweek' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_activity_month')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivitymonth' style='width: 1000px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalactivitymonth' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_activity_year')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivityyear' style='width: 1000px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalactivityyear' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<? if (!isset($data['totaluploads'])) echo "<!--";?>
 	<tr>
 		<th><?=lang('voc.i18n_uploads')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotaluploads' style='width: 1000px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotaluploads' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_upsize')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalupsize' style='width: 1000px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalupsize' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<? if (!isset($data['totaluploads'])) echo "-->";?>
 	<? if (!isset($data['totalaverage'])) echo "<!--";?>
@@ -506,13 +672,19 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 		<th><?=lang('voc.i18n_average_quality')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalquality' style='width: 1000px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalquality' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_bytesxquality')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalbytesxquality' style='width: 1000px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalbytesxquality' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
+	</tr>
+	<tr>
+		<th><?=lang('voc.i18n_hourquality')?></th>
+	</tr>
+	<tr>
+		<td><div id='qualityhourchart' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<? if (!isset($data['totalaverage'])) echo "-->";?>
 	</table>
@@ -524,7 +696,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 		<th><?=lang('voc.i18n_users')?></th>
 	</tr>
 	<tr>
-	<td><div id = "user_table"></div></td>
+		<td><div id = "user_table"></div></td>
 	</tr>
 	</table>
 	
@@ -535,7 +707,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 		<th><?=lang('voc.i18n_pages')?></th>
 	</tr>
 	<tr>
-	<td><div id = "pages_table"></div></td>
+		<td><div id = "pages_table"></div></td>
 	</tr>
 	</table>
 			
