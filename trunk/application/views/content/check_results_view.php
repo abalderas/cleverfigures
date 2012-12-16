@@ -632,6 +632,26 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 		}
 	</script>
 
+	<table id = "bodytable">
+	<tr>
+		<th colspan = "2"><?=lang('voc.i18n_filter_by')?></th>
+	</tr>
+	<tr>
+		<td style = "width:400px"><?
+			echo form_open('filters_form');
+			echo form_dropdown('select_filter', array(lang('voc.i18n_user') => lang('voc.i18n_user'),
+								lang('voc.i18n_page') => lang('voc.i18n_page'),
+								lang('voc.i18n_category') => lang('voc.i18n_category'),
+								lang('voc.i18n_criteria') => lang('voc.i18n_criteria')));
+		?></td>
+		<td style = "width:400px"><?
+			echo form_input('filterstring');
+			echo form_close();
+		?></td>
+	</tr>
+	</table>
+	
+	<br><br>
 	
 <!-- CHARTS -->
 
