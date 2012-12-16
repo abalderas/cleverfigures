@@ -530,6 +530,10 @@ class Wiki_model extends CI_Model{
 			
 			$revisioncategory[$row->cl_to][$row->rev_id] = true; 
 			
+			//TOTAL INFORMATION
+			
+			$aux_categories[$row->cl_to] = 1;
+			$totalcategories[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_categories);
 			
 			//PERCENTAGES
 			
@@ -749,6 +753,7 @@ class Wiki_model extends CI_Model{
 						, 'revisionpage' => $revisionpage
 						, 'revisioncategory' => $revisioncategory
 						, 'totalbytesdiff' => $totalbytesdiff
+						, 'totalcategories' => $totalcategories
 					);
 				
 				
@@ -866,6 +871,7 @@ class Wiki_model extends CI_Model{
 					, 'revisioncategory' => $revisioncategory
 					, 'daterevision' => $daterevision
 					, 'totalbytesdiff' => $totalbytesdiff
+					, 'totalcategories' => $totalcategories
 				);
 				
 				
@@ -970,6 +976,7 @@ class Wiki_model extends CI_Model{
 				, 'revisioncategory' => $revisioncategory
 				, 'daterevision' => $daterevision
 				, 'totalbytesdiff' => $totalbytesdiff
+				, 'totalcategories' => $totalcategories
 			);
 			
 		echo ">> Wiki analisis accomplished.</br>";

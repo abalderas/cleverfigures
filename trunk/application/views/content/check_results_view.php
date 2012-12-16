@@ -154,6 +154,27 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 				'fill': 30,
                                 'legendPosition': 'newRow',}
                                 );
+                                
+                        var data44 = new google.visualization.DataTable();
+			data44.addColumn('datetime', 'Date');
+			data44.addColumn('number', 'Total');
+			data44.addRows([
+			<?
+				foreach(array_keys($data['totalcategories']) as $key){
+					echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
+					$data['totalcategories'][$key].
+					"]";
+					if($key != end(array_keys($data['totalcategories']))) echo ",";
+				}
+			?>
+			]);
+
+			var chartcats = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalcategories'));
+			chartcats.draw(data44, {
+				'displayAnnotations': false,
+				'fill': 30,
+                                'legendPosition': 'newRow',}
+                                );
 			
 			var data5 = new google.visualization.arrayToDataTable([
 				['Hour', 'Others', 'Articles'],
@@ -544,22 +565,22 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 						round(end($data['pageedits'][$key]), 3).",".
 						round(end($data['pageedits_per'][$key]), 3).",".
 						round(end($data['pagebytes'][$key]), 3).",".
-						round(end($data['pagebytes_per'][$key]), 3).",";
+						round(end($data['pagebytes_per'][$key]), 3);
 					if(isset($data['pageuploads'][$key])) 
-						echo round(end($data['pageuploads'][$key]), 3).",".
-							round(end($data['pageuploads_per'][$key]), 3).",";
+						echo ", ".round(end($data['pageuploads'][$key]), 3).",".
+							round(end($data['pageuploads_per'][$key]), 3);
 					else
-						echo "0, 0, ";
+						echo ", 0, 0";
 					
 					if(isset($data['pageaveragevalue'][$key])) 
-						echo round(end($data['pageaveragevalue'][$key]), 3).",".
+						echo ", ".round(end($data['pageaveragevalue'][$key]), 3).",".
 							round(end($data['pagesd'][$key]), 3).",".
 							round(end($data['pageminvalue'][$key]), 3).",".
-							round(end($data['pagemaxvalue'][$key]), 3).",";
+							round(end($data['pagemaxvalue'][$key]), 3);
 					else
-						echo "0, 0, 0, 0, ";
+						echo ", 0, 0, 0, 0";
 						
-					echo $data['pagevisits'][$key].", ".round($data['pagevisits'][$key] / array_sum($data['pagevisits']), 3);
+					echo ", ".$data['pagevisits'][$key].", ".round($data['pagevisits'][$key] / array_sum($data['pagevisits']), 3);
 					
 					echo "]\n";
 					
@@ -571,6 +592,43 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
 			var pagetable = new google.visualization.Table(document.getElementById('pages_table'));
 			pagetable.draw(pagedata, {showRowNumber: true});
+			
+			var catdata = new google.visualization.DataTable();
+			catdata.addColumn('string', 'Name');
+			catdata.addColumn('number', 'Edits');
+			catdata.addColumn('number', 'Edits %');
+			catdata.addColumn('number', 'Bytes');
+			catdata.addColumn('number', 'Bytes %');
+			catdata.addColumn('number', 'Pages');
+			catdata.addColumn('number', 'Pages %');
+			<? if(isset($data['catuploads'])) echo "catdata.addColumn('number', 'Uploads');";?>
+			<? if(isset($data['catuploads'])) echo "catdata.addColumn('number', 'Uploads %');";?>
+			catdata.addRows([
+			<? 
+				foreach(array_keys($data['catedits']) as $key){
+					echo "['".$key."', ".
+						round(end($data['catedits'][$key]), 3).",".
+						round(end($data['catedits_per'][$key]), 3).",".
+						round(end($data['catbytes'][$key]), 3).",".
+						round(end($data['catbytes_per'][$key]), 3).",".
+						round(end($data['catpages'][$key]), 3).", ".
+						round(end($data['catpages_per'][$key]), 3);
+					if(isset($data['catuploads'][$key])) 
+						echo ", ".round(end($data['catuploads'][$key]), 3).",".
+							round(end($data['catuploads_per'][$key]), 3);
+					else
+						echo ", 0, 0";
+					
+					echo "]\n";
+					
+					if($key != end(array_keys($data['catedits']))) echo ",";
+				}
+			?>
+			]);
+
+
+			var cattable = new google.visualization.Table(document.getElementById('categories_table'));
+			cattable.draw(catdata, {showRowNumber: true});
 		}
 	</script>
 
@@ -622,6 +680,12 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	</tr>
 	<tr>
 		<td><div id='charttotalusers' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
+	</tr>
+	<tr>
+		<th><?=lang('voc.i18n_categories')?></th>
+	</tr>
+	<tr>
+		<td><div id='charttotalcategories' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_activity_hour')?></th>
@@ -708,6 +772,17 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	</tr>
 	<tr>
 		<td><div id = "pages_table"></div></td>
+	</tr>
+	</table>
+	
+	<br><br>
+	
+	<table id = "pagetable">
+	<tr>
+		<th><?=lang('voc.i18n_categories')?></th>
+	</tr>
+	<tr>
+		<td><div id = "categories_table"></div></td>
 	</tr>
 	</table>
 			
