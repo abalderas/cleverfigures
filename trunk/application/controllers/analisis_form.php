@@ -43,15 +43,6 @@ class Analisis_form extends CI_Controller {
 	}
 	
 	private function extra_info($wikidata, $colordata){
-		foreach(array_keys($wikidata['revisionpage']) as $key){ //páginas
-			foreach(array_keys($wikidata['revisionpage'][$key]) as $revision){ //revisiones
-				if(isset($wikidata['revisionpage'][$key][$revision]) and isset($colordata['totalmark'][$revision])){
-					$pagenvalues[$key] = 0;
-					$pagevaluesum[$key] = 0;
-				}
-			}
-		}
-		
 		foreach(array_keys($wikidata['revisionpage']) as $key){
 			foreach(array_keys($wikidata['revisionpage'][$key]) as $revision){
 				if(isset($wikidata['revisionpage'][$key][$revision]) and isset($colordata['totalmark'][$revision])){

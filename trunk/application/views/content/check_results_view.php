@@ -26,7 +26,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 		google.setOnLoadCallback(drawChart);
 		function drawChart() {
 			var data1 = new google.visualization.DataTable();
-			data1.addColumn('date', 'Date');
+			data1.addColumn('datetime', 'Date');
 			data1.addColumn('number', 'Total');
 			data1.addColumn('number', 'Articles');
 			data1.addColumn('number', 'Talks');
@@ -38,8 +38,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			data1.addRows([
 			<?
 				foreach(array_keys($data['totaledits']) as $key){
-					echo "[new Date(".date('Y', $key).", ".
-						date('m', $key)." ,".date('d', $key)."), ".
+					echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
 						$data['totaledits'][$key].", ".
 						$data['totaledits_art'][$key].", ".
 						$data['totaledits_talk'][$key].", ".
@@ -57,7 +56,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			var chartedits = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotaledits'));
 			chartedits.draw(data1, {
 				'displayAnnotations': false,
-				'fill': 30,
+				'fill': 20,
                                 'legendPosition': 'newRow',}
                                 );
 			
@@ -75,7 +74,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			data2.addRows([
 			<?
 				foreach(array_keys($data['totalbytes']) as $key){
-					echo "[new Date(".date('Y', $key).", ".date('m', $key)." ,".date('d', $key)."), ".
+					echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
 					$data['totalbytes'][$key].", ".
 					$data['totalbytes_art'][$key].", ".
 					$data['totalbytes_talk'][$key].", ".
@@ -93,7 +92,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			var chartbytes = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalbytes'));
 			chartbytes.draw(data2, {
 				'displayAnnotations': false,
-				'fill': 30,
+				'fill': 20,
                                 'legendPosition': 'newRow',}
                                 );
 			
@@ -128,7 +127,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			var chartpages = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalpages'));
 			chartpages.draw(data3, {
 				'displayAnnotations': false,
-				'fill': 30,
+				'fill': 20,
                                 'legendPosition': 'newRow',}
                                 );
 			
@@ -151,7 +150,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			var chartusers = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalusers'));
 			chartusers.draw(data4, {
 				'displayAnnotations': false,
-				'fill': 30,
+				'fill': 20,
                                 'legendPosition': 'newRow',}
                                 );
                                 
@@ -172,7 +171,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			var chartcats = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalcategories'));
 			chartcats.draw(data44, {
 				'displayAnnotations': false,
-				'fill': 30,
+				'fill': 20,
                                 'legendPosition': 'newRow',}
                                 );
 			
@@ -282,12 +281,13 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			charttotalactivityyear.draw(data9, options);
 			
 			var data10 = new google.visualization.DataTable();
-			data10.addColumn('date', 'Date');
+			data10.addColumn('datetime', 'Date');
 			data10.addColumn('number', '#Uploads');
 			data10.addRows([
 			<?
 				foreach(array_keys($data['totaluploads']) as $key){
-					echo "[new Date(".date('Y', $key).", ".date('m', $key)." ,".date('d', $key)."), ".$data['totaluploads'][$key]."]";
+					echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
+					$data['totaluploads'][$key]."]";
 					if($key != end(array_keys($data['totaluploads']))) echo ",";
 				}
 			?>
@@ -296,17 +296,18 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			var charttotaluploads = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotaluploads'));
 			charttotaluploads.draw(data10, {
 				'displayAnnotations': false,
-				'fill': 30,
+				'fill': 20,
                                 'legendPosition': 'newRow',}
                                 );
 			
 			var data11 = new google.visualization.DataTable();
-			data11.addColumn('date', 'Date');
+			data11.addColumn('datetime', 'Date');
 			data11.addColumn('number', 'Upload Bytes');
 			data11.addRows([
 			<?
 				foreach(array_keys($data['totalupsize']) as $key){
-					echo "[new Date(".date('Y', $key).", ".date('m', $key)." ,".date('d', $key)."), ".$data['totalupsize'][$key]."]";
+					echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
+					$data['totalupsize'][$key]."]";
 					if($key != end(array_keys($data['totalupsize']))) echo ",";
 				}
 			?>
@@ -315,7 +316,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			var charttotalupsize = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalupsize'));
 			charttotalupsize.draw(data11, {
 				'displayAnnotations': false,
-				'fill': 30,
+				'fill': 20,
                                 'legendPosition': 'newRow',}
                                 );
 			
@@ -341,7 +342,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			var charttotalquality = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalquality'));
 			charttotalquality.draw(data12, {
 				'displayAnnotations': false,
-				'fill': 30,
+				'fill': 20,
                                 'legendPosition': 'newRow',}
                                 );
 			
@@ -374,7 +375,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			var charttotalbytesxquality = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalbytesxquality'));
 			charttotalbytesxquality.draw(data13, {
 				'displayAnnotations': false,
-				'fill': 30,
+				'fill': 20,
                                 'legendPosition': 'newRow',}
                                 );
 			
