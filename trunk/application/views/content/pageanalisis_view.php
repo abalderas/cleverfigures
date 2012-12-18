@@ -322,63 +322,35 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			var chartqualityhour = new google.visualization.ScatterChart(document.getElementById('qualityhourchart'));
 			chartqualityhour.draw(data14, options);
 			
-			//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			
 			var data = new google.visualization.DataTable();
 			data.addColumn('string', 'Nick');
 			data.addColumn('string', 'Name');
 			data.addColumn('number', 'Edits');
 			data.addColumn('number', 'Edits %');
-			data.addColumn('number', 'Edits in articles');
-			data.addColumn('number', 'Edits in articles %');
 			data.addColumn('number', 'Bytes');
 			data.addColumn('number', 'Bytes %');
-			data.addColumn('number', 'Bytes in articles');
-			data.addColumn('number', 'Bytes in articles %');
-			<? if(isset($data['useruploads'])) echo "data.addColumn('number', 'Uploads');";?>
-			<? if(isset($data['useruploads'])) echo "data.addColumn('number', 'Uploads %');";?>
 			data.addColumn('number', 'Average Grade');
 			data.addColumn('number', 'Standard Deviation');
-			data.addColumn('number', 'Maximum Grade');
-			data.addColumn('number', 'Minimum Grade');
-			data.addColumn('number', 'Average Grade as revisor');
-			data.addColumn('number', 'Maximum Grade as revisor');
-			data.addColumn('number', 'Minimum Grade as revisor');
 			data.addRows([
 			<? 
-				foreach(array_keys($data['useredits']) as $key){
+				foreach(array_keys($data['pageuser'][$pagename]) as $key){
 					echo "['".$key."','".
 						$data['userrealname'][$key]."',".
-						round(end($data['useredits'][$key]), 3).",".
-						round(end($data['useredits_per'][$key]), 3).",".
-						(isset($data['useredits_art'][$key])?round(end($data['useredits_art'][$key]), 3):"0").",".
-						(isset($data['useredits_art_per'][$key])?round(end($data['useredits_art_per'][$key]), 3):"0").",".
-						round(end($data['userbytes'][$key]), 3).",".
-						round(end($data['userbytes_per'][$key]), 3).",".
-						(isset($data['userbytes_art'][$key])?round(end($data['userbytes_art'][$key]), 3):"0").",".
-						(isset($data['userbytes_art_per'][$key])?round(end($data['userbytes_art_per'][$key]), 3):"0").",";
-					if(isset($data['useruploads'][$key])) 
-						echo round(end($data['useruploads'][$key]), 3).",".
-							round(end($data['useruploads_per'][$key]), 3).",";
+						round(end($data['pageuseredits'][$pagename][$key]), 3).",".
+						round(end($data['pageuseredits_per'][$pagename][$key]), 3).",".
+						round(end($data['pageuserbytes'][$pagename][$key]), 3).",".
+						round(end($data['pageuserbytes_per'][$pagename][$key]), 3).",".
+					
+					if(isset($data['pageuseraverage'][$pagename][$data['iduser'][$key]])) 
+						echo round(end($data['pageuseraverage'][$pagename][$data['iduser'][$key]]), 3).",".
+							round(end($data['pageusersd'][$pagename][$data['iduser'][$key]]), 3).",".
 					else
 						echo "0, 0, ";
-					
-					if(isset($data['useraverage'][$data['iduser'][$key]])) 
-						echo round(end($data['useraverage'][$data['iduser'][$key]]), 3).",".
-							round(end($data['usersd'][$data['iduser'][$key]]), 3).",".
-							round(end($data['usermaxvalue'][$data['iduser'][$key]]), 3).",".
-							round(end($data['userminvalue'][$data['iduser'][$key]]), 3).",";
-					else
-						echo "0, 0, 0, 0, ";
 						
-					if(isset($data['revisoraverage'][$data['iduser'][$key]])) 
-						echo round(end($data['revisoraverage'][$data['iduser'][$key]]), 3).",".
-							round(end($data['revisormaxvalue'][$data['iduser'][$key]]), 3).",".
-							round(end($data['revisorminvalue'][$data['iduser'][$key]]), 3);
-					else
-						echo "0, 0, 0";
 					echo "]\n";
 					
-					if($key != end(array_keys($data['useredits']))) echo ",";
+					if($key != end(array_keys($data['pageuser'][$pagename]))) echo ",";
 				}
 			?>
 			]);
@@ -387,86 +359,16 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			var table = new google.visualization.Table(document.getElementById('user_table'));
 			table.draw(data, {showRowNumber: true});
 			
-			var pagedata = new google.visualization.DataTable();
-			pagedata.addColumn('string', 'Name');
-			pagedata.addColumn('number', 'Namespace');
-			pagedata.addColumn('number', 'Edits');
-			pagedata.addColumn('number', 'Edits %');
-			pagedata.addColumn('number', 'Bytes');
-			pagedata.addColumn('number', 'Bytes %');
-			<? if(isset($data['pageuploads'])) echo "pagedata.addColumn('number', 'Uploads');";?>
-			<? if(isset($data['pageuploads'])) echo "pagedata.addColumn('number', 'Uploads %');";?>
-			pagedata.addColumn('number', 'Average Grade');
-			pagedata.addColumn('number', 'Standard Deviation');
-			pagedata.addColumn('number', 'Min Grade');
-			pagedata.addColumn('number', 'Max Grade');
-			pagedata.addColumn('number', 'Visits');
-			pagedata.addColumn('number', 'Visits %');
-			pagedata.addRows([
-			<? 
-				foreach(array_keys($data['pageedits']) as $key){
-					echo "['".$key."', ".
-						$data['pagenamespace'][$key].", ".
-						round(end($data['pageedits'][$key]), 3).",".
-						round(end($data['pageedits_per'][$key]), 3).",".
-						round(end($data['pagebytes'][$key]), 3).",".
-						round(end($data['pagebytes_per'][$key]), 3);
-					if(isset($data['pageuploads'][$key])) 
-						echo ", ".round(end($data['pageuploads'][$key]), 3).",".
-							round(end($data['pageuploads_per'][$key]), 3);
-					else
-						echo ", 0, 0";
-					
-					if(isset($data['pageaveragevalue'][$key])) 
-						echo ", ".round(end($data['pageaveragevalue'][$key]), 3).",".
-							round(end($data['pagesd'][$key]), 3).",".
-							round(end($data['pageminvalue'][$key]), 3).",".
-							round(end($data['pagemaxvalue'][$key]), 3);
-					else
-						echo ", 0, 0, 0, 0";
-						
-					echo ", ".$data['pagevisits'][$key].", ".round($data['pagevisits'][$key] / array_sum($data['pagevisits']), 3);
-					
-					echo "]\n";
-					
-					if($key != end(array_keys($data['pageedits']))) echo ",";
-				}
-			?>
-			]);
-
-
-			var pagetable = new google.visualization.Table(document.getElementById('pages_table'));
-			pagetable.draw(pagedata, {showRowNumber: true});
-			
 			var catdata = new google.visualization.DataTable();
 			catdata.addColumn('string', 'Name');
-			catdata.addColumn('number', 'Edits');
-			catdata.addColumn('number', 'Edits %');
-			catdata.addColumn('number', 'Bytes');
-			catdata.addColumn('number', 'Bytes %');
-			catdata.addColumn('number', 'Pages');
-			catdata.addColumn('number', 'Pages %');
-			<? if(isset($data['catuploads'])) echo "catdata.addColumn('number', 'Uploads');";?>
-			<? if(isset($data['catuploads'])) echo "catdata.addColumn('number', 'Uploads %');";?>
 			catdata.addRows([
 			<? 
-				foreach(array_keys($data['catedits']) as $key){
-					echo "['".$key."', ".
-						round(end($data['catedits'][$key]), 3).",".
-						round(end($data['catedits_per'][$key]), 3).",".
-						round(end($data['catbytes'][$key]), 3).",".
-						round(end($data['catbytes_per'][$key]), 3).",".
-						round(end($data['catpages'][$key]), 3).", ".
-						round(end($data['catpages_per'][$key]), 3);
-					if(isset($data['catuploads'][$key])) 
-						echo ", ".round(end($data['catuploads'][$key]), 3).",".
-							round(end($data['catuploads_per'][$key]), 3);
-					else
-						echo ", 0, 0";
+				foreach(array_keys($data['pagecat'][$pagename]) as $key){
+					echo "['".$key.
 					
 					echo "]\n";
 					
-					if($key != end(array_keys($data['catedits']))) echo ",";
+					if($key != end(array_keys($data['pagecat'][$pagename]))) echo ",";
 				}
 			?>
 			]);
@@ -476,50 +378,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			cattable.draw(catdata, {showRowNumber: true});
 		}
 	</script>
-
-	<table id = "bodytable">
-	<tr>
-		<th colspan = "2"><?=lang('voc.i18n_filter_by')?></th>
-	</tr>
-	<tr>
-		<td style = "width:400px"><?
-			echo form_open('filters_form');
-			echo form_dropdown('select_filter', array(lang('voc.i18n_user') => lang('voc.i18n_user'),
-								lang('voc.i18n_page') => lang('voc.i18n_page'),
-								lang('voc.i18n_category') => lang('voc.i18n_category'),
-								lang('voc.i18n_criteria') => lang('voc.i18n_criteria')));
-		?></td>
-		<td style = "width:400px"><?
-			echo form_input('filterstring');
-			echo form_close();
-		?></td>
-	</tr>
-	</table>
-	
-	<br><br>
 	
 <!-- CHARTS -->
-
-	<table id = "bodytable">
-	<tr>
-		<th><?=lang('voc.i18n_edits')?></th>
-		<th><?=lang('voc.i18n_bytes')?></th>
-	</tr>
-	<tr>
-		<td><div id='chartfinaledits' style='width: 400px; height: 400px; border: 0px; padding: 0px;'></div></td>
-		<td><div id='chartfinalbytes' style='width: 400px; height: 400px; border: 0px; padding: 0px;'></div></td>
-	</tr>
-	<tr>
-		<th><?=lang('voc.i18n_pages')?></th>
-		<th><?=lang('voc.i18n_users')?></th>
-	</tr>
-	<tr>
-		<td><div id='chartfinalpages' style='width: 400px; height: 400px; border: 0px; padding: 0px;'></div></td>
-		<td><div id='chartfinalusers' style='width: 400px; height: 400px; border: 0px; padding: 0px;'></div></td>
-	</tr>
-	</table>
-	
-	<br><br>
 	
 	<table id = "bodytable">
 	<tr>
@@ -533,12 +393,6 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	</tr>
 	<tr>
 		<td><div id='charttotalbytes' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
-	</tr>
-	<tr>
-		<th><?=lang('voc.i18n_pages')?></th>
-	</tr>
-	<tr>
-		<td><div id='charttotalpages' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_users')?></th>
@@ -626,17 +480,6 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	</tr>
 	<tr>
 		<td><div id = "user_table"></div></td>
-	</tr>
-	</table>
-	
-	<br><br>
-	
-	<table id = "pagetable">
-	<tr>
-		<th><?=lang('voc.i18n_pages')?></th>
-	</tr>
-	<tr>
-		<td><div id = "pages_table"></div></td>
 	</tr>
 	</table>
 	

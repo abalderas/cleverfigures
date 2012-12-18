@@ -47,9 +47,13 @@ class Analisis_form extends CI_Controller {
 			foreach(array_keys($wikidata['revisionpage'][$key]) as $revision){
 				if(isset($wikidata['revisionpage'][$key][$revision]) and isset($colordata['totalmark'][$revision])){
 					$pagegrades[$key][$revision] = $colordata['totalmark'][$revision];
+					$pageusergrades[$key][$wikidata['revisionuser'][$revision]][$revision] = $colordata['totalmark'][$revision];
 					
 					$pageaveragevalue[$key][$revision] = array_sum($pagegrades[$key]) / count($pagegrades[$key]);
+					$pageuseraveragevalue[$key][$wikidata['revisionuser'][$revision]][$revision] = 
+						array_sum($pageusergrades[$key][$wikidata['revisionuser'][$revision]]) / count($pageusergrades[$key][$wikidata['revisionuser'][$revision]]);
 					$pagesd[$key][$revision] = $this->standard_deviation($pagegrades[$key]);
+					$pageusersd[$key][$wikidata['revisionuser'][$revision]][$revision] = $this->standard_deviation($pageusergrades[$key][$wikidata['revisionuser'][$revision]]);
 					$pageminvalue[$key][$revision] = min($pagegrades[$key]);
 					$pagemaxvalue[$key][$revision] = max($pagegrades[$key]);
 				}
@@ -78,7 +82,9 @@ class Analisis_form extends CI_Controller {
 		
 		return array(
 			'pagesd' => $pagesd, 
+			'pageusersd' => $pagesd, 
 			'pageaveragevalue' => $pageaveragevalue, 
+			'pageuseraveragevalue' => $pageuseraveragevalue, 
 			'pageminvalue' => $pageminvalue,
 			'pagemaxvalue' => $pagemaxvalue,
 			'catmaxvalue' => $catmaxvalue, 

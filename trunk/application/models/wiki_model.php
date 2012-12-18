@@ -226,6 +226,8 @@ class Wiki_model extends CI_Model{
 			$userpage[$row->user_name] = array();
 			$pageuser[$row->page_title] = array();
 			$usercreatedpages[$row->user_name]= array();
+			$pageusereditscount[$row->page_title][$row->user_name] = 0;
+			$pageuserbytescount[$row->page_title][$row->user_name] = 0;
    		}
    		
    		$aux_edits_art = array();
@@ -301,16 +303,22 @@ class Wiki_model extends CI_Model{
 			$useractivitymonth[$row->user_name][date('m', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
 			$useractivityyear[$row->user_name][date('Y', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
 			
+			$revisionuser[$row->rev_id] = $row->user_name;
+			
 			
 			//PAGE INFORMATION
 			
 			$pageeditscount	[$row->page_title] += 1;							// Count of the total editions per page
+			$pageusereditscount[$row->page_title][$row->user_name] += 1;					// Count of the total editions per page & user
 			$pagebytescount	[$row->page_title] += $row->rev_len - $LAST_PAGE_SIZE;				// Count of the total bytes per page
+			$pageuserbytescount[$row->page_title][$row->user_name] += $row->rev_len - $LAST_PAGE_SIZE;	// Count of the total bytes per page
 				
-			$pageusercount	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = count($pageuser[$row->page_title]);	// Users per page/date
+			$pageusercount	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = count($pageuser[$row->page_title]);						// Users per page/date
 				
-			$pageedits	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pageeditscount[$row->page_title];	// Editions per page/date
-			$pagebytes	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pagebytescount[$row->page_title];	// Bytes per page/date
+			$pageedits	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pageeditscount[$row->page_title];						// Editions per page/date
+			$pageuseredits	[$row->page_title][$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $pageusereditscount[$row->page_title][$row->user_name];	// Count of editions per page & user
+			$pagebytes	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pagebytescount[$row->page_title];						// Bytes per page/date
+			$pageuserbytes	[$row->page_title][$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $pageuserbytescount[$row->page_title][$row->user_name];	// Bytes per page/date
 				
 			$pagenamespace	[$row->page_title] = $row->page_namespace;					// Getting namespaces per page
 			$pagevisits	[$row->page_title] = $row->page_counter;					// Total visits per page
@@ -446,6 +454,7 @@ class Wiki_model extends CI_Model{
 			}
 			
 			$pageedits_per[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pageedits[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] / $totaledits[$this->mwtime_to_unix($row->rev_timestamp)];
+			$pageuseredits_per[$row->page_title][$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $pageuseredits[$row->page_title][$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] / $pageeditscount[$row->page_title];
 			$pagebytes_per[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pagebytes[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] / $totalbytes[$this->mwtime_to_unix($row->rev_timestamp)];
 // 			if($row->page_namespace == 0){
 // 				$pageedits_art_per	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pageedits_art	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] / $totaledits[$this->mwtime_to_unix($row->rev_timestamp)];
@@ -667,11 +676,8 @@ class Wiki_model extends CI_Model{
 						, 'usercatcount' => $usercatcount
 						, 'pageedits' => $pageedits
 						, 'pagebytes' => $pageedits
-// 						, 'pagebytes_art' => $pageedits_art
 						, 'pagebytes_per' => $pagebytes_per
-// 						, 'pagebytes_art_per' => $pagebytes_art_per
 						, 'pageedits_per' => $pageedits_per
-// 						, 'pageedits_art_per' => $pageedits_art_per
 						, 'pagenamespace' => $pagenamespace
 						, 'pagevisits' => $pagevisits
 						, 'totaledits' => $totaledits
@@ -754,6 +760,14 @@ class Wiki_model extends CI_Model{
 						, 'revisioncategory' => $revisioncategory
 						, 'totalbytesdiff' => $totalbytesdiff
 						, 'totalcategories' => $totalcategories
+						, 'userpage' => $userpage
+						, 'pageuser' => $pageuser
+						, 'pageuseredits' => $pageuseredits
+						, 'pageuseredits_per' => $pageuseredits_per
+						, 'pageuserbytes' => $pageuseredits
+						, 'pageuserbytes_per' => $pageuseredits_per
+						, 'revisionuser' => $revisionuser
+						, 'pagecat' => $pagecat
 					);
 				
 				
@@ -872,6 +886,14 @@ class Wiki_model extends CI_Model{
 					, 'daterevision' => $daterevision
 					, 'totalbytesdiff' => $totalbytesdiff
 					, 'totalcategories' => $totalcategories
+					, 'userpage' => $userpage
+					, 'pageuser' => $pageuser
+					, 'pageuseredits' => $pageuseredits
+					, 'pageuseredits_per' => $pageuseredits_per
+					, 'pageuserbytes' => $pageuseredits
+					, 'pageuserbytes_per' => $pageuseredits_per
+					, 'revisionuser' => $revisionuser
+					, 'pagecat' => $pagecat
 				);
 				
 				
@@ -907,11 +929,8 @@ class Wiki_model extends CI_Model{
 				, 'usercatcount' => $usercatcount
 				, 'pageedits' => $pageedits
 				, 'pagebytes' => $pageedits
-// 				, 'pagebytes_art' => $pageedits_art
 				, 'pagebytes_per' => $pagebytes_per
-// 				, 'pagebytes_art_per' => $pagebytes_art_per
 				, 'pageedits_per' => $pageedits_per
-// 				, 'pageedits_art_per' => $pageedits_art_per
 				, 'pagenamespace' => $pagenamespace
 				, 'pagevisits' => $pagevisits
 				, 'totaledits' => $totaledits
@@ -977,6 +996,14 @@ class Wiki_model extends CI_Model{
 				, 'daterevision' => $daterevision
 				, 'totalbytesdiff' => $totalbytesdiff
 				, 'totalcategories' => $totalcategories
+				, 'userpage' => $userpage
+				, 'pageuser' => $pageuser
+				, 'pageuseredits' => $pageuseredits
+				, 'pageuseredits_per' => $pageuseredits_per
+				, 'pageuserbytes' => $pageuseredits
+				, 'pageuserbytes_per' => $pageuseredits_per
+				, 'revisionuser' => $revisionuser
+				, 'pagecat' => $pagecat
 			);
 			
 		echo ">> Wiki analisis accomplished.</br>";

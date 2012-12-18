@@ -36,6 +36,7 @@ $lang['voc.i18n_connection_error'] = "Imposible to connect to given database.";
 $lang['voc.i18n_contact'] = "Contact";
 $lang['voc.i18n_content_evolution'] = "Content Evolution";
 $lang['voc.i18n_create_user'] = "Create User";
+$lang['voc.i18n_criteria'] = "Criteria";
 $lang['voc.i18n_data_source'] = "Data Source";
 $lang['voc.i18n_database_data'] = "Database Connection Data";
 $lang['voc.i18n_date_hour'] = "Date - Hour";
