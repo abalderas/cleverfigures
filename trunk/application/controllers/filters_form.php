@@ -19,21 +19,15 @@
 
 
 
-class Options_form extends CI_Controller {
+class Filters_form extends CI_Controller {
 
-	function Options_form(){
+	function Filters_form(){
       		parent::__construct();
-      		$this->load->model('wiki_model');
-      		$this->load->model('color_model');
-      		$this->load->model('filter_model');
-      		$this->load->model('analisis_model');
-      		$this->load->model('user_model');
-      		$this->load->model('csv_model');
+      		$this->load_model('analisis_model');
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
-   	
+	
 	function index(){
-   	
 		if(!$this->session->userdata('username')){
 			$datah = array('title' => lang('voc.i18n_login'));
 			
@@ -42,25 +36,23 @@ class Options_form extends CI_Controller {
 			$this->load->view('templates/footer_view');
 		}
 		else{
+			$adata = $this->analisis_model->get_analisis_data($this->session->flashdata('aname'));
 		
-			if(isset($_POST['delete'])){
-				$datah = array('title' => lang('voc.i18n_delete_analisis'));
-				
-				$this->load->view('templates/header_view', $datah);
-				$this->load->view('content/delete_analisis_view', array('analisis' => $_POST['aname']));
-				$this->load->view('templates/footer_view');
+			$datah = array('title' => lang('voc.i18n_check_results'));
+			$this->load->view('templates/header_view', $datah);
+		
+			if($_POST['select_filter'] == lang('voc.i18n_user'))
+				$this->load->view('content/pageanalisis_view', array('data' => $adata, 'pagename' => $_POST['filterstring']));
+			else if($_POST['select_filter'] == lang('voc.i18n_page'))
+				$this->load->view('content/useranalisis_view', array('data' => $adata, 'pagename' => $_POST['filterstring']));
+			else if($_POST['select_filter'] == lang('voc.i18n_category'))
+				$this->load->view('content/catanalisis_view', array('data' => $adata, 'pagename' => $_POST['filterstring']));
+			//else if($_POST['select_filter'] == lang('voc.i18n_criteria')){}
+			else{	
+				die('Filters_form : FATAL ERROR');
 			}
-			else if(isset($_POST['view'])){
-				$datah = array('title' => lang('voc.i18n_check_results'));
-				
-				$adata = $this->analisis_model->get_analisis_data($_POST['aname']);
-				$this->session->set_flashdata('aname', $_POST['aname']);
-				
-				$this->load->view('templates/header_view', $datah);
-				$this->load->view('content/check_results_view', array('data' => $adata));
-				$this->load->view('templates/footer_view');
-			}
-			else die('FATAL ERROR');
+		
+			$this->load->view('templates/footer_view');
 		}
 	}
-}
+} 

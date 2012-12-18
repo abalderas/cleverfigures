@@ -633,27 +633,61 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 		}
 	</script>
 
-	<!--<table id = "bodytable">
+	<script>
+		collection = [
+		<?
+			foreach(array_keys($data['useredits']) as $key){
+				echo "'".$key."'";
+				if($key != end(array_keys($data['useredits']))) echo ",";
+			}
+		?>
+		];
+		
+		collection = [
+		<?
+			foreach(array_keys($data['pageedits']) as $key){
+				echo "'".$key."'";
+				if($key != end(array_keys($data['pageedits']))) echo ",";
+			}
+		?>
+		];
+		
+		collection = [
+		<?
+			foreach(array_keys($data['catedits']) as $key){
+				echo "'".$key."'";
+				if($key != end(array_keys($data['catedits']))) echo ",";
+			}
+		?>
+		];
+		
+	</script>
+	<script type="text/javascript" language="JavaScript" src="application/libraries/wick/wick.js"></script>
+	
+	<table id = "bodytable">
 	<tr>
-		<th colspan = "2"><?=lang('voc.i18n_filter_by')?></th>
+		<th colspan = "3"><?=lang('voc.i18n_filter_by')?></th>
 	</tr>
 	<tr>
 		<td style = "width:400px"><?
 			echo form_open('filters_form');
+			echo "<form onsubmit=\"return checkForm()\">";
 			echo form_dropdown('select_filter', array(lang('voc.i18n_user') => lang('voc.i18n_user'),
 								lang('voc.i18n_page') => lang('voc.i18n_page'),
 								lang('voc.i18n_category') => lang('voc.i18n_category')
 								//lang('voc.i18n_criteria') => lang('voc.i18n_criteria'))
 								));
+			echo "   ";
+			echo form_input(array('id' => 'filterstring', 'class' => 'wickEnabled'));
 		?></td>
 		<td style = "width:400px"><?
-			echo form_input('filterstring');
+			echo form_submit('submit', lang('voc.i18n_submit'));
 			echo form_close();
 		?></td>
 	</tr>
 	</table>
 	
-	<br><br>-->
+	<br><br>
 	
 <!-- CHARTS -->
 

@@ -23,6 +23,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	<title> CleverFigures | <?=$title?> </title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<link rel="shortcut icon" type="image/x-icon" href="images/icons/favicon.ico">
+	<link rel="stylesheet" type="text/css" href="application/libraries/wick/wick.css" />
 	<? 
 		if($this->session->userdata('language') == 'russian') 
 			 echo link_tag('css/russianstyles.css');  
