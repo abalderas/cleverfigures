@@ -340,13 +340,13 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 						round(end($data['pageuseredits'][$pagename][$key]), 3).",".
 						round(end($data['pageuseredits_per'][$pagename][$key]), 3).",".
 						round(end($data['pageuserbytes'][$pagename][$key]), 3).",".
-						round(end($data['pageuserbytes_per'][$pagename][$key]), 3).",".
+						round(end($data['pageuserbytes_per'][$pagename][$key]), 3);
 					
 					if(isset($data['pageuseraverage'][$pagename][$data['iduser'][$key]])) 
-						echo round(end($data['pageuseraverage'][$pagename][$data['iduser'][$key]]), 3).",".
-							round(end($data['pageusersd'][$pagename][$data['iduser'][$key]]), 3).",".
+						echo ", ".round(end($data['pageuseraverage'][$pagename][$data['iduser'][$key]]), 3).",".
+							round(end($data['pageusersd'][$pagename][$data['iduser'][$key]]), 3).",";
 					else
-						echo "0, 0, ";
+						echo ", 0, 0, ";
 						
 					echo "]\n";
 					
@@ -364,7 +364,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			catdata.addRows([
 			<? 
 				foreach(array_keys($data['pagecat'][$pagename]) as $key){
-					echo "['".$key.
+					echo "['".$key;
 					
 					echo "]\n";
 					

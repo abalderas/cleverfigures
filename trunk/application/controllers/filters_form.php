@@ -23,7 +23,7 @@ class Filters_form extends CI_Controller {
 
 	function Filters_form(){
       		parent::__construct();
-      		$this->load_model('analisis_model');
+      		$this->load->model('analisis_model');
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
 	
@@ -42,9 +42,9 @@ class Filters_form extends CI_Controller {
 			$this->load->view('templates/header_view', $datah);
 		
 			if($_POST['select_filter'] == lang('voc.i18n_user'))
-				$this->load->view('content/pageanalisis_view', array('data' => $adata, 'pagename' => $_POST['filterstring']));
-			else if($_POST['select_filter'] == lang('voc.i18n_page'))
 				$this->load->view('content/useranalisis_view', array('data' => $adata, 'pagename' => $_POST['filterstring']));
+			else if($_POST['select_filter'] == lang('voc.i18n_page'))
+				$this->load->view('content/pageanalisis_view', array('data' => $adata, 'pagename' => $_POST['filterstring']));
 			else if($_POST['select_filter'] == lang('voc.i18n_category'))
 				$this->load->view('content/catanalisis_view', array('data' => $adata, 'pagename' => $_POST['filterstring']));
 			//else if($_POST['select_filter'] == lang('voc.i18n_criteria')){}

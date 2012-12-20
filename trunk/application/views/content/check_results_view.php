@@ -18,8 +18,9 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <?="<h1>".lang('voc.i18n_check_results')."</h1></br>"?>
 
+
 <!-- CHARTS SCRIPTS -->
-			
+
 <script type='text/javascript' src='http://www.google.com/jsapi'></script>
 	<script type='text/javascript'>
 		google.load('visualization', '1', {'packages':['annotatedtimeline', 'corechart', 'table']});
@@ -632,61 +633,80 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			cattable.draw(catdata, {showRowNumber: true});
 		}
 	</script>
-
-	<script>
-		collection = [
-		<?
-			foreach(array_keys($data['useredits']) as $key){
-				echo "'".$key."'";
-				if($key != end(array_keys($data['useredits']))) echo ",";
-			}
-		?>
-		];
-		
-		collection = [
-		<?
-			foreach(array_keys($data['pageedits']) as $key){
-				echo "'".$key."'";
-				if($key != end(array_keys($data['pageedits']))) echo ",";
-			}
-		?>
-		];
-		
-		collection = [
-		<?
-			foreach(array_keys($data['catedits']) as $key){
-				echo "'".$key."'";
-				if($key != end(array_keys($data['catedits']))) echo ",";
-			}
-		?>
-		];
-		
-	</script>
-	<script type="text/javascript" language="JavaScript" src="application/libraries/wick/wick.js"></script>
 	
+	<!-- FILTERS FORM -->
+	
+	<script src="http://yui.yahooapis.com/3.8.0/build/yui/yui-min.js"></script>
+	<script>
+		YUI().use('autocomplete', 'autocomplete-highlighters', 'autocomplete-filters', function (Y) {
+			Y.one('body').addClass('yui3-skin-sam');
+			Y.one('#filterstring').plug(Y.Plugin.AutoComplete, {
+				resultHighlighter: 'phraseMatch',
+				resultFilters: ['subWordMatch'],
+				source: function(query){
+			var myindex  = document.getElementById("select_filter").selectedIndex;
+			var SelValue = document.getElementById("select_filter").options[myindex].value;
+		
+			if(SelValue == "<?=lang('voc.i18n_user')?>"){
+				return [
+				<?
+					foreach(array_keys($data['useredits']) as $key){
+						echo "'".$key."'";
+						if($key != end(array_keys($data['useredits']))) echo ",";
+					}
+				?>
+				];
+			} else if(SelValue == "<?=lang('voc.i18n_page')?>"){
+				return [
+				<?
+					foreach(array_keys($data['pageedits']) as $key){
+						echo "'".$key."'";
+						if($key != end(array_keys($data['pageedits']))) echo ",";
+					}
+				?>
+				];
+			} else if(SelValue == "<?=lang('voc.i18n_category')?>"){
+				return [
+				<?
+					foreach(array_keys($data['catedits']) as $key){
+						echo "'".$key."'";
+						if($key != end(array_keys($data['catedits']))) echo ",";
+					}
+				?>
+				];
+			}
+		}
+			});
+		});
+	</script>
+
+	<? echo form_open('filters_form', array('onsubmit' => "return checkForm()", 'class' => "yui3-skin-sam")); ?>
 	<table id = "bodytable">
 	<tr>
 		<th colspan = "3"><?=lang('voc.i18n_filter_by')?></th>
 	</tr>
 	<tr>
-		<td style = "width:400px"><?
-			echo form_open('filters_form');
-			echo "<form onsubmit=\"return checkForm()\">";
-			echo form_dropdown('select_filter', array(lang('voc.i18n_user') => lang('voc.i18n_user'),
+		<td style = "width:400px">
+		<?
+			$options = array(lang('voc.i18n_user') => lang('voc.i18n_user'),
 								lang('voc.i18n_page') => lang('voc.i18n_page'),
 								lang('voc.i18n_category') => lang('voc.i18n_category')
 								//lang('voc.i18n_criteria') => lang('voc.i18n_criteria'))
-								));
+								);
+			echo form_dropdown('select_filter', $options, lang('voc.i18n_user'), "id = 'select_filter'");
+			
 			echo "   ";
-			echo form_input(array('id' => 'filterstring', 'class' => 'wickEnabled'));
-		?></td>
-		<td style = "width:400px"><?
-			echo form_submit('submit', lang('voc.i18n_submit'));
-			echo form_close();
-		?></td>
+			echo form_input(array('id' => 'filterstring', 'name' => 'filterstring'));
+		?>
+		</td>
+		<td style = "width:400px">
+			<? echo form_submit('submit', lang('voc.i18n_submit')); ?>
+		</td>
 	</tr>
 	</table>
 	
+	<? echo form_close(); ?>
+
 	<br><br>
 	
 <!-- CHARTS -->
