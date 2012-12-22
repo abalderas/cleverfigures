@@ -37,6 +37,7 @@ class Filters_form extends CI_Controller {
 		}
 		else{
 			$adata = $this->analisis_model->get_analisis_data($this->session->flashdata('aname'));
+			$this->session->keep_flashdata('aname');
 		
 			$datah = array('title' => lang('voc.i18n_check_results'));
 			$this->load->view('templates/header_view', $datah);

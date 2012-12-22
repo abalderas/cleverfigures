@@ -82,9 +82,11 @@ class Analisis_form extends CI_Controller {
 		
 		return array(
 			'pagesd' => $pagesd, 
-			'pageusersd' => $pagesd, 
+			'pageusersd' => $pageusersd, 
 			'pageaveragevalue' => $pageaveragevalue, 
 			'pageuseraveragevalue' => $pageuseraveragevalue, 
+			'pagegrades' => $pagegrades,
+			'pageusergrades' => $pageusergrades,
 			'pageminvalue' => $pageminvalue,
 			'pagemaxvalue' => $pagemaxvalue,
 			'catmaxvalue' => $catmaxvalue, 
@@ -127,13 +129,15 @@ class Analisis_form extends CI_Controller {
 					);
 				$datah = array('title' => lang('voc.i18n_analising'));
 			
+				$analisis = now();
+				$this->session->set_flashdata(array('aname' => $analisis));
+				
 				echo $this->load->view('templates/header_view', $datah, true);
 				echo $this->load->view('content/analising_view', $adata, true);
 				ob_flush(); flush();
 				
 				$start = microtime(true);
-			
-				$analisis = now();
+
 				$this->analise($adata, $analisis);
 			
 				ob_flush(); flush();

@@ -680,13 +680,13 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 		});
 	</script>
 
-	<? echo form_open('filters_form', array('onsubmit' => "return checkForm()", 'class' => "yui3-skin-sam")); ?>
+	<? echo form_open('filters_form', array('class' => "yui3-skin-sam")); ?>
 	<table id = "bodytable">
 	<tr>
 		<th colspan = "3"><?=lang('voc.i18n_filter_by')?></th>
 	</tr>
 	<tr>
-		<td style = "width:400px">
+		<td style = "width:800px">
 		<?
 			$options = array(lang('voc.i18n_user') => lang('voc.i18n_user'),
 								lang('voc.i18n_page') => lang('voc.i18n_page'),
@@ -696,11 +696,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			echo form_dropdown('select_filter', $options, lang('voc.i18n_user'), "id = 'select_filter'");
 			
 			echo "   ";
-			echo form_input(array('id' => 'filterstring', 'name' => 'filterstring'));
+			echo form_input(array('id' => 'filterstring', 'name' => 'filterstring', 'class' => 'cssform'));
 		?>
-		</td>
-		<td style = "width:400px">
-			<? echo form_submit('submit', lang('voc.i18n_submit')); ?>
 		</td>
 	</tr>
 	</table>

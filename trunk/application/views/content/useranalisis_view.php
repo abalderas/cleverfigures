@@ -96,84 +96,6 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
                                 'legendPosition': 'newRow',}
                                 );
 			
-			var data3 = new google.visualization.DataTable();
-			data3.addColumn('datetime', 'Date');
-			data3.addColumn('number', 'Total');
-			data3.addColumn('number', 'Articles');
-			data3.addColumn('number', 'Talks');
-			data3.addColumn('number', 'Users');
-			data3.addColumn('number', 'User Talks');
-			data3.addColumn('number', 'Files');
-			data3.addColumn('number', 'Template');
-			data3.addColumn('number', 'Category');
-			data3.addRows([
-			<?
-				foreach(array_keys($data['totalpages']) as $key){
-					echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
-					$data['totalpages'][$key].", ".
-					$data['totalpages_art'][$key].", ".
-					$data['totalpages_talk'][$key].", ".
-					$data['totalpages_us'][$key].", ".
-					$data['totalpages_ustalk'][$key].", ".
-					$data['totalpages_file'][$key].", ".
-					$data['totalpages_temp'][$key].", ".
-					$data['totalpages_cat'][$key].
-					"]";
-					if($key != end(array_keys($data['totalpages']))) echo ",";
-				}
-			?>
-			]);
-
-			var chartpages = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalpages'));
-			chartpages.draw(data3, {
-				'displayAnnotations': false,
-				'fill': 20,
-                                'legendPosition': 'newRow',}
-                                );
-			
-			var data4 = new google.visualization.DataTable();
-			data4.addColumn('datetime', 'Date');
-			data4.addColumn('number', 'Total');
-			data4.addColumn('number', 'Contributed to Articles');
-			data4.addRows([
-			<?
-				foreach(array_keys($data['totalusers']) as $key){
-					echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
-					$data['totalusers'][$key].", ".
-					$data['totalusers_art'][$key].
-					"]";
-					if($key != end(array_keys($data['totalusers']))) echo ",";
-				}
-			?>
-			]);
-
-			var chartusers = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalusers'));
-			chartusers.draw(data4, {
-				'displayAnnotations': false,
-				'fill': 20,
-                                'legendPosition': 'newRow',}
-                                );
-                                
-                        var data44 = new google.visualization.DataTable();
-			data44.addColumn('datetime', 'Date');
-			data44.addColumn('number', 'Total');
-			data44.addRows([
-			<?
-				foreach(array_keys($data['totalcategories']) as $key){
-					echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
-					$data['totalcategories'][$key].
-					"]";
-					if($key != end(array_keys($data['totalcategories']))) echo ",";
-				}
-			?>
-			]);
-
-			var chartcats = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalcategories'));
-			chartcats.draw(data44, {
-				'displayAnnotations': false,
-				'fill': 20,
-                                'legendPosition': 'newRow',}
-                                );
 			
 			var data5 = new google.visualization.arrayToDataTable([
 				['Hour', 'Others', 'Articles'],
@@ -412,136 +334,6 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			var chartqualityhour = new google.visualization.ScatterChart(document.getElementById('qualityhourchart'));
 			chartqualityhour.draw(data14, options);
 			
-			var data15 = google.visualization.arrayToDataTable([
-				['Type', 	'Editions'],
-				['Articles', 	<?=end($data['totaledits_art'])?>],
-				['Talks', 	<?=end($data['totaledits_talk'])?>],
-				['Users', 	<?=end($data['totaledits_us'])?>],
-				['User Talks',	<?=end($data['totaledits_ustalk'])?>],
-				['Templates', 	<?=end($data['totaledits_temp'])?>],
-				['Categories', 	<?=end($data['totaledits_cat'])?>],
-				['Files', 	<?=end($data['totaledits_file'])?>]
-			]);
-			
-			new google.visualization.PieChart(document.getElementById('chartfinaledits'))
-				.draw(data15,{
-					chartArea:{width:"90%",height:"90%"},
-					legend:{position: 'none'},
-					is3D:true
-				});
-				
-			var data16 = google.visualization.arrayToDataTable([
-				['Type', 	'Bytes'],
-				['Articles', 	<?=end($data['totalbytes_art'])?>],
-				['Talks', 	<?=end($data['totalbytes_talk'])?>],
-				['Users', 	<?=end($data['totalbytes_us'])?>],
-				['User Talks',	<?=end($data['totalbytes_ustalk'])?>],
-				['Templates', 	<?=end($data['totalbytes_temp'])?>],
-				['Categories', 	<?=end($data['totalbytes_cat'])?>],
-				['Files', 	<?=end($data['totalbytes_file'])?>]
-			]);
-			
-			new google.visualization.PieChart(document.getElementById('chartfinalbytes'))
-				.draw(data16,{
-					chartArea:{width:"90%",height:"90%"},
-					legend:{position: 'none'},
-					is3D:true
-				});
-				
-			var data17 = google.visualization.arrayToDataTable([
-				['Type', 	'Pages'],
-				['Articles', 	<?=end($data['totalpages_art'])?>],
-				['Talks', 	<?=end($data['totalpages_talk'])?>],
-				['Users', 	<?=end($data['totalpages_us'])?>],
-				['User Talks',	<?=end($data['totalpages_ustalk'])?>],
-				['Templates', 	<?=end($data['totalpages_temp'])?>],
-				['Categories', 	<?=end($data['totalpages_cat'])?>],
-				['Files', 	<?=end($data['totalpages_file'])?>]
-			]);
-			
-			new google.visualization.PieChart(document.getElementById('chartfinalpages'))
-				.draw(data17,{
-					chartArea:{width:"90%",height:"90%"},
-					legend:{position: 'none'},
-					is3D:true
-				});
-				
-			var data18 = google.visualization.arrayToDataTable([
-				['Type', 				'Pages'],
-				['Contributed to Articles', 		<?=end($data['totalusers_art'])?>],
-				['Did not contribute to articles', 	<?=(end($data['totalusers']) - end($data['totalusers_art']))?>]
-			]);
-			
-			new google.visualization.PieChart(document.getElementById('chartfinalusers'))
-				.draw(data18,{
-					chartArea:{width:"90%",height:"90%"},
-					legend:{position: 'none'},
-					is3D:true
-				});
-			
-			var data = new google.visualization.DataTable();
-			data.addColumn('string', 'Nick');
-			data.addColumn('string', 'Name');
-			data.addColumn('number', 'Edits');
-			data.addColumn('number', 'Edits %');
-			data.addColumn('number', 'Edits in articles');
-			data.addColumn('number', 'Edits in articles %');
-			data.addColumn('number', 'Bytes');
-			data.addColumn('number', 'Bytes %');
-			data.addColumn('number', 'Bytes in articles');
-			data.addColumn('number', 'Bytes in articles %');
-			<? if(isset($data['useruploads'])) echo "data.addColumn('number', 'Uploads');";?>
-			<? if(isset($data['useruploads'])) echo "data.addColumn('number', 'Uploads %');";?>
-			data.addColumn('number', 'Average Grade');
-			data.addColumn('number', 'Standard Deviation');
-			data.addColumn('number', 'Maximum Grade');
-			data.addColumn('number', 'Minimum Grade');
-			data.addColumn('number', 'Average Grade as revisor');
-			data.addColumn('number', 'Maximum Grade as revisor');
-			data.addColumn('number', 'Minimum Grade as revisor');
-			data.addRows([
-			<? 
-				foreach(array_keys($data['useredits']) as $key){
-					echo "['".$key."','".
-						$data['userrealname'][$key]."',".
-						round(end($data['useredits'][$key]), 3).",".
-						round(end($data['useredits_per'][$key]), 3).",".
-						(isset($data['useredits_art'][$key])?round(end($data['useredits_art'][$key]), 3):"0").",".
-						(isset($data['useredits_art_per'][$key])?round(end($data['useredits_art_per'][$key]), 3):"0").",".
-						round(end($data['userbytes'][$key]), 3).",".
-						round(end($data['userbytes_per'][$key]), 3).",".
-						(isset($data['userbytes_art'][$key])?round(end($data['userbytes_art'][$key]), 3):"0").",".
-						(isset($data['userbytes_art_per'][$key])?round(end($data['userbytes_art_per'][$key]), 3):"0").",";
-					if(isset($data['useruploads'][$key])) 
-						echo round(end($data['useruploads'][$key]), 3).",".
-							round(end($data['useruploads_per'][$key]), 3).",";
-					else
-						echo "0, 0, ";
-					
-					if(isset($data['useraverage'][$data['iduser'][$key]])) 
-						echo round(end($data['useraverage'][$data['iduser'][$key]]), 3).",".
-							round(end($data['usersd'][$data['iduser'][$key]]), 3).",".
-							round(end($data['usermaxvalue'][$data['iduser'][$key]]), 3).",".
-							round(end($data['userminvalue'][$data['iduser'][$key]]), 3).",";
-					else
-						echo "0, 0, 0, 0, ";
-						
-					if(isset($data['revisoraverage'][$data['iduser'][$key]])) 
-						echo round(end($data['revisoraverage'][$data['iduser'][$key]]), 3).",".
-							round(end($data['revisormaxvalue'][$data['iduser'][$key]]), 3).",".
-							round(end($data['revisorminvalue'][$data['iduser'][$key]]), 3);
-					else
-						echo "0, 0, 0";
-					echo "]\n";
-					
-					if($key != end(array_keys($data['useredits']))) echo ",";
-				}
-			?>
-			]);
-
-
-			var table = new google.visualization.Table(document.getElementById('user_table'));
-			table.draw(data, {showRowNumber: true});
 			
 			var pagedata = new google.visualization.DataTable();
 			pagedata.addColumn('string', 'Name');
@@ -658,27 +450,6 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
 	<table id = "bodytable">
 	<tr>
-		<th><?=lang('voc.i18n_edits')?></th>
-		<th><?=lang('voc.i18n_bytes')?></th>
-	</tr>
-	<tr>
-		<td><div id='chartfinaledits' style='width: 400px; height: 400px; border: 0px; padding: 0px;'></div></td>
-		<td><div id='chartfinalbytes' style='width: 400px; height: 400px; border: 0px; padding: 0px;'></div></td>
-	</tr>
-	<tr>
-		<th><?=lang('voc.i18n_pages')?></th>
-		<th><?=lang('voc.i18n_users')?></th>
-	</tr>
-	<tr>
-		<td><div id='chartfinalpages' style='width: 400px; height: 400px; border: 0px; padding: 0px;'></div></td>
-		<td><div id='chartfinalusers' style='width: 400px; height: 400px; border: 0px; padding: 0px;'></div></td>
-	</tr>
-	</table>
-	
-	<br><br>
-	
-	<table id = "bodytable">
-	<tr>
 		<th><?=lang('voc.i18n_edits_evolution')?></th>
 	</tr>
 	<tr>
@@ -689,24 +460,6 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	</tr>
 	<tr>
 		<td><div id='charttotalbytes' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
-	</tr>
-	<tr>
-		<th><?=lang('voc.i18n_pages')?></th>
-	</tr>
-	<tr>
-		<td><div id='charttotalpages' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
-	</tr>
-	<tr>
-		<th><?=lang('voc.i18n_users')?></th>
-	</tr>
-	<tr>
-		<td><div id='charttotalusers' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
-	</tr>
-	<tr>
-		<th><?=lang('voc.i18n_categories')?></th>
-	</tr>
-	<tr>
-		<td><div id='charttotalcategories' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_activity_hour')?></th>
@@ -775,15 +528,6 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	</table>
 	
 	<br><br>
-	
-	<table id = "usertable">
-	<tr>
-		<th><?=lang('voc.i18n_users')?></th>
-	</tr>
-	<tr>
-		<td><div id = "user_table"></div></td>
-	</tr>
-	</table>
 	
 	<br><br>
 	
