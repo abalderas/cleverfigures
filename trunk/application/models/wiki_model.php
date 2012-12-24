@@ -167,7 +167,7 @@ class Wiki_model extends CI_Model{
    		ob_flush(); flush();
    		
    		//Creating query string for the general query
-   		$qstr = "select rev_id, rev_page, page_title, page_counter, page_namespace, page_is_new, user_id, user_name, user_real_name, user_email, user_registration, rev_timestamp, rev_len from revision, user, page where rev_page = page_id and rev_user = user_id order by rev_timestamp asc";		
+   		$qstr = "select rev_id, rev_page, page_id, page_title, page_counter, page_namespace, page_is_new, user_id, user_name, user_real_name, user_email, user_registration, rev_timestamp, rev_len from revision, user, page where rev_page = page_id and rev_user = user_id order by rev_timestamp asc";		
 		
 		//Querying database
    		$query = $link->query($qstr);
@@ -310,6 +310,7 @@ class Wiki_model extends CI_Model{
 			
 			//PAGE INFORMATION
 			
+			$pageid			[$row->page_title] = $row->page_id;
 			$pageeditscount		[$row->page_title] += 1;							// Count of the total editions per page
 			$pageusereditscount	[$row->page_title][$row->user_name] += 1;					// Count of the total editions per page & user
 			$pagebytescount		[$row->page_title] += $tamdiff;							// Count of the total bytes per page
@@ -768,6 +769,7 @@ class Wiki_model extends CI_Model{
 						, 'pagecat' => $pagecat
 						, 'pageusereditscount' => $pageuseredits
 						, 'pageuserbytescount' => $pageuserbytes
+						, 'pageid' => $pageid
 					);
 				
 				
@@ -893,6 +895,7 @@ class Wiki_model extends CI_Model{
 					, 'pagecat' => $pagecat
 					, 'pageusereditscount' => $pageuseredits
 					, 'pageuserbytescount' => $pageuserbytes
+					, 'pageid' => $pageid
 				);
 				
 				
@@ -1005,6 +1008,7 @@ class Wiki_model extends CI_Model{
 				, 'pagecat' => $pagecat
 				, 'pageusereditscount' => $pageuseredits
 				, 'pageuserbytescount' => $pageuserbytes
+				, 'pageid' => $pageid
 			);
 			
 		echo ">> Wiki analisis accomplished.</br>";

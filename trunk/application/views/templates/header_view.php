@@ -30,6 +30,16 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 		else
 			 echo link_tag('css/styles.css'); 
 	?>
+	
+	<script>
+		function swap_visibility(id){
+			if(id.style.visibility == 'visible')
+				id.style.visibility = 'hidden';
+			else	
+				id.style.visibility = 'visible';
+		}
+	</script>
+
 </head>
 <body>
 <table id = "menu">

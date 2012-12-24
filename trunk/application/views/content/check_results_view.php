@@ -643,6 +643,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			Y.one('#filterstring').plug(Y.Plugin.AutoComplete, {
 				resultHighlighter: 'phraseMatch',
 				resultFilters: ['subWordMatch'],
+				queryDelimiter: ',',
 				source: function(query){
 			var myindex  = document.getElementById("select_filter").selectedIndex;
 			var SelValue = document.getElementById("select_filter").options[myindex].value;

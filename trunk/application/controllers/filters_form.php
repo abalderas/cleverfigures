@@ -27,6 +27,13 @@ class Filters_form extends CI_Controller {
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
 	
+	private function split_string($string, $delimiter){
+		$ufstring = str_replace(' ','',$string);
+		$finalarray = explode($delimiter, $ufstring);
+		array_pop($finalarray);
+		return $finalarray;
+	}
+	
 	function index(){
 		if(!$this->session->userdata('username')){
 			$datah = array('title' => lang('voc.i18n_login'));
@@ -38,16 +45,28 @@ class Filters_form extends CI_Controller {
 		else{
 			$adata = $this->analisis_model->get_analisis_data($this->session->flashdata('aname'));
 			$this->session->keep_flashdata('aname');
-		
+			
 			$datah = array('title' => lang('voc.i18n_check_results'));
 			$this->load->view('templates/header_view', $datah);
-		
+			
+			$filterstrings = $this->split_string($_POST['filterstring'],',');
+			
 			if($_POST['select_filter'] == lang('voc.i18n_user'))
-				$this->load->view('content/useranalisis_view', array('data' => $adata, 'pagename' => $_POST['filterstring']));
+				foreach($filterstrings as $user){
+					$this->load->view('content/useranalisis_view', array('data' => $adata, 'username' => $user));
+// 					echo "<br><br>";
+				}
 			else if($_POST['select_filter'] == lang('voc.i18n_page'))
-				$this->load->view('content/pageanalisis_view', array('data' => $adata, 'pagename' => $_POST['filterstring']));
+				foreach($filterstrings as $page){
+					$this->load->view('content/pageanalisis_view', array('data' => $adata, 'pagename' => $page));
+					ob_flush(); flush();
+// 					echo "<br><br>";
+				}
 			else if($_POST['select_filter'] == lang('voc.i18n_category'))
-				$this->load->view('content/catanalisis_view', array('data' => $adata, 'pagename' => $_POST['filterstring']));
+				foreach($filterstrings as $category){
+					$this->load->view('content/catanalisis_view', array('data' => $adata, 'catname' => $category));
+// 					echo "<br><br>";
+				}
 			//else if($_POST['select_filter'] == lang('voc.i18n_criteria')){}
 			else{	
 				die('Filters_form : FATAL ERROR');
