@@ -29,11 +29,14 @@ class Filters_form extends CI_Controller {
 	
 	private function previous_highest_key($array, $key){
 		$result = false;
-		foreach(array_keys($array) as $akey)
+		$keys = array_keys($array);
+		sort($keys);
+		foreach($keys as $akey){////////////////////////////////////////////////////////////////////////////
 			if($akey <= $key)
 				$result = $akey;
 			else 
 				return $result;
+		}
 	}
 	
 	private function split_string($string, $delimiter){
@@ -46,7 +49,7 @@ class Filters_form extends CI_Controller {
 	private function combine_additive_array($superarray){
 		$keys = array();
 		foreach($superarray as $arg_array)
-			$keys += array_keys($arg_array);
+			$keys = array_merge(array_keys($arg_array), $keys);
 		$keys = array_unique($keys);
 		sort($keys);
 		
@@ -56,13 +59,13 @@ class Filters_form extends CI_Controller {
 				$sum = $value ? $value : 0;
 				$result[$key] = (isset($result[$key])) ? $result[$key] + $sum : $sum;
 			}
-		$superarray = $result;
+		return $result;
 	}
 	
 	private function combine_array($superarray){
 		$keys = array();
 		foreach($superarray as $arg_array)
-			$keys += array_keys($arg_array);
+			$keys = array_merge(array_keys($arg_array), $keys);
 		$keys = array_unique($keys);
 		sort($keys);
 		
@@ -72,7 +75,7 @@ class Filters_form extends CI_Controller {
 				$sum = $value ? $value : 0;
 				$result[$key] = (isset($result[$key])) ? $result[$key] + $sum : $sum;
 			}
-		$superarray = $result;
+		return $result;
 	}
 	
 	private function combine_results($names, $filtertype, $data){
@@ -133,37 +136,38 @@ class Filters_form extends CI_Controller {
 					$cat_arrays[$page] = $data['pagecat'][$page];
 			}
 			
-			$this->combine_additive_array($edits_arrays);
-			$this->combine_additive_array($bytes_arrays);
-			$this->combine_additive_array($edits_per_arrays);
-			$this->combine_additive_array($bytes_per_arrays);
-			$this->combine_additive_array($pageusercount_arrays);
-			$this->combine_array($activityhour_arrays);
-			$this->combine_array($activitywday_arrays);
-			$this->combine_array($activityweek_arrays);
-			$this->combine_array($activitymonth_arrays);
-			$this->combine_array($activityyear_arrays);
-			$this->combine_additive_array($usereditscount_arrays);
-			$this->combine_additive_array($userbytes_arrays);
-			$this->combine_additive_array($userbytescount_arrays);
+			$edits_arrays = $this->combine_additive_array($edits_arrays);
+			$bytes_arrays = $this->combine_additive_array($bytes_arrays);
+			$edits_per_arrays = $this->combine_additive_array($edits_per_arrays);
+			$bytes_per_arrays = $this->combine_additive_array($bytes_per_arrays);
+			$pageusercount_arrays = $this->combine_additive_array($pageusercount_arrays);
+			$activityhour_arrays = $this->combine_array($activityhour_arrays);
+			$activitywday_arrays = $this->combine_array($activitywday_arrays);
+			$activityweek_arrays = $this->combine_array($activityweek_arrays);
+			$activitymonth_arrays = $this->combine_array($activitymonth_arrays);
+			$activityyear_arrays = $this->combine_array($activityyear_arrays);
+			$useredits_arrays = $this->combine_additive_array($useredits_arrays);
+			$usereditscount_arrays = $this->combine_additive_array($usereditscount_arrays);
+			$userbytes_arrays = $this->combine_additive_array($userbytes_arrays);
+			$userbytescount_arrays = $this->combine_additive_array($userbytescount_arrays);
 			$users = array();
-			foreach($user_arrays as $page)
-				$users = array_merge($users, $page);
+			foreach($user_arrays as $user)
+				$users = array_merge($users, $user);
 				
 			$combined_data = array('edits_arrays' => $edits_arrays, 'bytes_arrays' => $bytes_arrays, 'edits_per_arrays' => $edits_per_arrays, 'bytes_per_arrays' => $bytes_per_arrays, 'pageusercount_arrays' => $pageusercount_arrays, 'activityhour_arrays' => $activityhour_arrays, 'activitymonth_arrays' => $activitymonth_arrays, 'activitywday_arrays' => $activitywday_arrays, 'activityweek_arrays' => $activityweek_arrays, 'activityyear_arrays' => $activityyear_arrays, 'useredits_arrays' => $useredits_arrays, 'userbytes_arrays' => $userbytes_arrays, 'usereditscount_arrays' => $usereditscount_arrays, 'userbytescount_arrays' => $userbytescount_arrays, 'users' => $users);
 			
 			if(isset($data['pageuploads'][$page])){
-				$this->combine_additive_array($uploads_arrays);
-				$this->combine_additive_array($upsize_arrays);
+				$uploads_arrays = $this->combine_additive_array($uploads_arrays);
+				$upsize_arrays = $this->combine_additive_array($upsize_arrays);
 				
 				$combined_data[] = $uploads_arrays;
 				$combined_data[] = $upsize_arrays;
 			}
 			if(isset($data['pageaveragevalue'][$page])){
-				$this->combine_additive_array($averagevalue_arrays);
-				$this->combine_additive_array($useraveragevalue_arrays);
-				$this->combine_additive_array($usersd_arrays);
-				$this->combine_additive_array($useredits_arrays);
+				$averagevalue_arrays = $this->combine_additive_array($averagevalue_arrays);
+				$useraveragevalue_arrays = $this->combine_additive_array($useraveragevalue_arrays);
+				$usersd_arrays = $this->combine_additive_array($usersd_arrays);
+				$useredits_arrays = $this->combine_additive_array($useredits_arrays);
 				
 				$grades = array();
 				foreach($grades_arrays as $page)
