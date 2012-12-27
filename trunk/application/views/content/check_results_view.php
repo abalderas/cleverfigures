@@ -697,7 +697,10 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			echo form_dropdown('select_filter', $options, lang('voc.i18n_user'), "id = 'select_filter'");
 			
 			echo "   ";
-			echo form_input(array('id' => 'filterstring', 'name' => 'filterstring', 'class' => 'cssform'));
+			echo form_input(array('id' => 'filterstring', 'name' => 'filterstring', 'class' => 'cssform', 'width' => '80%'));
+			echo "   ";
+			echo form_checkbox('combined', lang('voc.i18n_combined_analisis'), FALSE);
+			echo form_label(lang('voc.i18n_combined_analisis'));
 		?>
 		</td>
 	</tr>

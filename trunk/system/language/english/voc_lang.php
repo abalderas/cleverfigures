@@ -26,6 +26,7 @@ $lang['voc.i18n_close_session'] = "Close Session";
 $lang['voc.i18n_color'] = "Qualitative Source";
 $lang['voc.i18n_color_database'] = "Qualitative Database";
 $lang['voc.i18n_color_name'] = "Qualitative Source Name";
+$lang['voc.i18n_combined_analisis'] = "Combined Analisis";
 $lang['voc.i18n_come_back'] = "Back";
 $lang['voc.i18n_confirm_delete'] = "Do you really want to delete this analisis?";
 $lang['voc.i18n_confirm'] = "Confirm";
