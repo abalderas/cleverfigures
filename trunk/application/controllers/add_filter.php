@@ -17,8 +17,8 @@
 // You should have received a copy of the GNU General Public License
 // along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
-
-
+//_deprecated_
+/*
 class Add_filter extends CI_Controller {
 
 	function Add_filter(){
@@ -150,4 +150,4 @@ class Add_filter extends CI_Controller {
 			}
 		}
 	}
-} 
+} */

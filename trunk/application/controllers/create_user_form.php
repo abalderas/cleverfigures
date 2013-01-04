@@ -39,11 +39,22 @@ class Create_user_form extends CI_Controller {
 			$this->load->view('templates/footer_view');
 		}
 		else{
-			$this->user_model->new_user($this->input->post('username'), $this->input->post('password'), now(), $this->input->post('real_name'), $this->input->post('email'));
-			$datah = array('title' => lang('voc.i18n_installation'));
-			$this->load->view('templates/header_view', $datah);
-			$this->load->view('content/installation3_view');
-			$this->load->view('templates/footer_view');
+			$result = $this->db->query("select * from user")->result();
+			if($result){
+				$this->user_model->new_user($this->input->post('username'), $this->input->post('password'), now(), $this->input->post('real_name'), $this->input->post('email'), $this->input->post('is_admin'));
+				$datah = array('title' => lang('voc.i18n_configuration'));
+				
+				$this->load->view('templates/header_view', $datah);
+				$this->load->view('content/configuration_view', array('admin' => $this->session->userdata('is_admin')));
+				$this->load->view('templates/footer_view');
+			}
+			else{
+				$this->user_model->new_user($this->input->post('username'), $this->input->post('password'), now(), $this->input->post('real_name'), $this->input->post('email'), true);
+				$datah = array('title' => lang('voc.i18n_installation'));
+				$this->load->view('templates/header_view', $datah);
+				$this->load->view('content/installation3_view');
+				$this->load->view('templates/footer_view');
+			}
 		}
 	}
 }  

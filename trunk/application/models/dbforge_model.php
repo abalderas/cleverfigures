@@ -39,7 +39,7 @@ class Dbforge_model extends CI_Model{
 
 		$this->db = $this->load->database('main_db', TRUE);
 		
-		$this->db->query("CREATE TABLE user ( user_username VARCHAR(20) NOT NULL, user_password VARCHAR(50) NOT NULL, user_last_session INT(50) NOT NULL, user_realname VARCHAR(50) NOT NULL, user_email VARCHAR(30) NOT NULL, user_language VARCHAR(10) NOT NULL, user_filter VARCHAR(20) NOT NULL, KEY user_username (user_username) ) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
+		$this->db->query("CREATE TABLE user ( user_username VARCHAR(20) NOT NULL, user_password VARCHAR(50) NOT NULL, user_last_session INT(50) NOT NULL, user_realname VARCHAR(50) NOT NULL, user_email VARCHAR(30) NOT NULL, user_language VARCHAR(10) NOT NULL, user_filter VARCHAR(20) NOT NULL, user_is_admin BOOLEAN NOT NULL, KEY user_username (user_username) ) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
 			
 		$this->db->query("CREATE TABLE `wiki` ( `wiki_id` INT(9) UNSIGNED NOT NULL AUTO_INCREMENT, `wiki_name` VARCHAR(50) NOT NULL, `wiki_connection` INT(6) NOT NULL, KEY `wiki_id` (`wiki_id`) ) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
 			
@@ -53,10 +53,10 @@ class Dbforge_model extends CI_Model{
 		
 		$this->db->query("CREATE TABLE `user-color` ( `user_username` VARCHAR(20) NOT NULL, `color_name` VARCHAR(50) NOT NULL, KEY `user_username` (`user_username`) ) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
 		
-		$this->db->query("CREATE TABLE `user-analisis` ( `user_username` VARCHAR(20) NOT NULL, `analisis_date` VARCHAR(50) NOT NULL, KEY `user_username` (`user_username`) ) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
+		$this->db->query("CREATE TABLE `user-analisis` ( `user_username` VARCHAR(20) NOT NULL, `analisis_date` VARCHAR(50) NOT NULL, KEY `user_username` (`user_username`) ) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");/*
 		
 		$this->db->query("CREATE TABLE `user-filter` ( `user_username` VARCHAR(20) NOT NULL, `filter_id` VARCHAR(20) NOT NULL, KEY `user_username` (`user_username`) ) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
 		
-		$this->db->query("CREATE TABLE `filter` ( `ref` INT(9) UNSIGNED NOT NULL AUTO_INCREMENT, `filter_id` VARCHAR(20) NOT NULL, `filter_user` VARCHAR(20) NOT NULL, `filter_username` VARCHAR(20) NOT NULL, `filter_page` BOOLEAN NOT NULL, `filter_pagename` VARCHAR(40) NOT NULL, `filter_category` BOOLEAN NOT NULL, `filter_categoryname` VARCHAR(40) NOT NULL, `filter_criteria` BOOLEAN NOT NULL, `filter_criterianame` VARCHAR(40) NOT NULL, `filter_date_a` VARCHAR(50) NOT NULL, `filter_date_b` VARCHAR(50) NOT NULL, KEY `ref` (`ref`) ) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
+		$this->db->query("CREATE TABLE `filter` ( `ref` INT(9) UNSIGNED NOT NULL AUTO_INCREMENT, `filter_id` VARCHAR(20) NOT NULL, `filter_user` VARCHAR(20) NOT NULL, `filter_username` VARCHAR(20) NOT NULL, `filter_page` BOOLEAN NOT NULL, `filter_pagename` VARCHAR(40) NOT NULL, `filter_category` BOOLEAN NOT NULL, `filter_categoryname` VARCHAR(40) NOT NULL, `filter_criteria` BOOLEAN NOT NULL, `filter_criterianame` VARCHAR(40) NOT NULL, `filter_date_a` VARCHAR(50) NOT NULL, `filter_date_b` VARCHAR(50) NOT NULL, KEY `ref` (`ref`) ) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");*/
    	}
 }

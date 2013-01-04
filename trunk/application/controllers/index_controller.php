@@ -59,8 +59,8 @@ class Index_controller extends CI_Controller {
 				foreach($this->user_model->get_analisis_list($this->session->userdata('username')) as $analisis){
 					$adata = $this->analisis_model->get_analisis_data($analisis);
 					$adate[] = $analisis;
-					$awiki[] = $adata['awiki'];
-					$acolor[] = $adata['acolor'];
+					$awiki[] = $this->analisis_model->get_analisis_wiki($analisis);
+					$acolor[] = $this->analisis_model->get_analisis_color($analisis);
 				}
 			
 				$tdata = array('adate' => $adate, 'awiki' => $awiki, 'acolor' => $acolor);
@@ -70,7 +70,7 @@ class Index_controller extends CI_Controller {
 				$this->load->view('templates/footer_view');
 			}
 			else{
-				//If it exists user
+				//If an user already exists
 				if($this->db->query('select * from user')->result()){
 					$datah = array('title' => lang('voc.i18n_login'));
 			

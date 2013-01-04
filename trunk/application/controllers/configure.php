@@ -23,7 +23,7 @@ class Configure extends CI_Controller {
       		parent::__construct();
       		$this->load->model('wiki_model');
       		$this->load->model('color_model');
-      		$this->load->model('filter_model');
+//       	$this->load->model('filter_model');
       		$this->load->model('user_model');
    	}
    	
@@ -38,15 +38,15 @@ class Configure extends CI_Controller {
 		}
 		else{
 		
-			$datah = array('title' => lang('voc.i18n_configuration'));
+			$datah = array('title' => lang('voc.i18n_configuration'));/*
 			$filters = array(0 => lang('voc.i18n_no_filter'));
 			$filters = array_merge($filters, $this->filter_model->get_filter_list($this->session->userdata('username')));
-			$defaultfilter = $this->user_model->default_filter($this->session->userdata('username'));
+			$defaultfilter = $this->user_model->default_filter($this->session->userdata('username'));*/
 		
-			$confdata = array('filters' => $filters, 'userdefaultfilter' => $defaultfilter);
-				
+// 			$confdata = array('filters' => $filters, 'userdefaultfilter' => $defaultfilter);
+			
 			$this->load->view('templates/header_view', $datah);
-			$this->load->view('content/configuration_view', $confdata);
+			$this->load->view('content/configuration_view', array('admin' => $this->session->userdata('is_admin')));
 			$this->load->view('templates/footer_view');
 		}
 	}

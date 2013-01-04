@@ -56,6 +56,10 @@ echo form_open('create_user_form');
 	</tr>
 	<?php if(form_error('password_confirmation')) echo "<tr><td><em>".form_error('password_confirmation')."</em></td></tr>"; ?>
 	<tr>
+		<td class="fieldbox"><?=lang('voc.i18n_is_admin')?>:</td>
+		<td><?= form_checkbox('is_admin') ?></td>
+	</tr>
+	<tr>
 		<th class="next" colspan = "2"><?=form_submit(array('id' => 'submit', 'value' => lang('voc.i18n_next'), 'class' => 'next'));?></th>
 	</tr>
 </table>

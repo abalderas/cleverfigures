@@ -49,6 +49,19 @@ echo form_open('configuration_form');
 	<td><?=form_label(lang('voc.i18n_add_color'), 'add_color');?></td>
 	<td><?=form_submit('add_color', lang('voc.i18n_add_color'));?></td>
 </tr>
+<? if(!isset($admin) || !$admin) echo "<!--" ?>
+<tr>
+	<th colspan = "2"><?=lang('voc.i18n_users');?></th>
+</tr>
+<tr>
+	<td><?=form_label(lang('voc.i18n_add_user'), 'add_user');?></td>
+	<td><?=form_submit('add_user', lang('voc.i18n_add_user'));?></td>
+</tr>
+<!--<tr>
+	<td><?//=form_label(lang('voc.i18n_erase_user'), 'erase_user');?></td>
+	<td><?//=form_submit('erase_user', lang('voc.i18n_erase_user'));?></td>
+</tr>-->
+<? if(!isset($admin) || !$admin) echo "-->" ?>
 <tr>
 	<th colspan = "2">
 	<?=form_submit(array('name' => 'save_conf', 'value' => lang('voc.i18n_save_conf'), 'class' => 'next'));?>

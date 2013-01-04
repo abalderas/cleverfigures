@@ -42,9 +42,9 @@ class Wiki_model extends CI_Model{
    	   	$ci =& get_instance();
 		$ci->load->model('connection_model');
 		$ci->load->helper('file');
-		
+		/*
 		$cf =& get_instance();
-		$cf->load->model('filter_model');
+		$cf->load->model('filter_model');*/
    	}
 	
 	private function mwtime_to_unix($mwtime){

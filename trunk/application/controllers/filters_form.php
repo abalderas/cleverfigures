@@ -29,20 +29,19 @@ class Filters_form extends CI_Controller {
 	
 	private function previous_highest_key($array, $key){
 		$result = false;
-		$keys = array_keys($array);
-		sort($keys);
-		foreach($keys as $akey){////////////////////////////////////////////////////////////////////////////
+		foreach(array_keys($array) as $akey){
 			if($akey <= $key)
 				$result = $akey;
 			else 
 				return $result;
 		}
+		return $result;
 	}
 	
 	private function split_string($string, $delimiter){
 		$ufstring = str_replace(' ','',$string);
 		$finalarray = explode($delimiter, $ufstring);
-		array_pop($finalarray);
+		
 		return $finalarray;
 	}
 	
@@ -59,7 +58,19 @@ class Filters_form extends CI_Controller {
 				$sum = $value ? $value : 0;
 				$result[$key] = (isset($result[$key])) ? $result[$key] + $sum : $sum;
 			}
-		return $result;
+		if(isset($result)) return $result;
+		else return false;
+	}
+	
+	private function combine_additive_array_2l($superarray){
+		foreach($superarray as $fl)
+			foreach($fl as $sl)
+				$mid[$sl][] = $superarray[$fl][$sl];
+		
+		foreach($mid as $u)
+			$mid[$u] = $this->combine_additive_array($mid[$u]);/////////////////////////////////////////////////////
+			
+		return $mid;
 	}
 	
 	private function combine_array($superarray){
@@ -146,10 +157,10 @@ class Filters_form extends CI_Controller {
 			$activityweek_arrays = $this->combine_array($activityweek_arrays);
 			$activitymonth_arrays = $this->combine_array($activitymonth_arrays);
 			$activityyear_arrays = $this->combine_array($activityyear_arrays);
-			$useredits_arrays = $this->combine_additive_array($useredits_arrays);
-			$usereditscount_arrays = $this->combine_additive_array($usereditscount_arrays);
-			$userbytes_arrays = $this->combine_additive_array($userbytes_arrays);
-			$userbytescount_arrays = $this->combine_additive_array($userbytescount_arrays);
+			$useredits_arrays = $this->combine_additive_array_2l($useredits_arrays);
+			$usereditscount_arrays = $this->combine_additive_array_2l($usereditscount_arrays);
+			$userbytes_arrays = $this->combine_additive_array_2l($userbytes_arrays);
+			$userbytescount_arrays = $this->combine_additive_array_2l($userbytescount_arrays);
 			$users = array();
 			foreach($user_arrays as $user)
 				$users = array_merge($users, $user);
@@ -209,7 +220,7 @@ class Filters_form extends CI_Controller {
 			$this->load->view('templates/footer_view');
 		}
 		else{
-			if($_POST['combined'] == TRUE){
+			if(isset($_POST['combined']) and ($_POST['combined'] == true)){
 				$adata = $this->analisis_model->get_analisis_data($this->session->flashdata('aname'));
 				$this->session->keep_flashdata('aname');
 			
@@ -217,7 +228,6 @@ class Filters_form extends CI_Controller {
 							$this->load->view('templates/header_view', $datah);
 			
 				$filterstrings = $this->split_string($_POST['filterstring'],',');
-				
 				$combined_data = $this->combine_results($filterstrings, $_POST['select_filter'], $adata);
 				
 				if($_POST['select_filter'] == lang('voc.i18n_user'))
