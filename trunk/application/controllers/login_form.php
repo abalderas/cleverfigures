@@ -25,6 +25,7 @@ class Login_form extends CI_Controller {
       		parent::__construct();
       		$this->load->model('user_model');
 		$this->load->model('analisis_model');
+		$this->load->model('wiki_model');
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	
@@ -65,6 +66,27 @@ class Login_form extends CI_Controller {
 					$this->load->view('templates/footer_view');
 				}
 			}
+			else if($this->wiki_model->student_login($this->input->post('username'), $this->input->post('password'))){
+// 				$reports = $this->report_model->get_my_reports($this->session->userdata('username'));
+// 				if($reports){
+// 					foreach($reports as $report){
+// 					}
+// 			
+// 					$tdata = array('rdate' => $rdate, 'rwiki' => $rwiki, 'rteacher' => $rteacher, 'rtype' => $rtype, 'rname' => $rname);
+// 				
+// 					//And give the data to the view
+// 					$this->load->view('templates/header_view', $datah);
+// 					$this->load->view('content/student_view', $tdata);
+// 					$this->load->view('templates/footer_view');
+// 				}
+// 				//Else, load view without data
+// 				else{
+// 					$this->load->view('templates/header_view', $datah);
+// 					$this->load->view('content/teacher_view');
+// 					$this->load->view('templates/footer_view');
+// 				}
+			}
+			
 			//Else, reload login view showing error
 			else{
 				$datah = array('title' => lang('voc.i18n_login'));

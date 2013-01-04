@@ -149,6 +149,36 @@ class Wiki_model extends CI_Model{
 		return $return;
 	}
    	
+   	function student_login($uname, $pass){
+		$wikis = $this->db->query("select wiki_name from wiki")->result();
+		
+		foreach($wikis as $wiki){
+			$link = $this->connection_model->connect($this->wconnection($wiki));
+			
+			$link -> from('user') 
+			-> where('user_name = ' . "'" . $uname . "'") 
+			-> where('user_password = ' . "'" . MD5($pass) . "'") 
+			-> limit(1);
+   
+			$query = $link -> get();
+       
+			if($query->result()){
+				foreach($query->result() as $row) 
+					$sess_array = array('username' => $row -> user_name,
+        						'language' => 'english',
+        						'is_student' => 1,
+        						'student_wiki' => $wiki,
+        						'realname' => $row -> user_real_name
+        						); 
+				$this -> session -> set_userdata($sess_array);
+				$this->update_last_session($uname);
+				return true;
+			}
+		}
+		
+		return false;
+   	}
+   	
    	function fetch($wikiname, $analisis){
 		
 		//Creating directory to store data
