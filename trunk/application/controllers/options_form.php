@@ -43,14 +43,14 @@ class Options_form extends CI_Controller {
 		}
 		else{
 		
-			if(isset($_POST['delete'])){
+			if(isset($_POST['delete_x'])){
 				$datah = array('title' => lang('voc.i18n_delete_analisis'));
 				
 				$this->load->view('templates/header_view', $datah);
 				$this->load->view('content/delete_analisis_view', array('analisis' => $_POST['aname']));
 				$this->load->view('templates/footer_view');
 			}
-			else if(isset($_POST['view'])){
+			else if(isset($_POST['view_x'])){
 				$datah = array('title' => lang('voc.i18n_check_results'));
 				
 				$adata = $this->analisis_model->get_analisis_data($_POST['aname']);

@@ -35,7 +35,52 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 				echo "<td>".$acolor[$i]."</td>";
 				echo form_open('options_form');
 				echo form_hidden('aname', $adate[$i]);
-				echo "<td>".form_submit('view', lang('voc.i18n_view'))." ".form_submit('delete', lang('voc.i18n_delete'))."</td>";
+				$btn_view = array(
+					'type' => 'image',
+					'src' => base_url().'images/icons/Developer_Icons_PNG/PNG/Green/24/object_13.png',
+					'name' => 'view',
+					'id' => 'view',
+					'width' => '24',
+					'height' => '24',
+					'alt' => 'view',
+					'value' => ''
+				);
+				$btn_delete = array(
+					'type' => 'image',
+					'src' => base_url().'images/icons/Developer_Icons_PNG/PNG/Green/24/Recycle.png',
+					'name' => 'delete',
+					'id' => 'delete',
+					'width' => '24',
+					'height' => '24',
+					'alt' => 'delete',
+					'value' => ''
+				);
+				$btn_locked = array(
+					'type' => 'image',
+					'src' => base_url().'images/icons/Developer_Icons_PNG/PNG/Green/24/locked.png',
+					'name' => 'locked',
+					'id' => 'locked',
+					'width' => '24',
+					'height' => '24',
+					'alt' => 'locked',
+					'value' => ''
+				);
+				$btn_shared = array(
+					'type' => 'image',
+					'src' => base_url().'images/icons/Developer_Icons_PNG/PNG/Green/24/unlocked.png',
+					'name' => 'shared',
+					'id' => 'shared',
+					'width' => '24',
+					'height' => '24',
+					'alt' => 'shared',
+					'value' => ''
+				);
+				echo "<td>".form_submit($btn_view)." ".form_submit($btn_delete)."</td>";
+// 				if($isshared[$i])
+// 					echo form_input($btn_shared)."</td>";
+// 				else
+// 					echo form_input($btn_locked)."</td>";
+					
 				echo form_close();
 			echo "</tr>";
 		}
