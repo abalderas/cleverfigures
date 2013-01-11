@@ -36,8 +36,11 @@ echo form_open('configuration_form');
 </tr>
 <tr>
 	<td><?=form_label(lang('voc.i18n_select_language'), 'select_language');?></td>
-	<td><?=form_dropdown('select_language', $languages, 'english');?></td>
+	<td><?=form_dropdown('select_language', $languages, 'english');?><?=form_submit(array('name' => 'save_conf', 'value' => lang('voc.i18n_save_conf'), 'class' => 'next'));?></td>
 </tr>
+</table>
+<br>
+<table id = "bodytable">
 <tr>
 	<th colspan = "2"><?=lang('voc.i18n_data_source');?></th>
 </tr>
@@ -49,7 +52,10 @@ echo form_open('configuration_form');
 	<td><?=form_label(lang('voc.i18n_add_color'), 'add_color');?></td>
 	<td><?=form_submit('add_color', lang('voc.i18n_add_color'));?></td>
 </tr>
+</table>
+<br>
 <? if(!isset($admin) || !$admin) echo "<!--" ?>
+<table id = "bodytable">
 <tr>
 	<th colspan = "2"><?=lang('voc.i18n_users');?></th>
 </tr>
@@ -61,13 +67,7 @@ echo form_open('configuration_form');
 	<td><?//=form_label(lang('voc.i18n_erase_user'), 'erase_user');?></td>
 	<td><?//=form_submit('erase_user', lang('voc.i18n_erase_user'));?></td>
 </tr>-->
-<? if(!isset($admin) || !$admin) echo "-->" ?>
-<tr>
-	<th colspan = "2">
-	<?=form_submit(array('name' => 'save_conf', 'value' => lang('voc.i18n_save_conf'), 'class' => 'next'));?>
-	<?=form_submit(array('name' => 'cancel_conf', 'value' => lang('voc.i18n_cancel_conf'), 'class' => 'next'));?>
-	</th>
-</tr>
 </table>
+<? if(!isset($admin) || !$admin) echo "-->" ?>
 
 <?=form_close();?>

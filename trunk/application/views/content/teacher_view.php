@@ -17,7 +17,8 @@ You should have received a copy of the GNU General Public License
 along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<?="<h1>".lang('voc.i18n_performed_analisis')."</h1></br>"?>
+<?="<h1>".lang('voc.i18n_performed_analisis')."</h1><br>"?>
+<?echo form_open('options_form');?>
 <table id = "bodytable">
 <tr>
 	<th><?=lang('voc.i18n_date_hour')?></th>
@@ -33,7 +34,6 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 				echo "<td>".unix_to_human($adate[$i])."</td>";
 				echo "<td>".$awiki[$i]."</td>";
 				echo "<td>".$acolor[$i]."</td>";
-				echo form_open('options_form');
 				echo form_hidden('aname', $adate[$i]);
 				$btn_view = array(
 					'type' => 'image',
@@ -81,10 +81,10 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 // 				else
 // 					echo form_input($btn_locked)."</td>";
 					
-				echo form_close();
 			echo "</tr>";
 		}
 	else echo "<tr><td colspan = \"4\">".lang('voc.i18n_no_analisis')."</td></tr>";
 ?>
 
 </table>
+<?echo form_close();?>
