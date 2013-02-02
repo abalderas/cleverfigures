@@ -57,13 +57,13 @@ class Index_controller extends CI_Controller {
 				$datah = array('title' => lang('voc.i18n_teacher_view'));
 				
 				foreach($this->user_model->get_analisis_list($this->session->userdata('username')) as $analisis){
-					$adata = $this->analisis_model->get_analisis_data($analisis);
-					$adate[] = $analisis;
-					$awiki[] = $this->analisis_model->get_analisis_wiki($analisis);
-					$acolor[] = $this->analisis_model->get_analisis_color($analisis);
+					$adate = $analisis;
+					$awiki = $this->analisis_model->get_analisis_wiki($analisis);
+					$acolor = $this->analisis_model->get_analisis_color($analisis);
 				}
 			
-				$tdata = array('adate' => $adate, 'awiki' => $awiki, 'acolor' => $acolor);
+				if(isset($adate)) $tdata = array('adate' => $adate, 'awiki' => $awiki, 'acolor' => $acolor);
+				else $tdata = array();
 				
 				$this->load->view('templates/header_view', $datah);
 				$this->load->view('content/teacher_view', $tdata);
