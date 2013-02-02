@@ -16,7 +16,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<?="<h1>".lang('voc.i18n_check_results')."</h1></br>"?>
 
 
 <!-- CHARTS SCRIPTS -->
@@ -698,9 +697,6 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			
 			echo "   ";
 			echo form_input(array('id' => 'filterstring', 'name' => 'filterstring', 'class' => 'cssform', 'width' => '80%'));
-			echo "   ";
-			echo form_checkbox('combined', lang('voc.i18n_combined_analisis'), FALSE);
-			echo form_label(lang('voc.i18n_combined_analisis'));
 		?>
 		</td>
 	</tr>

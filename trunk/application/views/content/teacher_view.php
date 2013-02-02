@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License
 along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<?="<h1>".lang('voc.i18n_performed_analisis')."</h1><br>"?>
 <?echo form_open('options_form');?>
 <table id = "bodytable">
 <tr>

@@ -16,7 +16,6 @@
 // You should have received a copy of the GNU General Public License
 // along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
-echo "<h1>".lang('voc.i18n_analise')."</h1></br>";
 ?>
 
 <?=form_open('analisis_form')?>

@@ -44,7 +44,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			chartedits<?=$data['pageid'][$pagename]?>.draw(data1<?=$data['pageid'][$pagename]?>, {
 				'displayAnnotations': false,
 				'fill': 20,
-                                'legendPosition': 'newRow'}
+                                'legendPosition': 'newRow',
+                                'wmode': 'transparent'}
                                 );
 			
 			
@@ -66,7 +67,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			chartbytes<?=$data['pageid'][$pagename]?>.draw(data2<?=$data['pageid'][$pagename]?>, {
 				'displayAnnotations': false,
 				'fill': 20,
-                                'legendPosition': 'newRow'}
+                                'legendPosition': 'newRow',
+                                'wmode': 'transparent'}
                                 );
                                 
                         var data4<?=$data['pageid'][$pagename]?> = new google.visualization.DataTable();
@@ -87,7 +89,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			chartusers<?=$data['pageid'][$pagename]?>.draw(data4<?=$data['pageid'][$pagename]?>, {
 				'displayAnnotations': false,
 				'fill': 20,
-                                'legendPosition': 'newRow'
+                                'legendPosition': 'newRow',
+                                'wmode': 'transparent'
                                 }
                         );
                         
@@ -106,7 +109,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			
 			var options5<?=$data['pageid'][$pagename]?> = {
 				hAxis: {title: 'Hour', titleTextStyle: {data: 'green'}},
-				isStacked:true
+				isStacked:true,
 			};
 
 			var charttotalactivityhour<?=$data['pageid'][$pagename]?> = new google.visualization.ColumnChart(document.getElementById('charttotalactivityhour<?=$data['pageid'][$pagename]?>'));
@@ -127,7 +130,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			
 			var options6<?=$data['pageid'][$pagename]?> = {
 				hAxis: {title: 'Week Day', titleTextStyle: {data: 'green'}},
-				isStacked:true
+				isStacked:true,
 			};
 
 			var charttotalactivitywday<?=$data['pageid'][$pagename]?> = new google.visualization.ColumnChart(document.getElementById('charttotalactivitywday<?=$data['pageid'][$pagename]?>'));
@@ -148,7 +151,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			
 			var options7<?=$data['pageid'][$pagename]?> = {
 				hAxis: {title: 'Week', titleTextStyle: {data: 'green'}},
-				isStacked:true
+				isStacked:true,
 			};
 
 			var charttotalactivityweek<?=$data['pageid'][$pagename]?> = new google.visualization.ColumnChart(document.getElementById('charttotalactivityweek<?=$data['pageid'][$pagename]?>'));
@@ -168,7 +171,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			
 			var options8<?=$data['pageid'][$pagename]?> = {
 				hAxis: {title: 'Month', titleTextStyle: {data: 'green'}},
-				isStacked:true
+				isStacked:true,
 			};
 
 			var charttotalactivitymonth<?=$data['pageid'][$pagename]?> = new google.visualization.ColumnChart(document.getElementById('charttotalactivitymonth<?=$data['pageid'][$pagename]?>'));
@@ -188,7 +191,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			
 			var options9<?=$data['pageid'][$pagename]?> = {
 				hAxis: {title: 'Year', titleTextStyle: {data: 'green'}},
-				isStacked:true
+				isStacked:true,
 			};
 
 			var charttotalactivityyear<?=$data['pageid'][$pagename]?> = new google.visualization.ColumnChart(document.getElementById('charttotalactivityyear<?=$data['pageid'][$pagename]?>'));

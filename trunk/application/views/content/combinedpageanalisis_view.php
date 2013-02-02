@@ -17,6 +17,15 @@ You should have received a copy of the GNU General Public License
 along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
+<?
+	function maxlastvalue($array, $masterkey){
+		$keys = arsort($array_keys($array));
+		foreach($keys as $key)
+			if($key <= $masterkey)
+				return $array[$masterkey];
+	}
+?>
+
 <? 
 	echo "<h1> ";
 	foreach($pagenames as $page){
@@ -25,7 +34,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	}
 	echo " </h1></br>";
 	
-	$pagename = end($pagenames);
+	
 ?>
 
 <!-- CHARTS SCRIPTS -->
@@ -33,18 +42,27 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 <script type='text/javascript' src='http://www.google.com/jsapi'></script>
 	<script type='text/javascript'>
 		google.load('visualization', '1', {'packages':['annotatedtimeline', 'corechart', 'table']});
-		google.setOnLoadCallback(drawChart<?=$data['pageid'][$pagename]?>);
-		function drawChart<?=$data['pageid'][$pagename]?>() {
-			var data1<?=$data['pageid'][$pagename]?> = new google.visualization.DataTable();
-			data1<?=$data['pageid'][$pagename]?>.addColumn('datetime', 'Date');
-			data1<?=$data['pageid'][$pagename]?>.addColumn('number', 'Editions');
+		google.setOnLoadCallback(drawChart<?=$data['pageid'][$page]?>);
+		function drawChart<?=$data['pageid'][$page]?>() {
+			var data1<?=$data['pageid'][$page]?> = new google.visualization.DataTable();
+			data1<?=$data['pageid'][$page]?>.addColumn('datetime', 'Date');
+			<?
+				foreach($pagenames as $pagename)
+					echo "data1".$data['pageid'][$pagename].".addColumn('number', '".$pagename."');"
+			?>
+			
 			data1<?=$data['pageid'][$pagename]?>.addRows([
 			<?
-				foreach(array_keys($data['edits_arrays']) as $key){
-					echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
-						$data['edits_arrays'][$key].
-						"]";
-					if($key != end(array_keys($data['edits_arrays']))) echo ",";
+				foreach(array_keys($data['pageedits'][$pagename]) as $key){
+					echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."),";
+						foreach($pagenames as $pagename){
+							echo maxlastvalue($data['pageedits'][$pagename][$key], $key);/////////////////////////////////////////////////////////////////
+							if($pagename != end($pagenames))
+								echo ",";
+						}
+					echo "]";
+					if($key != end(array_keys($data['pageedits'][$pagename]))) 
+						echo ",";
 				}
 			?>
 			]);
@@ -53,7 +71,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			chartedits<?=$data['pageid'][$pagename]?>.draw(data1<?=$data['pageid'][$pagename]?>, {
 				'displayAnnotations': false,
 				'fill': 20,
-                                'legendPosition': 'newRow'}
+                                'legendPosition': 'newRow',
+                                'wmode': 'transparent'}
                                 );
 			
 			
@@ -62,11 +81,11 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			data2<?=$data['pageid'][$pagename]?>.addColumn('number', 'Bytes');
 			data2<?=$data['pageid'][$pagename]?>.addRows([
 			<?
-				foreach(array_keys($data['bytes_arrays']) as $key){
+				foreach(array_keys($data['pagebytes'][$pagename]) as $key){
 					echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
-					$data['bytes_arrays'][$key].
+					$data['pagebytes'][$pagename][$key].
 					"]";
-					if($key != end(array_keys($data['bytes_arrays']))) echo ",";
+					if($key != end(array_keys($data['pagebytes'][$pagename]))) echo ",";
 				}
 			?>
 			]);
@@ -75,7 +94,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			chartbytes<?=$data['pageid'][$pagename]?>.draw(data2<?=$data['pageid'][$pagename]?>, {
 				'displayAnnotations': false,
 				'fill': 20,
-                                'legendPosition': 'newRow'}
+                                'legendPosition': 'newRow',
+                                'wmode': 'transparent'}
                                 );
                                 
                         var data4<?=$data['pageid'][$pagename]?> = new google.visualization.DataTable();
@@ -83,11 +103,11 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			data4<?=$data['pageid'][$pagename]?>.addColumn('number', 'Users');
 			data4<?=$data['pageid'][$pagename]?>.addRows([
 			<?
-				foreach(array_keys($data['pageusercount_arrays']) as $key){
+				foreach(array_keys($data['pageusercount'][$pagename]) as $key){
 					echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
-					$data['pageusercount_arrays'][$key].
+					$data['pageusercount'][$pagename][$key].
 					"]";
-					if($key != end(array_keys($data['pageusercount_arrays']))) echo ",";
+					if($key != end(array_keys($data['pageusercount'][$pagename]))) echo ",";
 				}
 			?>
 			]);
@@ -96,7 +116,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			chartusers<?=$data['pageid'][$pagename]?>.draw(data4<?=$data['pageid'][$pagename]?>, {
 				'displayAnnotations': false,
 				'fill': 20,
-                                'legendPosition': 'newRow'
+                                'legendPosition': 'newRow',
+                                'wmode': 'transparent'
                                 }
                         );
                         
@@ -104,18 +125,18 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
                         var data5<?=$data['pageid'][$pagename]?> = new google.visualization.arrayToDataTable([
 				['Hour', 'Editions'],
 			<?
-				foreach(array_keys($data['activityhour_arrays']) as $key){
+				foreach(array_keys($data['pageactivityhour'][$pagename]) as $key){
 					echo "[".$key.", ".
-					$data['activityhour_arrays'][$key].
+					$data['pageactivityhour'][$pagename][$key].
 					"]";
-					if($key != end(array_keys($data['activityhour_arrays']))) echo ",";
+					if($key != end(array_keys($data['pageactivityhour'][$pagename]))) echo ",";
 				}
 			?>
 			]);
 			
 			var options5<?=$data['pageid'][$pagename]?> = {
 				hAxis: {title: 'Hour', titleTextStyle: {data: 'green'}},
-				isStacked:true
+				isStacked:true,
 			};
 
 			var charttotalactivityhour<?=$data['pageid'][$pagename]?> = new google.visualization.ColumnChart(document.getElementById('charttotalactivityhour<?=$data['pageid'][$pagename]?>'));
@@ -125,18 +146,18 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			var data6<?=$data['pageid'][$pagename]?> = new google.visualization.arrayToDataTable([
 				['Week Day', 'Editions'],
 			<?
-				foreach(array_keys($data['activitywday_arrays']) as $key){
+				foreach(array_keys($data['pageactivitywday'][$pagename]) as $key){
 					echo "['".$key."', ".
-					$data['activitywday_arrays'][$key].
+					$data['pageactivitywday'][$pagename][$key].
 					"]";
-					if($key != end(array_keys($data['activitywday_arrays']))) echo ",";
+					if($key != end(array_keys($data['pageactivitywday'][$pagename]))) echo ",";
 				}
 			?>
 			]);
 			
 			var options6<?=$data['pageid'][$pagename]?> = {
 				hAxis: {title: 'Week Day', titleTextStyle: {data: 'green'}},
-				isStacked:true
+				isStacked:true,
 			};
 
 			var charttotalactivitywday<?=$data['pageid'][$pagename]?> = new google.visualization.ColumnChart(document.getElementById('charttotalactivitywday<?=$data['pageid'][$pagename]?>'));
@@ -146,18 +167,18 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			var data7<?=$data['pageid'][$pagename]?> = new google.visualization.arrayToDataTable([
 				['Week', 'Editions'],
 			<?
-				foreach(array_keys($data['activityweek_arrays']) as $key){
+				foreach(array_keys($data['pageactivityweek'][$pagename]) as $key){
 					echo "['".$key."', ".
-					$data['activityweek_arrays'][$key].
+					$data['pageactivityweek'][$pagename][$key].
 					"]";
-					if($key != end(array_keys($data['activityweek_arrays']))) echo ",";
+					if($key != end(array_keys($data['pageactivityweek'][$pagename]))) echo ",";
 				}
 			?>
 			]);
 			
 			var options7<?=$data['pageid'][$pagename]?> = {
 				hAxis: {title: 'Week', titleTextStyle: {data: 'green'}},
-				isStacked:true
+				isStacked:true,
 			};
 
 			var charttotalactivityweek<?=$data['pageid'][$pagename]?> = new google.visualization.ColumnChart(document.getElementById('charttotalactivityweek<?=$data['pageid'][$pagename]?>'));
@@ -166,18 +187,18 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			var data8<?=$data['pageid'][$pagename]?> = new google.visualization.arrayToDataTable([
 				['Month', 'Editions'],
 			<?
-				foreach(array_keys($data['activitymonth_arrays']) as $key){
+				foreach(array_keys($data['pageactivitymonth'][$pagename]) as $key){
 					echo "['".$key."', ".
-					$data['activitymonth_arrays'][$key].
+					$data['pageactivitymonth'][$pagename][$key].
 					"]";
-					if($key != end(array_keys($data['activitymonth_arrays']))) echo ",";
+					if($key != end(array_keys($data['pageactivitymonth'][$pagename]))) echo ",";
 				}
 			?>
 			]);
 			
 			var options8<?=$data['pageid'][$pagename]?> = {
 				hAxis: {title: 'Month', titleTextStyle: {data: 'green'}},
-				isStacked:true
+				isStacked:true,
 			};
 
 			var charttotalactivitymonth<?=$data['pageid'][$pagename]?> = new google.visualization.ColumnChart(document.getElementById('charttotalactivitymonth<?=$data['pageid'][$pagename]?>'));
@@ -186,33 +207,33 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			var data9<?=$data['pageid'][$pagename]?> = new google.visualization.arrayToDataTable([
 				['Year', 'Editions'],
 			<?
-				foreach(array_keys($data['activityyear_arrays']) as $key){
+				foreach(array_keys($data['pageactivityyear'][$pagename]) as $key){
 					echo "['".$key."', ".
-					$data['activityyear_arrays'][$key].
+					$data['pageactivityyear'][$pagename][$key].
 					"]";
-					if($key != end(array_keys($data['activityyear_arrays']))) echo ",";
+					if($key != end(array_keys($data['pageactivityyear'][$pagename]))) echo ",";
 				}
 			?>
 			]);
 			
 			var options9<?=$data['pageid'][$pagename]?> = {
 				hAxis: {title: 'Year', titleTextStyle: {data: 'green'}},
-				isStacked:true
+				isStacked:true,
 			};
 
 			var charttotalactivityyear<?=$data['pageid'][$pagename]?> = new google.visualization.ColumnChart(document.getElementById('charttotalactivityyear<?=$data['pageid'][$pagename]?>'));
 			charttotalactivityyear<?=$data['pageid'][$pagename]?>.draw(data9<?=$data['pageid'][$pagename]?>, options9<?=$data['pageid'][$pagename]?>);
 			<?
-			if(isset($data['uploads_arrays'])){
+			if(isset($data['pageuploads'][$pagename])){
 					echo "var data10".$data['pageid'][$pagename]." = new google.visualization.DataTable();
 				data10".$data['pageid'][$pagename].".addColumn('datetime', 'Date');
 				data10".$data['pageid'][$pagename].".addColumn('number', 'Uploads');
 				data10".$data['pageid'][$pagename].".addRows([";
 				
-					foreach(array_keys($data['uploads_arrays']) as $key){
+					foreach(array_keys($data['pageuploads'][$pagename]) as $key){
 						echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
-						$data['uploads_arrays'][$key]."]";
-						if($key != end(array_keys($data['uploads_arrays']))) echo ",";
+						$data['pageuploads'][$pagename][$key]."]";
+						if($key != end(array_keys($data['pageuploads'][$pagename]))) echo ",";
 					}
 				
 				echo "]);
@@ -229,10 +250,10 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 				data11".$data['pageid'][$pagename].".addColumn('number', 'Upload Bytes');
 				data11".$data['pageid'][$pagename].".addRows([";
 				
-					foreach(array_keys($data['upsize_arrays']) as $key){
+					foreach(array_keys($data['pageupsize'][$pagename]) as $key){
 						echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
-						$data['upsize_arrays'][$key]."]";
-						if($key != end(array_keys($data['upsize_arrays']))) echo ",";
+						$data['pageupsize'][$pagename][$key]."]";
+						if($key != end(array_keys($data['pageupsize'][$pagename]))) echo ",";
 					}
 				
 				echo "]);
@@ -247,14 +268,14 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			?>
 			
 			<?
-			if(isset($data['averagevalue_arrays'])){
+			if(isset($data['pageaveragevalue'][$pagename])){
 			
 				echo "var data12".$data['pageid'][$pagename]." = new google.visualization.DataTable();
 				data12".$data['pageid'][$pagename].".addColumn('datetime', 'Date');
 				data12".$data['pageid'][$pagename].".addColumn('number', 'Average Grade');
 				data12".$data['pageid'][$pagename].".addRows([";
 			
-					foreach(array_keys($data['averagevalue_arrays']) as $key){
+					foreach(array_keys($data['pageaveragevalue'][$pagename]) as $key){
 						$date = $data['revisiondate'][$key];
 						echo "[new Date(".
 						date('Y', $date).", ".
@@ -262,8 +283,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 						date('d', $date)." ,".
 						date('H', $date)." ,".
 						date('i', $date)."), ".
-						$data['averagevalue_arrays'][$key]."]";
-						if($key != end(array_keys($data['averagevalue_arrays']))) echo ",";
+						$data['pageaveragevalue'][$pagename][$key]."]";
+						if($key != end(array_keys($data['pageaveragevalue'][$pagename]))) echo ",";
 					}
 				echo "]);
 
@@ -280,9 +301,9 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 				data13".$data['pageid'][$pagename].".addColumn('number', 'Bytes');
 				data13".$data['pageid'][$pagename].".addRows([";
 					$result = 0;
-					foreach(array_keys($data['bytes_arrays']) as $date){
+					foreach(array_keys($data['pagebytes'][$pagename]) as $date){
 						$rev = $data['daterevision'][$date];
-						$grade = isset($data['averagevalue_arrays'][$rev])? $data['averagevalue_arrays'][$rev] : 5;
+						$grade = isset($data['pageaveragevalue'][$pagename][$rev])? $data['pageaveragevalue'][$pagename][$rev] : 5;
 						
 						$result += $data['totalbytesdiff'][$date] + ($grade - 5) * ($data['totalbytesdiff'][$date]/5);
 						echo "[new Date(".
@@ -292,9 +313,9 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 						date('H', $date)." ,".
 						date('i', $date)."), ".
 						$result.", ".
-						$data['bytes_arrays'][$date].
+						$data['pagebytes'][$pagename][$date].
 						"]";
-						if($date != end(array_keys($data['bytes_arrays']))) echo ",";
+						if($date != end(array_keys($data['pagebytes'][$pagename]))) echo ",";
 					}
 				echo "]);
 				
@@ -309,15 +330,15 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 				data14".$data['pageid'][$pagename].".addColumn('number', 'Hour');
 				data14".$data['pageid'][$pagename].".addColumn('number', 'Quality');
 				data14".$data['pageid'][$pagename].".addRows([";
-					foreach(array_keys($data['grades']) as $revision){
+					foreach(array_keys($data['pagegrades'][$pagename]) as $revision){
 						$date = $data['revisiondate'][$revision];
 						$accum[date('H', $date)] = 0;
 						$nrevs[date('H', $date)] = 0;
 					}
 					
-					foreach(array_keys($data['grades']) as $revision){
+					foreach(array_keys($data['pagegrades'][$pagename]) as $revision){
 						$date = $data['revisiondate'][$revision];
-						$grade = $data['grades'][$revision];
+						$grade = $data['pagegrades'][$pagename][$revision];
 						$accum[date('H', $date)] += $grade;
 						$nrevs[date('H', $date)] += 1;
 					}
@@ -349,26 +370,26 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			data<?=$data['pageid'][$pagename]?>.addColumn('number', 'Standard Deviation');
 			data<?=$data['pageid'][$pagename]?>.addRows([
 			<? 
-				foreach(array_keys($data['users']) as $key){
+				foreach(array_keys($data['pageuser'][$pagename]) as $key){
 					echo "['".$key."','".
 						$data['userrealname'][$key]."',".
-						round(end($data['useredits_arrays'][$key]), 2).",".
-						round(end($data['usereditscount_arrays'][$key])/end($data['edits_arrays']), 2).",";
-					if(end($data['bytes_arrays']) != 0){
-						echo round(end($data['userbytes_arrays'][$key]), 2).",".
-						round(end($data['userbytescount_arrays'][$key])/end($data['bytes_arrays']), 2);
+						round(end($data['pageuseredits'][$pagename][$key]), 2).",".
+						round(end($data['pageusereditscount'][$pagename][$key])/end($data['pageedits'][$pagename]), 2).",";
+					if(end($data['pagebytes'][$pagename]) != 0){
+						echo round(end($data['pageuserbytes'][$pagename][$key]), 2).",".
+						round(end($data['pageuserbytescount'][$pagename][$key])/end($data['pagebytes'][$pagename]), 2);
 					}else
 						echo "0, 0";
 					
-					if(isset($data['useraveragevalue_arrays'][$key])) 
-						echo ", ".round(end($data['useraveragevalue_arrays'][$key]), 2).",".
-							round(end($data['usersd_arrays'][$key]), 2);
+					if(isset($data['pageuseraveragevalue'][$pagename][$key])) 
+						echo ", ".round(end($data['pageuseraveragevalue'][$pagename][$key]), 2).",".
+							round(end($data['pageusersd'][$pagename][$key]), 2);
 					else
 						echo ", -1, -1";
 						
 					echo "]\n";
 					
-					if($key != end(array_keys($data['users']))) echo ",";
+					if($key != end(array_keys($data['pageuser'][$pagename]))) echo ",";
 				}
 			?>
 			]);
@@ -378,14 +399,14 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			table<?=$data['pageid'][$pagename]?>.draw(data<?=$data['pageid'][$pagename]?>, {showRowNumber: true});
 			
 			<?
-			if(isset($data['cat_arrays'])){
+			if(isset($data['pagecat'][$pagename])){
 				echo "var catdata".$data['pageid'][$pagename]." = new google.visualization.DataTable();
 				catdata".$data['pageid'][$pagename].".addColumn('string', 'Name');
 				catdata".$data['pageid'][$pagename].".addRows([";
-					foreach(array_keys($data['cat_arrays']) as $key){
+					foreach(array_keys($data['pagecat'][$pagename]) as $key){
 						echo "['".$key."']\n";
 						
-						if($key != end(array_keys($data['cat_arrays']))) echo ",";
+						if($key != end(array_keys($data['pagecat'][$pagename]))) echo ",";
 					}
 				echo "]);
 

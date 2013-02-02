@@ -39,20 +39,14 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 <table id = "menu">
 	<tr>
 		<?
-			echo "<th class = \"user\">";
-// 			if($this->session->userdata('is_admin') == 1) 
-// 				echo img('images/icons/Developer_Icons_PNG/PNG/Blue/32/star.png');
-// 			else 
-// 				echo img('images/icons/Developer_Icons_PNG/PNG/Green/32/user.png');
-			echo "<un>".$this->session->userdata('realname')."</un>";
-			echo "</th>";
-			echo "<th>"./*img('images/icons/Developer_Icons_PNG/PNG/Green/32/tool.png').*/anchor('configure', lang('voc.i18n_configuration'))."</th>";
+			echo "<th class = \"user\"><un>".$title."</un></th>";
+			echo "<th>".anchor('configure', lang('voc.i18n_configuration'))."</th>";
 			if($this->session->userdata('is_student') == 1)
-				echo "<th>"./*img('images/icons/Developer_Icons_PNG/PNG/Green/32/charts.png').*/anchor('student', lang('voc.i18n_view_reports'))."</th>";
+				echo "<th>".anchor('student', lang('voc.i18n_view_reports'))."</th>";
 			else
-				echo "<th>"./*img('images/icons/Developer_Icons_PNG/PNG/Green/32/charts.png').*/anchor('teacher', lang('voc.i18n_view_analisis'))."</th>";
-			echo "<th>"./*img('images/icons/Developer_Icons_PNG/PNG/Green/32/Forward.png').*/anchor('analise', lang('voc.i18n_analise'))."</th>";
-			echo "<th>"./*img('images/icons/Developer_Icons_PNG/PNG/Green/32/door.png').*/anchor('close_session', lang('voc.i18n_close_session'));
+				echo "<th>".anchor('teacher', lang('voc.i18n_view_analisis'))."</th>";
+			echo "<th>".anchor('analise', lang('voc.i18n_analise'))."</th>";
+			echo "<th>".anchor('close_session', lang('voc.i18n_close_session'));
 		?>
 	</tr>
 </table>
@@ -60,3 +54,4 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	if($logged == '') echo "-->";
 ?>
 <div id = "wrap">
+<br>
