@@ -16,14 +16,6 @@
 // You should have received a copy of the GNU General Public License
 // along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
-echo "<h1>".lang('voc.i18n_analising')."</h1></br>";
 
+//EMPTY VIEW TO MAKE CODEIGNITER LOAD A BLANK PAGE
 ?>
-
-<!--<table border = "0" cellpadding = "0" cellspacing = "0" align = "center">
-<tr>
-
-<td align = "center" width="128" height="128" background="images/loading/loading.gif"></td>
-
-</tr>
-</table>-->

@@ -17,8 +17,6 @@ You should have received a copy of the GNU General Public License
 along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<?="<h1> ".$pagename." </h1></br>"?>
-
 <!-- CHARTS SCRIPTS -->
 
 <script type='text/javascript' src='http://www.google.com/jsapi'></script>

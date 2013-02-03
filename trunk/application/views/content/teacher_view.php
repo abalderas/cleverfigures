@@ -42,7 +42,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 					'width' => '24',
 					'height' => '24',
 					'alt' => 'view',
-					'value' => ''
+					'value' => '',
+					'onclick' => 'overlay.show();'
 				);
 				$btn_delete = array(
 					'type' => 'image',

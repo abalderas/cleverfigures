@@ -70,6 +70,29 @@ em{
 	font-size:0.8em;
 }
 
+#overlay{
+	background-color:rgba(0,0,0,0.8);
+	position:absolute;
+	top:0px;
+	left:0px;
+	height:100%;
+	width:100%;
+	z-index:1000;
+}
+
+#overlay img{
+	position:absolute;
+	top:50%;
+	left:50%;
+	margin-left:-33px;
+	margin-top:-33px;
+	z-index:1001;
+}
+
+#maintable{
+	margin:auto;
+}
+
 #wrap{
 	padding-top:65px;
 	margin-bottom:35px;
@@ -172,12 +195,8 @@ color:#ffffff;
 #formins {
 	table-layout: fixed;
 	text-align:left;
-	font-size:1.2em;
-	border:1px solid #A7C942;
 	font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
 	margin: auto;
-	border-radius: 10px;
-	min-width:500px;
 }
 
 #formins tr{
@@ -187,26 +206,20 @@ border: 1px solid #ffffff;
 #formins td, #formins th 
 {
 font-size:1em;
-height:50px;
 padding:3px 7px 2px 7px;
 border-radius: 10px;
 }
 
 #formins th 
 {
-font-size:1em;
 text-align:center;
 padding-top:5px;
 padding-bottom:4px;
 color:#ffffff;
-text-transform: uppercase;
-text-shadow: 0.1em 0.1em 0.2em black;
-background-color:#A7C942;
 }
 
 #formins td 
 {
-font-size:1em;
 }
 
 #formins select{
@@ -217,7 +230,6 @@ font-size:1em;
 }
 
 #formins input{
-	font-size:1.2em;
 	padding-left:5px;
 	text-align:left;
 }

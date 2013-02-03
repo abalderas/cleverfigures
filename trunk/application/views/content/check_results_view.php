@@ -635,7 +635,6 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	
 	<!-- FILTERS FORM -->
 	
-	<script src="http://yui.yahooapis.com/3.8.0/build/yui/yui-min.js"></script>
 	<script>
 		YUI().use('autocomplete', 'autocomplete-highlighters', 'autocomplete-filters', function (Y) {
 			Y.one('body').addClass('yui3-skin-sam');

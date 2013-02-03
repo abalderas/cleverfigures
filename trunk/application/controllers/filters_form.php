@@ -55,53 +55,55 @@ class Filters_form extends CI_Controller {
 		}
 		else{
 			$filterstrings = $this->split_string($_POST['filterstring'],',');
+			array_pop($filterstrings);
 			
-// 			if(isset($_POST['combined']) and ($_POST['combined'] == true)){
+			if(count($filterstrings) > 1){
 				$adata = $this->analisis_model->get_analisis_data($this->session->flashdata('aname'));
 				$this->session->keep_flashdata('aname');
 			
 				$datah = array('title' => lang('voc.i18n_check_results'));
-							$this->load->view('templates/header_view', $datah);
+				$this->load->view('templates/header_view', $datah);
 				
 				if($_POST['select_filter'] == lang('voc.i18n_user'))
-					$this->load->view('content/combineduseranalisis_view', array('data' => $adata, 'usernames' => $filterstrings));
+					$type = 'user';
 				else if($_POST['select_filter'] == lang('voc.i18n_page'))
-					$this->load->view('content/combinedpageanalisis_view', array('data' => $adata, 'pagenames' => $filterstrings));
+					$type = 'page';
 				else if($_POST['select_filter'] == lang('voc.i18n_category'))
-					$this->load->view('content/combinedcatanalisis_view', array('data' => $adata, 'catnames' => $filterstrings));
+					$type = 'category';
 				//else if($_POST['select_filter'] == lang('voc.i18n_criteria')){}
 				else{	
 					die('Filters_form : FATAL ERROR');
 				}
-// 			}
-// 			else{
-// 				$adata = $this->analisis_model->get_analisis_data($this->session->flashdata('aname'));
-// 				$this->session->keep_flashdata('aname');
-// 			
-// 				$datah = array('title' => lang('voc.i18n_check_results'));
-// 				$this->load->view('templates/header_view', $datah);
-// 			
-// 				if($_POST['select_filter'] == lang('voc.i18n_user'))
-// 					foreach($filterstrings as $user){
-// 						$this->load->view('content/useranalisis_view', array('data' => $adata, 'username' => $user));
-// // 						echo "<br><br>";
-// 					}
-// 				else if($_POST['select_filter'] == lang('voc.i18n_page'))
-// 					foreach($filterstrings as $page){
-// 						$this->load->view('content/pageanalisis_view', array('data' => $adata, 'pagename' => $page));
-// 						ob_flush(); flush();
-// // 						echo "<br><br>";
-// 					}
-// 				else if($_POST['select_filter'] == lang('voc.i18n_category'))
-// 					foreach($filterstrings as $category){
-// 						$this->load->view('content/catanalisis_view', array('data' => $adata, 'catname' => $category));
-// // 						echo "<br><br>";
-// 					}
-// 				//else if($_POST['select_filter'] == lang('voc.i18n_criteria')){}
-// 				else{	
-// 					die('Filters_form : FATAL ERROR');
-// 				}
-// 			}
+				$this->load->view('content/tabbed_view', array('data' => $adata, 'names' => $filterstrings, 'type' => $type));
+			}
+			else{
+				$adata = $this->analisis_model->get_analisis_data($this->session->flashdata('aname'));
+				$this->session->keep_flashdata('aname');
+			
+				$datah = array('title' => lang('voc.i18n_check_results'));
+				$this->load->view('templates/header_view', $datah);
+			
+				if($_POST['select_filter'] == lang('voc.i18n_user'))
+					foreach($filterstrings as $user){
+						$this->load->view('content/useranalisis_view', array('data' => $adata, 'username' => $user));
+// 						echo "<br><br>";
+					}
+				else if($_POST['select_filter'] == lang('voc.i18n_page'))
+					foreach($filterstrings as $page){
+						$this->load->view('content/pageanalisis_view', array('data' => $adata, 'pagename' => $page));
+						ob_flush(); flush();
+// 						echo "<br><br>";
+					}
+				else if($_POST['select_filter'] == lang('voc.i18n_category'))
+					foreach($filterstrings as $category){
+						$this->load->view('content/catanalisis_view', array('data' => $adata, 'categoryname' => $category));
+// 						echo "<br><br>";
+					}
+				//else if($_POST['select_filter'] == lang('voc.i18n_criteria')){}
+				else{	
+					die('Filters_form : FATAL ERROR');
+				}
+			}
 			
 			$this->load->view('templates/footer_view');
 		}
