@@ -44,7 +44,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			<tr>
 				<th colspan="2">
 					<?= form_submit('submit', lang('voc.i18n_submit')) ?>
-					<?= form_submit('forgot', lang('voc.i18n_forgot_login_data')) ?>
+					<? //echo form_submit('forgot', lang('voc.i18n_forgot_login_data')) ?>
 				</th>
 			</tr>
 		</table>

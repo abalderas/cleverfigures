@@ -18,8 +18,6 @@
 // along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
 
-echo "<h1>".lang('voc.i18n_add_wiki')."</h1>";
-
 echo form_open('add_wiki');
 ?>
 

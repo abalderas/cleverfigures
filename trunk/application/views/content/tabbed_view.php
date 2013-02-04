@@ -36,10 +36,11 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 				$view = "content/".$type."analisis_view";
 				$item = $type."name";
 				
-				foreach($names as $name)
+				foreach($names as $name){
 					echo "<div id = \"".$name."\">";
-					$this->view($view, array('data' => $data, "$item" => $name));
+					$this->load->view($view, array('data' => $data, "$item" => $name));
 					echo "</div>";
+				}
 			?>
 		</div>
 	</div>

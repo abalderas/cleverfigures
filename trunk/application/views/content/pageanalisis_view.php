@@ -389,82 +389,9 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 		}
 	</script>
 	
-		<!-- FILTERS FORM -->
-	
-	<script src="http://yui.yahooapis.com/3.8.0/build/yui/yui-min.js"></script>
-	<script>
-		YUI().use('autocomplete', 'autocomplete-highlighters', 'autocomplete-filters', function (Y) {
-			Y.one('body').addClass('yui3-skin-sam');
-			Y.one('#filterstring').plug(Y.Plugin.AutoComplete, {
-				resultHighlighter: 'phraseMatch',
-				resultFilters: ['subWordMatch'],
-				queryDelimiter: ',',
-				source: function(query){
-			var myindex  = document.getElementById("select_filter").selectedIndex;
-			var SelValue = document.getElementById("select_filter").options[myindex].value;
-		
-			if(SelValue == "<?=lang('voc.i18n_user')?>"){
-				return [
-				<?
-					foreach(array_keys($data['useredits']) as $key){
-						echo "'".$key."'";
-						if($key != end(array_keys($data['useredits']))) echo ",";
-					}
-				?>
-				];
-			} else if(SelValue == "<?=lang('voc.i18n_page')?>"){
-				return [
-				<?
-					foreach(array_keys($data['pageedits']) as $key){
-						echo "'".$key."'";
-						if($key != end(array_keys($data['pageedits']))) echo ",";
-					}
-				?>
-				];
-			} else if(SelValue == "<?=lang('voc.i18n_category')?>"){
-				return [
-				<?
-					foreach(array_keys($data['catedits']) as $key){
-						echo "'".$key."'";
-						if($key != end(array_keys($data['catedits']))) echo ",";
-					}
-				?>
-				];
-			}
-		}
-			});
-		});
-	</script>
-	
-	<? echo form_open('filters_form', array('class' => "yui3-skin-sam")); ?>
-	<table id = "bodytable">
-	<tr>
-		<th colspan = "3"><?=lang('voc.i18n_filter_by')?></th>
-	</tr>
-	<tr>
-		<td style = "width:800px">
-		<?
-			$options = array(lang('voc.i18n_user') => lang('voc.i18n_user'),
-								lang('voc.i18n_page') => lang('voc.i18n_page'),
-								lang('voc.i18n_category') => lang('voc.i18n_category')
-								//lang('voc.i18n_criteria') => lang('voc.i18n_criteria'))
-								);
-			echo form_dropdown('select_filter', $options, lang('voc.i18n_user'), "id = 'select_filter'");
-			
-			echo "   ";
-			echo form_input(array('id' => 'filterstring', 'name' => 'filterstring', 'class' => 'cssform'));
-		?>
-		</td>
-	</tr>
-	</table>
-	
-	<? echo form_close(); ?>
-
-	<br><br>
-	
 <!-- CHARTS -->
 	
-	<table id = "bodytable">
+	<table id = "charttable">
 	<tr>
 		<th><?=lang('voc.i18n_edits_evolution')?></th>
 	</tr>
@@ -551,7 +478,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	
 	<br><br>
 	
-	<table id = "usertable">
+	<table id = "charttable">
 	<tr>
 		<th><?=lang('voc.i18n_users')?></th>
 	</tr>
@@ -563,7 +490,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	<br><br>
 	
 	<? if(!isset($data['pagecat'][$pagename])) echo "<!--";?>
-	<table id = "pagetable">
+	<table id = "charttable">
 	<tr>
 		<th><?=lang('voc.i18n_categories')?></th>
 	</tr>
