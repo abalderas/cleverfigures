@@ -518,18 +518,18 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 					else
 						echo "0, 0, ";
 					
-					if(isset($data['useraverage'][$data['iduser'][$key]])) 
-						echo round(end($data['useraverage'][$data['iduser'][$key]]), 3).",".
-							round(end($data['usersd'][$data['iduser'][$key]]), 3).",".
-							round(end($data['usermaxvalue'][$data['iduser'][$key]]), 3).",".
-							round(end($data['userminvalue'][$data['iduser'][$key]]), 3).",";
+					if(isset($data['useraverage'][$data['userid'][$key]])) 
+						echo round(end($data['useraverage'][$data['userid'][$key]]), 3).",".
+							round(end($data['usersd'][$data['userid'][$key]]), 3).",".
+							round(end($data['usermaxvalue'][$data['userid'][$key]]), 3).",".
+							round(end($data['userminvalue'][$data['userid'][$key]]), 3).",";
 					else
 						echo "0, 0, 0, 0, ";
 						
-					if(isset($data['revisoraverage'][$data['iduser'][$key]])) 
-						echo round(end($data['revisoraverage'][$data['iduser'][$key]]), 3).",".
-							round(end($data['revisormaxvalue'][$data['iduser'][$key]]), 3).",".
-							round(end($data['revisorminvalue'][$data['iduser'][$key]]), 3);
+					if(isset($data['revisoraverage'][$data['userid'][$key]])) 
+						echo round(end($data['revisoraverage'][$data['userid'][$key]]), 3).",".
+							round(end($data['revisormaxvalue'][$data['userid'][$key]]), 3).",".
+							round(end($data['revisorminvalue'][$data['userid'][$key]]), 3);
 					else
 						echo "0, 0, 0";
 					echo "]\n";

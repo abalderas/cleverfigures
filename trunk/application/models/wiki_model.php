@@ -303,8 +303,8 @@ class Wiki_model extends CI_Model{
 
 			//USER INFORMATION
 			
-			$userid			[$row->user_id] = $row->user_name;
-			$iduser			[$row->user_name] = $row->user_id;
+			$userid			[$row->user_name] = $row->user_id;
+			$iduser			[$row->user_id] = $row->user_name;
 			$usereditscount		[$row->user_name] += 1;								// Counts the total editions per user
 			$userbytescount		[$row->user_name] += $tamdiff;
 			
@@ -500,7 +500,7 @@ class Wiki_model extends CI_Model{
    		
    		//If no results then return false
    		if(!$query->result()) 
-			die ("ERROR");
+			die ("ERROR CONSULTA CATEGORIAS");
 			
    		echo "Storing category information...</br>";
    		ob_flush(); flush();
@@ -702,6 +702,7 @@ class Wiki_model extends CI_Model{
 						, 'usercreationcount' => $usercreationcount
 						, 'usercreatedpages' => $usercreatedpages
 						, 'userpagecount' => $userpagecount
+						, 'usercat' => $usercat
 						, 'usercatcount' => $usercatcount
 						, 'pageedits' => $pageedits
 						, 'pagebytes' => $pagebytes
@@ -832,6 +833,7 @@ class Wiki_model extends CI_Model{
 					, 'usercreationcount' => $usercreationcount
 					, 'usercreatedpages' => $usercreatedpages
 					, 'userpagecount' => $userpagecount
+                                        , 'usercat' => $usercat
 					, 'usercatcount' => $usercatcount
 					, 'pageedits' => $pageedits
 					, 'pagebytes' => $pagebytes
@@ -958,6 +960,7 @@ class Wiki_model extends CI_Model{
 				, 'usercreationcount' => $usercreationcount
 				, 'usercreatedpages' => $usercreatedpages
 				, 'userpagecount' => $userpagecount
+                                , 'usercat' => $usercat
 				, 'usercatcount' => $usercatcount
 				, 'pageedits' => $pageedits
 				, 'pagebytes' => $pagebytes

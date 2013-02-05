@@ -19,4 +19,4 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
 </div>
 </body>
-</html>  
+</html>
