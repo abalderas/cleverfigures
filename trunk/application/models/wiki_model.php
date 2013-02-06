@@ -179,6 +179,19 @@ class Wiki_model extends CI_Model{
 		return false;
    	}
    	
+   	private function namespacestring($ns){
+		switch($ns){
+			case 0: return "Article";
+			case 1: return "Talk";
+			case 2: return "User";
+			case 3: return "User Talk";
+			case 6: return "File";
+			case 10: return "Template";
+			case 14: return "Category";
+			default: return "Other";
+		}
+   	}
+   	
    	function fetch($wikiname, $analisis){
 		
 		//Creating directory to store data
@@ -353,7 +366,7 @@ class Wiki_model extends CI_Model{
 			$pagebytes	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = $pagebytescount[$row->page_title];						// Bytes per page/date
 			$pageuserbytes	[$row->page_title][$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $pageuserbytescount[$row->page_title][$row->user_name];	// Bytes per page/date
 				
-			$pagenamespace	[$row->page_title] = $row->page_namespace;					// Getting namespaces per page
+			$pagenamespace	[$row->page_title] = $this->namespacestring($row->page_namespace);		// Getting namespaces per page
 			$pagevisits	[$row->page_title] = $row->page_counter;					// Total visits per page
 				
 			$pageactivityhour	[$row->page_title][date('H', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
@@ -515,7 +528,8 @@ class Wiki_model extends CI_Model{
 			$catactivityweek[$row->cl_to][date('W', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
 			$catactivitymonth[$row->cl_to][date('m', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
 			$catactivityyear[$row->cl_to][date('Y', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
-			
+			$catusereditscount[$row->cl_to][$row->user_name] = 0;
+			$catuserbytescount[$row->cl_to][$row->user_name] = 0;
 			
 			$usercat[$row->user_name] = array();
 			$pagecat[$row->page_title] = array();
@@ -533,6 +547,7 @@ class Wiki_model extends CI_Model{
    			
    			$LAST_PAGE_SIZE = ($row->page_is_new == 0) ? end($pagebytes[$row->page_title]) : 0;
    			$LAST_PAGEBYTES_ARRAY = $pagebytes;
+   			$tamdiff = $row->rev_len - $LAST_PAGE_SIZE;
    			
    			//RELATION ARRAYS
    			
@@ -543,7 +558,11 @@ class Wiki_model extends CI_Model{
 
 			//USER INFORMATION
 			
-			$usercatcount[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = count($usercat[$row->user_name]);	// Categories per user/date
+			$usercatcount[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = count($usercat[$row->user_name]);	// Categories per cat/date
+			$catusereditscount	[$row->cl_to][$row->user_name] += 1;					// Count of the total editions per cat & user
+			$catuserbytescount	[$row->cl_to][$row->user_name] += $tamdiff;				// Count of the total bytes per cat & user
+			$catuseredits		[$row->cl_to][$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $catusereditscount[$row->cl_to][$row->user_name];	// Count of editions per cat & user
+			$catuserbytes		[$row->cl_to][$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $catuserbytescount[$row->cl_to][$row->user_name];	// Bytes per cat/date
 			
 			
 			//PAGE INFORMATION
@@ -613,6 +632,8 @@ class Wiki_model extends CI_Model{
 			}
 			
 			foreach($query->result() as $row){
+				
+				$imagesize[$row->img_name] = $row->img_size;
 				
 				// USER UPLOAD INFORMATION
 				$useruploadscount[$row->user_name] += 1;
@@ -801,6 +822,12 @@ class Wiki_model extends CI_Model{
 						, 'pageusereditscount' => $pageuseredits
 						, 'pageuserbytescount' => $pageuserbytes
 						, 'pageid' => $pageid
+						, 'imagesize' => $imagesize
+						, 'catuserbytes' => $catuserbytes
+						, 'catuseredits' => $catuseredits
+						, 'catuserbytescount' => $catuserbytescount
+						, 'catusereditscount' => $catusereditscount
+						, 'catuser' => $catuser
 					);
 				
 				
@@ -928,6 +955,12 @@ class Wiki_model extends CI_Model{
 					, 'pageusereditscount' => $pageuseredits
 					, 'pageuserbytescount' => $pageuserbytes
 					, 'pageid' => $pageid
+					, 'imagesize' => $imagesize
+					, 'catuserbytes' => $catuserbytes
+					, 'catuseredits' => $catuseredits
+					, 'catuserbytescount' => $catuserbytescount
+					, 'catusereditscount' => $catusereditscount
+					, 'catuser' => $catuser
 				);
 				
 				
@@ -1042,6 +1075,11 @@ class Wiki_model extends CI_Model{
 				, 'pageusereditscount' => $pageuseredits
 				, 'pageuserbytescount' => $pageuserbytes
 				, 'pageid' => $pageid
+				, 'catuserbytes' => $catuserbytes
+				, 'catuseredits' => $catuseredits
+				, 'catuserbytescount' => $catuserbytescount
+				, 'catusereditscount' => $catusereditscount
+				, 'catuser' => $catuser
 			);
 			
 		echo ">> Wiki analisis accomplished.</br>";

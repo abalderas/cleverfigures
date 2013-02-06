@@ -345,10 +345,10 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 					echo "['".$key."','".
 						$data['userrealname'][$key]."',".
 						round(end($data['pageuseredits'][$pagename][$key]), 2).",".
-						round(end($data['pageusereditscount'][$pagename][$key])/end($data['pageedits'][$pagename]), 2).",";
+						round(end($data['pageuseredits'][$pagename][$key])/end($data['pageedits'][$pagename]), 2).",";
 					if(end($data['pagebytes'][$pagename]) != 0){
 						echo round(end($data['pageuserbytes'][$pagename][$key]), 2).",".
-						round(end($data['pageuserbytescount'][$pagename][$key])/end($data['pagebytes'][$pagename]), 2);
+						round(end($data['pageuserbytes'][$pagename][$key])/end($data['pagebytes'][$pagename]), 2);
 					}else
 						echo "0, 0";
 					
@@ -466,12 +466,6 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	</tr>
 	<tr>
 		<td><div id='charttotalbytesxquality<?=$data['pageid'][$pagename]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
-	</tr>
-	<tr>
-		<th><?=lang('voc.i18n_hourquality')?></th>
-	</tr>
-	<tr>
-		<td><div id='qualityhourchart<?=$data['pageid'][$pagename]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<? if (!isset($data['pageaveragevalue'][$pagename])) echo "-->";?>
 	</table>

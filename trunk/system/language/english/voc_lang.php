@@ -79,6 +79,7 @@ $lang['voc.i18n_go_to_login'] = "Go to Login";
 $lang['voc.i18n_here'] = "here";
 $lang['voc.i18n_hourquality'] = "Quality per hour";
 $lang['voc.i18n_incorrect_login'] = "Incorrect Data";
+$lang['voc.i18n_images'] = "Images";
 $lang['voc.i18n_installation'] = "Installation";
 $lang['voc.i18n_is_admin'] = "Is Admin";
 $lang['voc.i18n_installation_end'] = "Installation finished. ¿Shorter than you expected? Enjoy the CleverFigures experience!!";

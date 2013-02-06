@@ -212,6 +212,25 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 					'fill': 20,
 					'legendPosition': 'newRow'}
 					);";
+					
+					
+				echo "var imgs".$data['userid'][$username]." = new google.visualization.DataTable();
+				imgs".$data['userid'][$username].".addColumn('string', 'Name');
+				imgs".$data['userid'][$username].".addColumn('number', 'Size');
+				imgs".$data['userid'][$username].".addColumn('datetime', 'Date');
+				imgs".$data['userid'][$username].".addRows([";
+					foreach(array_keys($data['userimages'][$username]) as $key){
+						echo "['".$data['userimages'][$username][$key]."',";
+						echo $data['imagesize'][$data['userimages'][$username][$key]].",";
+						echo "new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key).")]";
+						
+						if($key != end(array_keys($data['userimages'][$username]))) echo ",";
+					}
+				echo "]);
+
+
+				var imgtable".$data['userid'][$username]." = new google.visualization.Table(document.getElementById('img_table".$data['userid'][$username]."'));
+				imgtable".$data['userid'][$username].".draw(imgs".$data['userid'][$username].", {showRowNumber: true});";
 			}
 			?>
 			
@@ -309,6 +328,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			
 			var data<?=$data['userid'][$username]?> = new google.visualization.DataTable();
 			data<?=$data['userid'][$username]?>.addColumn('string', 'Name');
+			data<?=$data['userid'][$username]?>.addColumn('string', 'Namespace');
 			data<?=$data['userid'][$username]?>.addColumn('number', 'Edits');
 			data<?=$data['userid'][$username]?>.addColumn('number', 'Edits %');
 			data<?=$data['userid'][$username]?>.addColumn('number', 'Bytes');
@@ -317,7 +337,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			data<?=$data['userid'][$username]?>.addColumn('number', 'Standard Deviation');
 			data<?=$data['userid'][$username]?>.addRows([<? 
 				foreach(array_keys($data['userpage'][$username]) as $key){
-					echo "['".$key."',".
+					echo "['".$key."','".
+						$data['pagenamespace'][$key]."',".
 						round(end($data['pageuseredits'][$key][$username]), 2).",".
 						round(end($data['pageusereditscount'][$key][$username])/end($data['useredits'][$username]), 2).",";
 					if(end($data['userbytes'][$username]) != 0){
@@ -344,6 +365,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			
 			<?
 			if(isset($data['usercat'][$username])){
+								
 				echo "var catdata".$data['userid'][$username]." = new google.visualization.DataTable();
 				catdata".$data['userid'][$username].".addColumn('string', 'Name');
 				catdata".$data['userid'][$username].".addRows([";
@@ -465,3 +487,16 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	</tr>
 	</table>
 	<? if(!isset($data['usercat'][$username])) echo "-->";?>
+	
+	<br><br>
+	
+	<? if(!isset($data['userimages'][$username])) echo "<!--";?>
+	<table id = "charttable">
+	<tr>
+		<th><?=lang('voc.i18n_images')?></th>
+	</tr>
+	<tr>
+		<td><div id = "img_table<?=$data['userid'][$username]?>"></div></td>
+	</tr>
+	</table>
+	<? if(!isset($data['userimages'][$username])) echo "-->";?>

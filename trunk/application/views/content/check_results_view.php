@@ -545,7 +545,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			
 			var pagedata = new google.visualization.DataTable();
 			pagedata.addColumn('string', 'Name');
-			pagedata.addColumn('number', 'Namespace');
+			pagedata.addColumn('string', 'Namespace');
 			pagedata.addColumn('number', 'Edits');
 			pagedata.addColumn('number', 'Edits %');
 			pagedata.addColumn('number', 'Bytes');
@@ -561,8 +561,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			pagedata.addRows([
 			<? 
 				foreach(array_keys($data['pageedits']) as $key){
-					echo "['".$key."', ".
-						$data['pagenamespace'][$key].", ".
+					echo "['".$key."', '".
+						$data['pagenamespace'][$key]."', ".
 						round(end($data['pageedits'][$key]), 3).",".
 						round(end($data['pageedits_per'][$key]), 3).",".
 						round(end($data['pagebytes'][$key]), 3).",".

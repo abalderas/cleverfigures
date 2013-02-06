@@ -96,7 +96,7 @@ class Filters_form extends CI_Controller {
 					}
 				else if($_POST['select_filter'] == lang('voc.i18n_category'))
 					foreach($filterstrings as $category){
-						$this->load->view('content/catanalisis_view', array('data' => $adata, 'categoryname' => $category));
+						$this->load->view('content/categoryanalisis_view', array('data' => $adata, 'categoryname' => $category));
 // 						echo "<br><br>";
 					}
 				//else if($_POST['select_filter'] == lang('voc.i18n_criteria')){}

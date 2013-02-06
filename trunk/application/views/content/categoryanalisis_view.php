@@ -16,796 +16,480 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<?="<h1>".lang('voc.i18n_check_results')."</h1></br>"?>
 
 <!-- CHARTS SCRIPTS -->
-			
+
 <script type='text/javascript' src='http://www.google.com/jsapi'></script>
 	<script type='text/javascript'>
 		google.load('visualization', '1', {'packages':['annotatedtimeline', 'corechart', 'table']});
-		google.setOnLoadCallback(drawChart);
-		function drawChart() {
-			var data1 = new google.visualization.DataTable();
-			data1.addColumn('datetime', 'Date');
-			data1.addColumn('number', 'Total');
-			data1.addColumn('number', 'Articles');
-			data1.addColumn('number', 'Talks');
-			data1.addColumn('number', 'Users');
-			data1.addColumn('number', 'User Talks');
-			data1.addColumn('number', 'Files');
-			data1.addColumn('number', 'Template');
-			data1.addColumn('number', 'Category');
-			data1.addRows([
+		google.setOnLoadCallback(drawChart<?=$categoryname?>);
+		function drawChart<?=$categoryname?>() {
+			var data1<?=$categoryname?> = new google.visualization.DataTable();
+			data1<?=$categoryname?>.addColumn('datetime', 'Date');
+			data1<?=$categoryname?>.addColumn('number', 'Editions');
+			data1<?=$categoryname?>.addRows([
 			<?
-				foreach(array_keys($data['totaledits']) as $key){
+				foreach(array_keys($data['catedits'][$categoryname]) as $key){
 					echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
-						$data['totaledits'][$key].", ".
-						$data['totaledits_art'][$key].", ".
-						$data['totaledits_talk'][$key].", ".
-						$data['totaledits_us'][$key].", ".
-						$data['totaledits_ustalk'][$key].", ".
-						$data['totaledits_file'][$key].", ".
-						$data['totaledits_temp'][$key].", ".
-						$data['totaledits_cat'][$key].", ".
+						$data['catedits'][$categoryname][$key].
 						"]";
-					if($key != end(array_keys($data['totaledits']))) echo ",";
+					if($key != end(array_keys($data['catedits'][$categoryname]))) echo ",";
 				}
 			?>
 			]);
 
-			var chartedits = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotaledits'));
-			chartedits.draw(data1, {
+			var chartedits<?=$categoryname?> = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotaledits<?=$categoryname?>'));
+			chartedits<?=$categoryname?>.draw(data1<?=$categoryname?>, {
 				'displayAnnotations': false,
 				'fill': 20,
-                                'legendPosition': 'newRow',}
+                                'legendPosition': 'newRow',
+                                'wmode': 'transparent'}
                                 );
 			
 			
-			var data2 = new google.visualization.DataTable();
-			data2.addColumn('datetime', 'Date');
-			data2.addColumn('number', 'Total');
-			data2.addColumn('number', 'Article');
-			data2.addColumn('number', 'Talks');
-			data2.addColumn('number', 'Users');
-			data2.addColumn('number', 'User Talks');
-			data2.addColumn('number', 'Files');
-			data2.addColumn('number', 'Templates');
-			data2.addColumn('number', 'Categories');
-			data2.addRows([
+			var data2<?=$categoryname?> = new google.visualization.DataTable();
+			data2<?=$categoryname?>.addColumn('datetime', 'Date');
+			data2<?=$categoryname?>.addColumn('number', 'Bytes');
+			data2<?=$categoryname?>.addRows([
 			<?
-				foreach(array_keys($data['totalbytes']) as $key){
+				foreach(array_keys($data['catbytes'][$categoryname]) as $key){
 					echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
-					$data['totalbytes'][$key].", ".
-					$data['totalbytes_art'][$key].", ".
-					$data['totalbytes_talk'][$key].", ".
-					$data['totalbytes_us'][$key].", ".
-					$data['totalbytes_ustalk'][$key].", ".
-					$data['totalbytes_file'][$key].", ".
-					$data['totalbytes_temp'][$key].", ".
-					$data['totalbytes_cat'][$key].
+					$data['catbytes'][$categoryname][$key].
 					"]";
-					if($key != end(array_keys($data['totalbytes']))) echo ",";
+					if($key != end(array_keys($data['catbytes'][$categoryname]))) echo ",";
 				}
 			?>
 			]);
 
-			var chartbytes = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalbytes'));
-			chartbytes.draw(data2, {
+			var chartbytes<?=$categoryname?> = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalbytes<?=$categoryname?>'));
+			chartbytes<?=$categoryname?>.draw(data2<?=$categoryname?>, {
 				'displayAnnotations': false,
 				'fill': 20,
-                                'legendPosition': 'newRow',}
-                                );
-			
-			var data3 = new google.visualization.DataTable();
-			data3.addColumn('datetime', 'Date');
-			data3.addColumn('number', 'Total');
-			data3.addColumn('number', 'Articles');
-			data3.addColumn('number', 'Talks');
-			data3.addColumn('number', 'Users');
-			data3.addColumn('number', 'User Talks');
-			data3.addColumn('number', 'Files');
-			data3.addColumn('number', 'Template');
-			data3.addColumn('number', 'Category');
-			data3.addRows([
-			<?
-				foreach(array_keys($data['totalpages']) as $key){
-					echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
-					$data['totalpages'][$key].", ".
-					$data['totalpages_art'][$key].", ".
-					$data['totalpages_talk'][$key].", ".
-					$data['totalpages_us'][$key].", ".
-					$data['totalpages_ustalk'][$key].", ".
-					$data['totalpages_file'][$key].", ".
-					$data['totalpages_temp'][$key].", ".
-					$data['totalpages_cat'][$key].
-					"]";
-					if($key != end(array_keys($data['totalpages']))) echo ",";
-				}
-			?>
-			]);
-
-			var chartpages = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalpages'));
-			chartpages.draw(data3, {
-				'displayAnnotations': false,
-				'fill': 20,
-                                'legendPosition': 'newRow',}
-                                );
-			
-			var data4 = new google.visualization.DataTable();
-			data4.addColumn('datetime', 'Date');
-			data4.addColumn('number', 'Total');
-			data4.addColumn('number', 'Contributed to Articles');
-			data4.addRows([
-			<?
-				foreach(array_keys($data['totalusers']) as $key){
-					echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
-					$data['totalusers'][$key].", ".
-					$data['totalusers_art'][$key].
-					"]";
-					if($key != end(array_keys($data['totalusers']))) echo ",";
-				}
-			?>
-			]);
-
-			var chartusers = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalusers'));
-			chartusers.draw(data4, {
-				'displayAnnotations': false,
-				'fill': 20,
-                                'legendPosition': 'newRow',}
+                                'legendPosition': 'newRow',
+                                'wmode': 'transparent'}
                                 );
                                 
-                        var data44 = new google.visualization.DataTable();
-			data44.addColumn('datetime', 'Date');
-			data44.addColumn('number', 'Total');
-			data44.addRows([
+                        var data4<?=$categoryname?> = new google.visualization.DataTable();
+			data4<?=$categoryname?>.addColumn('datetime', 'Date');
+			data4<?=$categoryname?>.addColumn('number', 'Users');
+			data4<?=$categoryname?>.addRows([
 			<?
-				foreach(array_keys($data['totalcategories']) as $key){
+				foreach(array_keys($data['catusers'][$categoryname]) as $key){
 					echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
-					$data['totalcategories'][$key].
+					$data['catusers'][$categoryname][$key].
 					"]";
-					if($key != end(array_keys($data['totalcategories']))) echo ",";
+					if($key != end(array_keys($data['catusers'][$categoryname]))) echo ",";
 				}
 			?>
 			]);
 
-			var chartcats = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalcategories'));
-			chartcats.draw(data44, {
+			var chartusers<?=$categoryname?> = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalusers<?=$categoryname?>'));
+			chartusers<?=$categoryname?>.draw(data4<?=$categoryname?>, {
 				'displayAnnotations': false,
 				'fill': 20,
-                                'legendPosition': 'newRow',}
-                                );
-			
-			var data5 = new google.visualization.arrayToDataTable([
-				['Hour', 'Others', 'Articles'],
+                                'legendPosition': 'newRow',
+                                'wmode': 'transparent'
+                                }
+                        );
+                        
+                        var data3<?=$categoryname?> = new google.visualization.DataTable();
+			data3<?=$categoryname?>.addColumn('datetime', 'Date');
+			data3<?=$categoryname?>.addColumn('number', 'Pages');
+			data3<?=$categoryname?>.addRows([
 			<?
-				foreach(array_keys($data['totalactivityhour']) as $key){
+				foreach(array_keys($data['catpages'][$categoryname]) as $key){
+					echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
+					$data['catpages'][$categoryname][$key].
+					"]";
+					if($key != end(array_keys($data['catpages'][$categoryname]))) echo ",";
+				}
+			?>
+			]);
+
+			var chartpages<?=$categoryname?> = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalpages<?=$categoryname?>'));
+			chartpages<?=$categoryname?>.draw(data4<?=$categoryname?>, {
+				'displayAnnotations': false,
+				'fill': 20,
+                                'legendPosition': 'newRow',
+                                'wmode': 'transparent'
+                                }
+                        );
+                        
+                        var data5<?=$categoryname?> = new google.visualization.arrayToDataTable([
+				['Hour', 'Editions'],
+			<?
+				foreach(array_keys($data['catactivityhour'][$categoryname]) as $key){
 					echo "[".$key.", ".
-					($data['totalactivityhour'][$key]-$data['totalactivityhour_art'][$key]).", ".
-					$data['totalactivityhour_art'][$key].
+					$data['catactivityhour'][$categoryname][$key].
 					"]";
-					if($key != end(array_keys($data['totalactivityhour']))) echo ",";
+					if($key != end(array_keys($data['catactivityhour'][$categoryname]))) echo ",";
 				}
 			?>
 			]);
 			
-			var options = {
+			var options5<?=$categoryname?> = {
 				hAxis: {title: 'Hour', titleTextStyle: {data: 'green'}},
-				isStacked:true
+				isStacked:true,
 			};
 
-			var charttotalactivityhour = new google.visualization.ColumnChart(document.getElementById('charttotalactivityhour'));
-			charttotalactivityhour.draw(data5, options);
+			var charttotalactivityhour<?=$categoryname?> = new google.visualization.ColumnChart(document.getElementById('charttotalactivityhour<?=$categoryname?>'));
+			charttotalactivityhour<?=$categoryname?>.draw(data5<?=$categoryname?>, options5<?=$categoryname?>);
 			
-			var data6 = new google.visualization.arrayToDataTable([
-				['Day', 'Others', 'Articles'],
+			
+			var data6<?=$categoryname?> = new google.visualization.arrayToDataTable([
+				['Week Day', 'Editions'],
 			<?
-				foreach(array_keys($data['totalactivitywday']) as $key){
+				foreach(array_keys($data['catactivitywday'][$categoryname]) as $key){
 					echo "['".$key."', ".
-					($data['totalactivitywday'][$key]-$data['totalactivitywday_art'][$key]).", ".
-					$data['totalactivitywday_art'][$key].
+					$data['catactivitywday'][$categoryname][$key].
 					"]";
-					if($key != end(array_keys($data['totalactivitywday']))) echo ",";
+					if($key != end(array_keys($data['catactivitywday'][$categoryname]))) echo ",";
 				}
 			?>
 			]);
 			
-			var options = {
-				hAxis: {title: 'Day', titleTextStyle: {data: 'green'}},
-				isStacked:true
+			var options6<?=$categoryname?> = {
+				hAxis: {title: 'Week Day', titleTextStyle: {data: 'green'}},
+				isStacked:true,
 			};
 
-			var charttotalactivitywday = new google.visualization.ColumnChart(document.getElementById('charttotalactivitywday'));
-			charttotalactivitywday.draw(data6, options);
+			var charttotalactivitywday<?=$categoryname?> = new google.visualization.ColumnChart(document.getElementById('charttotalactivitywday<?=$categoryname?>'));
+			charttotalactivitywday<?=$categoryname?>.draw(data6<?=$categoryname?>, options6<?=$categoryname?>);
 			
-			var data7 = new google.visualization.arrayToDataTable([
-				['Week', 'Others', 'Articles'],
+			
+			var data7<?=$categoryname?> = new google.visualization.arrayToDataTable([
+				['Week', 'Editions'],
 			<?
-				foreach(array_keys($data['totalactivityweek']) as $key){
+				foreach(array_keys($data['catactivityweek'][$categoryname]) as $key){
 					echo "['".$key."', ".
-					($data['totalactivityweek'][$key] - $data['totalactivityweek_art'][$key]).", ".
-					$data['totalactivityweek_art'][$key].
+					$data['catactivityweek'][$categoryname][$key].
 					"]";
-					if($key != end(array_keys($data['totalactivityweek']))) echo ",";
+					if($key != end(array_keys($data['catactivityweek'][$categoryname]))) echo ",";
 				}
 			?>
 			]);
 			
-			var options = {
+			var options7<?=$categoryname?> = {
 				hAxis: {title: 'Week', titleTextStyle: {data: 'green'}},
-				isStacked:true
+				isStacked:true,
 			};
 
-			var charttotalactivityweek = new google.visualization.ColumnChart(document.getElementById('charttotalactivityweek'));
-			charttotalactivityweek.draw(data7, options);
+			var charttotalactivityweek<?=$categoryname?> = new google.visualization.ColumnChart(document.getElementById('charttotalactivityweek<?=$categoryname?>'));
+			charttotalactivityweek<?=$categoryname?>.draw(data7<?=$categoryname?>, options7<?=$categoryname?>);
 			
-			var data8 = new google.visualization.arrayToDataTable([
-				['Month', 'Others', 'Articles'],
+			var data8<?=$categoryname?> = new google.visualization.arrayToDataTable([
+				['Month', 'Editions'],
 			<?
-				foreach(array_keys($data['totalactivitymonth']) as $key){
+				foreach(array_keys($data['catactivitymonth'][$categoryname]) as $key){
 					echo "['".$key."', ".
-					($data['totalactivitymonth'][$key]-$data['totalactivitymonth_art'][$key]).", ".
-					$data['totalactivitymonth_art'][$key].
+					$data['catactivitymonth'][$categoryname][$key].
 					"]";
-					if($key != end(array_keys($data['totalactivitymonth']))) echo ",";
+					if($key != end(array_keys($data['catactivitymonth'][$categoryname]))) echo ",";
 				}
 			?>
 			]);
 			
-			var options = {
+			var options8<?=$categoryname?> = {
 				hAxis: {title: 'Month', titleTextStyle: {data: 'green'}},
-				isStacked:true
+				isStacked:true,
 			};
 
-			var charttotalactivitymonth = new google.visualization.ColumnChart(document.getElementById('charttotalactivitymonth'));
-			charttotalactivitymonth.draw(data8, options);
+			var charttotalactivitymonth<?=$categoryname?> = new google.visualization.ColumnChart(document.getElementById('charttotalactivitymonth<?=$categoryname?>'));
+			charttotalactivitymonth<?=$categoryname?>.draw(data8<?=$categoryname?>, options8<?=$categoryname?>);
 			
-			var data9 = new google.visualization.arrayToDataTable([
-				['Year', 'Others', 'Articles'],
+			var data9<?=$categoryname?> = new google.visualization.arrayToDataTable([
+				['Year', 'Editions'],
 			<?
-				foreach(array_keys($data['totalactivityyear']) as $key){
+				foreach(array_keys($data['catactivityyear'][$categoryname]) as $key){
 					echo "['".$key."', ".
-					($data['totalactivityyear'][$key]-$data['totalactivityyear_art'][$key]).", ".
-					$data['totalactivityyear_art'][$key].
+					$data['catactivityyear'][$categoryname][$key].
 					"]";
-					if($key != end(array_keys($data['totalactivityyear']))) echo ",";
+					if($key != end(array_keys($data['catactivityyear'][$categoryname]))) echo ",";
 				}
 			?>
 			]);
 			
-			var options = {
+			var options9<?=$categoryname?> = {
 				hAxis: {title: 'Year', titleTextStyle: {data: 'green'}},
-				isStacked:true
+				isStacked:true,
 			};
 
-			var charttotalactivityyear = new google.visualization.ColumnChart(document.getElementById('charttotalactivityyear'));
-			charttotalactivityyear.draw(data9, options);
+			var charttotalactivityyear<?=$categoryname?> = new google.visualization.ColumnChart(document.getElementById('charttotalactivityyear<?=$categoryname?>'));
+			charttotalactivityyear<?=$categoryname?>.draw(data9<?=$categoryname?>, options9<?=$categoryname?>);
 			
-			var data10 = new google.visualization.DataTable();
-			data10.addColumn('datetime', 'Date');
-			data10.addColumn('number', '#Uploads');
-			data10.addRows([
+			
 			<?
-				foreach(array_keys($data['totaluploads']) as $key){
-					echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
-					$data['totaluploads'][$key]."]";
-					if($key != end(array_keys($data['totaluploads']))) echo ",";
-				}
-			?>
-			]);
+			if(isset($data['catuploads'][$categoryname])){
+					echo "var data10".$categoryname." = new google.visualization.DataTable();
+				data10".$categoryname.".addColumn('datetime', 'Date');
+				data10".$categoryname.".addColumn('number', 'Uploads');
+				data10".$categoryname.".addRows([";
+				
+					foreach(array_keys($data['catuploads'][$categoryname]) as $key){
+						echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
+						$data['catuploads'][$categoryname][$key]."]";
+						if($key != end(array_keys($data['catuploads'][$categoryname]))) echo ",";
+					}
+				
+				echo "]);
 
-			var charttotaluploads = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotaluploads'));
-			charttotaluploads.draw(data10, {
-				'displayAnnotations': false,
-				'fill': 20,
-                                'legendPosition': 'newRow',}
-                                );
-			
-			var data11 = new google.visualization.DataTable();
-			data11.addColumn('datetime', 'Date');
-			data11.addColumn('number', 'Upload Bytes');
-			data11.addRows([
-			<?
-				foreach(array_keys($data['totalupsize']) as $key){
-					echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
-					$data['totalupsize'][$key]."]";
-					if($key != end(array_keys($data['totalupsize']))) echo ",";
-				}
-			?>
-			]);
+				var charttotaluploads".$categoryname." = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotaluploads".$categoryname."'));
+				charttotaluploads".$categoryname.".draw(data10".$categoryname.", {
+					'displayAnnotations': false,
+					'fill': 20,
+					'legendPosition': 'newRow'}
+					);
+				
+				var data11".$categoryname." = new google.visualization.DataTable();
+				data11".$categoryname.".addColumn('datetime', 'Date');
+				data11".$categoryname.".addColumn('number', 'Upload Bytes');
+				data11".$categoryname.".addRows([";
+				
+					foreach(array_keys($data['catupsize'][$categoryname]) as $key){
+						echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
+						$data['catupsize'][$categoryname][$key]."]";
+						if($key != end(array_keys($data['catupsize'][$categoryname]))) echo ",";
+					}
+				
+				echo "]);
 
-			var charttotalupsize = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalupsize'));
-			charttotalupsize.draw(data11, {
-				'displayAnnotations': false,
-				'fill': 20,
-                                'legendPosition': 'newRow',}
-                                );
-			
-			var data12 = new google.visualization.DataTable();
-			data12.addColumn('datetime', 'Date');
-			data12.addColumn('number', 'Average Grade');
-			data12.addRows([
-			<?
-				foreach(array_keys($data['totalaverage']) as $key){
-					$date = $data['revisiondate'][$key];
-					echo "[new Date(".
-					date('Y', $date).", ".
-					date('m', $date)." ,".
-					date('d', $date)." ,".
-					date('H', $date)." ,".
-					date('i', $date)."), ".
-					$data['totalaverage'][$key]."]";
-					if($key != end(array_keys($data['totalaverage']))) echo ",";
-				}
-			?>
-			]);
-
-			var charttotalquality = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalquality'));
-			charttotalquality.draw(data12, {
-				'displayAnnotations': false,
-				'fill': 20,
-                                'legendPosition': 'newRow',}
-                                );
-			
-			var data13 = new google.visualization.DataTable();
-			data13.addColumn('datetime', 'Date');
-			data13.addColumn('number', 'Bytes X Quality');
-			data13.addColumn('number', 'Bytes');
-			data13.addRows([
-			<?
-				$result = 0;
-				foreach(array_keys($data['totalbytes']) as $date){
-					$rev = $data['daterevision'][$date];
-					$grade = isset($data['totalaverage'][$rev])? $data['totalaverage'][$rev] : 5;
+				var charttotalupsize".$categoryname." = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalupsize".$categoryname."'));
+				charttotalupsize".$categoryname.".draw(data11".$categoryname.", {
+					'displayAnnotations': false,
+					'fill': 20,
+					'legendPosition': 'newRow'}
+					);";
 					
-					$result += $data['totalbytesdiff'][$date] + ($grade - 5) * ($data['totalbytesdiff'][$date]/5);
-					echo "[new Date(".
-					date('Y', $date).", ".
-					date('m', $date)." ,".
-					date('d', $date)." ,".
-					date('H', $date)." ,".
-					date('i', $date)."), ".
-					$result.", ".
-					$data['totalbytes'][$date].
-					"]";
-					if($date != end(array_keys($data['totalbytes']))) echo ",";
-				}
+				echo "var imgs".$categoryname." = new google.visualization.DataTable();
+				imgs".$categoryname.".addColumn('string', 'Name');
+				imgs".$categoryname.".addColumn('number', 'Size');
+				imgs".$categoryname.".addColumn('datetime', 'Date');
+				imgs".$categoryname.".addRows([";
+					foreach(array_keys($data['catimages'][$categoryname]) as $key){
+						echo "['".$data['catimages'][$categoryname][$key]."',";
+						echo $data['imagesize'][$data['catimages'][$categoryname][$key]].",";
+						echo "new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key).")]";
+						
+						if($key != end(array_keys($data['catimages'][$categoryname]))) echo ",";
+					}
+				echo "]);
+
+
+				var imgtable".$categoryname." = new google.visualization.Table(document.getElementById('img_table".$categoryname."'));
+				imgtable".$categoryname.".draw(imgs".$categoryname.", {showRowNumber: true});";
+			}
 			?>
-			]);
 			
-			var charttotalbytesxquality = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalbytesxquality'));
-			charttotalbytesxquality.draw(data13, {
-				'displayAnnotations': false,
-				'fill': 20,
-                                'legendPosition': 'newRow',}
-                                );
-			
-			var data14 = new google.visualization.DataTable();
-			data14.addColumn('number', 'Hour');
-			data14.addColumn('number', 'Quality');
-			data14.addRows([
 			<?
-				foreach(array_keys($data['totalmark']) as $revision){
-					$date = $data['revisiondate'][$revision];
-					$accum[date('H', $date)] = 0;
-					$nrevs[date('H', $date)] = 0;
-				}
+			if(isset($data['cataveragevalue'][$categoryname])){
+			
+				echo "var data12".$categoryname." = new google.visualization.DataTable();
+				data12".$categoryname.".addColumn('datetime', 'Date');
+				data12".$categoryname.".addColumn('number', 'Average Grade');
+				data12".$categoryname.".addRows([";
+			
+					foreach(array_keys($data['cataveragevalue'][$categoryname]) as $key){
+						$date = $data['revisiondate'][$key];
+						echo "[new Date(".
+						date('Y', $date).", ".
+						date('m', $date)." ,".
+						date('d', $date)." ,".
+						date('H', $date)." ,".
+						date('i', $date)."), ".
+						$data['cataveragevalue'][$categoryname][$key]."]";
+						if($key != end(array_keys($data['cataveragevalue'][$categoryname]))) echo ",";
+					}
+				echo "]);
+
+				var charttotalquality".$categoryname." = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalquality".$categoryname."'));
+				charttotalquality".$categoryname.".draw(data12".$categoryname.", {
+					'displayAnnotations': false,
+					'fill': 20,
+					'legendPosition': 'newRow'}
+					);
 				
-				foreach(array_keys($data['totalmark']) as $revision){
-					$date = $data['revisiondate'][$revision];
-					$grade = $data['totalmark'][$revision];
-					$accum[date('H', $date)] += $grade;
-					$nrevs[date('H', $date)] += 1;
-				}
+				var data13".$categoryname." = new google.visualization.DataTable();
+				data13".$categoryname.".addColumn('datetime', 'Date');
+				data13".$categoryname.".addColumn('number', 'Bytes X Quality');
+				data13".$categoryname.".addColumn('number', 'Bytes');
+				data13".$categoryname.".addRows([";
+					$result = 0;
+					foreach(array_keys($data['catbytes'][$categoryname]) as $date){
+						$rev = $data['daterevision'][$date];
+						$grade = isset($data['cataveragevalue'][$categoryname][$rev])? $data['cataveragevalue'][$categoryname][$rev] : 5;
+						
+						$result += $data['totalbytesdiff'][$date] + ($grade - 5) * ($data['totalbytesdiff'][$date]/5);
+						echo "[new Date(".
+						date('Y', $date).", ".
+						date('m', $date)." ,".
+						date('d', $date)." ,".
+						date('H', $date)." ,".
+						date('i', $date)."), ".
+						$result.", ".
+						$data['catbytes'][$categoryname][$date].
+						"]";
+						if($date != end(array_keys($data['catbytes'][$categoryname]))) echo ",";
+					}
+				echo "]);
 				
-				foreach(array_keys($accum) as $hour){
-					echo "[".$hour.", ".($accum[$hour]/$nrevs[$hour])."]";
-					if($hour != end(array_keys($accum))) echo ",";
-				}
+				var charttotalbytesxquality".$categoryname." = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalbytesxquality".$categoryname."'));
+				charttotalbytesxquality".$categoryname.".draw(data13".$categoryname.", {
+					'displayAnnotations': false,
+					'fill': 20,
+					'legendPosition': 'newRow'}
+					);";
+			}
 			?>
-			]);
 			
-			var options = {
-				hAxis: {title: 'Hour', titleTextStyle: {data: 'green'}},
-				vAxis: {title: 'Quality', titleTextStyle: {data: 'green'}, minValue:0}
-			};
-			
-			var chartqualityhour = new google.visualization.ScatterChart(document.getElementById('qualityhourchart'));
-			chartqualityhour.draw(data14, options);
-			
-			var data15 = google.visualization.arrayToDataTable([
-				['Type', 	'Editions'],
-				['Articles', 	<?=end($data['totaledits_art'])?>],
-				['Talks', 	<?=end($data['totaledits_talk'])?>],
-				['Users', 	<?=end($data['totaledits_us'])?>],
-				['User Talks',	<?=end($data['totaledits_ustalk'])?>],
-				['Templates', 	<?=end($data['totaledits_temp'])?>],
-				['Categories', 	<?=end($data['totaledits_cat'])?>],
-				['Files', 	<?=end($data['totaledits_file'])?>]
-			]);
-			
-			new google.visualization.PieChart(document.getElementById('chartfinaledits'))
-				.draw(data15,{
-					chartArea:{width:"90%",height:"90%"},
-					legend:{position: 'none'},
-					is3D:true
-				});
-				
-			var data16 = google.visualization.arrayToDataTable([
-				['Type', 	'Bytes'],
-				['Articles', 	<?=end($data['totalbytes_art'])?>],
-				['Talks', 	<?=end($data['totalbytes_talk'])?>],
-				['Users', 	<?=end($data['totalbytes_us'])?>],
-				['User Talks',	<?=end($data['totalbytes_ustalk'])?>],
-				['Templates', 	<?=end($data['totalbytes_temp'])?>],
-				['Categories', 	<?=end($data['totalbytes_cat'])?>],
-				['Files', 	<?=end($data['totalbytes_file'])?>]
-			]);
-			
-			new google.visualization.PieChart(document.getElementById('chartfinalbytes'))
-				.draw(data16,{
-					chartArea:{width:"90%",height:"90%"},
-					legend:{position: 'none'},
-					is3D:true
-				});
-				
-			var data17 = google.visualization.arrayToDataTable([
-				['Type', 	'Pages'],
-				['Articles', 	<?=end($data['totalpages_art'])?>],
-				['Talks', 	<?=end($data['totalpages_talk'])?>],
-				['Users', 	<?=end($data['totalpages_us'])?>],
-				['User Talks',	<?=end($data['totalpages_ustalk'])?>],
-				['Templates', 	<?=end($data['totalpages_temp'])?>],
-				['Categories', 	<?=end($data['totalpages_cat'])?>],
-				['Files', 	<?=end($data['totalpages_file'])?>]
-			]);
-			
-			new google.visualization.PieChart(document.getElementById('chartfinalpages'))
-				.draw(data17,{
-					chartArea:{width:"90%",height:"90%"},
-					legend:{position: 'none'},
-					is3D:true
-				});
-				
-			var data18 = google.visualization.arrayToDataTable([
-				['Type', 				'Pages'],
-				['Contributed to Articles', 		<?=end($data['totalusers_art'])?>],
-				['Did not contribute to articles', 	<?=(end($data['totalusers']) - end($data['totalusers_art']))?>]
-			]);
-			
-			new google.visualization.PieChart(document.getElementById('chartfinalusers'))
-				.draw(data18,{
-					chartArea:{width:"90%",height:"90%"},
-					legend:{position: 'none'},
-					is3D:true
-				});
-			
-			var data = new google.visualization.DataTable();
-			data.addColumn('string', 'Nick');
-			data.addColumn('string', 'Name');
-			data.addColumn('number', 'Edits');
-			data.addColumn('number', 'Edits %');
-			data.addColumn('number', 'Edits in articles');
-			data.addColumn('number', 'Edits in articles %');
-			data.addColumn('number', 'Bytes');
-			data.addColumn('number', 'Bytes %');
-			data.addColumn('number', 'Bytes in articles');
-			data.addColumn('number', 'Bytes in articles %');
-			<? if(isset($data['useruploads'])) echo "data.addColumn('number', 'Uploads');";?>
-			<? if(isset($data['useruploads'])) echo "data.addColumn('number', 'Uploads %');";?>
-			data.addColumn('number', 'Average Grade');
-			data.addColumn('number', 'Standard Deviation');
-			data.addColumn('number', 'Maximum Grade');
-			data.addColumn('number', 'Minimum Grade');
-			data.addColumn('number', 'Average Grade as revisor');
-			data.addColumn('number', 'Maximum Grade as revisor');
-			data.addColumn('number', 'Minimum Grade as revisor');
-			data.addRows([
+			var data<?=$categoryname?> = new google.visualization.DataTable();
+			data<?=$categoryname?>.addColumn('string', 'Nick');
+			data<?=$categoryname?>.addColumn('string', 'Name');
+			data<?=$categoryname?>.addColumn('number', 'Edits');
+			data<?=$categoryname?>.addColumn('number', 'Edits %');
+			data<?=$categoryname?>.addColumn('number', 'Bytes');
+			data<?=$categoryname?>.addColumn('number', 'Bytes %');
+			data<?=$categoryname?>.addRows([
 			<? 
-				foreach(array_keys($data['useredits']) as $key){
+				foreach(array_keys($data['catuser'][$categoryname]) as $key){
 					echo "['".$key."','".
 						$data['userrealname'][$key]."',".
-						round(end($data['useredits'][$key]), 3).",".
-						round(end($data['useredits_per'][$key]), 3).",".
-						(isset($data['useredits_art'][$key])?round(end($data['useredits_art'][$key]), 3):"0").",".
-						(isset($data['useredits_art_per'][$key])?round(end($data['useredits_art_per'][$key]), 3):"0").",".
-						round(end($data['userbytes'][$key]), 3).",".
-						round(end($data['userbytes_per'][$key]), 3).",".
-						(isset($data['userbytes_art'][$key])?round(end($data['userbytes_art'][$key]), 3):"0").",".
-						(isset($data['userbytes_art_per'][$key])?round(end($data['userbytes_art_per'][$key]), 3):"0").",";
-					if(isset($data['useruploads'][$key])) 
-						echo round(end($data['useruploads'][$key]), 3).",".
-							round(end($data['useruploads_per'][$key]), 3).",";
-					else
-						echo "0, 0, ";
-					
-					if(isset($data['useraverage'][$data['iduser'][$key]])) 
-						echo round(end($data['useraverage'][$data['iduser'][$key]]), 3).",".
-							round(end($data['usersd'][$data['iduser'][$key]]), 3).",".
-							round(end($data['usermaxvalue'][$data['iduser'][$key]]), 3).",".
-							round(end($data['userminvalue'][$data['iduser'][$key]]), 3).",";
-					else
-						echo "0, 0, 0, 0, ";
+						round(end($data['catuseredits'][$categoryname][$key]), 2).",".
+						round(end($data['catuseredits'][$categoryname][$key])/end($data['catedits'][$categoryname]), 2).",";
+					if(end($data['catbytes'][$categoryname]) != 0){
+						echo round(end($data['catuserbytes'][$categoryname][$key]), 2).",".
+						round(end($data['catuserbytes'][$categoryname][$key])/end($data['catbytes'][$categoryname]), 2);
+					}else
+						echo "0, 0";
 						
-					if(isset($data['revisoraverage'][$data['iduser'][$key]])) 
-						echo round(end($data['revisoraverage'][$data['iduser'][$key]]), 3).",".
-							round(end($data['revisormaxvalue'][$data['iduser'][$key]]), 3).",".
-							round(end($data['revisorminvalue'][$data['iduser'][$key]]), 3);
-					else
-						echo "0, 0, 0";
 					echo "]\n";
 					
-					if($key != end(array_keys($data['useredits']))) echo ",";
+					if($key != end(array_keys($data['catuser'][$categoryname]))) echo ",";
 				}
 			?>
 			]);
 
 
-			var table = new google.visualization.Table(document.getElementById('user_table'));
-			table.draw(data, {showRowNumber: true});
+			var table<?=$categoryname?> = new google.visualization.Table(document.getElementById('user_table<?=$categoryname?>'));
+			table<?=$categoryname?>.draw(data<?=$categoryname?>, {showRowNumber: true});
 			
-			var pagedata = new google.visualization.DataTable();
-			pagedata.addColumn('string', 'Name');
-			pagedata.addColumn('number', 'Namespace');
-			pagedata.addColumn('number', 'Edits');
-			pagedata.addColumn('number', 'Edits %');
-			pagedata.addColumn('number', 'Bytes');
-			pagedata.addColumn('number', 'Bytes %');
-			<? if(isset($data['pageuploads'])) echo "pagedata.addColumn('number', 'Uploads');";?>
-			<? if(isset($data['pageuploads'])) echo "pagedata.addColumn('number', 'Uploads %');";?>
-			pagedata.addColumn('number', 'Average Grade');
-			pagedata.addColumn('number', 'Standard Deviation');
-			pagedata.addColumn('number', 'Min Grade');
-			pagedata.addColumn('number', 'Max Grade');
-			pagedata.addColumn('number', 'Visits');
-			pagedata.addColumn('number', 'Visits %');
-			pagedata.addRows([
-			<? 
-				foreach(array_keys($data['pageedits']) as $key){
-					echo "['".$key."', ".
-						$data['pagenamespace'][$key].", ".
-						round(end($data['pageedits'][$key]), 3).",".
-						round(end($data['pageedits_per'][$key]), 3).",".
-						round(end($data['pagebytes'][$key]), 3).",".
-						round(end($data['pagebytes_per'][$key]), 3);
-					if(isset($data['pageuploads'][$key])) 
-						echo ", ".round(end($data['pageuploads'][$key]), 3).",".
-							round(end($data['pageuploads_per'][$key]), 3);
-					else
-						echo ", 0, 0";
-					
-					if(isset($data['pageaveragevalue'][$key])) 
-						echo ", ".round(end($data['pageaveragevalue'][$key]), 3).",".
-							round(end($data['pagesd'][$key]), 3).",".
-							round(end($data['pageminvalue'][$key]), 3).",".
-							round(end($data['pagemaxvalue'][$key]), 3);
-					else
-						echo ", 0, 0, 0, 0";
-						
-					echo ", ".$data['pagevisits'][$key].", ".round($data['pagevisits'][$key] / array_sum($data['pagevisits']), 3);
-					
-					echo "]\n";
-					
-					if($key != end(array_keys($data['pageedits']))) echo ",";
-				}
-			?>
-			]);
-
-
-			var pagetable = new google.visualization.Table(document.getElementById('pages_table'));
-			pagetable.draw(pagedata, {showRowNumber: true});
-			
-			var catdata = new google.visualization.DataTable();
-			catdata.addColumn('string', 'Name');
-			catdata.addColumn('number', 'Edits');
-			catdata.addColumn('number', 'Edits %');
-			catdata.addColumn('number', 'Bytes');
-			catdata.addColumn('number', 'Bytes %');
-			catdata.addColumn('number', 'Pages');
-			catdata.addColumn('number', 'Pages %');
-			<? if(isset($data['catuploads'])) echo "catdata.addColumn('number', 'Uploads');";?>
-			<? if(isset($data['catuploads'])) echo "catdata.addColumn('number', 'Uploads %');";?>
-			catdata.addRows([
-			<? 
-				foreach(array_keys($data['catedits']) as $key){
-					echo "['".$key."', ".
-						round(end($data['catedits'][$key]), 3).",".
-						round(end($data['catedits_per'][$key]), 3).",".
-						round(end($data['catbytes'][$key]), 3).",".
-						round(end($data['catbytes_per'][$key]), 3).",".
-						round(end($data['catpages'][$key]), 3).", ".
-						round(end($data['catpages_per'][$key]), 3);
-					if(isset($data['catuploads'][$key])) 
-						echo ", ".round(end($data['catuploads'][$key]), 3).",".
-							round(end($data['catuploads_per'][$key]), 3);
-					else
-						echo ", 0, 0";
-					
-					echo "]\n";
-					
-					if($key != end(array_keys($data['catedits']))) echo ",";
-				}
-			?>
-			]);
-
-
-			var cattable = new google.visualization.Table(document.getElementById('categories_table'));
-			cattable.draw(catdata, {showRowNumber: true});
 		}
 	</script>
-
-	<table id = "bodytable">
-	<tr>
-		<th colspan = "2"><?=lang('voc.i18n_filter_by')?></th>
-	</tr>
-	<tr>
-		<td style = "width:400px"><?
-			echo form_open('filters_form');
-			echo form_dropdown('select_filter', array(lang('voc.i18n_user') => lang('voc.i18n_user'),
-								lang('voc.i18n_page') => lang('voc.i18n_page'),
-								lang('voc.i18n_category') => lang('voc.i18n_category'),
-								lang('voc.i18n_criteria') => lang('voc.i18n_criteria')));
-		?></td>
-		<td style = "width:400px"><?
-			echo form_input('filterstring');
-			echo form_close();
-		?></td>
-	</tr>
-	</table>
-	
-	<br><br>
 	
 <!-- CHARTS -->
-
-	<table id = "bodytable">
-	<tr>
-		<th><?=lang('voc.i18n_edits')?></th>
-		<th><?=lang('voc.i18n_bytes')?></th>
-	</tr>
-	<tr>
-		<td><div id='chartfinaledits' style='width: 400px; height: 400px; border: 0px; padding: 0px;'></div></td>
-		<td><div id='chartfinalbytes' style='width: 400px; height: 400px; border: 0px; padding: 0px;'></div></td>
-	</tr>
-	<tr>
-		<th><?=lang('voc.i18n_pages')?></th>
-		<th><?=lang('voc.i18n_users')?></th>
-	</tr>
-	<tr>
-		<td><div id='chartfinalpages' style='width: 400px; height: 400px; border: 0px; padding: 0px;'></div></td>
-		<td><div id='chartfinalusers' style='width: 400px; height: 400px; border: 0px; padding: 0px;'></div></td>
-	</tr>
-	</table>
-	
-	<br><br>
-	
-	<table id = "bodytable">
+	<table id = "charttable">
 	<tr>
 		<th><?=lang('voc.i18n_edits_evolution')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotaledits' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotaledits<?=$categoryname?>' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_content_evolution')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalbytes' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
-	</tr>
-	<tr>
-		<th><?=lang('voc.i18n_pages')?></th>
-	</tr>
-	<tr>
-		<td><div id='charttotalpages' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalbytes<?=$categoryname?>' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_users')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalusers' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalusers<?=$categoryname?>' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
-		<th><?=lang('voc.i18n_categories')?></th>
+		<th><?=lang('voc.i18n_pages')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalcategories' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalpages<?=$categoryname?>' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_activity_hour')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivityhour' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalactivityhour<?=$categoryname?>' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_activity_wday')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivitywday' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalactivitywday<?=$categoryname?>' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_activity_week')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivityweek' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalactivityweek<?=$categoryname?>' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_activity_month')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivitymonth' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalactivitymonth<?=$categoryname?>' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_activity_year')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivityyear' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalactivityyear<?=$categoryname?>' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
-	<? if (!isset($data['totaluploads'])) echo "<!--";?>
+	<? if (!isset($data['catuploads'][$categoryname])) echo "<!--";?>
 	<tr>
 		<th><?=lang('voc.i18n_uploads')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotaluploads' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotaluploads<?=$categoryname?>' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_upsize')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalupsize' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalupsize<?=$categoryname?>' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
-	<? if (!isset($data['totaluploads'])) echo "-->";?>
-	<? if (!isset($data['totalaverage'])) echo "<!--";?>
+	<? if (!isset($data['catuploads'][$categoryname])) echo "-->";?>
+	<? if (!isset($data['cataveragevalue'][$categoryname])) echo "<!--";?>
 	<tr>
 		<th><?=lang('voc.i18n_average_quality')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalquality' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalquality<?=$categoryname?>' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_bytesxquality')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalbytesxquality' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalbytesxquality<?=$categoryname?>' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<tr>
 		<th><?=lang('voc.i18n_hourquality')?></th>
 	</tr>
 	<tr>
-		<td><div id='qualityhourchart' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='qualityhourchart<?=$categoryname?>' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
-	<? if (!isset($data['totalaverage'])) echo "-->";?>
+	<? if (!isset($data['cataveragevalue'][$categoryname])) echo "-->";?>
 	</table>
 	
 	<br><br>
 	
-	<table id = "usertable">
+	<table id = "charttable">
 	<tr>
 		<th><?=lang('voc.i18n_users')?></th>
 	</tr>
 	<tr>
-		<td><div id = "user_table"></div></td>
+		<td><div id = "user_table<?=$categoryname?>"></div></td>
 	</tr>
 	</table>
 	
 	<br><br>
 	
-	<table id = "pagetable">
+	<? if(!isset($data['catimages'][$categoryname])) echo "<!--";?>
+	<table id = "charttable">
 	<tr>
-		<th><?=lang('voc.i18n_pages')?></th>
+		<th><?=lang('voc.i18n_images')?></th>
 	</tr>
 	<tr>
-		<td><div id = "pages_table"></div></td>
-	</tr>
-	</table>
-	
-	<br><br>
-	
-	<table id = "pagetable">
-	<tr>
-		<th><?=lang('voc.i18n_categories')?></th>
-	</tr>
-	<tr>
-		<td><div id = "categories_table"></div></td>
+		<td><div id = "img_table<?=$categoryname?>"></div></td>
 	</tr>
 	</table>
+	<? if(!isset($data['catimages'][$categoryname])) echo "-->";?>
 			
 <!-- [2] www.christophermonnat.com/2008/08/generating-pdf-files-using-codeigniter -->
 <!--[2] TO_DO: generate pdf-->
