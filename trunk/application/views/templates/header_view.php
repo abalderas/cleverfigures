@@ -25,7 +25,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	<title> CleverFigures | <?=$title?> </title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<link rel="shortcut icon" type="image/x-icon" href="images/icons/favicon.ico">
-	<link href='http://fonts.googleapis.com/css?family=Playball&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Playball&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Cinzel' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Donegal+One' rel='stylesheet' type='text/css'>
 	<script src="http://yui.yahooapis.com/3.8.0/build/yui/yui-min.js"></script>
@@ -92,7 +92,7 @@ var overlay = {
 <table id = "menu">
 	<tr>
 		<?
-			echo "<th class = \"user\"><un>".$title."</un></th>";
+			echo "<th class = \"user\">".$title."</th>";
 			echo "<th>".anchor('configure', lang('voc.i18n_configuration'))."</th>";
 			if($this->session->userdata('is_student') == 1)
 				echo "<th>".anchor('student', lang('voc.i18n_view_reports'))."</th>";

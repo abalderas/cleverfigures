@@ -57,7 +57,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			chartedits.draw(data1, {
 				'displayAnnotations': false,
 				'fill': 20,
-                                'legendPosition': 'newRow'}
+                                'legendPosition': 'newRow',
+                                'wmode': 'transparent'}
                                 );
 			
 			
@@ -93,7 +94,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			chartbytes.draw(data2, {
 				'displayAnnotations': false,
 				'fill': 20,
-                                'legendPosition': 'newRow'}
+                                'legendPosition': 'newRow',
+                                'wmode': 'transparent'}
                                 );
 			
 			var data3 = new google.visualization.DataTable();
@@ -128,7 +130,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			chartpages.draw(data3, {
 				'displayAnnotations': false,
 				'fill': 20,
-                                'legendPosition': 'newRow'}
+                                'legendPosition': 'newRow',
+                                'wmode': 'transparent'}
                                 );
 			
 			var data4 = new google.visualization.DataTable();
@@ -151,7 +154,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			chartusers.draw(data4, {
 				'displayAnnotations': false,
 				'fill': 20,
-                                'legendPosition': 'newRow'}
+                                'legendPosition': 'newRow',
+                                'wmode': 'transparent'}
                                 );
                                 
                         var data44 = new google.visualization.DataTable();
@@ -172,7 +176,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			chartcats.draw(data44, {
 				'displayAnnotations': false,
 				'fill': 20,
-                                'legendPosition': 'newRow'}
+                                'legendPosition': 'newRow',
+                                'wmode': 'transparent'}
                                 );
 			
 			var data5 = new google.visualization.arrayToDataTable([
@@ -297,7 +302,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			charttotaluploads.draw(data10, {
 				'displayAnnotations': false,
 				'fill': 20,
-                                'legendPosition': 'newRow',}
+                                'legendPosition': 'newRow',
+                                'wmode': 'transparent'}
                                 );
 			
 			var data11 = new google.visualization.DataTable();
@@ -317,7 +323,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			charttotalupsize.draw(data11, {
 				'displayAnnotations': false,
 				'fill': 20,
-                                'legendPosition': 'newRow',}
+                                'legendPosition': 'newRow',
+                                'wmode': 'transparent'}
                                 );
 			
 			var data12 = new google.visualization.DataTable();
@@ -343,7 +350,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			charttotalquality.draw(data12, {
 				'displayAnnotations': false,
 				'fill': 20,
-                                'legendPosition': 'newRow'}
+                                'legendPosition': 'newRow',
+                                'wmode': 'transparent'}
                                 );
 			
 			var data13 = new google.visualization.DataTable();
@@ -376,7 +384,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			charttotalbytesxquality.draw(data13, {
 				'displayAnnotations': false,
 				'fill': 20,
-                                'legendPosition': 'newRow'}
+                                'legendPosition': 'newRow',
+                                'wmode': 'transparent'}
                                 );
 			
 			var data14 = new google.visualization.DataTable();
