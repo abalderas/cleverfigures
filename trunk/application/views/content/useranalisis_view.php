@@ -22,7 +22,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 <script type='text/javascript' src='http://www.google.com/jsapi'></script>
 	<script type='text/javascript'>
 		google.load('visualization', '1', {'packages':['annotatedtimeline', 'corechart', 'table']});
-		google.setOnLoadCallback(drawChart<?=$data['userid'][$username]?>);
+// 		google.setOnLoadCallback(drawChart<?=$data['userid'][$username]?>);
 		function drawChart<?=$data['userid'][$username]?>() {
 			var data1<?=$data['userid'][$username]?> = new google.visualization.DataTable();
 			data1<?=$data['userid'][$username]?>.addColumn('datetime', 'Date');
@@ -500,3 +500,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	</tr>
 	</table>
 	<? if(!isset($data['userimages'][$username])) echo "-->";?>
+	
+	<script>
+		drawChart<?=$data['userid'][$username]?>();
+	</script>

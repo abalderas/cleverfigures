@@ -22,7 +22,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 <script type='text/javascript' src='http://www.google.com/jsapi'></script>
 	<script type='text/javascript'>
 		google.load('visualization', '1', {'packages':['annotatedtimeline', 'corechart', 'table']});
-		google.setOnLoadCallback(drawChart<?=$data['pageid'][$pagename]?>);
+// 		google.setOnLoadCallback(drawChart<?=$data['pageid'][$pagename]?>);
 		function drawChart<?=$data['pageid'][$pagename]?>() {
 			var data1<?=$data['pageid'][$pagename]?> = new google.visualization.DataTable();
 			data1<?=$data['pageid'][$pagename]?>.addColumn('datetime', 'Date');
@@ -493,6 +493,10 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	</tr>
 	</table>
 	<? if(!isset($data['pagecat'][$pagename])) echo "-->";?>
-			
+	
+	
+	<script>
+		drawChart<?=$data['pageid'][$pagename]?>();
+	</script>
 <!-- [2] www.christophermonnat.com/2008/08/generating-pdf-files-using-codeigniter -->
 <!--[2] TO_DO: generate pdf-->

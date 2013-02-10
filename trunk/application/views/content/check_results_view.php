@@ -57,7 +57,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			chartedits.draw(data1, {
 				'displayAnnotations': false,
 				'fill': 20,
-                                'legendPosition': 'newRow',}
+                                'legendPosition': 'newRow'}
                                 );
 			
 			
@@ -93,7 +93,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			chartbytes.draw(data2, {
 				'displayAnnotations': false,
 				'fill': 20,
-                                'legendPosition': 'newRow',}
+                                'legendPosition': 'newRow'}
                                 );
 			
 			var data3 = new google.visualization.DataTable();
@@ -128,7 +128,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			chartpages.draw(data3, {
 				'displayAnnotations': false,
 				'fill': 20,
-                                'legendPosition': 'newRow',}
+                                'legendPosition': 'newRow'}
                                 );
 			
 			var data4 = new google.visualization.DataTable();
@@ -151,7 +151,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			chartusers.draw(data4, {
 				'displayAnnotations': false,
 				'fill': 20,
-                                'legendPosition': 'newRow',}
+                                'legendPosition': 'newRow'}
                                 );
                                 
                         var data44 = new google.visualization.DataTable();
@@ -172,7 +172,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			chartcats.draw(data44, {
 				'displayAnnotations': false,
 				'fill': 20,
-                                'legendPosition': 'newRow',}
+                                'legendPosition': 'newRow'}
                                 );
 			
 			var data5 = new google.visualization.arrayToDataTable([
@@ -343,7 +343,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			charttotalquality.draw(data12, {
 				'displayAnnotations': false,
 				'fill': 20,
-                                'legendPosition': 'newRow',}
+                                'legendPosition': 'newRow'}
                                 );
 			
 			var data13 = new google.visualization.DataTable();
@@ -376,7 +376,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			charttotalbytesxquality.draw(data13, {
 				'displayAnnotations': false,
 				'fill': 20,
-                                'legendPosition': 'newRow',}
+                                'legendPosition': 'newRow'}
                                 );
 			
 			var data14 = new google.visualization.DataTable();
@@ -827,7 +827,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	
 	<br><br>
 	
-	<table id = "usertable">
+	<table id = "bodytable">
 	<tr>
 		<th><?=lang('voc.i18n_users')?></th>
 	</tr>
@@ -838,7 +838,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	
 	<br><br>
 	
-	<table id = "pagetable">
+	<table id = "bodytable">
 	<tr>
 		<th><?=lang('voc.i18n_pages')?></th>
 	</tr>
@@ -849,7 +849,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	
 	<br><br>
 	
-	<table id = "pagetable">
+	<table id = "bodytable">
 	<tr>
 		<th><?=lang('voc.i18n_categories')?></th>
 	</tr>

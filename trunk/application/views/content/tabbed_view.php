@@ -17,10 +17,12 @@ You should have received a copy of the GNU General Public License
 along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<script> YUI().use('tabview', function (Y) {
+<script> 
+YUI().use('tabview', function (Y) {
 	var tabview = new Y.TabView({srcNode:'#tabs'});
 	tabview.render();
-}); </script>
+}); 
+</script>
 
 <div class = "yui3-skin-sam">
 	<div id = "tabs">
