@@ -148,8 +148,7 @@ class Analisis_form extends CI_Controller {
 				$this->analisis_model->register_analisis($_POST['select_wiki'], isset($_POST['select_color'])? $_POST['select_color'] : false, $analisis);
 				$this->user_model->relate_analisis($analisis);
 			
-				echo "<b>Analisis saved. You can view the results ".anchor('teacher',lang('voc.i18n_here')).".</b>";
-				echo $this->load->view('templates/footer_view', true);
+				echo "<b>Analisis saved. You can check it in \"Performed Analisis\".</b>";
 			}
 			else{
 				echo 	"<script language=\"javascript\" type=\"text/javascript\">

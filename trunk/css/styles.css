@@ -133,23 +133,17 @@ padding:2px;
 
 #charttable
 {
-width:100%;
 margin-left: auto;
 margin-right: auto;
 padding:2px;
+width:100%;
 }
 
 #charttable th 
 {
 	width:100%;
 	background-color:rgba(0,0,0,0.8);
-	font-family: 'Cinzel', serif;
 	color:white;
-}
-
-#charttable td
-{
-	text-align:center;
 }
 
 

@@ -17,33 +17,20 @@ You should have received a copy of the GNU General Public License
 along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<script> 
-YUI().use('tabview', function (Y) {
-	var tabview = new Y.TabView({srcNode:'#tabs'});
-	tabview.render();
-}); 
-</script>
+<script type="text/javascript" src="application/libraries/tabpane.js"></script>
+<link type="text/css" rel="StyleSheet" href="css/tab.webfx.css" />
 
-<div class = "yui3-skin-sam">
-	<div id = "tabs">
-		<ul>
-			<?
-				foreach($names as $name)
-					echo "<li><a href = \"#".$name."\">".$name."</a></li>";
-			?>
-		</ul>
+
+<div class="tab-pane" id="tab-pane-1">
+	<?
+		$view = "content/".$type."analisis_view";
+		$item = $type."name";
 		
-		<div>
-			<?
-				$view = "content/".$type."analisis_view";
-				$item = $type."name";
-				
-				foreach($names as $name){
-					echo "<div id = \"".$name."\">";
-					$this->load->view($view, array('data' => $data, "$item" => $name));
-					echo "</div>";
-				}
-			?>
-		</div>
-	</div>
+		foreach($names as $name){
+			echo "<div class = \"tab-page\">";
+				echo "<h2 class = \"tab\">".$name."</h2>";
+				$this->load->view($view, array('data' => $data, "$item" => $name));
+			echo "</div>";
+		}
+	?>
 </div>

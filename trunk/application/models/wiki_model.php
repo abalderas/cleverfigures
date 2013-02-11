@@ -506,7 +506,7 @@ class Wiki_model extends CI_Model{
    		
    		echo "Querying database for category information...</br>";
    		
-   		$qstr = "select rev_id, rev_page, page_title, page_counter, page_namespace, page_is_new, user_id, user_name, user_real_name, user_email, user_registration, rev_timestamp, cl_to, cat_pages, rev_len from revision, user, page, categorylinks, category where rev_page = page_id and rev_user = user_id and page_id = cl_from and cl_to = cat_title order by rev_timestamp asc";		
+   		$qstr = "select rev_id, rev_page, page_title, page_counter, page_namespace, page_is_new, user_id, user_name, user_real_name, user_email, user_registration, rev_timestamp, cl_to, cat_pages, rev_len, cat_id from revision, user, page, categorylinks, category where rev_page = page_id and rev_user = user_id and page_id = cl_from and cl_to = cat_title order by rev_timestamp asc";		
 		
 		//Querying database
    		$query = $link->query($qstr);
@@ -550,6 +550,8 @@ class Wiki_model extends CI_Model{
    			$tamdiff = $row->rev_len - $LAST_PAGE_SIZE;
    			
    			//RELATION ARRAYS
+   			
+   			$catid	 [$row->cl_to] = $row->cat_id;
    			
    			$usercat [$row->user_name][$row->cl_to] = true;
    			$pagecat [$row->page_title][$row->cl_to] = true;
@@ -828,6 +830,7 @@ class Wiki_model extends CI_Model{
 						, 'catuserbytescount' => $catuserbytescount
 						, 'catusereditscount' => $catusereditscount
 						, 'catuser' => $catuser
+						, 'catid' => $catid
 					);
 				
 				
@@ -961,6 +964,7 @@ class Wiki_model extends CI_Model{
 					, 'catuserbytescount' => $catuserbytescount
 					, 'catusereditscount' => $catusereditscount
 					, 'catuser' => $catuser
+					, 'catid' => $catid
 				);
 				
 				
@@ -1080,6 +1084,7 @@ class Wiki_model extends CI_Model{
 				, 'catuserbytescount' => $catuserbytescount
 				, 'catusereditscount' => $catusereditscount
 				, 'catuser' => $catuser
+				, 'catid' => $catid
 			);
 			
 		echo ">> Wiki analisis accomplished.</br>";

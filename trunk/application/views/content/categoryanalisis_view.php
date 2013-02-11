@@ -16,18 +16,120 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 -->
+	
+<!-- CHARTS -->
+	<table id = "charttable">
+	<tr>
+		<th><?=lang('voc.i18n_edits_evolution')?></th>
+	</tr>
+	<tr>
+		<td><div id='charttotaledits<?=$data['catid'][$categoryname]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+	</tr>
+	<tr>
+		<th><?=lang('voc.i18n_content_evolution')?></th>
+	</tr>
+	<tr>
+		<td><div id='charttotalbytes<?=$data['catid'][$categoryname]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+	</tr>
+	<tr>
+		<th><?=lang('voc.i18n_users')?></th>
+	</tr>
+	<tr>
+		<td><div id='charttotalusers<?=$data['catid'][$categoryname]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+	</tr>
+	<tr>
+		<th><?=lang('voc.i18n_pages')?></th>
+	</tr>
+	<tr>
+		<td><div id='charttotalpages<?=$data['catid'][$categoryname]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+	</tr>
+	<tr>
+		<th><?=lang('voc.i18n_activity_hour')?></th>
+	</tr>
+	<tr>
+		<td><div id='charttotalactivityhour<?=$data['catid'][$categoryname]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+	</tr>
+	<tr>
+		<th><?=lang('voc.i18n_activity_wday')?></th>
+	</tr>
+	<tr>
+		<td><div id='charttotalactivitywday<?=$data['catid'][$categoryname]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+	</tr>
+	<tr>
+		<th><?=lang('voc.i18n_activity_week')?></th>
+	</tr>
+	<tr>
+		<td><div id='charttotalactivityweek<?=$data['catid'][$categoryname]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+	</tr>
+	<tr>
+		<th><?=lang('voc.i18n_activity_month')?></th>
+	</tr>
+	<tr>
+		<td><div id='charttotalactivitymonth<?=$data['catid'][$categoryname]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+	</tr>
+	<tr>
+		<th><?=lang('voc.i18n_activity_year')?></th>
+	</tr>
+	<tr>
+		<td><div id='charttotalactivityyear<?=$data['catid'][$categoryname]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+	</tr>
+	<? if (!isset($data['catuploads'][$categoryname])) echo "<!--";?>
+	<tr>
+		<th><?=lang('voc.i18n_uploads')?></th>
+	</tr>
+	<tr>
+		<td><div id='charttotaluploads<?=$data['catid'][$categoryname]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+	</tr>
+	<tr>
+		<th><?=lang('voc.i18n_upsize')?></th>
+	</tr>
+	<tr>
+		<td><div id='charttotalupsize<?=$data['catid'][$categoryname]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+	</tr>
+	<? if (!isset($data['catuploads'][$categoryname])) echo "-->";?>
+	<? if (!isset($data['cataveragevalue'][$categoryname])) echo "<!--";?>
+	<tr>
+		<th><?=lang('voc.i18n_average_quality')?></th>
+	</tr>
+	<tr>
+		<td><div id='charttotalquality<?=$data['catid'][$categoryname]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+	</tr>
+	<tr>
+		<th><?=lang('voc.i18n_bytesxquality')?></th>
+	</tr>
+	<tr>
+		<td><div id='charttotalbytesxquality<?=$data['catid'][$categoryname]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+	</tr>
+	<? if (!isset($data['cataveragevalue'][$categoryname])) echo "-->";?>
+	
+	<tr>
+		<th><?=lang('voc.i18n_users')?></th>
+	</tr>
+	<tr>
+		<td><div id = "user_table<?=$data['catid'][$categoryname]?>"></div></td>
+	</tr>
+	
+	<? if(!isset($data['catimages'][$categoryname])) echo "<!--";?>
+	<tr>
+		<th><?=lang('voc.i18n_images')?></th>
+	</tr>
+	<tr>
+		<td><div id = "img_table<?=$data['catid'][$categoryname]?>"></div></td>
+	</tr>
+	<? if(!isset($data['catimages'][$categoryname])) echo "-->";?>
+	</table>
+	
+	
+	<!-- CHARTS SCRIPTS -->
 
-<!-- CHARTS SCRIPTS -->
 
-<script type='text/javascript' src='http://www.google.com/jsapi'></script>
 	<script type='text/javascript'>
 		google.load('visualization', '1', {'packages':['annotatedtimeline', 'corechart', 'table']});
-		google.setOnLoadCallback(drawChart<?=$categoryname?>);
-		function drawChart<?=$categoryname?>() {
-			var data1<?=$categoryname?> = new google.visualization.DataTable();
-			data1<?=$categoryname?>.addColumn('datetime', 'Date');
-			data1<?=$categoryname?>.addColumn('number', 'Editions');
-			data1<?=$categoryname?>.addRows([
+		function drawChart<?=$data['catid'][$categoryname]?>() {
+			var data1<?=$data['catid'][$categoryname]?> = new google.visualization.DataTable();
+			data1<?=$data['catid'][$categoryname]?>.addColumn('datetime', 'Date');
+			data1<?=$data['catid'][$categoryname]?>.addColumn('number', 'Editions');
+			data1<?=$data['catid'][$categoryname]?>.addRows([
 			<?
 				foreach(array_keys($data['catedits'][$categoryname]) as $key){
 					echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
@@ -38,8 +140,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			?>
 			]);
 
-			var chartedits<?=$categoryname?> = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotaledits<?=$categoryname?>'));
-			chartedits<?=$categoryname?>.draw(data1<?=$categoryname?>, {
+			var chartedits<?=$data['catid'][$categoryname]?> = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotaledits<?=$data['catid'][$categoryname]?>'));
+			chartedits<?=$data['catid'][$categoryname]?>.draw(data1<?=$data['catid'][$categoryname]?>, {
 				'displayAnnotations': false,
 				'fill': 20,
                                 'legendPosition': 'newRow',
@@ -47,10 +149,10 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
                                 );
 			
 			
-			var data2<?=$categoryname?> = new google.visualization.DataTable();
-			data2<?=$categoryname?>.addColumn('datetime', 'Date');
-			data2<?=$categoryname?>.addColumn('number', 'Bytes');
-			data2<?=$categoryname?>.addRows([
+			var data2<?=$data['catid'][$categoryname]?> = new google.visualization.DataTable();
+			data2<?=$data['catid'][$categoryname]?>.addColumn('datetime', 'Date');
+			data2<?=$data['catid'][$categoryname]?>.addColumn('number', 'Bytes');
+			data2<?=$data['catid'][$categoryname]?>.addRows([
 			<?
 				foreach(array_keys($data['catbytes'][$categoryname]) as $key){
 					echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
@@ -61,18 +163,18 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			?>
 			]);
 
-			var chartbytes<?=$categoryname?> = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalbytes<?=$categoryname?>'));
-			chartbytes<?=$categoryname?>.draw(data2<?=$categoryname?>, {
+			var chartbytes<?=$data['catid'][$categoryname]?> = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalbytes<?=$data['catid'][$categoryname]?>'));
+			chartbytes<?=$data['catid'][$categoryname]?>.draw(data2<?=$data['catid'][$categoryname]?>, {
 				'displayAnnotations': false,
 				'fill': 20,
                                 'legendPosition': 'newRow',
                                 'wmode': 'transparent'}
                                 );
                                 
-                        var data4<?=$categoryname?> = new google.visualization.DataTable();
-			data4<?=$categoryname?>.addColumn('datetime', 'Date');
-			data4<?=$categoryname?>.addColumn('number', 'Users');
-			data4<?=$categoryname?>.addRows([
+                        var data4<?=$data['catid'][$categoryname]?> = new google.visualization.DataTable();
+			data4<?=$data['catid'][$categoryname]?>.addColumn('datetime', 'Date');
+			data4<?=$data['catid'][$categoryname]?>.addColumn('number', 'Users');
+			data4<?=$data['catid'][$categoryname]?>.addRows([
 			<?
 				foreach(array_keys($data['catusers'][$categoryname]) as $key){
 					echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
@@ -83,8 +185,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			?>
 			]);
 
-			var chartusers<?=$categoryname?> = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalusers<?=$categoryname?>'));
-			chartusers<?=$categoryname?>.draw(data4<?=$categoryname?>, {
+			var chartusers<?=$data['catid'][$categoryname]?> = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalusers<?=$data['catid'][$categoryname]?>'));
+			chartusers<?=$data['catid'][$categoryname]?>.draw(data4<?=$data['catid'][$categoryname]?>, {
 				'displayAnnotations': false,
 				'fill': 20,
                                 'legendPosition': 'newRow',
@@ -92,10 +194,10 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
                                 }
                         );
                         
-                        var data3<?=$categoryname?> = new google.visualization.DataTable();
-			data3<?=$categoryname?>.addColumn('datetime', 'Date');
-			data3<?=$categoryname?>.addColumn('number', 'Pages');
-			data3<?=$categoryname?>.addRows([
+                        var data3<?=$data['catid'][$categoryname]?> = new google.visualization.DataTable();
+			data3<?=$data['catid'][$categoryname]?>.addColumn('datetime', 'Date');
+			data3<?=$data['catid'][$categoryname]?>.addColumn('number', 'Pages');
+			data3<?=$data['catid'][$categoryname]?>.addRows([
 			<?
 				foreach(array_keys($data['catpages'][$categoryname]) as $key){
 					echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
@@ -106,8 +208,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			?>
 			]);
 
-			var chartpages<?=$categoryname?> = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalpages<?=$categoryname?>'));
-			chartpages<?=$categoryname?>.draw(data4<?=$categoryname?>, {
+			var chartpages<?=$data['catid'][$categoryname]?> = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalpages<?=$data['catid'][$categoryname]?>'));
+			chartpages<?=$data['catid'][$categoryname]?>.draw(data4<?=$data['catid'][$categoryname]?>, {
 				'displayAnnotations': false,
 				'fill': 20,
                                 'legendPosition': 'newRow',
@@ -115,7 +217,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
                                 }
                         );
                         
-                        var data5<?=$categoryname?> = new google.visualization.arrayToDataTable([
+                        var data5<?=$data['catid'][$categoryname]?> = new google.visualization.arrayToDataTable([
 				['Hour', 'Editions'],
 			<?
 				foreach(array_keys($data['catactivityhour'][$categoryname]) as $key){
@@ -127,16 +229,16 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			?>
 			]);
 			
-			var options5<?=$categoryname?> = {
+			var options5<?=$data['catid'][$categoryname]?> = {
 				hAxis: {title: 'Hour', titleTextStyle: {data: 'green'}},
 				isStacked:true,
 			};
 
-			var charttotalactivityhour<?=$categoryname?> = new google.visualization.ColumnChart(document.getElementById('charttotalactivityhour<?=$categoryname?>'));
-			charttotalactivityhour<?=$categoryname?>.draw(data5<?=$categoryname?>, options5<?=$categoryname?>);
+			var charttotalactivityhour<?=$data['catid'][$categoryname]?> = new google.visualization.ColumnChart(document.getElementById('charttotalactivityhour<?=$data['catid'][$categoryname]?>'));
+			charttotalactivityhour<?=$data['catid'][$categoryname]?>.draw(data5<?=$data['catid'][$categoryname]?>, options5<?=$data['catid'][$categoryname]?>);
 			
 			
-			var data6<?=$categoryname?> = new google.visualization.arrayToDataTable([
+			var data6<?=$data['catid'][$categoryname]?> = new google.visualization.arrayToDataTable([
 				['Week Day', 'Editions'],
 			<?
 				foreach(array_keys($data['catactivitywday'][$categoryname]) as $key){
@@ -148,16 +250,16 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			?>
 			]);
 			
-			var options6<?=$categoryname?> = {
+			var options6<?=$data['catid'][$categoryname]?> = {
 				hAxis: {title: 'Week Day', titleTextStyle: {data: 'green'}},
 				isStacked:true,
 			};
 
-			var charttotalactivitywday<?=$categoryname?> = new google.visualization.ColumnChart(document.getElementById('charttotalactivitywday<?=$categoryname?>'));
-			charttotalactivitywday<?=$categoryname?>.draw(data6<?=$categoryname?>, options6<?=$categoryname?>);
+			var charttotalactivitywday<?=$data['catid'][$categoryname]?> = new google.visualization.ColumnChart(document.getElementById('charttotalactivitywday<?=$data['catid'][$categoryname]?>'));
+			charttotalactivitywday<?=$data['catid'][$categoryname]?>.draw(data6<?=$data['catid'][$categoryname]?>, options6<?=$data['catid'][$categoryname]?>);
 			
 			
-			var data7<?=$categoryname?> = new google.visualization.arrayToDataTable([
+			var data7<?=$data['catid'][$categoryname]?> = new google.visualization.arrayToDataTable([
 				['Week', 'Editions'],
 			<?
 				foreach(array_keys($data['catactivityweek'][$categoryname]) as $key){
@@ -169,15 +271,15 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			?>
 			]);
 			
-			var options7<?=$categoryname?> = {
+			var options7<?=$data['catid'][$categoryname]?> = {
 				hAxis: {title: 'Week', titleTextStyle: {data: 'green'}},
 				isStacked:true,
 			};
 
-			var charttotalactivityweek<?=$categoryname?> = new google.visualization.ColumnChart(document.getElementById('charttotalactivityweek<?=$categoryname?>'));
-			charttotalactivityweek<?=$categoryname?>.draw(data7<?=$categoryname?>, options7<?=$categoryname?>);
+			var charttotalactivityweek<?=$data['catid'][$categoryname]?> = new google.visualization.ColumnChart(document.getElementById('charttotalactivityweek<?=$data['catid'][$categoryname]?>'));
+			charttotalactivityweek<?=$data['catid'][$categoryname]?>.draw(data7<?=$data['catid'][$categoryname]?>, options7<?=$data['catid'][$categoryname]?>);
 			
-			var data8<?=$categoryname?> = new google.visualization.arrayToDataTable([
+			var data8<?=$data['catid'][$categoryname]?> = new google.visualization.arrayToDataTable([
 				['Month', 'Editions'],
 			<?
 				foreach(array_keys($data['catactivitymonth'][$categoryname]) as $key){
@@ -189,15 +291,15 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			?>
 			]);
 			
-			var options8<?=$categoryname?> = {
+			var options8<?=$data['catid'][$categoryname]?> = {
 				hAxis: {title: 'Month', titleTextStyle: {data: 'green'}},
 				isStacked:true,
 			};
 
-			var charttotalactivitymonth<?=$categoryname?> = new google.visualization.ColumnChart(document.getElementById('charttotalactivitymonth<?=$categoryname?>'));
-			charttotalactivitymonth<?=$categoryname?>.draw(data8<?=$categoryname?>, options8<?=$categoryname?>);
+			var charttotalactivitymonth<?=$data['catid'][$categoryname]?> = new google.visualization.ColumnChart(document.getElementById('charttotalactivitymonth<?=$data['catid'][$categoryname]?>'));
+			charttotalactivitymonth<?=$data['catid'][$categoryname]?>.draw(data8<?=$data['catid'][$categoryname]?>, options8<?=$data['catid'][$categoryname]?>);
 			
-			var data9<?=$categoryname?> = new google.visualization.arrayToDataTable([
+			var data9<?=$data['catid'][$categoryname]?> = new google.visualization.arrayToDataTable([
 				['Year', 'Editions'],
 			<?
 				foreach(array_keys($data['catactivityyear'][$categoryname]) as $key){
@@ -209,21 +311,21 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			?>
 			]);
 			
-			var options9<?=$categoryname?> = {
+			var options9<?=$data['catid'][$categoryname]?> = {
 				hAxis: {title: 'Year', titleTextStyle: {data: 'green'}},
 				isStacked:true,
 			};
 
-			var charttotalactivityyear<?=$categoryname?> = new google.visualization.ColumnChart(document.getElementById('charttotalactivityyear<?=$categoryname?>'));
-			charttotalactivityyear<?=$categoryname?>.draw(data9<?=$categoryname?>, options9<?=$categoryname?>);
+			var charttotalactivityyear<?=$data['catid'][$categoryname]?> = new google.visualization.ColumnChart(document.getElementById('charttotalactivityyear<?=$data['catid'][$categoryname]?>'));
+			charttotalactivityyear<?=$data['catid'][$categoryname]?>.draw(data9<?=$data['catid'][$categoryname]?>, options9<?=$data['catid'][$categoryname]?>);
 			
 			
 			<?
 			if(isset($data['catuploads'][$categoryname])){
-					echo "var data10".$categoryname." = new google.visualization.DataTable();
-				data10".$categoryname.".addColumn('datetime', 'Date');
-				data10".$categoryname.".addColumn('number', 'Uploads');
-				data10".$categoryname.".addRows([";
+					echo "var data10".$data['catid'][$categoryname]." = new google.visualization.DataTable();
+				data10".$data['catid'][$categoryname].".addColumn('datetime', 'Date');
+				data10".$data['catid'][$categoryname].".addColumn('number', 'Uploads');
+				data10".$data['catid'][$categoryname].".addRows([";
 				
 					foreach(array_keys($data['catuploads'][$categoryname]) as $key){
 						echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
@@ -233,17 +335,18 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 				
 				echo "]);
 
-				var charttotaluploads".$categoryname." = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotaluploads".$categoryname."'));
-				charttotaluploads".$categoryname.".draw(data10".$categoryname.", {
+				var charttotaluploads".$data['catid'][$categoryname]." = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotaluploads".$data['catid'][$categoryname]."'));
+				charttotaluploads".$data['catid'][$categoryname].".draw(data10".$data['catid'][$categoryname].", {
 					'displayAnnotations': false,
 					'fill': 20,
-					'legendPosition': 'newRow'}
+					'legendPosition': 'newRow',
+					'wmode': 'transparent'}
 					);
 				
-				var data11".$categoryname." = new google.visualization.DataTable();
-				data11".$categoryname.".addColumn('datetime', 'Date');
-				data11".$categoryname.".addColumn('number', 'Upload Bytes');
-				data11".$categoryname.".addRows([";
+				var data11".$data['catid'][$categoryname]." = new google.visualization.DataTable();
+				data11".$data['catid'][$categoryname].".addColumn('datetime', 'Date');
+				data11".$data['catid'][$categoryname].".addColumn('number', 'Upload Bytes');
+				data11".$data['catid'][$categoryname].".addRows([";
 				
 					foreach(array_keys($data['catupsize'][$categoryname]) as $key){
 						echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
@@ -253,18 +356,19 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 				
 				echo "]);
 
-				var charttotalupsize".$categoryname." = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalupsize".$categoryname."'));
-				charttotalupsize".$categoryname.".draw(data11".$categoryname.", {
+				var charttotalupsize".$data['catid'][$categoryname]." = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalupsize".$data['catid'][$categoryname]."'));
+				charttotalupsize".$data['catid'][$categoryname].".draw(data11".$data['catid'][$categoryname].", {
 					'displayAnnotations': false,
 					'fill': 20,
-					'legendPosition': 'newRow'}
+					'legendPosition': 'newRow',
+					'wmode': 'transparent'}
 					);";
 					
-				echo "var imgs".$categoryname." = new google.visualization.DataTable();
-				imgs".$categoryname.".addColumn('string', 'Name');
-				imgs".$categoryname.".addColumn('number', 'Size');
-				imgs".$categoryname.".addColumn('datetime', 'Date');
-				imgs".$categoryname.".addRows([";
+				echo "var imgs".$data['catid'][$categoryname]." = new google.visualization.DataTable();
+				imgs".$data['catid'][$categoryname].".addColumn('string', 'Name');
+				imgs".$data['catid'][$categoryname].".addColumn('number', 'Size');
+				imgs".$data['catid'][$categoryname].".addColumn('datetime', 'Date');
+				imgs".$data['catid'][$categoryname].".addRows([";
 					foreach(array_keys($data['catimages'][$categoryname]) as $key){
 						echo "['".$data['catimages'][$categoryname][$key]."',";
 						echo $data['imagesize'][$data['catimages'][$categoryname][$key]].",";
@@ -275,18 +379,18 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 				echo "]);
 
 
-				var imgtable".$categoryname." = new google.visualization.Table(document.getElementById('img_table".$categoryname."'));
-				imgtable".$categoryname.".draw(imgs".$categoryname.", {showRowNumber: true});";
+				var imgtable".$data['catid'][$categoryname]." = new google.visualization.Table(document.getElementById('img_table".$data['catid'][$categoryname]."'));
+				imgtable".$data['catid'][$categoryname].".draw(imgs".$data['catid'][$categoryname].", {showRowNumber: true});";
 			}
 			?>
 			
 			<?
 			if(isset($data['cataveragevalue'][$categoryname])){
 			
-				echo "var data12".$categoryname." = new google.visualization.DataTable();
-				data12".$categoryname.".addColumn('datetime', 'Date');
-				data12".$categoryname.".addColumn('number', 'Average Grade');
-				data12".$categoryname.".addRows([";
+				echo "var data12".$data['catid'][$categoryname]." = new google.visualization.DataTable();
+				data12".$data['catid'][$categoryname].".addColumn('datetime', 'Date');
+				data12".$data['catid'][$categoryname].".addColumn('number', 'Average Grade');
+				data12".$data['catid'][$categoryname].".addRows([";
 			
 					foreach(array_keys($data['cataveragevalue'][$categoryname]) as $key){
 						$date = $data['revisiondate'][$key];
@@ -301,18 +405,19 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 					}
 				echo "]);
 
-				var charttotalquality".$categoryname." = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalquality".$categoryname."'));
-				charttotalquality".$categoryname.".draw(data12".$categoryname.", {
+				var charttotalquality".$data['catid'][$categoryname]." = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalquality".$data['catid'][$categoryname]."'));
+				charttotalquality".$data['catid'][$categoryname].".draw(data12".$data['catid'][$categoryname].", {
 					'displayAnnotations': false,
 					'fill': 20,
-					'legendPosition': 'newRow'}
+					'legendPosition': 'newRow',
+					'wmode': 'transparent'}
 					);
 				
-				var data13".$categoryname." = new google.visualization.DataTable();
-				data13".$categoryname.".addColumn('datetime', 'Date');
-				data13".$categoryname.".addColumn('number', 'Bytes X Quality');
-				data13".$categoryname.".addColumn('number', 'Bytes');
-				data13".$categoryname.".addRows([";
+				var data13".$data['catid'][$categoryname]." = new google.visualization.DataTable();
+				data13".$data['catid'][$categoryname].".addColumn('datetime', 'Date');
+				data13".$data['catid'][$categoryname].".addColumn('number', 'Bytes X Quality');
+				data13".$data['catid'][$categoryname].".addColumn('number', 'Bytes');
+				data13".$data['catid'][$categoryname].".addRows([";
 					$result = 0;
 					foreach(array_keys($data['catbytes'][$categoryname]) as $date){
 						$rev = $data['daterevision'][$date];
@@ -332,23 +437,24 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 					}
 				echo "]);
 				
-				var charttotalbytesxquality".$categoryname." = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalbytesxquality".$categoryname."'));
-				charttotalbytesxquality".$categoryname.".draw(data13".$categoryname.", {
+				var charttotalbytesxquality".$data['catid'][$categoryname]." = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalbytesxquality".$data['catid'][$categoryname]."'));
+				charttotalbytesxquality".$data['catid'][$categoryname].".draw(data13".$data['catid'][$categoryname].", {
 					'displayAnnotations': false,
 					'fill': 20,
-					'legendPosition': 'newRow'}
+					'legendPosition': 'newRow',
+					'wmode': 'transparent'}
 					);";
 			}
 			?>
 			
-			var data<?=$categoryname?> = new google.visualization.DataTable();
-			data<?=$categoryname?>.addColumn('string', 'Nick');
-			data<?=$categoryname?>.addColumn('string', 'Name');
-			data<?=$categoryname?>.addColumn('number', 'Edits');
-			data<?=$categoryname?>.addColumn('number', 'Edits %');
-			data<?=$categoryname?>.addColumn('number', 'Bytes');
-			data<?=$categoryname?>.addColumn('number', 'Bytes %');
-			data<?=$categoryname?>.addRows([
+			var data<?=$data['catid'][$categoryname]?> = new google.visualization.DataTable();
+			data<?=$data['catid'][$categoryname]?>.addColumn('string', 'Nick');
+			data<?=$data['catid'][$categoryname]?>.addColumn('string', 'Name');
+			data<?=$data['catid'][$categoryname]?>.addColumn('number', 'Edits');
+			data<?=$data['catid'][$categoryname]?>.addColumn('number', 'Edits %');
+			data<?=$data['catid'][$categoryname]?>.addColumn('number', 'Bytes');
+			data<?=$data['catid'][$categoryname]?>.addColumn('number', 'Bytes %');
+			data<?=$data['catid'][$categoryname]?>.addRows([
 			<? 
 				foreach(array_keys($data['catuser'][$categoryname]) as $key){
 					echo "['".$key."','".
@@ -369,127 +475,10 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			]);
 
 
-			var table<?=$categoryname?> = new google.visualization.Table(document.getElementById('user_table<?=$categoryname?>'));
-			table<?=$categoryname?>.draw(data<?=$categoryname?>, {showRowNumber: true});
+			var table<?=$data['catid'][$categoryname]?> = new google.visualization.Table(document.getElementById('user_table<?=$data['catid'][$categoryname]?>'));
+			table<?=$data['catid'][$categoryname]?>.draw(data<?=$data['catid'][$categoryname]?>, {showRowNumber: true});
 			
 		}
+		
+		drawChart<?=$data['catid'][$categoryname]?>();
 	</script>
-	
-<!-- CHARTS -->
-	<table id = "charttable">
-	<tr>
-		<th><?=lang('voc.i18n_edits_evolution')?></th>
-	</tr>
-	<tr>
-		<td><div id='charttotaledits<?=$categoryname?>' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
-	</tr>
-	<tr>
-		<th><?=lang('voc.i18n_content_evolution')?></th>
-	</tr>
-	<tr>
-		<td><div id='charttotalbytes<?=$categoryname?>' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
-	</tr>
-	<tr>
-		<th><?=lang('voc.i18n_users')?></th>
-	</tr>
-	<tr>
-		<td><div id='charttotalusers<?=$categoryname?>' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
-	</tr>
-	<tr>
-		<th><?=lang('voc.i18n_pages')?></th>
-	</tr>
-	<tr>
-		<td><div id='charttotalpages<?=$categoryname?>' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
-	</tr>
-	<tr>
-		<th><?=lang('voc.i18n_activity_hour')?></th>
-	</tr>
-	<tr>
-		<td><div id='charttotalactivityhour<?=$categoryname?>' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
-	</tr>
-	<tr>
-		<th><?=lang('voc.i18n_activity_wday')?></th>
-	</tr>
-	<tr>
-		<td><div id='charttotalactivitywday<?=$categoryname?>' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
-	</tr>
-	<tr>
-		<th><?=lang('voc.i18n_activity_week')?></th>
-	</tr>
-	<tr>
-		<td><div id='charttotalactivityweek<?=$categoryname?>' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
-	</tr>
-	<tr>
-		<th><?=lang('voc.i18n_activity_month')?></th>
-	</tr>
-	<tr>
-		<td><div id='charttotalactivitymonth<?=$categoryname?>' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
-	</tr>
-	<tr>
-		<th><?=lang('voc.i18n_activity_year')?></th>
-	</tr>
-	<tr>
-		<td><div id='charttotalactivityyear<?=$categoryname?>' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
-	</tr>
-	<? if (!isset($data['catuploads'][$categoryname])) echo "<!--";?>
-	<tr>
-		<th><?=lang('voc.i18n_uploads')?></th>
-	</tr>
-	<tr>
-		<td><div id='charttotaluploads<?=$categoryname?>' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
-	</tr>
-	<tr>
-		<th><?=lang('voc.i18n_upsize')?></th>
-	</tr>
-	<tr>
-		<td><div id='charttotalupsize<?=$categoryname?>' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
-	</tr>
-	<? if (!isset($data['catuploads'][$categoryname])) echo "-->";?>
-	<? if (!isset($data['cataveragevalue'][$categoryname])) echo "<!--";?>
-	<tr>
-		<th><?=lang('voc.i18n_average_quality')?></th>
-	</tr>
-	<tr>
-		<td><div id='charttotalquality<?=$categoryname?>' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
-	</tr>
-	<tr>
-		<th><?=lang('voc.i18n_bytesxquality')?></th>
-	</tr>
-	<tr>
-		<td><div id='charttotalbytesxquality<?=$categoryname?>' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
-	</tr>
-	<tr>
-		<th><?=lang('voc.i18n_hourquality')?></th>
-	</tr>
-	<tr>
-		<td><div id='qualityhourchart<?=$categoryname?>' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
-	</tr>
-	<? if (!isset($data['cataveragevalue'][$categoryname])) echo "-->";?>
-	</table>
-	
-	<br><br>
-	
-	<table id = "charttable">
-	<tr>
-		<th><?=lang('voc.i18n_users')?></th>
-	</tr>
-	<tr>
-		<td><div id = "user_table<?=$categoryname?>"></div></td>
-	</tr>
-	</table>
-	
-	<br><br>
-	
-	<? if(!isset($data['catimages'][$categoryname])) echo "<!--";?>
-	<table id = "charttable">
-	<tr>
-		<th><?=lang('voc.i18n_images')?></th>
-	</tr>
-	<tr>
-		<td><div id = "img_table<?=$categoryname?>"></div></td>
-	</tr>
-	</table>
-	<? if(!isset($data['catimages'][$categoryname])) echo "-->";?>
-			
-<!-- [2] www.christophermonnat.com/2008/08/generating-pdf-files-using-codeigniter -->
-<!--[2] TO_DO: generate pdf-->

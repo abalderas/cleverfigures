@@ -28,8 +28,10 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	<link href='http://fonts.googleapis.com/css?family=Playball&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Cinzel' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Donegal+One' rel='stylesheet' type='text/css'>
-	<script src="http://yui.yahooapis.com/3.8.0/build/yui/yui-min.js"></script>
 	<?= link_tag('css/styles.css')?>
+	<script src="http://yui.yahooapis.com/3.8.0/build/yui/yui-min.js"></script>
+	<script type='text/javascript' src='http://www.google.com/jsapi'></script>
+	
 	<script type="text/javascript">
 <!--
 
