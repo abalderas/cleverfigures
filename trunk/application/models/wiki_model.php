@@ -206,7 +206,7 @@ class Wiki_model extends CI_Model{
 		//Connecting to the wiki database
    		$link = $this->connection_model->connect($this->wconnection($wikiname));
    		
-   		echo "Querying database for general information...</br>";
+   		echo "Querying database for general information...";
    		ob_flush(); flush();
    		
    		//Creating query string for the general query
@@ -216,10 +216,16 @@ class Wiki_model extends CI_Model{
    		$query = $link->query($qstr);
    		
    		//If no results then return false
-   		if(!$query->result()) 
+   		if(!$query->result()){
+			echo "fail.</br>";
 			return false;
+		}
+		else
+			echo "done.</br>";
 			
-   		echo "Storing information...</br>";
+		$analisis_data = array();
+		
+   		echo "Storing information...";
    		ob_flush(); flush();
    		
    		//Initializing arrays for storing information
@@ -504,106 +510,219 @@ class Wiki_model extends CI_Model{
 			$pageuserbytes_per[$row->page_title][$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = ($pagebytescount[$row->page_title] != 0) ? $pageuserbytes[$row->page_title][$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] / $pagebytescount[$row->page_title] : 0;
    		}
    		
-   		echo "Querying database for category information...</br>";
+   		$analisis_data = array_merge($analisis_data, array('useredits' => $useredits
+			, 'useredits_art' => $useredits_art
+			, 'useredits_art_per' => $useredits_art_per
+			, 'useredits_per' => $useredits_per
+			, 'userbytes' => $userbytes
+			, 'userbytes_art' => $userbytes_art
+			, 'userbytes_art_per' => $userbytes_art_per
+			, 'userbytes_per' => $userbytes_per
+			, 'userrealname' => $userrealname
+			, 'usercreationcount' => $usercreationcount
+			, 'usercreatedpages' => $usercreatedpages
+			, 'userpagecount' => $userpagecount
+			, 'pageedits' => $pageedits
+			, 'pagebytes' => $pagebytes
+			, 'pagebytes_per' => $pagebytes_per
+			, 'pageedits_per' => $pageedits_per
+			, 'pagenamespace' => $pagenamespace
+			, 'pagevisits' => $pagevisits
+			, 'totaledits' => $totaledits
+			, 'totaledits_art' => $totaledits_art
+			, 'totaledits_talk' => $totaledits_talk
+			, 'totaledits_us' => $totaledits_us
+			, 'totaledits_ustalk' => $totaledits_ustalk
+			, 'totaledits_file' => $totaledits_file
+			, 'totaledits_temp' => $totaledits_temp
+			, 'totaledits_cat' => $totaledits_cat
+			, 'totalpages' => $totalpages
+			, 'totalpages_art' => $totalpages_art
+			, 'totalpages_talk' => $totalpages_art
+			, 'totalpages_us' => $totalpages_us
+			, 'totalpages_ustalk' => $totalpages_ustalk
+			, 'totalpages_file' => $totalpages_file
+			, 'totalpages_temp' => $totalpages_temp
+			, 'totalpages_cat' => $totalpages_cat
+			, 'totalusers' => $totalusers
+			, 'totalusers_art' => $totalusers_art
+			, 'totalvisits' => $totalvisits
+			, 'totalbytes' => $totalbytes
+			, 'totalbytes_art' => $totalbytes_art
+			, 'totalbytes_talk' => $totalbytes_talk
+			, 'totalbytes_us' => $totalbytes_us
+			, 'totalbytes_ustalk' => $totalbytes_ustalk
+			, 'totalbytes_file' => $totalbytes_file
+			, 'totalbytes_temp' => $totalbytes_temp
+			, 'totalbytes_cat' => $totalbytes_cat
+			, 'pageusercount' => $pageusercount
+			, 'revisiondate' => $revisiondate
+			, 'daterevision' => $daterevision
+			, 'userid' => $userid
+			, 'iduser' => $iduser
+			, 'useractivityhour' => $useractivityhour
+			, 'useractivitywday' => $useractivitywday
+			, 'useractivityweek' => $useractivityweek
+			, 'useractivitymonth' => $useractivitymonth
+			, 'useractivityyear' => $useractivityyear
+			, 'pageactivityhour' => $pageactivityhour
+			, 'pageactivitywday' => $pageactivitywday
+			, 'pageactivityweek' => $pageactivityweek
+			, 'pageactivitymonth' => $pageactivitymonth
+			, 'pageactivityyear' => $pageactivityyear
+			, 'totalactivityhour' => $totalactivityhour
+			, 'totalactivityhour_art' => $totalactivityhour_art
+			, 'totalactivitywday' => $totalactivitywday
+			, 'totalactivitywday_art' => $totalactivitywday_art
+			, 'totalactivityweek' => $totalactivityweek
+			, 'totalactivityweek_art' => $totalactivityweek_art
+			, 'totalactivitymonth' => $totalactivitymonth
+			, 'totalactivitymonth_art' => $totalactivitymonth_art
+			, 'totalactivityyear' => $totalactivityyear
+			, 'totalactivityyear_art' => $totalactivityyear_art
+			, 'revisionpage' => $revisionpage
+			, 'totalbytesdiff' => $totalbytesdiff
+			, 'userpage' => $userpage
+			, 'pageuser' => $pageuser
+			, 'pageuseredits' => $pageuseredits
+			, 'pageuseredits_per' => $pageuseredits_per
+			, 'pageuserbytes' => $pageuserbytes
+			, 'pageuserbytes_per' => $pageuserbytes_per
+			, 'revisionuser' => $revisionuser
+			, 'pageusereditscount' => $pageuseredits
+			, 'pageuserbytescount' => $pageuserbytes
+			, 'pageid' => $pageid));
+						
+   		echo "done.</br>";
+   		echo "Querying database for category information...";
    		
    		$qstr = "select rev_id, rev_page, page_title, page_counter, page_namespace, page_is_new, user_id, user_name, user_real_name, user_email, user_registration, rev_timestamp, cl_to, cat_pages, rev_len, cat_id from revision, user, page, categorylinks, category where rev_page = page_id and rev_user = user_id and page_id = cl_from and cl_to = cat_title order by rev_timestamp asc";		
 		
 		//Querying database
    		$query = $link->query($qstr);
+		
+		if($query->result()){
+			echo "done.</br>";
+			$catexist = true;
+			echo "Storing category information...";
+			ob_flush(); flush();
    		
-   		//If no results then return false
-   		if(!$query->result()) 
-			die ("ERROR CONSULTA CATEGORIAS");
+			//Initializing arrays for storing information
+			foreach($query->result() as $row){
+				
+				$cateditscount[$row->cl_to] = 0;
+				$catbytescount[$row->cl_to] = 0;
+				$catactivityhour[$row->cl_to][date('H', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
+				$catactivitywday[$row->cl_to][date('w', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
+				$catactivityweek[$row->cl_to][date('W', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
+				$catactivitymonth[$row->cl_to][date('m', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
+				$catactivityyear[$row->cl_to][date('Y', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
+				$catusereditscount[$row->cl_to][$row->user_name] = 0;
+				$catuserbytescount[$row->cl_to][$row->user_name] = 0;
+				
+				$usercat[$row->user_name] = array();
+				$pagecat[$row->page_title] = array();
+				$catuser[$row->cl_to] = array();
+				$catpage[$row->cl_to] = array();
+			}
 			
-   		echo "Storing category information...</br>";
-   		ob_flush(); flush();
-   		
-   		//Initializing arrays for storing information
-   		foreach($query->result() as $row){
 			
- 			$cateditscount[$row->cl_to] = 0;
-			$catbytescount[$row->cl_to] = 0;
-			$catactivityhour[$row->cl_to][date('H', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
-			$catactivitywday[$row->cl_to][date('w', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
-			$catactivityweek[$row->cl_to][date('W', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
-			$catactivitymonth[$row->cl_to][date('m', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
-			$catactivityyear[$row->cl_to][date('Y', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
-			$catusereditscount[$row->cl_to][$row->user_name] = 0;
-			$catuserbytescount[$row->cl_to][$row->user_name] = 0;
+			//Storing classified information in arrays
 			
-			$usercat[$row->user_name] = array();
-			$pagecat[$row->page_title] = array();
-			$catuser[$row->cl_to] = array();
-			$catpage[$row->cl_to] = array();
-		}
-   		
-   		
-   		//Storing classified information in arrays
-   		
-   		//This loop clasifies categories data contained in the query (which ignores uploads info) in arrays. 
-   		foreach($query->result() as $row){
-   			
-   			//USEFUL VARIABLES
-   			
-   			$LAST_PAGE_SIZE = ($row->page_is_new == 0) ? end($pagebytes[$row->page_title]) : 0;
-   			$LAST_PAGEBYTES_ARRAY = $pagebytes;
-   			$tamdiff = $row->rev_len - $LAST_PAGE_SIZE;
-   			
-   			//RELATION ARRAYS
-   			
-   			$catid	 [$row->cl_to] = $row->cat_id;
-   			
-   			$usercat [$row->user_name][$row->cl_to] = true;
-   			$pagecat [$row->page_title][$row->cl_to] = true;
-   			$catuser [$row->cl_to][$row->user_name] = true;
-   			$catpage [$row->cl_to][$row->page_title] = true;
+			//This loop clasifies categories data contained in the query (which ignores uploads info) in arrays. 
+			foreach($query->result() as $row){
+				
+				//USEFUL VARIABLES
+				
+				$LAST_PAGE_SIZE = ($row->page_is_new == 0) ? end($pagebytes[$row->page_title]) : 0;
+				$LAST_PAGEBYTES_ARRAY = $pagebytes;
+				$tamdiff = $row->rev_len - $LAST_PAGE_SIZE;
+				
+				//RELATION ARRAYS
+				
+				$catid	 [$row->cl_to] = $row->cat_id;
+				
+				$usercat [$row->user_name][$row->cl_to] = true;
+				$pagecat [$row->page_title][$row->cl_to] = true;
+				$catuser [$row->cl_to][$row->user_name] = true;
+				$catpage [$row->cl_to][$row->page_title] = true;
 
-			//USER INFORMATION
+				//USER INFORMATION
+				
+				$usercatcount[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = count($usercat[$row->user_name]);	// Categories per cat/date
+				$catusereditscount	[$row->cl_to][$row->user_name] += 1;					// Count of the total editions per cat & user
+				$catuserbytescount	[$row->cl_to][$row->user_name] += $tamdiff;				// Count of the total bytes per cat & user
+				$catuseredits		[$row->cl_to][$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $catusereditscount[$row->cl_to][$row->user_name];	// Count of editions per cat & user
+				$catuserbytes		[$row->cl_to][$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $catuserbytescount[$row->cl_to][$row->user_name];	// Bytes per cat/date
+				
+				
+				//PAGE INFORMATION
+				
+				$pagecatcount	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = count($pagecat[$row->page_title]);	// Categories per page/date   			
+				
+				//CATEGORY INFORMATION
+				
+				$cateditscount	[$row->cl_to] += 1;
+				
+				$catpages	[$row->cl_to][$this->mwtime_to_unix($row->rev_timestamp)] = count($catpage[$row->cl_to]);
+				$catusers	[$row->cl_to][$this->mwtime_to_unix($row->rev_timestamp)] = count($catuser[$row->cl_to]);
+				
+				$catedits	[$row->cl_to][$this->mwtime_to_unix($row->rev_timestamp)] = $cateditscount[$row->cl_to];
+				$catbytes	[$row->cl_to][$this->mwtime_to_unix($row->rev_timestamp)] = $this->last_psize_sum($LAST_PAGEBYTES_ARRAY, $catpage, $row->cl_to);
+				
+				$catactivityhour[$row->cl_to][date('H', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
+				$catactivitywday[$row->cl_to][date('w', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
+				$catactivityweek[$row->cl_to][date('W', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
+				$catactivitymonth[$row->cl_to][date('m', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
+				$catactivityyear[$row->cl_to][date('Y', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
+				
+				$revisioncategory[$row->cl_to][$row->rev_id] = true; 
+				
+				//TOTAL INFORMATION
+				
+				$aux_categories[$row->cl_to] = 1;
+				$totalcategories[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_categories);
+				
+				//PERCENTAGES
+				
+				$catpages_per[$row->cl_to][$this->mwtime_to_unix($row->rev_timestamp)] = $catpages[$row->cl_to][$this->mwtime_to_unix($row->rev_timestamp)] / $totalpages[$this->mwtime_to_unix($row->rev_timestamp)];
+				$catusers_per[$row->cl_to][$this->mwtime_to_unix($row->rev_timestamp)] = $catusers[$row->cl_to][$this->mwtime_to_unix($row->rev_timestamp)] / $totalusers[$this->mwtime_to_unix($row->rev_timestamp)];
+				$catedits_per[$row->cl_to][$this->mwtime_to_unix($row->rev_timestamp)] = $catedits[$row->cl_to][$this->mwtime_to_unix($row->rev_timestamp)] / $totaledits[$this->mwtime_to_unix($row->rev_timestamp)];
+				$catbytes_per[$row->cl_to][$this->mwtime_to_unix($row->rev_timestamp)] = $catbytes[$row->cl_to][$this->mwtime_to_unix($row->rev_timestamp)] / $totalbytes[$this->mwtime_to_unix($row->rev_timestamp)];
+			}
 			
-			$usercatcount[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = count($usercat[$row->user_name]);	// Categories per cat/date
-			$catusereditscount	[$row->cl_to][$row->user_name] += 1;					// Count of the total editions per cat & user
-			$catuserbytescount	[$row->cl_to][$row->user_name] += $tamdiff;				// Count of the total bytes per cat & user
-			$catuseredits		[$row->cl_to][$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $catusereditscount[$row->cl_to][$row->user_name];	// Count of editions per cat & user
-			$catuserbytes		[$row->cl_to][$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $catuserbytescount[$row->cl_to][$row->user_name];	// Bytes per cat/date
+			echo "done.</br>";
 			
-			
-			//PAGE INFORMATION
-			
-			$pagecatcount	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = count($pagecat[$row->page_title]);	// Categories per page/date   			
-   			
-			//CATEGORY INFORMATION
-			
-   			$cateditscount	[$row->cl_to] += 1;
-   			
-			$catpages	[$row->cl_to][$this->mwtime_to_unix($row->rev_timestamp)] = count($catpage[$row->cl_to]);
-			$catusers	[$row->cl_to][$this->mwtime_to_unix($row->rev_timestamp)] = count($catuser[$row->cl_to]);
-			
-   			$catedits	[$row->cl_to][$this->mwtime_to_unix($row->rev_timestamp)] = $cateditscount[$row->cl_to];
-   			$catbytes	[$row->cl_to][$this->mwtime_to_unix($row->rev_timestamp)] = $this->last_psize_sum($LAST_PAGEBYTES_ARRAY, $catpage, $row->cl_to);
-   			
-   			$catactivityhour[$row->cl_to][date('H', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-			$catactivitywday[$row->cl_to][date('w', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-			$catactivityweek[$row->cl_to][date('W', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-			$catactivitymonth[$row->cl_to][date('m', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-			$catactivityyear[$row->cl_to][date('Y', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-			
-			$revisioncategory[$row->cl_to][$row->rev_id] = true; 
-			
-			//TOTAL INFORMATION
-			
-			$aux_categories[$row->cl_to] = 1;
-			$totalcategories[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_categories);
-			
-			//PERCENTAGES
-			
-			$catpages_per[$row->cl_to][$this->mwtime_to_unix($row->rev_timestamp)] = $catpages[$row->cl_to][$this->mwtime_to_unix($row->rev_timestamp)] / $totalpages[$this->mwtime_to_unix($row->rev_timestamp)];
-			$catusers_per[$row->cl_to][$this->mwtime_to_unix($row->rev_timestamp)] = $catusers[$row->cl_to][$this->mwtime_to_unix($row->rev_timestamp)] / $totalusers[$this->mwtime_to_unix($row->rev_timestamp)];
-			$catedits_per[$row->cl_to][$this->mwtime_to_unix($row->rev_timestamp)] = $catedits[$row->cl_to][$this->mwtime_to_unix($row->rev_timestamp)] / $totaledits[$this->mwtime_to_unix($row->rev_timestamp)];
-			$catbytes_per[$row->cl_to][$this->mwtime_to_unix($row->rev_timestamp)] = $catbytes[$row->cl_to][$this->mwtime_to_unix($row->rev_timestamp)] / $totalbytes[$this->mwtime_to_unix($row->rev_timestamp)];
+			$analisis_data = array_merge($analisis_data, array('catpages' => $catpages
+						, 'catpages_per' => $catpages_per
+						, 'catusers' => $catusers
+						, 'catusers_per' => $catusers_per
+						, 'catedits' => $catedits
+						, 'catedits_per' => $catedits_per
+						, 'catbytes' => $catbytes
+						, 'catbytes_per' => $catbytes_per
+						, 'usercat' => $usercat
+						, 'usercatcount' => $usercatcount
+						, 'pagecatcount' => $pagecatcount
+						, 'catactivityhour' => $catactivityhour
+						, 'catactivitywday' => $catactivitywday
+						, 'catactivityweek' => $catactivityweek
+						, 'catactivitymonth' => $catactivitymonth
+						, 'catactivityyear' => $catactivityyear
+						, 'totalcategories' => $totalcategories
+						, 'pagecat' => $pagecat
+						, 'catuserbytes' => $catuserbytes
+						, 'catuseredits' => $catuseredits
+						, 'catuserbytescount' => $catuserbytescount
+						, 'catusereditscount' => $catusereditscount
+						, 'catuser' => $catuser
+						, 'revisioncategory' => $revisioncategory
+						, 'catid' => $catid));
    		}
+   		else 
+			echo "fail.</br>";
    		
-   		
-   		echo "Querying database for uploads information...</br>";
+   		echo "Querying database for uploads information...";
    		ob_flush(); flush();
    		
    		//Creating query string for the uploads query
@@ -614,8 +733,9 @@ class Wiki_model extends CI_Model{
 		
 		//If there is information about uploads
    		if($query->result()){
-   		echo "Uploads found. Storing uploads information...</br>";
-   		ob_flush(); flush();
+			echo "done.</br>";
+			echo "Storing uploads information...";
+			ob_flush(); flush();
    		
 			//Initializing arrays
 			foreach($query->result() as $row){
@@ -670,427 +790,82 @@ class Wiki_model extends CI_Model{
 				$pageupsize_per[$row->page_title][$this->mwtime_to_unix($row->img_timestamp)] = $pageupsize[$row->page_title][$this->mwtime_to_unix($row->img_timestamp)] / $totalupsize[$this->mwtime_to_unix($row->img_timestamp)];
 			}
 			
+			echo "done.</br>";
 			
-			echo "Querying database for uploads information in categories...</br>";
+			$analisis_data = array_merge($analisis_data, array('useruploads' => $useruploads
+							, 'useruploads_per' => $useruploads_per
+							, 'userupsize' => $userupsize
+							, 'userupsize_per' => $userupsize_per
+							, 'userimages' => $userimages
+							, 'pageuploads' => $pageuploads
+							, 'pageuploads_per' => $pageuploads_per
+							, 'pageupsize' => $pageupsize
+							, 'pageupsize_per' => $pageupsize_per
+							, 'pageimages' => $pageimages
+							, 'totaluploads' => $totaluploads
+							, 'totalupsize' => $totalupsize
+							, 'totalimages' => $totalimages
+							, 'imagesize' => $imagesize
+						));
 			
-			$qstr = "select img_name, user_name, img_timestamp, img_size, page_title, cl_to from image, page, user, imagelinks, categorylinks where img_name = il_to and il_from = page_id and page_id = cl_from and img_user = user_id order by img_timestamp asc";
+			if($catexist){
 			
-			//Querying database
-			$query = $link->query($qstr);
-			if($query->result()){
-				echo "Uploads found. Storing uploads information in categories...</br>";
-				ob_flush(); flush();
-			
-				//Initializing arrays
-				foreach($query->result() as $row){
-			
-					$catupsize[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] = 0;
-					$catuploadscount[$row->cl_to] = 0;
-					$catupsizecount[$row->cl_to] = 0;
+				echo "Querying database for uploads information in categories...";
+				
+				$qstr = "select img_name, user_name, img_timestamp, img_size, page_title, cl_to from image, page, user, imagelinks, categorylinks where img_name = il_to and il_from = page_id and page_id = cl_from and img_user = user_id order by img_timestamp asc";
+				
+				//Querying database
+				$query = $link->query($qstr);
+				if($query->result()){
+					echo "done.</br>";
+					echo "Storing uploads information in categories...";
+					ob_flush(); flush();
+				
+					//Initializing arrays
+					foreach($query->result() as $row){
+				
+						$catupsize[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] = 0;
+						$catuploadscount[$row->cl_to] = 0;
+						$catupsizecount[$row->cl_to] = 0;
+					}
+				
+					foreach($query->result() as $row){
+					
+						//CATEGORY UPLOAD INFORMATION
+						$catuploadscount[$row->cl_to] += 1;
+						$catupsizecount[$row->cl_to] += $row->img_size;
+					
+						$catuploads[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] = $catuploadscount[$row->cl_to];
+						$catimages[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] = $row->img_name;
+						$catupsize[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] = $catupsizecount[$row->cl_to];
+					
+					
+						//PERCENTAGES
+						$catuploads_per	[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] = $catuploads[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] / $totaluploads[$this->mwtime_to_unix($row->img_timestamp)];
+						$catupsize_per	[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] = $catupsize	[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] / $totalupsize [$this->mwtime_to_unix($row->img_timestamp)];
+					}
+					
+					echo "done.</br>";
+					ob_flush(); flush();
+				}else{
+					echo "fail.</br>";
+					ob_flush(); flush();
 				}
-			
-				foreach($query->result() as $row){
 				
-					//CATEGORY UPLOAD INFORMATION
-					$catuploadscount[$row->cl_to] += 1;
-					$catupsizecount[$row->cl_to] += $row->img_size;
-				
-					$catuploads[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] = $catuploadscount[$row->cl_to];
-					$catimages[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] = $row->img_name;
-					$catupsize[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] = $catupsizecount[$row->cl_to];
-				
-				
-					//PERCENTAGES
-					$catuploads_per	[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] = $catuploads[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] / $totaluploads[$this->mwtime_to_unix($row->img_timestamp)];
-					$catupsize_per	[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] = $catupsize	[$row->cl_to][$this->mwtime_to_unix($row->img_timestamp)] / $totalupsize [$this->mwtime_to_unix($row->img_timestamp)];
-				}
-				
-				$analisis_data = array(	  'catpages' => $catpages
-						, 'catpages_per' => $catpages_per
-						, 'catusers' => $catusers
-						, 'catusers_per' => $catusers_per
-						, 'catedits' => $catedits
-						, 'catedits_per' => $catedits_per
-						, 'catbytes' => $catbytes
-						, 'catbytes_per' => $catbytes_per
-						, 'useredits' => $useredits
-						, 'useredits_art' => $useredits_art
-						, 'useredits_art_per' => $useredits_art_per
-						, 'useredits_per' => $useredits_per
-						, 'userbytes' => $userbytes
-						, 'userbytes_art' => $userbytes_art
-						, 'userbytes_art_per' => $userbytes_art_per
-						, 'userbytes_per' => $userbytes_per
-						, 'userrealname' => $userrealname
-						, 'usercreationcount' => $usercreationcount
-						, 'usercreatedpages' => $usercreatedpages
-						, 'userpagecount' => $userpagecount
-						, 'usercat' => $usercat
-						, 'usercatcount' => $usercatcount
-						, 'pageedits' => $pageedits
-						, 'pagebytes' => $pagebytes
-						, 'pagebytes_per' => $pagebytes_per
-						, 'pageedits_per' => $pageedits_per
-						, 'pagenamespace' => $pagenamespace
-						, 'pagevisits' => $pagevisits
-						, 'totaledits' => $totaledits
-						, 'totaledits_art' => $totaledits_art
-						, 'totaledits_talk' => $totaledits_talk
-						, 'totaledits_us' => $totaledits_us
-						, 'totaledits_ustalk' => $totaledits_ustalk
-						, 'totaledits_file' => $totaledits_file
-						, 'totaledits_temp' => $totaledits_temp
-						, 'totaledits_cat' => $totaledits_cat
-						, 'totalpages' => $totalpages
-						, 'totalpages_art' => $totalpages_art
-						, 'totalpages_talk' => $totalpages_art
-						, 'totalpages_us' => $totalpages_us
-						, 'totalpages_ustalk' => $totalpages_ustalk
-						, 'totalpages_file' => $totalpages_file
-						, 'totalpages_temp' => $totalpages_temp
-						, 'totalpages_cat' => $totalpages_cat
-						, 'totalusers' => $totalusers
-						, 'totalusers_art' => $totalusers_art
-						, 'totalvisits' => $totalvisits
-						, 'totalbytes' => $totalbytes
-						, 'totalbytes_art' => $totalbytes_art
-						, 'totalbytes_talk' => $totalbytes_talk
-						, 'totalbytes_us' => $totalbytes_us
-						, 'totalbytes_ustalk' => $totalbytes_ustalk
-						, 'totalbytes_file' => $totalbytes_file
-						, 'totalbytes_temp' => $totalbytes_temp
-						, 'totalbytes_cat' => $totalbytes_cat
-						, 'useruploads' => $useruploads
-						, 'useruploads_per' => $useruploads_per
-						, 'userupsize' => $userupsize
-						, 'userupsize_per' => $userupsize_per
-						, 'userimages' => $userimages
-						, 'pageuploads' => $pageuploads
-						, 'pageuploads_per' => $pageuploads_per
-						, 'pageupsize' => $pageupsize
-						, 'pageupsize_per' => $pageupsize_per
-						, 'pageimages' => $pageimages
-						, 'pageusercount' => $pageusercount
-						, 'pagecatcount' => $pagecatcount
-						, 'catuploads' => $catuploads
-						, 'catuploads_per' => $catuploads_per
-						, 'catupsize' => $catupsize
-						, 'catupsize_per' => $catupsize_per
-						, 'catimages' => $catimages
-						, 'totaluploads' => $totaluploads
-						, 'totalupsize' => $totalupsize
-						, 'totalimages' => $totalimages
-						, 'revisiondate' => $revisiondate
-						, 'daterevision' => $daterevision
-						, 'userid' => $userid
-						, 'iduser' => $iduser
-						, 'useractivityhour' => $useractivityhour
-						, 'useractivitywday' => $useractivitywday
-						, 'useractivityweek' => $useractivityweek
-						, 'useractivitymonth' => $useractivitymonth
-						, 'useractivityyear' => $useractivityyear
-						, 'pageactivityhour' => $pageactivityhour
-						, 'pageactivitywday' => $pageactivitywday
-						, 'pageactivityweek' => $pageactivityweek
-						, 'pageactivitymonth' => $pageactivitymonth
-						, 'pageactivityyear' => $pageactivityyear
-						, 'catactivityhour' => $catactivityhour
-						, 'catactivitywday' => $catactivitywday
-						, 'catactivityweek' => $catactivityweek
-						, 'catactivitymonth' => $catactivitymonth
-						, 'catactivityyear' => $catactivityyear
-						, 'totalactivityhour' => $totalactivityhour
-						, 'totalactivityhour_art' => $totalactivityhour_art
-						, 'totalactivitywday' => $totalactivitywday
-						, 'totalactivitywday_art' => $totalactivitywday_art
-						, 'totalactivityweek' => $totalactivityweek
-						, 'totalactivityweek_art' => $totalactivityweek_art
-						, 'totalactivitymonth' => $totalactivitymonth
-						, 'totalactivitymonth_art' => $totalactivitymonth_art
-						, 'totalactivityyear' => $totalactivityyear
-						, 'totalactivityyear_art' => $totalactivityyear_art
-						, 'revisionpage' => $revisionpage
-						, 'revisioncategory' => $revisioncategory
-						, 'totalbytesdiff' => $totalbytesdiff
-						, 'totalcategories' => $totalcategories
-						, 'userpage' => $userpage
-						, 'pageuser' => $pageuser
-						, 'pageuseredits' => $pageuseredits
-						, 'pageuseredits_per' => $pageuseredits_per
-						, 'pageuserbytes' => $pageuserbytes
-						, 'pageuserbytes_per' => $pageuserbytes_per
-						, 'revisionuser' => $revisionuser
-						, 'pagecat' => $pagecat
-						, 'pageusereditscount' => $pageuseredits
-						, 'pageuserbytescount' => $pageuserbytes
-						, 'pageid' => $pageid
-						, 'imagesize' => $imagesize
-						, 'catuserbytes' => $catuserbytes
-						, 'catuseredits' => $catuseredits
-						, 'catuserbytescount' => $catuserbytescount
-						, 'catusereditscount' => $catusereditscount
-						, 'catuser' => $catuser
-						, 'catid' => $catid
-					);
-				
-				
-				echo ">> Wiki analisis accomplished.</br>";
-				ob_flush(); flush();
-				
-				return $analisis_data;
+				$analisis_data = array_merge($analisis_data, array('catuploads' => $catuploads
+					, 'catuploads_per' => $catuploads_per
+					, 'catupsize' => $catupsize
+					, 'catimages' => $catimages
+					, 'catupsize_per' => $catupsize_per));
 			}
-			
-			echo "Uploads information in categories not found.</br>";
-			ob_flush(); flush();
-   		
-			$analisis_data = array(	  'catpages' => $catpages
-					, 'catpages_per' => $catpages_per
-					, 'catusers' => $catusers
-					, 'catusers_per' => $catusers_per
-					, 'catedits' => $catedits
-					, 'catedits_per' => $catedits_per
-					, 'catbytes' => $catbytes
-					, 'catbytes_per' => $catbytes_per
-					, 'useredits' => $useredits
-					, 'useredits_art' => $useredits_art
-					, 'useredits_art_per' => $useredits_art_per
-					, 'useredits_per' => $useredits_per
-					, 'userbytes' => $userbytes
-					, 'userrealname' => $userrealname
-					, 'userbytes_art' => $userbytes_art
-					, 'userbytes_art_per' => $userbytes_art_per
-					, 'userbytes_per' => $userbytes_per
-					, 'usercreationcount' => $usercreationcount
-					, 'usercreatedpages' => $usercreatedpages
-					, 'userpagecount' => $userpagecount
-                                        , 'usercat' => $usercat
-					, 'usercatcount' => $usercatcount
-					, 'pageedits' => $pageedits
-					, 'pagebytes' => $pagebytes
-					, 'pagebytes_per' => $pagebytes_per
-					, 'pageedits_per' => $pageedits_per
-					, 'pagenamespace' => $pagenamespace
-					, 'pagevisits' => $pagevisits
-					, 'totaledits' => $totaledits
-					, 'totaledits_art' => $totaledits_art
-					, 'totaledits_talk' => $totaledits_talk
-					, 'totaledits_us' => $totaledits_us
-					, 'totaledits_ustalk' => $totaledits_ustalk
-					, 'totaledits_file' => $totaledits_file
-					, 'totaledits_temp' => $totaledits_temp
-					, 'totaledits_cat' => $totaledits_cat
-					, 'totalpages' => $totalpages
-					, 'totalpages_art' => $totalpages_art
-					, 'totalpages_talk' => $totalpages_art
-					, 'totalpages_us' => $totalpages_us
-					, 'totalpages_ustalk' => $totalpages_ustalk
-					, 'totalpages_file' => $totalpages_file
-					, 'totalpages_temp' => $totalpages_temp
-					, 'totalpages_cat' => $totalpages_cat
-					, 'totalusers' => $totalusers
-					, 'totalusers_art' => $totalusers_art
-					, 'totalvisits' => $totalvisits
-					, 'totalbytes' => $totalbytes
-					, 'totalbytes_art' => $totalbytes_art
-					, 'totalbytes_art' => $totalbytes_art
-					, 'totalbytes_talk' => $totalbytes_talk
-					, 'totalbytes_us' => $totalbytes_us
-					, 'totalbytes_ustalk' => $totalbytes_ustalk
-					, 'totalbytes_file' => $totalbytes_file
-					, 'totalbytes_temp' => $totalbytes_temp
-					, 'totalbytes_cat' => $totalbytes_cat
-					, 'useruploads' => $useruploads
-					, 'useruploads_per' => $useruploads_per
-					, 'userupsize' => $userupsize
-					, 'userupsize_per' => $userupsize_per
-					, 'userimages' => $userimages
-					, 'pageuploads' => $pageuploads
-					, 'pageuploads_per' => $pageuploads_per
-					, 'pageupsize' => $pageupsize
-					, 'pageupsize_per' => $pageupsize_per
-					, 'pageimages' => $pageimages
-					, 'pageusercount' => $pageusercount
-					, 'pagecatcount' => $pagecatcount
-					, 'totaluploads' => $totaluploads
-					, 'totalupsize' => $totalupsize
-					, 'totalimages' => $totalimages
-					, 'revisiondate' => $revisiondate
-					, 'userid' => $userid
-					, 'iduser' => $iduser
-					, 'useractivityhour' => $useractivityhour
-					, 'useractivitywday' => $useractivitywday
-					, 'useractivityweek' => $useractivityweek
-					, 'useractivitymonth' => $useractivitymonth
-					, 'useractivityyear' => $useractivityyear
-					, 'pageactivityhour' => $pageactivityhour
-					, 'pageactivitywday' => $pageactivitywday
-					, 'pageactivityweek' => $pageactivityweek
-					, 'pageactivitymonth' => $pageactivitymonth
-					, 'pageactivityyear' => $pageactivityyear
-					, 'catactivityhour' => $catactivityhour
-					, 'catactivitywday' => $catactivitywday
-					, 'catactivityweek' => $catactivityweek
-					, 'catactivitymonth' => $catactivitymonth
-					, 'catactivityyear' => $catactivityyear
-					, 'totalactivityhour' => $totalactivityhour
-					, 'totalactivityhour_art' => $totalactivityhour_art
-					, 'totalactivitywday' => $totalactivitywday
-					, 'totalactivitywday_art' => $totalactivitywday_art
-					, 'totalactivityweek' => $totalactivityweek
-					, 'totalactivityweek_art' => $totalactivityweek_art
-					, 'totalactivitymonth' => $totalactivitymonth
-					, 'totalactivitymonth_art' => $totalactivitymonth_art
-					, 'totalactivityyear' => $totalactivityyear
-					, 'totalactivityyear_art' => $totalactivityyear_art
-					, 'revisionpage' => $revisionpage
-					, 'revisioncategory' => $revisioncategory
-					, 'daterevision' => $daterevision
-					, 'totalbytesdiff' => $totalbytesdiff
-					, 'totalcategories' => $totalcategories
-					, 'userpage' => $userpage
-					, 'pageuser' => $pageuser
-					, 'pageuseredits' => $pageuseredits
-					, 'pageuseredits_per' => $pageuseredits_per
-					, 'pageuserbytes' => $pageuserbytes
-					, 'pageuserbytes_per' => $pageuserbytes_per
-					, 'revisionuser' => $revisionuser
-					, 'pagecat' => $pagecat
-					, 'pageusereditscount' => $pageuseredits
-					, 'pageuserbytescount' => $pageuserbytes
-					, 'pageid' => $pageid
-					, 'imagesize' => $imagesize
-					, 'catuserbytes' => $catuserbytes
-					, 'catuseredits' => $catuseredits
-					, 'catuserbytescount' => $catuserbytescount
-					, 'catusereditscount' => $catusereditscount
-					, 'catuser' => $catuser
-					, 'catid' => $catid
-				);
-				
-				
-			echo ">> Wiki analisis accomplished.</br>";
-			ob_flush(); flush();
-				
-			return $analisis_data;
+		}else{
+			echo "fail.</br>";
 		}
-   		
-   		echo "Uploads not found.</br>";
+		
+		echo ">> Wiki analisis accomplished.</br>";
    		ob_flush(); flush();
    		
-   		$analisis_data = array(	  'catpages' => $catpages
-				, 'catpages_per' => $catpages_per
-				, 'catusers' => $catusers
-				, 'catusers_per' => $catusers_per
-				, 'catedits' => $catedits
-				, 'catedits_per' => $catedits_per
-				, 'catbytes' => $catbytes
-				, 'catbytes_per' => $catbytes_per
-				, 'useredits' => $useredits
-				, 'useredits_art' => $useredits_art
-				, 'useredits_art_per' => $useredits_art_per
-				, 'useredits_per' => $useredits_per
-				, 'userbytes' => $userbytes
-				, 'userbytes_art' => $userbytes_art
-				, 'userrealname' => $userrealname
-				, 'userbytes_art_per' => $userbytes_art_per
-				, 'userbytes_per' => $userbytes_per
-				, 'usercreationcount' => $usercreationcount
-				, 'usercreatedpages' => $usercreatedpages
-				, 'userpagecount' => $userpagecount
-                                , 'usercat' => $usercat
-				, 'usercatcount' => $usercatcount
-				, 'pageedits' => $pageedits
-				, 'pagebytes' => $pagebytes
-				, 'pagebytes_per' => $pagebytes_per
-				, 'pageedits_per' => $pageedits_per
-				, 'pagenamespace' => $pagenamespace
-				, 'pagevisits' => $pagevisits
-				, 'totaledits' => $totaledits
-				, 'totaledits_art' => $totaledits_art
-				, 'totaledits_talk' => $totaledits_talk
-				, 'totaledits_us' => $totaledits_us
-				, 'totaledits_ustalk' => $totaledits_ustalk
-				, 'totaledits_file' => $totaledits_file
-				, 'totaledits_temp' => $totaledits_temp
-				, 'totaledits_cat' => $totaledits_cat
-				, 'totalpages' => $totalpages
-				, 'totalpages_art' => $totalpages_art
-				, 'totalpages_talk' => $totalpages_art
-				, 'totalpages_us' => $totalpages_us
-				, 'totalpages_ustalk' => $totalpages_ustalk
-				, 'totalpages_file' => $totalpages_file
-				, 'totalpages_temp' => $totalpages_temp
-				, 'totalpages_cat' => $totalpages_cat
-				, 'totalusers' => $totalusers
-				, 'totalusers_art' => $totalusers_art
-				, 'totalvisits' => $totalvisits
-				, 'totalbytes' => $totalbytes
-				, 'totalbytes_art' => $totalbytes_art
-				, 'totalbytes_art' => $totalbytes_art
-				, 'totalbytes_talk' => $totalbytes_talk
-				, 'totalbytes_us' => $totalbytes_us
-				, 'totalbytes_ustalk' => $totalbytes_ustalk
-				, 'totalbytes_file' => $totalbytes_file
-				, 'totalbytes_temp' => $totalbytes_temp
-				, 'totalbytes_cat' => $totalbytes_cat
-				, 'pageusercount' => $pageusercount
-				, 'pagecatcount' => $pagecatcount
-				, 'revisiondate' => $revisiondate
-				, 'userid' => $userid
-				, 'iduser' => $iduser
-				, 'useractivityhour' => $useractivityhour
-				, 'useractivitywday' => $useractivitywday
-				, 'useractivityweek' => $useractivityweek
-				, 'useractivitymonth' => $useractivitymonth
-				, 'useractivityyear' => $useractivityyear
-				, 'pageactivityhour' => $pageactivityhour
-				, 'pageactivitywday' => $pageactivitywday
-				, 'pageactivityweek' => $pageactivityweek
-				, 'pageactivitymonth' => $pageactivitymonth
-				, 'pageactivityyear' => $pageactivityyear
-				, 'catactivityhour' => $catactivityhour
-				, 'catactivitywday' => $catactivitywday
-				, 'catactivityweek' => $catactivityweek
-				, 'catactivitymonth' => $catactivitymonth
-				, 'catactivityyear' => $catactivityyear
-				, 'totalactivityhour' => $totalactivityhour
-				, 'totalactivityhour_art' => $totalactivityhour_art
-				, 'totalactivitywday' => $totalactivitywday
-				, 'totalactivitywday_art' => $totalactivitywday_art
-				, 'totalactivityweek' => $totalactivityweek
-				, 'totalactivityweek_art' => $totalactivityweek_art
-				, 'totalactivitymonth' => $totalactivitymonth
-				, 'totalactivitymonth_art' => $totalactivitymonth_art
-				, 'totalactivityyear' => $totalactivityyear
-				, 'totalactivityyear_art' => $totalactivityyear_art
-				, 'revisionpage' => $revisionpage
-				, 'revisioncategory' => $revisioncategory
-				, 'daterevision' => $daterevision
-				, 'totalbytesdiff' => $totalbytesdiff
-				, 'totalcategories' => $totalcategories
-				, 'userpage' => $userpage
-				, 'pageuser' => $pageuser
-				, 'pageuseredits' => $pageuseredits
-				, 'pageuseredits_per' => $pageuseredits_per
-				, 'pageuserbytes' => $pageuserbytes
-				, 'pageuserbytes_per' => $pageuserbytes_per
-				, 'revisionuser' => $revisionuser
-				, 'pagecat' => $pagecat
-				, 'pageusereditscount' => $pageuseredits
-				, 'pageuserbytescount' => $pageuserbytes
-				, 'pageid' => $pageid
-				, 'catuserbytes' => $catuserbytes
-				, 'catuseredits' => $catuseredits
-				, 'catuserbytescount' => $catuserbytescount
-				, 'catusereditscount' => $catusereditscount
-				, 'catuser' => $catuser
-				, 'catid' => $catid
-			);
-			
-		echo ">> Wiki analisis accomplished.</br>";
-		ob_flush(); flush();
-			
-		return $analisis_data;
+   		return $analisis_data;
    	}
    	
    	function delete_wiki($wikiname){

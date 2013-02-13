@@ -33,19 +33,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 				echo "<td>".unix_to_human($adate[$i])."</td>";
 				echo "<td>".$awiki[$i]."</td>";
 				echo "<td>".$acolor[$i]."</td>";
-				echo form_hidden('aname', $adate[$i]);
-				$btn_view = array(
-					'name' => 'view',
-					'id' => 'view',
-					'value' => 'view',
-					'onclick' => 'overlay.show();'
-				);
-				$btn_delete = array(
-					'name' => 'delete',
-					'id' => 'delete',
-					'value' => 'delete'
-				);
-				echo "<td>".form_submit($btn_view)." ".form_submit($btn_delete)."</td>";
+				echo "<td>".anchor('options_form/view/'.$adate[$i], 'View')." - ".anchor('options_form/delete/'.$adate[$i], 'Delete')."</td>";
 					
 			echo "</tr>";
 		}

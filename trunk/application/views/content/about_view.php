@@ -22,7 +22,7 @@ echo img('images/logo/logotrans.png');
 echo br();
 ?>
 
-<table id= "formins">
+<table width = "500px" align = "center">
 
 <tr><th>Copyright 2013 Alvaro Almagro Doello</th></tr>
 

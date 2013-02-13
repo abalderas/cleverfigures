@@ -119,7 +119,7 @@ class Color_model extends CI_Model{
 		//Connecting to the wiki database
    		$link = $this->connection_model->connect($this->wconnection($colorname));
    		
-   		echo "Querying database for assess information...</br>";
+   		echo "Querying database for assess information...";
 		ob_flush(); flush();
    		//Creating query string
    		$qstr = "select eva_user, eva_revisor, eva_revision, ent_entregable, ee_nota, ee_comentario from entregables, evaluaciones, evaluaciones_entregables where evaluaciones_entregables.eva_id = evaluaciones.eva_id and evaluaciones_entregables.ent_id = entregables.ent_id order by eva_revision asc";
@@ -129,9 +129,11 @@ class Color_model extends CI_Model{
    		
    		//If no results then return false
    		if(!$query->result()) 
-			die('ERROR');;
+			return false;
+			
+		echo "done.</br>";
    		
-   		echo "Storing assess information...</br>";
+   		echo "Storing assess information...";
 		ob_flush(); flush();
    		//Storing classified information in arrays 
    		foreach($query->result() as $row){
@@ -181,6 +183,7 @@ class Color_model extends CI_Model{
 			$totalrevisor	[$row->eva_revision] = $row->eva_revisor;
    		}
    		
+   		echo "done.</br>";
    		echo ">> Assess analisis accomplished.</br>";
 		ob_flush(); flush();
    		

@@ -158,27 +158,32 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
                                 'wmode': 'transparent'}
                                 );
                                 
-                        var data44 = new google.visualization.DataTable();
-			data44.addColumn('datetime', 'Date');
-			data44.addColumn('number', 'Total');
-			data44.addRows([
-			<?
-				foreach(array_keys($data['totalcategories']) as $key){
-					echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
-					$data['totalcategories'][$key].
-					"]";
-					if($key != end(array_keys($data['totalcategories']))) echo ",";
-				}
+                        <? 
+				if(isset($data['totalcategories'])){
+					echo "
+						var data44 = new google.visualization.DataTable();
+						data44.addColumn('datetime', 'Date');
+						data44.addColumn('number', 'Total');
+						data44.addRows([";
+						
+						foreach(array_keys($data['totalcategories']) as $key){
+							echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
+							$data['totalcategories'][$key].
+							"]";
+							if($key != end(array_keys($data['totalcategories']))) echo ",";
+						}
+					echo "]);
+	
+					var chartcats = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalcategories'));
+					chartcats.draw(data44, {
+						'displayAnnotations': false,
+						'fill': 20,
+						'legendPosition': 'newRow',
+						'wmode': 'transparent'}
+						);";
+                                }
+			
 			?>
-			]);
-
-			var chartcats = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalcategories'));
-			chartcats.draw(data44, {
-				'displayAnnotations': false,
-				'fill': 20,
-                                'legendPosition': 'newRow',
-                                'wmode': 'transparent'}
-                                );
 			
 			var data5 = new google.visualization.arrayToDataTable([
 				['Hour', 'Others', 'Articles'],
@@ -285,141 +290,150 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			var charttotalactivityyear = new google.visualization.ColumnChart(document.getElementById('charttotalactivityyear'));
 			charttotalactivityyear.draw(data9, options);
 			
-			var data10 = new google.visualization.DataTable();
-			data10.addColumn('datetime', 'Date');
-			data10.addColumn('number', '#Uploads');
-			data10.addRows([
 			<?
-				foreach(array_keys($data['totaluploads']) as $key){
-					echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
-					$data['totaluploads'][$key]."]";
-					if($key != end(array_keys($data['totaluploads']))) echo ",";
-				}
-			?>
-			]);
-
-			var charttotaluploads = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotaluploads'));
-			charttotaluploads.draw(data10, {
-				'displayAnnotations': false,
-				'fill': 20,
-                                'legendPosition': 'newRow',
-                                'wmode': 'transparent'}
-                                );
-			
-			var data11 = new google.visualization.DataTable();
-			data11.addColumn('datetime', 'Date');
-			data11.addColumn('number', 'Upload Bytes');
-			data11.addRows([
-			<?
-				foreach(array_keys($data['totalupsize']) as $key){
-					echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
-					$data['totalupsize'][$key]."]";
-					if($key != end(array_keys($data['totalupsize']))) echo ",";
-				}
-			?>
-			]);
-
-			var charttotalupsize = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalupsize'));
-			charttotalupsize.draw(data11, {
-				'displayAnnotations': false,
-				'fill': 20,
-                                'legendPosition': 'newRow',
-                                'wmode': 'transparent'}
-                                );
-			
-			var data12 = new google.visualization.DataTable();
-			data12.addColumn('datetime', 'Date');
-			data12.addColumn('number', 'Average Grade');
-			data12.addRows([
-			<?
-				foreach(array_keys($data['totalaverage']) as $key){
-					$date = $data['revisiondate'][$key];
-					echo "[new Date(".
-					date('Y', $date).", ".
-					date('m', $date)." ,".
-					date('d', $date)." ,".
-					date('H', $date)." ,".
-					date('i', $date)."), ".
-					$data['totalaverage'][$key]."]";
-					if($key != end(array_keys($data['totalaverage']))) echo ",";
-				}
-			?>
-			]);
-
-			var charttotalquality = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalquality'));
-			charttotalquality.draw(data12, {
-				'displayAnnotations': false,
-				'fill': 20,
-                                'legendPosition': 'newRow',
-                                'wmode': 'transparent'}
-                                );
-			
-			var data13 = new google.visualization.DataTable();
-			data13.addColumn('datetime', 'Date');
-			data13.addColumn('number', 'Bytes X Quality');
-			data13.addColumn('number', 'Bytes');
-			data13.addRows([
-			<?
-				$result = 0;
-				foreach(array_keys($data['totalbytes']) as $date){
-					$rev = $data['daterevision'][$date];
-					$grade = isset($data['totalaverage'][$rev])? $data['totalaverage'][$rev] : 5;
+				if(isset($data['totaluploads'])){
+					echo "
+						var data10 = new google.visualization.DataTable();
+						data10.addColumn('datetime', 'Date');
+						data10.addColumn('number', '#Uploads');
+						data10.addRows([";
 					
-					$result += $data['totalbytesdiff'][$date] + ($grade - 5) * ($data['totalbytesdiff'][$date]/5);
-					echo "[new Date(".
-					date('Y', $date).", ".
-					date('m', $date)." ,".
-					date('d', $date)." ,".
-					date('H', $date)." ,".
-					date('i', $date)."), ".
-					$result.", ".
-					$data['totalbytes'][$date].
-					"]";
-					if($date != end(array_keys($data['totalbytes']))) echo ",";
+					foreach(array_keys($data['totaluploads']) as $key){
+						echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
+						$data['totaluploads'][$key]."]";
+						if($key != end(array_keys($data['totaluploads']))) echo ",";
+					}
+					
+					echo "]);
+	
+					var charttotaluploads = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotaluploads'));
+					charttotaluploads.draw(data10, {
+						'displayAnnotations': false,
+						'fill': 20,
+						'legendPosition': 'newRow',
+						'wmode': 'transparent'}
+						);
+			
+			
+					var data11 = new google.visualization.DataTable();
+					data11.addColumn('datetime', 'Date');
+					data11.addColumn('number', 'Upload Bytes');
+					data11.addRows([";
+				
+					foreach(array_keys($data['totalupsize']) as $key){
+						echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
+						$data['totalupsize'][$key]."]";
+						if($key != end(array_keys($data['totalupsize']))) echo ",";
+					}
+					
+					echo "]);
+
+					var charttotalupsize = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalupsize'));
+					charttotalupsize.draw(data11, {
+						'displayAnnotations': false,
+						'fill': 20,
+						'legendPosition': 'newRow',
+						'wmode': 'transparent'}
+						);";
 				}
 			?>
-			]);
 			
-			var charttotalbytesxquality = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalbytesxquality'));
-			charttotalbytesxquality.draw(data13, {
-				'displayAnnotations': false,
-				'fill': 20,
-                                'legendPosition': 'newRow',
-                                'wmode': 'transparent'}
-                                );
-			
-			var data14 = new google.visualization.DataTable();
-			data14.addColumn('number', 'Hour');
-			data14.addColumn('number', 'Quality');
-			data14.addRows([
 			<?
-				foreach(array_keys($data['totalmark']) as $revision){
-					$date = $data['revisiondate'][$revision];
-					$accum[date('H', $date)] = 0;
-					$nrevs[date('H', $date)] = 0;
-				}
+				if(isset($data['totalaverage'])){
+					echo "	var data12 = new google.visualization.DataTable();
+						data12.addColumn('datetime', 'Date');
+						data12.addColumn('number', 'Average Grade');
+						data12.addRows([";
+						
+					foreach(array_keys($data['totalaverage']) as $key){
+						$date = $data['revisiondate'][$key];
+						echo "[new Date(".
+							date('Y', $date).", ".
+							date('m', $date)." ,".
+							date('d', $date)." ,".
+							date('H', $date)." ,".
+							date('i', $date)."), ".
+						$data['totalaverage'][$key]."]";
+						if($key != end(array_keys($data['totalaverage']))) echo ",";
+					}
+					echo "]);
+
+						var charttotalquality = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalquality'));
+						charttotalquality.draw(data12, {
+							'displayAnnotations': false,
+							'fill': 20,
+							'legendPosition': 'newRow',
+							'wmode': 'transparent'}
+							);
+							
+						var data13 = new google.visualization.DataTable();
+						data13.addColumn('datetime', 'Date');
+						data13.addColumn('number', 'Bytes X Quality');
+						data13.addColumn('number', 'Bytes');
+						data13.addRows([";
+						
+					$result = 0;
+					foreach(array_keys($data['totalbytes']) as $date){
+						$rev = $data['daterevision'][$date];
+						$grade = isset($data['totalaverage'][$rev])? $data['totalaverage'][$rev] : 5;
+						
+						$result += $data['totalbytesdiff'][$date] + ($grade - 5) * ($data['totalbytesdiff'][$date]/5);
+						echo "[new Date(".
+							date('Y', $date).", ".
+							date('m', $date)." ,".
+							date('d', $date)." ,".
+							date('H', $date)." ,".
+							date('i', $date)."), ".
+							$result.", ".
+							$data['totalbytes'][$date].
+						"]";
+						if($date != end(array_keys($data['totalbytes']))) echo ",";
+					}
+					
+					echo "]);
+						var charttotalbytesxquality = new google.visualization.AnnotatedTimeLine(document.getElementById('charttotalbytesxquality'));
+						charttotalbytesxquality.draw(data13, {
+							'displayAnnotations': false,
+							'fill': 20,
+							'legendPosition': 'newRow',
+							'wmode': 'transparent'}
+							);
+							
+						var data14 = new google.visualization.DataTable();
+						data14.addColumn('number', 'Hour');
+						data14.addColumn('number', 'Quality');
+						data14.addRows([";
+					
+					foreach(array_keys($data['totalmark']) as $revision){
+						$date = $data['revisiondate'][$revision];
+						$accum[date('H', $date)] = 0;
+						$nrevs[date('H', $date)] = 0;
+					}
 				
-				foreach(array_keys($data['totalmark']) as $revision){
-					$date = $data['revisiondate'][$revision];
-					$grade = $data['totalmark'][$revision];
-					$accum[date('H', $date)] += $grade;
-					$nrevs[date('H', $date)] += 1;
-				}
+					foreach(array_keys($data['totalmark']) as $revision){
+						$date = $data['revisiondate'][$revision];
+						$grade = $data['totalmark'][$revision];
+						$accum[date('H', $date)] += $grade;
+						$nrevs[date('H', $date)] += 1;
+					}
 				
-				foreach(array_keys($accum) as $hour){
-					echo "[".$hour.", ".($accum[$hour]/$nrevs[$hour])."]";
-					if($hour != end(array_keys($accum))) echo ",";
+					foreach(array_keys($accum) as $hour){
+						echo "[".$hour.", ".($accum[$hour]/$nrevs[$hour])."]";
+						if($hour != end(array_keys($accum))) echo ",";
+					}
+					
+					echo "]);
+					
+						var options = {
+							hAxis: {title: 'Hour', titleTextStyle: {data: 'green'}},
+							vAxis: {title: 'Quality', titleTextStyle: {data: 'green'}, minValue:0}
+						};
+			
+						var chartqualityhour = new google.visualization.ScatterChart(document.getElementById('qualityhourchart'));
+						chartqualityhour.draw(data14, options);";
 				}
 			?>
-			]);
 			
-			var options = {
-				hAxis: {title: 'Hour', titleTextStyle: {data: 'green'}},
-				vAxis: {title: 'Quality', titleTextStyle: {data: 'green'}, minValue:0}
-			};
-			
-			var chartqualityhour = new google.visualization.ScatterChart(document.getElementById('qualityhourchart'));
-			chartqualityhour.draw(data14, options);
 			
 			var data15 = google.visualization.arrayToDataTable([
 				['Type', 	'Editions'],
@@ -501,13 +515,15 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			data.addColumn('number', 'Bytes in articles %');
 			<? if(isset($data['useruploads'])) echo "data.addColumn('number', 'Uploads');";?>
 			<? if(isset($data['useruploads'])) echo "data.addColumn('number', 'Uploads %');";?>
-			data.addColumn('number', 'Average Grade');
-			data.addColumn('number', 'Standard Deviation');
-			data.addColumn('number', 'Maximum Grade');
-			data.addColumn('number', 'Minimum Grade');
-			data.addColumn('number', 'Average Grade as revisor');
-			data.addColumn('number', 'Maximum Grade as revisor');
-			data.addColumn('number', 'Minimum Grade as revisor');
+			<? if(isset($data['useraverage'])) echo "
+				data.addColumn('number', 'Average Grade');
+				data.addColumn('number', 'Standard Deviation');
+				data.addColumn('number', 'Maximum Grade');
+				data.addColumn('number', 'Minimum Grade');
+				data.addColumn('number', 'Average Grade as revisor');
+				data.addColumn('number', 'Maximum Grade as revisor');
+				data.addColumn('number', 'Minimum Grade as revisor');";
+			?>
 			data.addRows([
 			<? 
 				foreach(array_keys($data['useredits']) as $key){
@@ -520,27 +536,29 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 						round(end($data['userbytes'][$key]), 3).",".
 						round(end($data['userbytes_per'][$key]), 3).",".
 						(isset($data['userbytes_art'][$key])?round(end($data['userbytes_art'][$key]), 3):"0").",".
-						(isset($data['userbytes_art_per'][$key])?round(end($data['userbytes_art_per'][$key]), 3):"0").",";
-					if(isset($data['useruploads'][$key])) 
-						echo round(end($data['useruploads'][$key]), 3).",".
-							round(end($data['useruploads_per'][$key]), 3).",";
+						(isset($data['userbytes_art_per'][$key])?round(end($data['userbytes_art_per'][$key]), 3):"0");
+					if(isset($data['useruploads']))
+						if(isset($data['useruploads'][$key])) 
+							echo ",".round(end($data['useruploads'][$key]), 3).",".
+							round(end($data['useruploads_per'][$key]), 3);
 					else
-						echo "0, 0, ";
+						echo ", 0, 0";
+					if(isset($data['useraverage']))
+						if(isset($data['useraverage'][$data['userid'][$key]])) 
+							echo ",".round(end($data['useraverage'][$data['userid'][$key]]), 3).",".
+								round(end($data['usersd'][$data['userid'][$key]]), 3).",".
+								round(end($data['usermaxvalue'][$data['userid'][$key]]), 3).",".
+								round(end($data['userminvalue'][$data['userid'][$key]]), 3);
+						else
+							echo ", -1, -1, -1, -1";
 					
-					if(isset($data['useraverage'][$data['userid'][$key]])) 
-						echo round(end($data['useraverage'][$data['userid'][$key]]), 3).",".
-							round(end($data['usersd'][$data['userid'][$key]]), 3).",".
-							round(end($data['usermaxvalue'][$data['userid'][$key]]), 3).",".
-							round(end($data['userminvalue'][$data['userid'][$key]]), 3).",";
-					else
-						echo "0, 0, 0, 0, ";
-						
-					if(isset($data['revisoraverage'][$data['userid'][$key]])) 
-						echo round(end($data['revisoraverage'][$data['userid'][$key]]), 3).",".
-							round(end($data['revisormaxvalue'][$data['userid'][$key]]), 3).",".
-							round(end($data['revisorminvalue'][$data['userid'][$key]]), 3);
-					else
-						echo "0, 0, 0";
+					if(isset($data['useraverage']))
+						if(isset($data['revisoraverage'][$data['userid'][$key]])) 
+							echo ",".round(end($data['revisoraverage'][$data['userid'][$key]]), 3).",".
+								round(end($data['revisormaxvalue'][$data['userid'][$key]]), 3).",".
+								round(end($data['revisorminvalue'][$data['userid'][$key]]), 3);
+						else
+							echo ", -1, -1, -1";
 					echo "]\n";
 					
 					if($key != end(array_keys($data['useredits']))) echo ",";
@@ -561,10 +579,12 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			pagedata.addColumn('number', 'Bytes %');
 			<? if(isset($data['pageuploads'])) echo "pagedata.addColumn('number', 'Uploads');";?>
 			<? if(isset($data['pageuploads'])) echo "pagedata.addColumn('number', 'Uploads %');";?>
-			pagedata.addColumn('number', 'Average Grade');
-			pagedata.addColumn('number', 'Standard Deviation');
-			pagedata.addColumn('number', 'Min Grade');
-			pagedata.addColumn('number', 'Max Grade');
+			<? if(isset($data['pageaveragevalue'])) echo "
+				pagedata.addColumn('number', 'Average Grade');
+				pagedata.addColumn('number', 'Standard Deviation');
+				pagedata.addColumn('number', 'Min Grade');
+				pagedata.addColumn('number', 'Max Grade');";
+			?>
 			pagedata.addColumn('number', 'Visits');
 			pagedata.addColumn('number', 'Visits %');
 			pagedata.addRows([
@@ -576,19 +596,20 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 						round(end($data['pageedits_per'][$key]), 3).",".
 						round(end($data['pagebytes'][$key]), 3).",".
 						round(end($data['pagebytes_per'][$key]), 3);
-					if(isset($data['pageuploads'][$key])) 
-						echo ", ".round(end($data['pageuploads'][$key]), 3).",".
+					if(isset($data['pageuploads']))
+						if(isset($data['pageuploads'][$key])) 
+							echo ", ".round(end($data['pageuploads'][$key]), 3).",".
 							round(end($data['pageuploads_per'][$key]), 3);
 					else
 						echo ", 0, 0";
-					
-					if(isset($data['pageaveragevalue'][$key])) 
-						echo ", ".round(end($data['pageaveragevalue'][$key]), 3).",".
-							round(end($data['pagesd'][$key]), 3).",".
-							round(end($data['pageminvalue'][$key]), 3).",".
-							round(end($data['pagemaxvalue'][$key]), 3);
-					else
-						echo ", 0, 0, 0, 0";
+					if(isset($data['pageaveragevalue']))
+						if(isset($data['pageaveragevalue'][$key])) 
+							echo ", ".round(end($data['pageaveragevalue'][$key]), 3).",".
+								round(end($data['pagesd'][$key]), 3).",".
+								round(end($data['pageminvalue'][$key]), 3).",".
+								round(end($data['pagemaxvalue'][$key]), 3);
+						else
+							echo ", -1, -1, -1, -1";
 						
 					echo ", ".$data['pagevisits'][$key].", ".round($data['pagevisits'][$key] / array_sum($data['pagevisits']), 3);
 					
@@ -603,48 +624,51 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			var pagetable = new google.visualization.Table(document.getElementById('pages_table'));
 			pagetable.draw(pagedata, {showRowNumber: true});
 			
-			var catdata = new google.visualization.DataTable();
-			catdata.addColumn('string', 'Name');
-			catdata.addColumn('number', 'Edits');
-			catdata.addColumn('number', 'Edits %');
-			catdata.addColumn('number', 'Bytes');
-			catdata.addColumn('number', 'Bytes %');
-			catdata.addColumn('number', 'Pages');
-			catdata.addColumn('number', 'Pages %');
-			<? if(isset($data['catuploads'])) echo "catdata.addColumn('number', 'Uploads');";?>
-			<? if(isset($data['catuploads'])) echo "catdata.addColumn('number', 'Uploads %');";?>
-			catdata.addRows([
-			<? 
-				foreach(array_keys($data['catedits']) as $key){
-					echo "['".$key."', ".
-						round(end($data['catedits'][$key]), 3).",".
-						round(end($data['catedits_per'][$key]), 3).",".
-						round(end($data['catbytes'][$key]), 3).",".
-						round(end($data['catbytes_per'][$key]), 3).",".
-						round(end($data['catpages'][$key]), 3).", ".
-						round(end($data['catpages_per'][$key]), 3);
-					if(isset($data['catuploads'][$key])) 
-						echo ", ".round(end($data['catuploads'][$key]), 3).",".
-							round(end($data['catuploads_per'][$key]), 3);
-					else
-						echo ", 0, 0";
+			<?
+				if(isset($data['catedits'])){
+					echo "var catdata = new google.visualization.DataTable();
+						catdata.addColumn('string', 'Name');
+						catdata.addColumn('number', 'Edits');
+						catdata.addColumn('number', 'Edits %');
+						catdata.addColumn('number', 'Bytes');
+						catdata.addColumn('number', 'Bytes %');
+						catdata.addColumn('number', 'Pages');
+						catdata.addColumn('number', 'Pages %');";
+						if(isset($data['catuploads'])) echo "catdata.addColumn('number', 'Uploads');";
+						if(isset($data['catuploads'])) echo "catdata.addColumn('number', 'Uploads %');";
+			
+					echo "catdata.addRows([";
+					foreach(array_keys($data['catedits']) as $key){
+						echo "['".$key."', ".
+							round(end($data['catedits'][$key]), 3).",".
+							round(end($data['catedits_per'][$key]), 3).",".
+							round(end($data['catbytes'][$key]), 3).",".
+							round(end($data['catbytes_per'][$key]), 3).",".
+							round(end($data['catpages'][$key]), 3).", ".
+							round(end($data['catpages_per'][$key]), 3);
+						if(isset($data['catuploads'][$key])) 
+							echo ", ".round(end($data['catuploads'][$key]), 3).",".
+								round(end($data['catuploads_per'][$key]), 3);
+						else
+							echo ", 0, 0";
 					
-					echo "]\n";
+						echo "]\n";
 					
-					if($key != end(array_keys($data['catedits']))) echo ",";
+						if($key != end(array_keys($data['catedits']))) echo ",";
+					}
+					echo "]);
+					
+					var cattable = new google.visualization.Table(document.getElementById('categories_table'));
+					cattable.draw(catdata, {showRowNumber: true});";
 				}
 			?>
-			]);
-
-
-			var cattable = new google.visualization.Table(document.getElementById('categories_table'));
-			cattable.draw(catdata, {showRowNumber: true});
 		}
 	</script>
 	
 	<!-- FILTERS FORM -->
 	
 	<script>
+	
 		YUI().use('autocomplete', 'autocomplete-highlighters', 'autocomplete-filters', function (Y) {
 			Y.one('body').addClass('yui3-skin-sam');
 			Y.one('#filterstring').plug(Y.Plugin.AutoComplete, {
@@ -652,40 +676,45 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 				resultFilters: ['subWordMatch'],
 				queryDelimiter: ',',
 				source: function(query){
-			var myindex  = document.getElementById("select_filter").selectedIndex;
-			var SelValue = document.getElementById("select_filter").options[myindex].value;
-		
-			if(SelValue == "<?=lang('voc.i18n_user')?>"){
-				return [
-				<?
-					foreach(array_keys($data['useredits']) as $key){
-						echo "'".$key."'";
-						if($key != end(array_keys($data['useredits']))) echo ",";
-					}
-				?>
-				];
-			} else if(SelValue == "<?=lang('voc.i18n_page')?>"){
-				return [
-				<?
-					foreach(array_keys($data['pageedits']) as $key){
-						echo "'".$key."'";
-						if($key != end(array_keys($data['pageedits']))) echo ",";
-					}
-				?>
-				];
-			} else if(SelValue == "<?=lang('voc.i18n_category')?>"){
-				return [
-				<?
-					foreach(array_keys($data['catedits']) as $key){
-						echo "'".$key."'";
-						if($key != end(array_keys($data['catedits']))) echo ",";
-					}
-				?>
-				];
-			}
-		}
+					var myindex  = document.getElementById("select_filter").selectedIndex;
+					var SelValue = document.getElementById("select_filter").options[myindex].value;
+			
+					if(SelValue == "<?=lang('voc.i18n_user')?>"){
+						return [
+						<?
+							foreach(array_keys($data['useredits']) as $key){
+								echo "'".$key."'";
+								if($key != end(array_keys($data['useredits']))) echo ",";
+							}
+						?>
+						];
+					} else if(SelValue == "<?=lang('voc.i18n_page')?>"){
+						return [
+						<?
+							foreach(array_keys($data['pageedits']) as $key){
+								echo "'".$key."'";
+								if($key != end(array_keys($data['pageedits']))) echo ",";
+							}
+						?>
+						];
+					} 
+				
+					<?
+						if(isset($data['catedits'])){
+							echo "else if(SelValue == ".lang('voc.i18n_category')."){
+								return [";
+							foreach(array_keys($data['catedits']) as $key){
+								echo "'".$key."'";
+								if($key != end(array_keys($data['catedits']))) echo ",";
+							}
+							echo "];
+							}";
+						}
+					?>
+				}
 			});
 		});
+		
 	</script>
 
 	<? echo form_open('filters_form', array('class' => "yui3-skin-sam")); ?>
@@ -696,14 +725,21 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	<tr>
 		<td style = "width:800px">
 		<?
-			$options = array(lang('voc.i18n_user') => lang('voc.i18n_user'),
+			if(isset($data['catedits']))
+				$options = array(lang('voc.i18n_user') => lang('voc.i18n_user'),
 								lang('voc.i18n_page') => lang('voc.i18n_page'),
 								lang('voc.i18n_category') => lang('voc.i18n_category')
+								//lang('voc.i18n_criteria') => lang('voc.i18n_criteria'))
+								);
+			else
+				$options = array(lang('voc.i18n_user') => lang('voc.i18n_user'),
+								lang('voc.i18n_page') => lang('voc.i18n_page')
 								//lang('voc.i18n_criteria') => lang('voc.i18n_criteria'))
 								);
 			echo form_dropdown('select_filter', $options, lang('voc.i18n_user'), "id = 'select_filter'");
 			
 			echo "   ";
+			echo form_hidden('aname', $aname);
 			echo form_input(array('id' => 'filterstring', 'name' => 'filterstring', 'class' => 'cssform', 'width' => '80%'));
 		?>
 		</td>
@@ -762,12 +798,14 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	<tr>
 		<td><div id='charttotalusers' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
+	<?if(!isset($data['totalcategories'])) echo "<!--";?>
 	<tr>
 		<th><?=lang('voc.i18n_categories')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalcategories' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
+	<?if(!isset($data['totalcategories'])) echo "-->";?>
 	<tr>
 		<th><?=lang('voc.i18n_activity_hour')?></th>
 	</tr>
@@ -857,15 +895,16 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	</table>
 	
 	<br><br>
-	
-	<table id = "bodytable">
+	<?if(!isset($data['catedits'])) echo "<!--";?>
+	<table id = 'bodytable'>
 	<tr>
 		<th><?=lang('voc.i18n_categories')?></th>
 	</tr>
 	<tr>
-		<td><div id = "categories_table"></div></td>
+		<td><div id = 'categories_table'></div></td>
 	</tr>
 	</table>
+	<?if(!isset($data['catedits'])) echo "-->";?>
 			
 <!-- [2] www.christophermonnat.com/2008/08/generating-pdf-files-using-codeigniter -->
 <!--[2] TO_DO: generate pdf-->

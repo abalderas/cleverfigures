@@ -41,26 +41,43 @@ class Options_form extends CI_Controller {
 			$this->load->view('content/login_view');
 			$this->load->view('templates/footer_view');
 		}
+	}
+	
+	function delete($name){
+		if(!$this->session->userdata('username')){
+			$datah = array('title' => lang('voc.i18n_login'));
+			
+			$this->load->view('templates/header_view', $datah);
+			$this->load->view('content/login_view');
+			$this->load->view('templates/footer_view');
+		}
 		else{
 		
-			if(isset($_POST['delete'])){
-				$datah = array('title' => lang('voc.i18n_delete_analisis'));
+			$datah = array('title' => lang('voc.i18n_delete_analisis'));
 				
-				$this->load->view('templates/header_view', $datah);
-				$this->load->view('content/delete_analisis_view', array('analisis' => $_POST['aname']));
-				$this->load->view('templates/footer_view');
-			}
-			else if(isset($_POST['view'])){
-				$datah = array('title' => lang('voc.i18n_check_results'));
+			$this->load->view('templates/header_view', $datah);
+			$this->load->view('content/delete_analisis_view', array('analisis' => $name));
+			$this->load->view('templates/footer_view');
+		}
+	}
+	
+	function view($name){
+		if(!$this->session->userdata('username')){
+			$datah = array('title' => lang('voc.i18n_login'));
+			
+			$this->load->view('templates/header_view', $datah);
+			$this->load->view('content/login_view');
+			$this->load->view('templates/footer_view');
+		}
+		else{
+		
+			$datah = array('title' => lang('voc.i18n_check_results'));
 				
-				$adata = $this->analisis_model->get_analisis_data($_POST['aname']);
-				$this->session->set_flashdata('aname', $_POST['aname']);
-				
-				$this->load->view('templates/header_view', $datah);
-				$this->load->view('content/check_results_view', array('data' => $adata));
-				$this->load->view('templates/footer_view');
-			}
-			else die('FATAL ERROR');
+			$adata = $this->analisis_model->get_analisis_data($name);
+			
+			$this->load->view('templates/header_view', $datah);
+			$this->load->view('content/check_results_view', array('aname' => $name, 'data' => $adata));
+			$this->load->view('templates/footer_view');
 		}
 	}
 }

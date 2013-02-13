@@ -43,6 +43,8 @@ class Analisis_form extends CI_Controller {
 	}
 	
 	private function extra_info($wikidata, $colordata){
+		$finaldata = array();
+		
 		foreach(array_keys($wikidata['revisionpage']) as $key){
 			foreach(array_keys($wikidata['revisionpage'][$key]) as $revision){
 				if(isset($wikidata['revisionpage'][$key][$revision]) and isset($colordata['totalmark'][$revision])){
@@ -60,39 +62,45 @@ class Analisis_form extends CI_Controller {
 			}
 		}
 		
-		foreach(array_keys($wikidata['revisioncategory']) as $key){
-			$catmaxvalue[$key] = 0;
-			$catminvalue[$key] = 10;
-			$catnvalues[$key] = 0;
-			$catvaluesum[$key] = 0;
-			
-			foreach(array_keys($wikidata['revisioncategory'][$key]) as $revision){
-				if(isset($wikidata['revisioncategory'][$key][$revision]) and isset($colordata['totalmark'][$revision])){
-					if($colordata['totalmark'][$revision] > $catmaxvalue[$key])
-						$catmaxvalue[$key] = $colordata['totalmark'][$revision];
-					if($colordata['totalmark'][$revision] < $catminvalue[$key])
-						$catminvalue[$key] = $colordata['totalmark'][$revision];
-						
-					$catnvalues[$key] += 1;
-					$catvaluesum[$key] += $colordata['totalmark'][$revision];
-					$cataveragevalue[$key][$revision] = $catvaluesum[$key] / $catnvalues[$key];
+		if(isset($pagegrades))
+			$finaldata = array_merge($finaldata, array(
+				'pagesd' => $pagesd, 
+				'pageusersd' => $pageusersd, 
+				'pageaveragevalue' => $pageaveragevalue, 
+				'pageuseraveragevalue' => $pageuseraveragevalue, 
+				'pagegrades' => $pagegrades,
+				'pageusergrades' => $pageusergrades,
+				'pageminvalue' => $pageminvalue,
+				'pagemaxvalue' => $pagemaxvalue));
+				
+		if(isset($wikidata['revisioncategory']))
+			foreach(array_keys($wikidata['revisioncategory']) as $key){
+				$catmaxvalue[$key] = 0;
+				$catminvalue[$key] = 10;
+				$catnvalues[$key] = 0;
+				$catvaluesum[$key] = 0;
+				
+				foreach(array_keys($wikidata['revisioncategory'][$key]) as $revision){
+					if(isset($wikidata['revisioncategory'][$key][$revision]) and isset($colordata['totalmark'][$revision])){
+						if($colordata['totalmark'][$revision] > $catmaxvalue[$key])
+							$catmaxvalue[$key] = $colordata['totalmark'][$revision];
+						if($colordata['totalmark'][$revision] < $catminvalue[$key])
+							$catminvalue[$key] = $colordata['totalmark'][$revision];
+							
+						$catnvalues[$key] += 1;
+						$catvaluesum[$key] += $colordata['totalmark'][$revision];
+						$cataveragevalue[$key][$revision] = $catvaluesum[$key] / $catnvalues[$key];
+					}
 				}
 			}
-		}
 		
-		return array(
-			'pagesd' => $pagesd, 
-			'pageusersd' => $pageusersd, 
-			'pageaveragevalue' => $pageaveragevalue, 
-			'pageuseraveragevalue' => $pageuseraveragevalue, 
-			'pagegrades' => $pagegrades,
-			'pageusergrades' => $pageusergrades,
-			'pageminvalue' => $pageminvalue,
-			'pagemaxvalue' => $pagemaxvalue,
-			'catmaxvalue' => $catmaxvalue, 
-			'catminvalue' => $catminvalue, 
-			'cataveragevalue' => $cataveragevalue
-		);
+		if(isset($catmaxvalue))
+			$finaldata = array_merge($finaldata, array(
+				'catmaxvalue' => $catmaxvalue, 
+				'catminvalue' => $catminvalue, 
+				'cataveragevalue' => $cataveragevalue));
+				
+		return $finaldata;
 	}
 	
    	private function analise($analisis_data, $name){
@@ -102,15 +110,27 @@ class Analisis_form extends CI_Controller {
 		$assess_result = array();
 		
 		$wiki_result = $this->wiki_model->fetch($analisis_data['wiki'], $name);
+		if(!$wiki_result)
+			return -1;
+			
 		if($analisis_data['color'] != lang('voc.i18n_no_color')){
 			$assess_result = $this->color_model->fetch($analisis_data['color'], $name);
+			
+			if(empty($assess_result))
+				return -2;
+				
 			$extra = $this->extra_info($wiki_result, $assess_result);
 			
+			if(empty($extra))
+				return -3;
+				
 			write_file("analisis/$name.dat", serialize(array_merge($wiki_result, $assess_result, $extra)));
 		}
 		else{
 			write_file("analisis/$name.dat", serialize(array_merge($wiki_result)));
 		}
+		
+		return true;
    	}
    	
    	function index(){
@@ -138,17 +158,24 @@ class Analisis_form extends CI_Controller {
 				
 				$start = microtime(true);
 
-				$this->analise($adata, $analisis);
-			
+				$valid_analisis = $this->analise($adata, $analisis);
 				ob_flush(); flush();
+				
+				if($valid_analisis == -1)
+					echo "<b>EMPTY WIKI. No analisis performed.</b>";
+				else if($valid_analisis == -2)
+					echo "<b>EMPTY QUALITATIVE DATA SOURCE. The qualitative data source that you chose is empty. Please select another.</b>";
+				else if($valid_analisis == -3)
+					echo "<b>INCOMPATIBLE QUALITATIVE DATA SOURCE. The qualitative data source that you chose is not compatible with the data in the wiki. Please select another.</b>";
+				else{
+					printf("Performed in %.02f seconds.</br>", (microtime(true)-$start));
+					ob_flush(); flush();
 			
-				printf("Performed in %.02f seconds.</br>", (microtime(true)-$start));
-				ob_flush(); flush();
-			
-				$this->analisis_model->register_analisis($_POST['select_wiki'], isset($_POST['select_color'])? $_POST['select_color'] : false, $analisis);
-				$this->user_model->relate_analisis($analisis);
-			
-				echo "<b>Analisis saved. You can check it in \"Performed Analisis\".</b>";
+					$this->analisis_model->register_analisis($_POST['select_wiki'], isset($_POST['select_color'])? $_POST['select_color'] : false, $analisis);
+					$this->user_model->relate_analisis($analisis);
+				
+					echo "<b>Analisis saved. You can check it in \"Performed Analisis\".</b>";
+				}
 			}
 			else{
 				echo 	"<script language=\"javascript\" type=\"text/javascript\">

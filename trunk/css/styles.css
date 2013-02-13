@@ -46,17 +46,17 @@ img{
 }
 
 a:link {
-  color:white;
+  color:#A7C942;
   font-weight:bold;
   text-decoration:none;
 }
 a:visited {
-  color:white;
+  color:#A7C942;
   font-weight:bold;
   text-decoration:none;
 }
 a:hover {
-  color:white;
+  color:green;
   font-weight:bold;
   text-decoration:none;
 }

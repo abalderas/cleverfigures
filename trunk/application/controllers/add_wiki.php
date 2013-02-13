@@ -74,14 +74,10 @@ class Add_wiki extends CI_Controller {
 					//Saving database
 					$this->wiki_model->new_wiki($_POST['wiki_name'], $_POST['dbserver'], $_POST['dbname'], $_POST['dbuser'], $_POST['dbpassword']);
 					$this->user_model->relate_wiki($_POST['wiki_name']);
-					
-					$filters = array(0 => lang('voc.i18n_no_filter'));
-					$filters = array_merge($filters, $this->filter_model->get_filter_list($this->session->userdata('username')));
-					$confdata = array('filters' => $filters, 'userdefaultfilter' => $this->user_model->default_filter($this->session->userdata('username')));
 			
 					$datah = array('title' => lang('voc.i18n_installation'));
 					$this->load->view('templates/header_view', $datah);
-					$this->load->view('content/configuration_view', $confdata);
+					$this->load->view('content/configuration_view');
 					$this->load->view('templates/footer_view');
 				}
 			}
