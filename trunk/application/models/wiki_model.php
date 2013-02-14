@@ -194,10 +194,6 @@ class Wiki_model extends CI_Model{
    	
    	function fetch($wikiname, $analisis){
 		
-		//Creating directory to store data
-		
-		mkdir("analisis/$analisis");
-		
 		//Starting the analisis
 		echo ">> Analisis started. </br>";
 		echo "Connecting to database...</br>";

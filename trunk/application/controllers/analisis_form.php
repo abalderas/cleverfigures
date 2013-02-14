@@ -25,7 +25,6 @@ class Analisis_form extends CI_Controller {
       		parent::__construct();
       		$this->load->model('wiki_model');
       		$this->load->model('color_model');
-//       	$this->load->model('filter_model');
       		$this->load->model('analisis_model');
       		$this->load->model('user_model');
       		$this->load->model('csv_model');
@@ -130,7 +129,7 @@ class Analisis_form extends CI_Controller {
 			write_file("analisis/$name.dat", serialize(array_merge($wiki_result)));
 		}
 		
-		return true;
+		return 1;
    	}
    	
    	function index(){

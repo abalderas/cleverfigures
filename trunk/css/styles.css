@@ -230,6 +230,9 @@ padding:3px 7px 2px 7px;
 	text-decoration:none;
 }
 #menu a:visited {
+	color:white;
+	text-decoration:none;
+	font-size:1.1em;
 }
 #menu a:hover {
 	color:white;
