@@ -164,46 +164,6 @@ width:100%;
 padding:3px 7px 2px 7px;
 }
 
-#formins th{
-	text-align:right;
-}
-
-#formins select{
-	font-size:1.2em;
-	padding-left:5px;
-	text-align:left;
-	width:100%;
-}
-
-#formins input{
-	padding-left:5px;
-	text-align:left;
-}
-
-#formins input.next{
-	font-size:1.2em;
-	padding-left:5px;
-	text-align:left;
-	font-weight:bold;
-	border:1px solid #EAF2D3;
-	color:#ffffff;
-	background-color:#A7C942;
-	text-transform: uppercase;
-	text-shadow: 0.1em 0.1em 0.2em black;
-}
-
-#formins input.next:hover{
-	font-size:1.3em;
-	padding-left:5px;
-	text-align:left;
-	font-weight:bold;
-	border:1px solid #EAF2D3;
-	color:#ffffff;
-	background-color:#A7C942;
-	text-transform: uppercase;
-	text-shadow: 0.1em 0.1em 0.2em black;
-	cursor:pointer;
-}
 
 /* HEADER MENU */
 
