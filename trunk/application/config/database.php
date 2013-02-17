@@ -48,10 +48,10 @@
 $active_group = 'main_db';
 $active_record = TRUE;
 
-$db['main_db']['hostname'] = '';
-$db['main_db']['username'] = '';
-$db['main_db']['password'] = '';
-$db['main_db']['database'] = '';
+$db['main_db']['hostname'] = 'localhost';
+$db['main_db']['username'] = 'root';
+$db['main_db']['password'] = 'Ornitorrinco1?!';
+$db['main_db']['database'] = 'cleverfigures';
 $db['main_db']['dbdriver'] = 'mysql';
 $db['main_db']['dbprefix'] = '';
 $db['main_db']['pconnect'] = FALSE;

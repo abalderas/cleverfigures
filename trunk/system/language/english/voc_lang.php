@@ -122,6 +122,7 @@ $lang['voc.i18n_user'] = "User";
 $lang['voc.i18n_users'] = "Users";
 $lang['voc.i18n_view'] = "View";
 $lang['voc.i18n_view_analisis'] = "Performed Analisis";
+$lang['voc.i18n_warnings'] = "Warnings";
 $lang['voc.i18n_wiki'] = "Wiki";
 $lang['voc.i18n_wiki_database'] = "Wiki Database";
 $lang['voc.i18n_wiki_name'] = "Wiki Name";

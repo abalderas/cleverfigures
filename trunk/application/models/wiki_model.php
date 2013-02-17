@@ -861,6 +861,9 @@ class Wiki_model extends CI_Model{
 		echo ">> Wiki analisis accomplished.</br>";
    		ob_flush(); flush();
    		
+   		//Calculating warnings
+   		
+   		//Returning data
    		return $analisis_data;
    	}
    	

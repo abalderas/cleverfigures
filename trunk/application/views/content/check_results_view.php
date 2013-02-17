@@ -701,7 +701,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 				
 					<?
 						if(isset($data['catedits'])){
-							echo "else if(SelValue == ".lang('voc.i18n_category')."){
+							echo "else if(SelValue == '".lang('voc.i18n_category')."'){
 								return [";
 							foreach(array_keys($data['catedits']) as $key){
 								echo "'".$key."'";
