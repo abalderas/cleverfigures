@@ -46,14 +46,6 @@ class User_model extends CI_Model{
 			$this->db->insert('user', $sql);
 		}
    	}
-   	/*
-   	function default_filter($uname){
-		$query = $this->db->get_where('user', array('user_username' => $uname));
-		if($query->result()) 
-			foreach($query->result() as $user)
-				return $user->user_filter;
-		else {return "default_filter(): ERR_NONEXISTENT";}
-   	}*/
    	
 //    	function default_language(){}
    	
@@ -134,23 +126,6 @@ class User_model extends CI_Model{
    			die( "relate_color(): ERR_ALREADY_EXISTS");
    	}
    	
-//    	function relate_filter($id){
-// 		$query = $this->db->query("select * from filter where filter_id = '$id'");
-//    		if($query->result()){
-//    			$sql = array('user_username' => $this->session->userdata('username'),
-//    					'filter_id' => "$id"
-//    				);
-// 	
-// 			$this->db->insert('user-filter', $sql);
-// 		
-// 			if($this->db->affected_rows() != 1) 
-// 				return "relate_filter(): ERR_AFFECTED_ROWS";
-// 			else return TRUE;
-// 		}
-//    		else
-//    			return "relate_filter(): ERR_ALREADY_EXISTS";
-//    	}
-   	
    	function relate_analisis($analisis){
    		$query = $this->db->query("select * from analisis where analisis_date = '$analisis'");
    		if($query->result()){
@@ -184,7 +159,7 @@ class User_model extends CI_Model{
         						'is_admin' => $row -> user_is_admin,
         						'realname' => $row -> user_realname); 
             		$this -> session -> set_userdata($sess_array);
-            		$this->update_last_session($uname);
+            		$this -> update_last_session($uname);
             		return true;
       		}
       		else

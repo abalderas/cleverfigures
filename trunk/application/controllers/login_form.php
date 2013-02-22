@@ -66,7 +66,7 @@ class Login_form extends CI_Controller {
 					$this->load->view('templates/footer_view');
 				}
 			}
-			else if($this->wiki_model->student_login($this->input->post('username'), $this->input->post('password'))){
+//			else if($this->wiki_model->student_login($this->input->post('username'), $this->input->post('password'))){
 // 				$reports = $this->report_model->get_my_reports($this->session->userdata('username'));
 // 				if($reports){
 // 					foreach($reports as $report){
@@ -85,7 +85,7 @@ class Login_form extends CI_Controller {
 // 					$this->load->view('content/teacher_view');
 // 					$this->load->view('templates/footer_view');
 // 				}
-			}
+//			}
 			
 			//Else, reload login view showing error
 			else{
