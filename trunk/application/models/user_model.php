@@ -38,9 +38,9 @@ class User_model extends CI_Model{
    					'user_last_session' => $date,
    					'user_realname' => $rname,
    					'user_email' => $mail,
-   					'user_language' => $this->config->item('language'),/*
-   					'user_filter' => "",*/
-   					'user_is_admin' => $is_admin
+   					'user_language' => $this->config->item('language'),
+   					'user_is_admin' => $is_admin,
+   					'user_high_contrast' => false
    				);
 	
 			$this->db->insert('user', $sql);
@@ -157,6 +157,7 @@ class User_model extends CI_Model{
         			$sess_array = array('username' => $row -> user_username,
         						'language' => $row -> user_language,
         						'is_admin' => $row -> user_is_admin,
+        						'high_contrast' => $row -> user_high_contrast,
         						'realname' => $row -> user_realname); 
             		$this -> session -> set_userdata($sess_array);
             		$this -> update_last_session($uname);

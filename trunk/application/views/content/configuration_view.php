@@ -55,7 +55,7 @@ echo form_open('configuration_form');
 		</tr>
 		<tr>
 			<td><?=form_label(lang('voc.i18n_select_language'), 'select_language');?></td>
-			<td><?=form_dropdown('select_language', $languages, 'english');?><?=form_submit(array('name' => 'save_conf', 'value' => lang('voc.i18n_save_conf'), 'class' => 'next'));?></td>
+			<td><?=form_dropdown('select_language', $languages, 'english');?></td>
 		</tr>
 		<tr>
 			<th colspan = "2"><?=lang('voc.i18n_data_source');?></th>
@@ -76,6 +76,19 @@ echo form_open('configuration_form');
 		<tr>
 			<td><?=form_label(lang('voc.i18n_add_user'), 'add_user');?></td>
 			<td><?=form_submit('add_user', lang('voc.i18n_add_user'));?></td>
+		</tr>
+		<tr>
+			<th colspan = "2"><?=lang('voc.i18n_accessibility');?></th>
+		</tr>
+		<tr>
+			<td><?=form_label(lang('voc.i18n_high_contrast'), 'high_contrast');?></td>
+			<td><?=form_checkbox('high_contrast', '', $this->session->userdata('high_contrast'));?></td>
+		</tr>
+		<tr>
+			<td></br></td>
+		</tr>
+		<tr>
+			<th colspan = "2"><?=form_submit(array('name' => 'save_conf', 'value' => lang('voc.i18n_save_conf'), 'class' => 'next'));?></th>
 		</tr>
 		</table>
 		

@@ -1,6 +1,7 @@
 <?
 $lang['voc.i18n_about'] = "About";
 $lang['voc.i18n_activity'] = "Activity";
+$lang['voc.i18n_accessibility'] = "Accessibility";
 $lang['voc.i18n_activity_hour'] = "Activity per hour";
 $lang['voc.i18n_activity_wday'] = "Activity per weekday";
 $lang['voc.i18n_activity_week'] = "Activity per week";
@@ -78,6 +79,7 @@ $lang['voc.i18n_generate_pdf'] = "Generate PDF";
 $lang['voc.i18n_german'] = "German";
 $lang['voc.i18n_go_to_login'] = "Go to Login";
 $lang['voc.i18n_here'] = "here";
+$lang['voc.i18n_high_contrast'] = "High Contrast";
 $lang['voc.i18n_hourquality'] = "Quality per hour";
 $lang['voc.i18n_incorrect_login'] = "Incorrect Data";
 $lang['voc.i18n_images'] = "Images";

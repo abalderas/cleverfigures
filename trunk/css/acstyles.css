@@ -19,6 +19,9 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
 /* GENERAL SETTINGS */
 
+html{
+}
+
 body
 {
 font-family: 'Donegal One', serif;
@@ -34,7 +37,7 @@ font-family: 'Cinzel', serif;
 p
 {
 font-family:"Trebuchet MS";
-font-size:16px;
+font-size:20px;
 }
 
 img{
@@ -43,22 +46,22 @@ img{
 }
 
 a:link {
-  color:#A7C942;
+  color:#40FF00;
   font-weight:bold;
   text-decoration:none;
 }
 a:visited {
-  color:#A7C942;
+  color:#40FF00;
   font-weight:bold;
   text-decoration:none;
 }
 a:hover {
-  color:green;
+  color:#40FF00;
   font-weight:bold;
   text-decoration:none;
 }
 a:active {
-  color:white;
+  color:#40FF00;
   text-decoration:none;
 }
 
@@ -114,7 +117,7 @@ font-size:1em;
 padding-top:5px;
 padding-bottom:4px;
 color: white;
-background-color:rgba(0,0,0,0.8);
+background-color:black;
 }
 
 #bodytable td 
@@ -139,7 +142,7 @@ width:100%;
 #charttable th 
 {
 	width:100%;
-	background-color:rgba(0,0,0,0.8);
+	background-color:black;
 	color:white;
 }
 
@@ -151,9 +154,7 @@ width:100%;
 	text-align:left;
 	font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
 	margin: auto;
-	font-size:1em;/*
-	border: 1px solid #000000;
-	border-radius:10px;*/
+	font-size:1em;
 }
 
 #formins td, #formins th 
@@ -172,14 +173,11 @@ padding:3px 7px 2px 7px;
 	table-layout: fixed;
 	border-collapse:collapse;
 	text-align:center;
-	background: rgba(0, 0, 0, 0.8); 
+	background: black; 
 	position:fixed;
 	top:0px;
 	left:0px;
 	z-index:100;
-	-moz-box-shadow: 0 0 5px 5px #888;
-	-webkit-box-shadow: 0 0 5px 5px #888;
-	box-shadow: 0 0 5px 5px #888;
 }
 
 #menu a:link {
@@ -215,7 +213,7 @@ padding-bottom:4px;
 color:#000000;
 }
 
-#menu th.user 
+#menu th.user
 {
 text-align:center;
 font-family: 'Playball', cursive;
@@ -227,15 +225,15 @@ color:white;
 
 #footer
 {
+	width:100%;
 	height:25px;
 	text-align:center;
-	position:fixed;
-	right:0px;
+	table-layout: fixed;
+	position:absolute;
 	left:0px;
-	bottom:0px;
-	background: rgba(0, 0, 0, 0.8); 
+	bottom:0;
+	background: black; 
 	padding-bottom:5px;
-	z-index:10;
 }
 
 #footer td, #footer th 
@@ -244,7 +242,7 @@ color:white;
 	padding:3px 7px 0px 7px;
 }
 
-#footer td { background-color:#EAF2D3; }
+#footer td { background-color:black; }
 
 #footer a:link {
   color:white;
