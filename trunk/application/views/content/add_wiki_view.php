@@ -51,6 +51,10 @@ echo form_open('add_wiki');
 		<td class="fieldbox"><?=lang('voc.i18n_dbpassword')?>:</td>
 		<td><?= form_password('dbpassword') ?></td>
 	</tr>
+	<tr>
+		<td class="fieldbox"><?=lang('voc.i18n_wiki_baseurl')?>:</td>
+		<td><?= form_input('wiki_baseurl') ?></td>
+	</tr>
 	<?php if(form_error('dbpassword')) echo "<tr><td colspan = \"2\"><em>".form_error('dbpassword')."</em></td></tr>"; ?>
 	<?php if(isset($connection_error)) echo "<tr><td colspan = \"2\"><em>$connection_error</em></td></tr>"; ?>
 	<tr>

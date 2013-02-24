@@ -25,7 +25,6 @@ class Add_wiki extends CI_Controller {
       		parent::__construct();
 		$this->load->model('wiki_model');
 		$this->load->model('user_model');
-// 		$this->load->model('filter_model');
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	private function test_connection(){
@@ -72,7 +71,7 @@ class Add_wiki extends CI_Controller {
 				//Else, save wiki and load configuration view
 				else{
 					//Saving database
-					$this->wiki_model->new_wiki($_POST['wiki_name'], $_POST['dbserver'], $_POST['dbname'], $_POST['dbuser'], $_POST['dbpassword']);
+					$this->wiki_model->new_wiki($_POST['wiki_name'], $_POST['dbserver'], $_POST['dbname'], $_POST['dbuser'], $_POST['dbpassword'], $_POST['wiki_baseurl']);
 					$this->user_model->relate_wiki($_POST['wiki_name']);
 			
 					$datah = array('title' => lang('voc.i18n_installation'));

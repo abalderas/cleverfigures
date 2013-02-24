@@ -41,6 +41,8 @@ class Wiki_model extends CI_Model{
    	   	//Cargamos models necesarios
    	   	$ci =& get_instance();
 		$ci->load->model('connection_model');
+		$ct =& get_instance();
+		$ct->load->model('system_model');
 		$ci->load->helper('file');
 		/*
 		$cf =& get_instance();
@@ -59,6 +61,16 @@ class Wiki_model extends CI_Model{
 			list($day, $month, $year) = sscanf($date, '%d/%d/%d');
 			return $month."/".$day."/".$year;
 // 		}
+	}
+	
+	private function get_base_url($wikiname){
+		$result = $this->db->query("select wiki_baseurl from wiki where wiki_name = $wikiname")->result();
+		
+		foreach($result as $row){
+			return $row->wiki_baseurl;
+		}
+		
+		return false;
 	}
 	
    	private function wconnection($wikiname){
@@ -85,7 +97,7 @@ class Wiki_model extends CI_Model{
    		return $wikis;
    	}
    	
-   	function new_wiki($wikiname, $db_server, $db_name, $db_user, $db_password){
+   	function new_wiki($wikiname, $db_server, $db_name, $db_user, $db_password, $wiki_baseurl){
    		//Creamos una nueva conexión
    		$my_con = $this->connection_model->new_connection($db_server, $db_name, $db_user, $db_password);
    		
@@ -101,7 +113,8 @@ class Wiki_model extends CI_Model{
    			//Creamos el array a insertar, con la info de la wiki e insertamos
    			$sql = array('wiki_id' => "",
    				'wiki_name' => "$wikiname",
-   				'wiki_connection' => "$my_con"
+   				'wiki_connection' => "$my_con",
+   				'wiki_baseurl' => "$wiki_baseurl"
    				);
 			$this->db->insert('wiki', $sql);
 		
@@ -111,43 +124,7 @@ class Wiki_model extends CI_Model{
 		}
    	}
    	
-   	function displayTree($array) {
-		$output = "";
-		$newline = "<br>";
-		foreach($array as $key => $value) {    //cycle through each item in the array as key => value pairs
-			if (is_array($value) || is_object($value)) {        //if the VALUE is an array, then
-				//call it out as such, surround with brackets, and recursively call displayTree.
-				$value = "Array()" . $newline . "(<ul>" . $this->displayTree($value) . "</ul>)" . $newline;
-			}
-			//if value isn't an array, it must be a string. output its' key and value.
-			$output .= "[".$key."] => " . $value . $newline;
-		}
-		return $output;
-	}
    	
-   	private function last_psize_sum($pagebytes, $catpage, $category){
-		$res = 0;
-		foreach(array_keys($catpage[$category]) as $page)
-			$res += end($pagebytes[$page])?end($pagebytes[$page]):0;
-		return $res;
-   	}
-   	
-   	function array_back_sum($array, $limit){
-		$res = 0;
-		foreach(array_keys($array) as $key)
-			if($key <= $limit) $res += $array[$key];
-		
-		return $res;
-   	}
-   	
-   	function countdim($array){
-		if (is_array(reset($array)))
-			$return = $this->countdim(reset($array)) + 1;
-		else
-			$return = 1;
-
-		return $return;
-	}
    	
    	function student_login($uname, $pass){
 		$wikis = $this->db->query("select wiki_name from wiki")->result();
@@ -865,6 +842,18 @@ class Wiki_model extends CI_Model{
    		
    		//Returning data
    		return $analisis_data;
+   	}
+   	
+   	function get_page($title, $wikiname){
+   		$url = $this->get_base_url($wikiname)."/api.php?action=query&prop=revisions&rvlimit=1&rvprop=content&format=xml&action=parse&titles=".$title;
+   		
+   		if($this->system_model->fopen_enabled())
+			return file_get_contents($url);
+   		else{
+			$ch = curl_init($url);
+			curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+			return curl_exec($ch);
+   		}
    	}
    	
    	function delete_wiki($wikiname){
