@@ -85,7 +85,7 @@ echo form_open('configuration_form');
 			<td><?=form_checkbox('high_contrast', '', $this->session->userdata('high_contrast'));?></td>
 		</tr>
 		<tr>
-			<td></br></td>
+			<td><br></td>
 		</tr>
 		<tr>
 			<th colspan = "2"><?=form_submit(array('name' => 'save_conf', 'value' => lang('voc.i18n_save_conf'), 'class' => 'next'));?></th>
@@ -93,6 +93,35 @@ echo form_open('configuration_form');
 		</table>
 		
 		<? if(!isset($admin) || !$admin) echo "-->" ?>
+		
+		<? 
+			if(!isset($wikilist)) 
+				echo "<!--";
+			else{
+				echo "<br><table id = 'bodytable'>";
+				echo "<tr><th colspan = '2'>".lang('voc.i18n_your_wikis')."</th></tr>";
+				foreach($wikilist as $wiki)
+					echo "<tr><td>".$wiki."</td><td></td></tr>";
+				echo "</table>";
+			}
+		
+			if(!isset($wikilist)) echo "-->";
+		?>
+		
+		<?
+			if(empty($colorlist)) 
+				echo "<!--";
+			else{
+				echo "<br><table id = 'bodytable'>";
+				echo "<tr><th colspan = '2'>".lang('voc.i18n_your_qualitative_sources')."</th></tr>";
+				foreach($colorlist as $color)
+					echo "<tr><td>".$color."</td><td></td></tr>";
+				echo "</table>";
+			}
+		
+			if(empty($colorlist)) echo "-->";
+		?>
+		
 <?=form_close();?>
 
 

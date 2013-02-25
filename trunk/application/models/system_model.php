@@ -19,10 +19,10 @@
 
 
 
-class Dbforge_model extends CI_Model{
+class System_model extends CI_Model{
 
 	//METHODS
-   	function Dbforge_model(){
+   	function System_model(){
    	   	parent::__construct();
    	}
    	
