@@ -1,0 +1,36 @@
+.ir { display: block; border: 0; text-indent: -999em; overflow: hidden; background-color: transparent; background-repeat: no-repeat; text-align: left; direction: ltr; *line-height: 0; }
+.ir br { display: none; }
+
+body{
+    padding-top: 20px;
+    text-align: justify;
+}
+
+#mainLogo {
+    width: 355px;
+    height: 86px;
+    background-image: url(../img/logo.png);
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    margin-top: 20px;
+}
+
+.navbar ul.nav {
+    float: none;
+}
+
+h1{
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    margin-top: 20px;
+}
+
+h2{
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin: 0 0 10px;
+}

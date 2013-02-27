@@ -1,0 +1,1 @@
+<p>Hola <?php echo $usuario; ?>, en este momento no hay entradas para revisar. Inténtelo en otro momento. </p>

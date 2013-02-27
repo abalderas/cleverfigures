@@ -1,0 +1,265 @@
+/*
+<<Copyright 2013 Alvaro Almagro Doello>>
+
+This file is part of CleverFigures.
+
+CleverFigures is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+CleverFigures is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/* GENERAL SETTINGS */
+
+html{
+}
+
+body
+{
+font-family: 'Donegal One', serif;
+z-index:1;
+height:100%;
+}
+
+h1
+{
+text-align:center;
+font-family: 'Cinzel', serif;
+}
+p
+{
+font-family:"Trebuchet MS";
+font-size:20px;
+}
+
+img{
+  display:block;
+  margin:0 auto 0 auto;
+}
+
+a:link {
+  color:#40FF00;
+  font-weight:bold;
+  text-decoration:none;
+}
+a:visited {
+  color:#40FF00;
+  font-weight:bold;
+  text-decoration:none;
+}
+a:hover {
+  color:#40FF00;
+  font-weight:bold;
+  text-decoration:none;
+}
+a:active {
+  color:#40FF00;
+  text-decoration:none;
+}
+
+em{
+	color:red;
+	font-size:0.8em;
+}
+
+#overlay{
+	background-color:rgba(0,0,0,0.8);
+	position:absolute;
+	top:0px;
+	left:0px;
+	height:100%;
+	width:100%;
+	z-index:1000;
+}
+
+#overlay img{
+	position:absolute;
+	top:50%;
+	left:50%;
+	margin-left:-33px;
+	margin-top:-33px;
+	z-index:1001;
+}
+
+#maintable{
+	margin:auto;
+}
+
+#wrap{
+	padding-top:65px;
+	margin-bottom:35px;
+	height:100%;
+	z-index:0;
+}
+
+#bodytable
+{
+font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+min-width:800px;
+margin-left: auto;
+margin-right: auto;
+table-layout:fixed;
+border: solid 1px black;
+}
+
+
+#bodytable th 
+{
+font-size:1em;
+padding-top:5px;
+padding-bottom:4px;
+color: white;
+background-color:black;
+}
+
+#bodytable td 
+{
+color:#000000;
+min-height:29px;
+padding:2px;
+}
+
+#bodytable input.cssform{
+	width:60%;
+}
+
+#charttable
+{
+margin-left: auto;
+margin-right: auto;
+padding:2px;
+width:100%;
+}
+
+#charttable th 
+{
+	width:100%;
+	background-color:black;
+	color:white;
+}
+
+
+/* INSTALLATION AND LOGIN FORMS */
+
+#formins {
+	table-layout: fixed;
+	text-align:left;
+	font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+	margin: auto;
+	font-size:1em;
+}
+
+#formins td, #formins th 
+{
+padding:3px 7px 2px 7px;
+}
+
+
+/* HEADER MENU */
+
+#menu
+{
+	font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+	width:100%;
+	height:30px;
+	table-layout: fixed;
+	border-collapse:collapse;
+	text-align:center;
+	background: black; 
+	position:fixed;
+	top:0px;
+	left:0px;
+	z-index:100;
+}
+
+#menu a:link {
+	color:white;
+	text-decoration:none;
+}
+#menu a:visited {
+	color:white;
+	text-decoration:none;
+	font-size:1.1em;
+}
+#menu a:hover {
+	color:white;
+	text-decoration:none;
+	font-size:1.1em;
+}
+#menu a:active {
+	color:white;
+	text-decoration:none;
+}
+
+#menu td, #menu th 
+{
+border:0px solid black;
+padding:3px 7px 2px 7px;
+}
+
+#menu th 
+{
+text-align:center;
+padding-top:5px;
+padding-bottom:4px;
+color:#000000;
+}
+
+#menu th.user
+{
+text-align:center;
+font-family: 'Playball', cursive;
+font-size:28px;
+color:white;
+}
+
+/* FOOTER  */
+
+#footer
+{
+	width:100%;
+	height:25px;
+	text-align:center;
+	table-layout: fixed;
+	position:absolute;
+	left:0px;
+	bottom:0;
+	background: black; 
+	padding-bottom:5px;
+}
+
+#footer td, #footer th 
+{
+	font-size:1em;
+	padding:3px 7px 0px 7px;
+}
+
+#footer td { background-color:black; }
+
+#footer a:link {
+  color:white;
+  text-decoration:none;
+}
+
+#footer a:visited {
+  color:white;
+  text-decoration:none;
+}
+
+#footer a:hover {
+  color:white;
+  text-decoration:none;
+}
+
+#footer a:active {
+  color:white;
+  text-decoration:none;
+}
