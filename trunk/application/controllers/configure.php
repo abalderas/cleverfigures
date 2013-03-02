@@ -39,7 +39,7 @@ class Configure extends CI_Controller {
 		
 			$datah = array('title' => lang('voc.i18n_configuration'));
 			$this->load->view('templates/header_view', $datah);
-			$this->load->view('content/configuration_view', array('admin' => $this->session->userdata('is_admin'), 'wikilist' => $this->wiki_model->get_wiki_list($this->session->userdata('username')), 'colorlist' => $this->color_model->get_color_list($this->session->userdata('username'))));
+			$this->load->view('content/configuration_view', array('admin' => $this->session->userdata('is_admin'), 'wikilist' => $this->user_model->get_wiki_list($this->session->userdata('username')), 'colorlist' => $this->color_model->get_color_list($this->session->userdata('username'))));
 			$this->load->view('templates/footer_view');
 		}
 	}

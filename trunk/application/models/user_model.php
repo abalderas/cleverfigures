@@ -77,6 +77,18 @@ class User_model extends CI_Model{
 		$this->db->update('user', $data); 
    	}
    	
+   	function get_wiki_list($username = 'default'){
+		//Consultamos la conexión
+   		$query = $this->db->query("select * from wiki, `user-wiki` where wiki.wiki_name = `user-wiki`.wiki_name and `user-wiki`.user_username = '$username'");
+   		if(!$query->result())
+   			return array();
+   		else
+   			foreach($query->result() as $row)
+   				$wikis[$row->wiki_name] = $row->wiki_name;
+   		
+   		return $wikis;
+   	}
+   	
    	function get_analisis_list($uname){
 		$result = $this->db->query("select * from `user-analisis` where user_username = '$uname' order by analisis_date desc")->result();
 		

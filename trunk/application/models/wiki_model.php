@@ -44,9 +44,6 @@ class Wiki_model extends CI_Model{
 		$ct =& get_instance();
 		$ct->load->model('system_model');
 		$ci->load->helper('file');
-		/*
-		$cf =& get_instance();
-		$cf->load->model('filter_model');*/
    	}
 	
 	private function mwtime_to_unix($mwtime){
@@ -85,18 +82,6 @@ class Wiki_model extends CI_Model{
    				return $row->wiki_connection;
    	}
    	
-   	function get_wiki_list($username = 'default'){
-		//Consultamos la conexión
-   		$query = $this->db->query("select * from wiki, `user-wiki` where wiki.wiki_name = `user-wiki`.wiki_name and `user-wiki`.user_username = '$username'");
-   		if(!$query->result())
-   			return array();
-   		else
-   			foreach($query->result() as $row)
-   				$wikis[$row->wiki_name] = $row->wiki_name;
-   		
-   		return $wikis;
-   	}
-   	
    	function new_wiki($wikiname, $db_server, $db_name, $db_user, $db_password, $wiki_baseurl){
    		//Creamos una nueva conexión
    		$my_con = $this->connection_model->new_connection($db_server, $db_name, $db_user, $db_password);
@@ -124,7 +109,21 @@ class Wiki_model extends CI_Model{
 		}
    	}
    	
-   	
+   	function get_user_list($wikiname){
+		$link = $this->connection_model->connect($this->wconnection($wikiname));
+		
+		$qstr = "select user_name from user";
+   		$query = $link->query($qstr);
+   		
+   		//If no results then return false
+   		if(!$query->result())
+			return false;
+		else
+			foreach($query->result() as $row)
+				$res[] = $row->user_name;
+				
+		return $res;
+   	}
    	
    	function student_login($uname, $pass){
 		$wikis = $this->db->query("select wiki_name from wiki")->result();

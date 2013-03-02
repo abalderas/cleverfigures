@@ -41,7 +41,7 @@ class Dbforge_model extends CI_Model{
 		
 		$this->db->query("CREATE TABLE user ( user_username VARCHAR(20) NOT NULL, user_password VARCHAR(50) NOT NULL, user_last_session INT(50) NOT NULL, user_realname VARCHAR(50) NOT NULL, user_email VARCHAR(30) NOT NULL, user_language VARCHAR(10) NOT NULL, user_filter VARCHAR(20) NOT NULL, user_is_admin BOOLEAN NOT NULL, user_high_contrast BOOLEAN NOT NULL, KEY user_username (user_username) ) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
 			
-		$this->db->query("CREATE TABLE `wiki` ( `wiki_id` INT(9) UNSIGNED NOT NULL AUTO_INCREMENT, `wiki_name` VARCHAR(50) NOT NULL, `wiki_connection` INT(6) NOT NULL, KEY `wiki_id` (`wiki_id`) ) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
+		$this->db->query("CREATE TABLE `wiki` ( `wiki_id` INT(9) UNSIGNED NOT NULL AUTO_INCREMENT, `wiki_name` VARCHAR(50) NOT NULL, `wiki_baseurl` VARCHAR(70), `wiki_connection` INT(6) NOT NULL, KEY `wiki_id` (`wiki_id`) ) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
 			
 		$this->db->query("CREATE TABLE `color` ( `color_id` INT(9) UNSIGNED NOT NULL AUTO_INCREMENT, `color_name` VARCHAR(50) NOT NULL, `color_connection` INT(6) NOT NULL, KEY `color_id` (`color_id`) ) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
 			
