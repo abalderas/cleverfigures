@@ -101,7 +101,7 @@ echo form_open('configuration_form');
 				echo "<br><table id = 'bodytable'>";
 				echo "<tr><th colspan = '2'>".lang('voc.i18n_your_wikis')."</th></tr>";
 				foreach($wikilist as $wiki)
-					echo "<tr><td>".$wiki."</td><td></td></tr>";
+					echo "<tr><td>".$wiki."</td><td>".anchor("groups/getgroups/$wiki",lang('voc.i18n_manage_groups'))."</td></tr>";
 				echo "</table>";
 			}
 		

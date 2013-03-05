@@ -142,7 +142,7 @@ class User_model extends CI_Model{
    		$query = $this->db->query("select * from analisis where analisis_date = '$analisis'");
    		if($query->result()){
    			$sql = array('user_username' => $this->session->userdata('username'),
-   					'analisis_date' => $analisis,
+   					'analisis_date' => $analisis
    				);
 	
 			$this->db->insert('user-analisis', $sql);
