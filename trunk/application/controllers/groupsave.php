@@ -17,26 +17,19 @@
 // You should have received a copy of the GNU General Public License
 // along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
-class Groups extends CI_Controller {
 
-	function Groups(){
+
+class Groupsave extends CI_Controller {
+
+	function Analise(){
       		parent::__construct();
-      		$this->load->model('wiki_model');
+      		$this->load->model('color_model');
+      		$this->load->model('user_model');
+// 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	
-	function index(){
-	
-		if(!$this->session->userdata('username')){
-			$datah = array('title' => lang('voc.i18n_login'));
-			
-			$this->load->view('templates/header_view', $datah);
-			$this->load->view('content/login_view');
-			$this->load->view('templates/footer_view');
-		}
-	}
-	
-	function getgroups($wiki){
-	
+   	function index(){
+   	
 		if(!$this->session->userdata('username')){
 			$datah = array('title' => lang('voc.i18n_login'));
 			
@@ -46,11 +39,19 @@ class Groups extends CI_Controller {
 		}
 		else{
 		
-			$this->session->set_flashdata(array('wiki' => $wiki));
-			$datah = array('title' => lang('voc.i18n_groups'));
+			$datah = array('title' => lang('voc.i18n_analise'));
+			
+			$colors = array(lang('voc.i18n_no_color') => lang('voc.i18n_no_color'));
+			$colors = array_merge($colors, $this->color_model->get_color_list($this->session->userdata('username')));
+			
+			$wikis = array(lang('voc.i18n_no_wiki') => lang('voc.i18n_no_wiki')); 
+			$wikis = array_merge($wikis, $this->user_model->get_wiki_list($this->session->userdata('username')));
+			
+			$adata = array('wikis' => $wikis, 'colors' => $colors);
+			
 			$this->load->view('templates/header_view', $datah);
-			$this->load->view('content/group_view', array('users' => $this->wiki_model->get_user_list($wiki)));
+			$this->load->view('content/analise_view', $adata);
 			$this->load->view('templates/footer_view');
 		}
 	}
-} 
+}

@@ -17,26 +17,19 @@
 // You should have received a copy of the GNU General Public License
 // along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
-class Groups extends CI_Controller {
 
-	function Groups(){
+
+class Groupcreate extends CI_Controller {
+
+	function Groupcreate(){
       		parent::__construct();
+      		$this->load->model('group_model');
       		$this->load->model('wiki_model');
+// 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	
 	function index(){
-	
-		if(!$this->session->userdata('username')){
-			$datah = array('title' => lang('voc.i18n_login'));
-			
-			$this->load->view('templates/header_view', $datah);
-			$this->load->view('content/login_view');
-			$this->load->view('templates/footer_view');
-		}
-	}
-	
-	function getgroups($wiki){
-	
+   	
 		if(!$this->session->userdata('username')){
 			$datah = array('title' => lang('voc.i18n_login'));
 			
@@ -46,11 +39,22 @@ class Groups extends CI_Controller {
 		}
 		else{
 		
-			$this->session->set_flashdata(array('wiki' => $wiki));
-			$datah = array('title' => lang('voc.i18n_groups'));
-			$this->load->view('templates/header_view', $datah);
-			$this->load->view('content/group_view', array('users' => $this->wiki_model->get_user_list($wiki)));
-			$this->load->view('templates/footer_view');
+			if(isset($_POST['groupnameinput'])){
+				$this->group_model->new_group($_POST['groupnameinput'], $this->session->flashdata('wiki'));
+				
+				$this->session->keep_flashdata('wiki');
+				$datah = array('title' => lang('voc.i18n_groups'));
+				$this->load->view('templates/header_view', $datah);
+				$this->load->view('content/group_view', array('groupcreated' => true, 'users' => $this->wiki_model->get_user_list($this->session->flashdata('wiki'))));
+				$this->load->view('templates/footer_view');
+			}
+			else{
+				$this->session->keep_flashdata('wiki');
+				$datah = array('title' => lang('voc.i18n_groups'));
+				$this->load->view('templates/header_view', $datah);
+				$this->load->view('content/group_view', array('groupnamenotset' => true, 'users' => $this->wiki_model->get_user_list($this->session->flashdata('wiki'))));
+				$this->load->view('templates/footer_view');
+			}
 		}
 	}
-} 
+}

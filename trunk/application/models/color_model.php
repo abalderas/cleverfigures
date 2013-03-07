@@ -65,20 +65,6 @@ class Color_model extends CI_Model{
    				return $row->color_connection;
    	}
    	
-   	function get_color_list($username){
-		//Consultamos la conexión
-   		$query = $this->db->query("select * from color, `user-color` where color.color_name = `user-color`.color_name and `user-color`.user_username = '$username'");
-   		
-   		//Comprobamos que existe y devolvemos el id de conexión
-   		if(!$query->result())
-   			return array();
-   		else
-   			foreach($query->result() as $row)
-   				$colors[$row->color_name] = $row->color_name;
-   				
-   		return $colors;
-   	}
-   	
    	function new_color($colorname, $db_server, $db_name, $db_user, $db_password){
    		//Creamos una nueva conexión
    		$my_con = $this->connection_model->new_connection($db_server, $db_name, $db_user, $db_password);

@@ -23,9 +23,8 @@ class Analise extends CI_Controller {
 
 	function Analise(){
       		parent::__construct();
-      		$this->load->model('wiki_model');
       		$this->load->model('color_model');
-//       	$this->load->model('filter_model');
+      		$this->load->model('user_model');
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	
@@ -46,7 +45,7 @@ class Analise extends CI_Controller {
 			$colors = array_merge($colors, $this->color_model->get_color_list($this->session->userdata('username')));
 			
 			$wikis = array(lang('voc.i18n_no_wiki') => lang('voc.i18n_no_wiki')); 
-			$wikis = array_merge($wikis, $this->wiki_model->get_wiki_list($this->session->userdata('username')));
+			$wikis = array_merge($wikis, $this->user_model->get_wiki_list($this->session->userdata('username')));
 			
 			$adata = array('wikis' => $wikis, 'colors' => $colors);
 			

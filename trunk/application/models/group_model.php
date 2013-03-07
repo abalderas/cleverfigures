@@ -27,7 +27,7 @@ class Group_model extends CI_Model{
    	}
    	
    	function new_group($groupname, $wikiname){
-   		$check = $this->db->query("select * from user where user_username = '$uname'");
+   		$check = $this->db->query("select * from groups where group_name = '$groupname'");
    		if($check->result())
    			return "new_group(): ERR_ALREADY_EXISTS";
    		else{
@@ -35,16 +35,16 @@ class Group_model extends CI_Model{
    					'wiki_name' => $wikiname
    				);
 	
-			$this->db->insert('group', $sql);
+			$this->db->insert('groups', $sql);
 		}
    	}
    	
    	function delete_group($groupname){
-   		$check = $this->db->get_where('group', array('group_name' => $groupname));
+   		$check = $this->db->get_where('groups', array('group_name' => $groupname));
    		if(!$check)
    			return "delete(): ERR_NONEXISTENT";
    		else{
-   		 	$this->db->delete('group', array('group_name' => $groupname));
+   		 	$this->db->delete('groups', array('group_name' => $groupname));
    		 	$this->db->delete('member', array('member_group' => $groupname));
    		 	return true;
    		}
