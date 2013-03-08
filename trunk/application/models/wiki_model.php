@@ -112,8 +112,9 @@ class Wiki_model extends CI_Model{
    	function get_user_list($wikiname){
 		$link = $this->connection_model->connect($this->wconnection($wikiname));
 		
-		$qstr = "select user_name from user";
-   		$query = $link->query($qstr);
+		if(!$link) die("get_user_list::Invalid database connection for wiki $wikiname.");
+		
+   		$query = $link->query("select user_name from user");
    		
    		//If no results then return false
    		if(!$query->result())
@@ -125,8 +126,21 @@ class Wiki_model extends CI_Model{
 		return $res;
    	}
    	
+   	function get_group_list($wikiname){
+		$result = $this->db->query("select * from groups where wiki_name = '$wikiname'")->result();
+		
+		if(!$result) return false;
+   		
+   		foreach($result as $row)
+			$res[] = $row->group_name;
+				
+		return $res;
+   	}
+   	
    	function student_login($uname, $pass){
 		$wikis = $this->db->query("select wiki_name from wiki")->result();
+		
+		if(!$link) die("student_login::Invalid database connection.");
 		
 		foreach($wikis as $wiki){
 			$link = $this->connection_model->connect($this->wconnection($wiki));
@@ -177,6 +191,7 @@ class Wiki_model extends CI_Model{
 		
 		//Connecting to the wiki database
    		$link = $this->connection_model->connect($this->wconnection($wikiname));
+   		if(!$link) die("fetch::Invalid database connection.");
    		
    		echo "Querying database for general information...";
    		ob_flush(); flush();

@@ -42,7 +42,7 @@ class Analise extends CI_Controller {
 			$datah = array('title' => lang('voc.i18n_analise'));
 			
 			$colors = array(lang('voc.i18n_no_color') => lang('voc.i18n_no_color'));
-			$colors = array_merge($colors, $this->color_model->get_color_list($this->session->userdata('username')));
+			$colors = array_merge($colors, $this->user_model->get_color_list($this->session->userdata('username')));
 			
 			$wikis = array(lang('voc.i18n_no_wiki') => lang('voc.i18n_no_wiki')); 
 			$wikis = array_merge($wikis, $this->user_model->get_wiki_list($this->session->userdata('username')));

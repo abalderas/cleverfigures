@@ -22,6 +22,7 @@ class Groups extends CI_Controller {
 	function Groups(){
       		parent::__construct();
       		$this->load->model('wiki_model');
+      		$this->load->model('member_model');
    	}
    	
 	function index(){
@@ -45,11 +46,9 @@ class Groups extends CI_Controller {
 			$this->load->view('templates/footer_view');
 		}
 		else{
-		
-			$this->session->set_flashdata(array('wiki' => $wiki));
 			$datah = array('title' => lang('voc.i18n_groups'));
 			$this->load->view('templates/header_view', $datah);
-			$this->load->view('content/group_view', array('users' => $this->wiki_model->get_user_list($wiki)));
+			$this->load->view('content/group_view', array('wiki' => $wiki, 'users' => $this->wiki_model->get_user_list($wiki)));
 			$this->load->view('templates/footer_view');
 		}
 	}

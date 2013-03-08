@@ -25,6 +25,7 @@ class Groupcreate extends CI_Controller {
       		parent::__construct();
       		$this->load->model('group_model');
       		$this->load->model('wiki_model');
+      		$this->load->model('member_model');
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	
@@ -37,24 +38,35 @@ class Groupcreate extends CI_Controller {
 			$this->load->view('content/login_view');
 			$this->load->view('templates/footer_view');
 		}
+	}
+	
+	function crgroup($wikiname){
+   	
+		if(!$this->session->userdata('username')){
+			$datah = array('title' => lang('voc.i18n_login'));
+			
+			$this->load->view('templates/header_view', $datah);
+			$this->load->view('content/login_view');
+			$this->load->view('templates/footer_view');
+		}
 		else{
-		
-			if(isset($_POST['groupnameinput'])){
-				$this->group_model->new_group($_POST['groupnameinput'], $this->session->flashdata('wiki'));
-				
-				$this->session->keep_flashdata('wiki');
-				$datah = array('title' => lang('voc.i18n_groups'));
-				$this->load->view('templates/header_view', $datah);
-				$this->load->view('content/group_view', array('groupcreated' => true, 'users' => $this->wiki_model->get_user_list($this->session->flashdata('wiki'))));
-				$this->load->view('templates/footer_view');
+			$datah = array('title' => lang('voc.i18n_groups'));
+			$this->load->view('templates/header_view', $datah);
+			
+			$users = $this->wiki_model->get_user_list($wikiname);
+			
+			if($_POST['groupnameinput'] != ""){
+				$created = $this->group_model->new_group($_POST['groupnameinput'], $wikiname);
+				if($created)
+					$this->load->view('content/group_view', array('wiki' => $wikiname, 'groupcreated' => true, 'users' => $users));
+				else
+					$this->load->view('content/group_view', array('wiki' => $wikiname, 'groupexists' => true, 'users' => $users));
 			}
 			else{
-				$this->session->keep_flashdata('wiki');
-				$datah = array('title' => lang('voc.i18n_groups'));
-				$this->load->view('templates/header_view', $datah);
-				$this->load->view('content/group_view', array('groupnamenotset' => true, 'users' => $this->wiki_model->get_user_list($this->session->flashdata('wiki'))));
-				$this->load->view('templates/footer_view');
+				$this->load->view('content/group_view', array('wiki' => $wikiname, 'errgroupnamenotset' => true, 'users' => $users));
 			}
+			
+			$this->load->view('templates/footer_view');
 		}
 	}
 }

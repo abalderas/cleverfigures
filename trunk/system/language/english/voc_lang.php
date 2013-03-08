@@ -81,6 +81,7 @@ $lang['voc.i18n_german'] = "German";
 $lang['voc.i18n_go_to_login'] = "Go to Login";
 $lang['voc.i18n_groupname_not_set'] = "You must set a group name";
 $lang['voc.i18n_groupcreated'] = "Group Created";
+$lang['voc.i18n_groupexists'] = "Group already exists";
 $lang['voc.i18n_group'] = "Group";
 $lang['voc.i18n_group_name'] = "Group Name";
 $lang['voc.i18n_groups'] = "Groups";

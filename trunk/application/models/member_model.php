@@ -27,14 +27,13 @@ class Member_model extends CI_Model{
    	   	$this->load->database();
    	}
    	
-   	function get_group($membername){
-		$check = $this->db->get_where('member', array('member_name' => $membername));
+   	function get_member_group($member){
+		$result = $this->db->query("select * from member where member_name = '$member'")->result();
 		
-		if($check)
-			foreach($check as $row)
-				return $row->member_group;
-		else
-			return false;
+		if(!$result) return 'no group';
+   		
+   		foreach($result as $row)
+			return $row->member_group;
    	}
    	
    	function join_group($groupname, $membername){

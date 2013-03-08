@@ -29,7 +29,7 @@ class Group_model extends CI_Model{
    	function new_group($groupname, $wikiname){
    		$check = $this->db->query("select * from groups where group_name = '$groupname'");
    		if($check->result())
-   			return "new_group(): ERR_ALREADY_EXISTS";
+   			return false;
    		else{
    			$sql = array('group_name' => $groupname,
    					'wiki_name' => $wikiname

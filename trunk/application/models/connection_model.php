@@ -56,7 +56,7 @@ class Connection_model extends CI_Model{
 	function connect($id){
 		$query = $this->db->query("select * from connection where connection_id = '$id'");
    		if(!$query->result())
-   			return("connect(): ERR_NONEXISTENT");
+   			return false;
    		else{
    			$result = $query->result();
    			foreach($result as $row){

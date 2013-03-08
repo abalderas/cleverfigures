@@ -21,7 +21,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
 body
 {
-font-family: 'Donegal One', serif;
+/* font-family: 'Donegal One', serif; */
 z-index:1;
 height:100%;
 }
@@ -63,8 +63,28 @@ a:active {
 }
 
 em{
-	color:red;
+	color:white;
 	font-size:0.8em;
+	position:absolute;
+	right:5px;
+	bottom:5px;
+	font-weight:bold;
+	border:1px solid red;
+	border-radius:5px;
+	padding:20px;
+	background:red;
+}
+
+info{
+	color:white;
+	font-size:0.8em;
+	position:absolute;
+	right:5px;
+	bottom:5px;
+	border:1px solid green;
+	border-radius:5px;
+	padding:20px;
+	background:green;
 }
 
 #overlay{
@@ -110,7 +130,7 @@ border:solid 1px black;
 
 #bodytable th 
 {
-font-size:1em;
+font-size:14px;
 padding-top:5px;
 padding-bottom:4px;
 color: white;
@@ -119,7 +139,8 @@ background-color:rgba(0,0,0,0.8);
 
 #bodytable td 
 {
-color:#000000;
+	color:#000000;
+	font-size:12px;
 min-height:29px;
 padding:2px;
 }
