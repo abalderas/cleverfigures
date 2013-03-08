@@ -21,10 +21,11 @@
 
 class Groupsave extends CI_Controller {
 
-	function Analise(){
+	function Groupsave(){
       		parent::__construct();
-      		$this->load->model('color_model');
-      		$this->load->model('user_model');
+      		$this->load->model('member_model');
+      		$this->load->model('wiki_model');
+      		$this->load->model('group_model');
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	
@@ -37,20 +38,27 @@ class Groupsave extends CI_Controller {
 			$this->load->view('content/login_view');
 			$this->load->view('templates/footer_view');
 		}
-		else{
-		
-			$datah = array('title' => lang('voc.i18n_analise'));
-			
-			$colors = array(lang('voc.i18n_no_color') => lang('voc.i18n_no_color'));
-			$colors = array_merge($colors, $this->color_model->get_color_list($this->session->userdata('username')));
-			
-			$wikis = array(lang('voc.i18n_no_wiki') => lang('voc.i18n_no_wiki')); 
-			$wikis = array_merge($wikis, $this->user_model->get_wiki_list($this->session->userdata('username')));
-			
-			$adata = array('wikis' => $wikis, 'colors' => $colors);
+	}
+	
+	function savegroup($wikiname){
+   	
+		if(!$this->session->userdata('username')){
+			$datah = array('title' => lang('voc.i18n_login'));
 			
 			$this->load->view('templates/header_view', $datah);
-			$this->load->view('content/analise_view', $adata);
+			$this->load->view('content/login_view');
+			$this->load->view('templates/footer_view');
+		}
+		else{
+			
+			$users = $this->wiki_model->get_user_list($wikiname);
+			if($users)
+				foreach($users as $user)
+					if($this->input->post($user."group") != "no group")
+						$this->member_model->join_group($this->input->post($user."group"), $user);
+			
+			$this->load->view('templates/header_view', array('title' => lang('voc.i18n_groups')));
+			$this->load->view('content/group_view', array('wiki' => $wikiname, 'groupsaved' => true, 'users' => $users));
 			$this->load->view('templates/footer_view');
 		}
 	}

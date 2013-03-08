@@ -9,6 +9,8 @@
 		echo "<em>".lang('voc.i18n_groupname_not_set')."</em>";
 	if(isset($groupcreated))
 		echo "<info>".lang('voc.i18n_groupcreated')."</info>";
+	if(isset($groupsaved))
+		echo "<info>".lang('voc.i18n_groupsaved')."</info>";
 	if(isset($groupexists))
 		echo "<em>".lang('voc.i18n_groupexists')."</em>";
 ?>
@@ -17,7 +19,7 @@
 
 <br>
 
-<?=form_open('groupsave')?>
+<?=form_open("groupsave/savegroup/$wiki")?>
 
 <table id = "bodytable">
 	<?

@@ -37,6 +37,8 @@ class Group_model extends CI_Model{
 	
 			$this->db->insert('groups', $sql);
 		}
+		
+		return true;
    	}
    	
    	function delete_group($groupname){
