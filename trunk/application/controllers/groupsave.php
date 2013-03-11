@@ -23,7 +23,6 @@ class Groupsave extends CI_Controller {
 
 	function Groupsave(){
       		parent::__construct();
-      		$this->load->model('member_model');
       		$this->load->model('wiki_model');
       		$this->load->model('group_model');
 // 		$this->lang->load('voc', $this->session->userdata('language'));
@@ -55,7 +54,9 @@ class Groupsave extends CI_Controller {
 			if($users)
 				foreach($users as $user)
 					if($this->input->post($user."group") != "no group")
-						$this->member_model->join_group($this->input->post($user."group"), $user);
+						$this->group_model->join_group($this->input->post($user."group"), $user);
+					else
+						$this->group_model->leave_group($user);
 			
 			$this->load->view('templates/header_view', array('title' => lang('voc.i18n_groups')));
 			$this->load->view('content/group_view', array('wiki' => $wikiname, 'groupsaved' => true, 'users' => $users));

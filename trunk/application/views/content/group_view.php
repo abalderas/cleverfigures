@@ -35,7 +35,7 @@
 				$menulist[$group] = $group;
 			
 			foreach($users as $user)
-				echo "<tr><td>$user</td><td>".form_dropdown($user."group", $menulist, $this->member_model->get_member_group($user))."</td></tr>";
+				echo "<tr><td>$user</td><td>".form_dropdown($user."group", $menulist, $this->group_model->get_member_group($user))."</td></tr>";
 			echo "<tr><td colspan = '3' style = 'text-align:right;'>".form_submit('groupsubmit', lang('voc.i18n_save_selection'))."</td></tr>";
 		}
 		else{

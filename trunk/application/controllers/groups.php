@@ -22,7 +22,7 @@ class Groups extends CI_Controller {
 	function Groups(){
       		parent::__construct();
       		$this->load->model('wiki_model');
-      		$this->load->model('member_model');
+      		$this->load->model('group_model');
    	}
    	
 	function index(){
