@@ -138,6 +138,7 @@ $lang['voc.i18n_uploads'] = "Uploads";
 $lang['voc.i18n_upsize'] = "Uploads size";
 $lang['voc.i18n_user'] = "User";
 $lang['voc.i18n_users'] = "Users";
+$lang['voc.i18n_user_did_not_work'] = "There is no data for this user.";
 $lang['voc.i18n_view'] = "View";
 $lang['voc.i18n_view_analisis'] = "Performed Analisis";
 $lang['voc.i18n_warnings'] = "Warnings";

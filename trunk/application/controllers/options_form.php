@@ -27,6 +27,7 @@ class Options_form extends CI_Controller {
       		$this->load->model('color_model');
       		$this->load->model('analisis_model');
       		$this->load->model('user_model');
+      		$this->load->model('group_model');
       		$this->load->model('csv_model');
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
@@ -71,7 +72,7 @@ class Options_form extends CI_Controller {
 		else{
 		
 			$datah = array('title' => lang('voc.i18n_check_results'));
-				
+			
 			$adata = $this->analisis_model->get_analisis_data($name);
 			
 			$this->load->view('templates/header_view', $datah);

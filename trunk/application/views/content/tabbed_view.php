@@ -21,16 +21,24 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 <link type="text/css" rel="StyleSheet" href="css/tab.webfx.css" />
 
 
-<div class="tab-pane" id="tab-pane-1">
+<div class="tab-pane" id="tab-pane-<?=$panid?>">
 	<?
 		$view = "content/".$type."analisis_view";
 		$item = $type."name";
 		
 		foreach($names as $name){
-			echo "<div class = \"tab-page\">";
+			if(!($type == 'user' and !$this->wiki_model->user_has_worked($name, $wiki))){
+				echo "<div class = \"tab-page\">";
 				echo "<h2 class = \"tab\">".$name."</h2>";
 				$this->load->view($view, array('data' => $data, "$item" => $name));
-			echo "</div>";
+				echo "</div>";
+			}
+			else{
+				echo "<div class = \"tab-page\">";
+				echo "<h2 class = \"tab\">".$name."</h2>";
+				echo lang('voc.i18n_user_did_not_work');
+				echo "</div>";
+			}
 		}
 	?>
 </div>

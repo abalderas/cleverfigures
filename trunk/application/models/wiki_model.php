@@ -60,6 +60,13 @@ class Wiki_model extends CI_Model{
 // 		}
 	}
 	
+	private function last_psize_sum($pagebytes, $catpage, $category){
+		$res = 0;
+		foreach(array_keys($catpage[$category]) as $page)
+			$res += end($pagebytes[$page])?end($pagebytes[$page]):0;
+		return $res;
+   	}
+   	
 	private function get_base_url($wikiname){
 		$result = $this->db->query("select wiki_baseurl from wiki where wiki_name = $wikiname")->result();
 		
@@ -182,6 +189,14 @@ class Wiki_model extends CI_Model{
 		}
    	}
    	
+   	function user_has_worked($username, $wikiname){
+		$link = $this->connection_model->connect($this->wconnection($wikiname));
+   		if(!$link) die("user_has_worked::Invalid database connection.");
+   		
+		$result = $link->query("select * from revision, user where rev_user = user_id and user_name = '$username'")->result();
+		return $result ? true : false;
+   	}
+   	
    	function fetch($wikiname, $analisis){
 		
 		//Starting the analisis
@@ -193,6 +208,27 @@ class Wiki_model extends CI_Model{
    		$link = $this->connection_model->connect($this->wconnection($wikiname));
    		if(!$link) die("fetch::Invalid database connection.");
    		
+   		echo "Querying database for user id's...";
+   		ob_flush(); flush();
+   		
+   		//Creating query string for the general query
+   		$qstr = "select user_id, user_name from user";		
+		
+		//Querying database
+   		$query = $link->query($qstr);
+   		
+   		if(!$query->result()){
+			echo "fail.</br>";
+			return false;
+		}
+		else
+			echo "done.</br>";
+		
+		foreach($query->result() as $row){
+			$userid	[$row->user_name] = $row->user_id;
+			$iduser	[$row->user_id] = $row->user_name;
+		}
+		
    		echo "Querying database for general information...";
    		ob_flush(); flush();
    		
@@ -309,8 +345,6 @@ class Wiki_model extends CI_Model{
 
 			//USER INFORMATION
 			
-			$userid			[$row->user_name] = $row->user_id;
-			$iduser			[$row->user_id] = $row->user_name;
 			$usereditscount		[$row->user_name] += 1;								// Counts the total editions per user
 			$userbytescount		[$row->user_name] += $tamdiff;
 			
@@ -497,7 +531,8 @@ class Wiki_model extends CI_Model{
 			$pageuserbytes_per[$row->page_title][$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = ($pagebytescount[$row->page_title] != 0) ? $pageuserbytes[$row->page_title][$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] / $pagebytescount[$row->page_title] : 0;
    		}
    		
-   		$analisis_data = array_merge($analisis_data, array('useredits' => $useredits
+   		$analisis_data = array_merge($analisis_data, array(
+			'useredits' => $useredits
 			, 'useredits_art' => $useredits_art
 			, 'useredits_art_per' => $useredits_art_per
 			, 'useredits_per' => $useredits_per
@@ -578,6 +613,7 @@ class Wiki_model extends CI_Model{
 			, 'revisionuser' => $revisionuser
 			, 'pageusereditscount' => $pageuseredits
 			, 'pageuserbytescount' => $pageuserbytes
+			, 'wikiname' => $wikiname
 			, 'pageid' => $pageid));
 						
    		echo "done.</br>";

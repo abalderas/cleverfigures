@@ -41,6 +41,29 @@ class Group_model extends CI_Model{
 		return true;
    	}
    	
+   	function get_members($groupname){
+   		$check = $this->db->query("select member_name from member where member_group = '$groupname'");
+   		if(!$check->result())
+   			return false;
+   		else
+   			foreach($check->result() as $row)
+				$member[] = $row->member_name;
+		
+		return $member;
+   	}
+   	
+   	function there_are_groups(){ return ($this->db->query("select * from groups")->result()) ? true : false; }
+   	function get_groups(){
+		$check = $this->db->query("select * from groups");
+   		if(!$check->result())
+   			return false;
+   		else
+   			foreach($check->result() as $row)
+				$groups[] = $row->group_name;
+		
+		return $groups;
+   	}
+   	
    	function delete_group($groupname){
    		$check = $this->db->get_where('groups', array('group_name' => $groupname));
    		if(!$check)

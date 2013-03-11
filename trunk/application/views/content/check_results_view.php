@@ -711,6 +711,21 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 							}";
 						}
 					?>
+					
+					<?
+						if($this->group_model->there_are_groups()){
+							echo "else if(SelValue == '".lang('voc.i18n_group')."'){
+								return [";
+							$groups = $this->group_model->get_groups();
+							
+							foreach($groups as $group){
+								echo "'".$group."'";
+								if($group != end($groups)) echo ",";
+							}
+							echo "];
+							}";
+						}
+					?>
 				}
 			});
 		});
@@ -720,27 +735,37 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	<? echo form_open('filters_form', array('class' => "yui3-skin-sam")); ?>
 	<table id = "bodytable">
 	<tr>
-		<th colspan = "3"><?=lang('voc.i18n_filter_by')?></th>
+		<th><?=lang('voc.i18n_filter_by')?></th>
 	</tr>
 	<tr>
-		<td style = "width:800px">
+		<td>
 		<?
-			if(isset($data['catedits']))
+			if(isset($data['catedits']) and !$this->group_model->there_are_groups())
 				$options = array(lang('voc.i18n_user') => lang('voc.i18n_user'),
 								lang('voc.i18n_page') => lang('voc.i18n_page'),
 								lang('voc.i18n_category') => lang('voc.i18n_category')
-								//lang('voc.i18n_criteria') => lang('voc.i18n_criteria'))
+							);
+			else if(isset($data['catedits']) and $this->group_model->there_are_groups())
+				$options = array(lang('voc.i18n_user') => lang('voc.i18n_user'),
+								lang('voc.i18n_page') => lang('voc.i18n_page'),
+								lang('voc.i18n_category') => lang('voc.i18n_category'),
+								lang('voc.i18n_group') => lang('voc.i18n_group')
+							);
+			else if(!isset($data['catedits']) and !$this->group_model->there_are_groups())
+				$options = array(lang('voc.i18n_user') => lang('voc.i18n_user'),
+								lang('voc.i18n_page') => lang('voc.i18n_page')
 								);
 			else
 				$options = array(lang('voc.i18n_user') => lang('voc.i18n_user'),
-								lang('voc.i18n_page') => lang('voc.i18n_page')
-								//lang('voc.i18n_criteria') => lang('voc.i18n_criteria'))
-								);
+								lang('voc.i18n_page') => lang('voc.i18n_page'),
+								lang('voc.i18n_group') => lang('voc.i18n_group')
+							);
+							
 			echo form_dropdown('select_filter', $options, lang('voc.i18n_user'), "id = 'select_filter'");
-			
 			echo "   ";
 			echo form_hidden('aname', $aname);
-			echo form_input(array('id' => 'filterstring', 'name' => 'filterstring', 'class' => 'cssform', 'width' => '80%'));
+			echo form_hidden('wname', $data['wikiname']);
+			echo form_input(array('id' => 'filterstring', 'name' => 'filterstring', 'class' => 'cssform'));
 		?>
 		</td>
 	</tr>
