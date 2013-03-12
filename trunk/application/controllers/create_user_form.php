@@ -45,7 +45,7 @@ class Create_user_form extends CI_Controller {
 				$datah = array('title' => lang('voc.i18n_configuration'));
 				
 				$this->load->view('templates/header_view', $datah);
-				$this->load->view('content/configuration_view', array('admin' => $this->session->userdata('is_admin')));
+				$this->load->view('content/configuration_view');
 				$this->load->view('templates/footer_view');
 			}
 			else{

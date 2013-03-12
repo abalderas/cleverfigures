@@ -69,7 +69,7 @@ echo form_open('configuration_form');
 			<td><?=form_submit('add_color', lang('voc.i18n_add_color'));?></td>
 		</tr>
 		
-		<? if(!isset($admin) || !$admin) echo "<!--" ?>
+		<? if(!$this->session->userdata('is_admin')) echo "<!--" ?>
 		<tr>
 			<th colspan = "2"><?=lang('voc.i18n_users');?></th>
 		</tr>
@@ -77,6 +77,7 @@ echo form_open('configuration_form');
 			<td><?=form_label(lang('voc.i18n_add_user'), 'add_user');?></td>
 			<td><?=form_submit('add_user', lang('voc.i18n_add_user'));?></td>
 		</tr>
+		<? if(!$this->session->userdata('is_admin')) echo "-->" ?>
 		<tr>
 			<th colspan = "2"><?=lang('voc.i18n_accessibility');?></th>
 		</tr>
@@ -92,7 +93,6 @@ echo form_open('configuration_form');
 		</tr>
 		</table>
 		
-		<? if(!isset($admin) || !$admin) echo "-->" ?>
 		
 		<? 
 			if(!isset($wikilist)) 

@@ -149,4 +149,5 @@ $lang['voc.i18n_write_email'] = "Write your registered email";
 $lang['voc.i18n_your_data'] = "Your data";
 $lang['voc.i18n_your_qualitative_sources'] = "Your qualitative sources";
 $lang['voc.i18n_your_wikis'] = "Your wikis";
+$lang['voc.i18n_wiki_baseurl'] = "Base Url";
 ?>
