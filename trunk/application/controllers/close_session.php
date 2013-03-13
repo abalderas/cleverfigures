@@ -18,33 +18,34 @@
 // along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
 
-
+//CLOSE SESSION CONTROLLER
 class Close_session extends CI_Controller {
 
 	function Close_session(){
       		parent::__construct();
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
+   	
    	function index(){
+		
+		//IF SESSION EXPIRED
 		if(!$this->session->userdata('username')){
+			
+			//CREATE HEADER ARRAY
 			$datah = array('title' => lang('voc.i18n_login'));
 			
+			//LOAD LOGIN VIEW
 			$this->load->view('templates/header_view', $datah);
 			$this->load->view('content/login_view');
 			$this->load->view('templates/footer_view');
 		}
 		else{
-		
-			if($this->session->userdata('username')){
-				$this->session->sess_destroy();
-				redirect('close_session');
-			}
-			else{
-				$datah = array('title' => lang('voc.i18n_login'));
-				$this->load->view('templates/header_view', $datah);
-				$this->load->view('content/login_view');
-				$this->load->view('templates/footer_view');
-			}
+			
+			//DESTROY SESSION
+			$this->session->sess_destroy();
+			
+			//REDIRECT TO THIS CONTROLLER TO UPDATE THE SESSION
+			redirect('close_session');
 		}
 	}
 } 

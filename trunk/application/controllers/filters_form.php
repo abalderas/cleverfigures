@@ -29,6 +29,7 @@ class Filters_form extends CI_Controller {
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
 	
+	//PREVIOUS HIGHEST KEY FUNCTION: GETS THE LAST HIGHEST KEY OF AN ARRAY CHECKING BACKWARDS FROM THE GIVEN ONE
 	private function previous_highest_key($array, $key){
 		$result = false;
 		foreach(array_keys($array) as $akey){
@@ -40,6 +41,7 @@ class Filters_form extends CI_Controller {
 		return $result;
 	}
 	
+	//SPLIT STRING FUNCTION: SPLITS A STRING ACCORDING TO THE GIVEN DELIMITER
 	private function split_string($string, $delimiter){
 		$ufstring = str_replace(' ','',$string);
 		$finalarray = explode($delimiter, $ufstring);
@@ -47,47 +49,70 @@ class Filters_form extends CI_Controller {
 		return $finalarray;
 	}
 	
+	//MAIN FUNCTION
 	function index(){
+		//IF SESSION EXPIRED
 		if(!$this->session->userdata('username')){
+			//CREATE HEADER ARRAY
 			$datah = array('title' => lang('voc.i18n_login'));
 			
+			//load login view
 			$this->load->view('templates/header_view', $datah);
 			$this->load->view('content/login_view');
 			$this->load->view('templates/footer_view');
 		}
 		else{
-// 			$filterstrings = $this->split_string($_POST['filterstring'],',');
-// 			array_pop($filterstrings);
+			//SEPARATE STRING INTO SINGLE NAMES
 			$filterstrings = explode(',', $_POST['filterstring']);
 			
+			//GET ANALISIS DATA
 			$adata = $this->analisis_model->get_analisis_data($this->input->post('aname'));
+			
+			//IF NO DATA, ERROR
 			if(!$adata)
 				die('No such analisis data.');
 			
+			//CREATE HEADER ARRAY
 			$datah = array('title' => lang('voc.i18n_check_results'));
+			
+			//LOAD HEADER VIEW
 			$this->load->view('templates/header_view', $datah);
 			
+			//IF FILTERING BY USER
 			if($_POST['select_filter'] == lang('voc.i18n_user'))
+				//LOAD TABBED VIEW FOR USERS
 				$this->load->view('content/tabbed_view', array('data' => $adata, 'names' => $filterstrings, 'type' => 'user', 'panid' => '1', 'wiki' => $this->input->post('wname')));
+			//IF FILTERING BY PAGE
 			else if($_POST['select_filter'] == lang('voc.i18n_page'))
+				//LOAD TABBED VIEW FOR PAGES
 				$this->load->view('content/tabbed_view', array('data' => $adata, 'names' => $filterstrings, 'type' => 'page', 'panid' => '1', 'wiki' => $this->input->post('wname')));
+			//IF FILTERING BY CATEGORY
 			else if($_POST['select_filter'] == lang('voc.i18n_category'))
+				//LOAD TABBED VIEW FOR CATEGORIES
 				$this->load->view('content/tabbed_view', array('data' => $adata, 'names' => $filterstrings, 'type' => 'category', 'panid' => '1', 'wiki' => $this->input->post('wname')));
+			//IF FILTERING BY GROUP
 			else if($_POST['select_filter'] == lang('voc.i18n_group')){
 				$id = 1;
+				//FOR EACH GROUP
 				foreach($filterstrings as $groupname){
+					//GET MEMBERS
 					$members = $this->group_model->get_members($groupname);
+					
+					//IF THERE ARE MEMBERS
 					if($members){
+						//LOAD TABBED VIEW FOR USERS
 						$this->load->view('content/tabbed_view', array('data' => $adata, 'names' => $members, 'type' => 'user', 'panid' => $id, 'wiki' => $this->input->post('wname')));
 						echo "<br><br>";
 					}
 					$id++;
 				}
 			}
-			else{	
-				die('Filters_form : FATAL ERROR');
+			else{
+				//FILTER NOT DEFINED, ERROR
+				die('FILTER NOT DEFINED');
 			}
 			
+			//LOAD FOOTER VIEW
 			$this->load->view('templates/footer_view');
 		}
 	}

@@ -25,6 +25,7 @@ class Groups extends CI_Controller {
       		$this->load->model('group_model');
    	}
    	
+   	//DOES NOTHING, JUST CHECKS SESSION IN CASE OF FAILURE
 	function index(){
 	
 		if(!$this->session->userdata('username')){
@@ -36,17 +37,24 @@ class Groups extends CI_Controller {
 		}
 	}
 	
+	//GET STUDENT GROUP FUNCTION
 	function getgroups($wiki){
-	
+		
+		//IF SESSION EXPIRED
 		if(!$this->session->userdata('username')){
+			//CREATE HEADER ARRAY
 			$datah = array('title' => lang('voc.i18n_login'));
 			
+			//LOAD LOGIN VIEW
 			$this->load->view('templates/header_view', $datah);
 			$this->load->view('content/login_view');
 			$this->load->view('templates/footer_view');
 		}
 		else{
+			//CREATE HEADER ARRAY
 			$datah = array('title' => lang('voc.i18n_groups'));
+			
+			//LOAD GROUP VIEW WITH USERS LIST AND WIKI NAME
 			$this->load->view('templates/header_view', $datah);
 			$this->load->view('content/group_view', array('wiki' => $wiki, 'users' => $this->wiki_model->get_user_list($wiki)));
 			$this->load->view('templates/footer_view');

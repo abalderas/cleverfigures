@@ -28,6 +28,7 @@ class Groupsave extends CI_Controller {
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	
+   	//NOT USED, JUST CHECKS SESSION IF ERROR HAPPENS
    	function index(){
    	
 		if(!$this->session->userdata('username')){
@@ -39,25 +40,35 @@ class Groupsave extends CI_Controller {
 		}
 	}
 	
+	//SAVE STUDENTS GROUP FUNCTION
 	function savegroup($wikiname){
-   	
+		
+		//IF SESSION EXPIRED
 		if(!$this->session->userdata('username')){
+			//CREATE HEADER ARRAY
 			$datah = array('title' => lang('voc.i18n_login'));
 			
+			//LOAD LOGIN VIEW
 			$this->load->view('templates/header_view', $datah);
 			$this->load->view('content/login_view');
 			$this->load->view('templates/footer_view');
 		}
 		else{
-			
+			//GET WIKI USERS LIST
 			$users = $this->wiki_model->get_user_list($wikiname);
+			
+			//IF THERE ARE USERS
 			if($users)
 				foreach($users as $user)
+					//IF GROUP ASSIGNED
 					if($this->input->post($user."group") != "no group")
+						//USER JOINS GROUP
 						$this->group_model->join_group($this->input->post($user."group"), $user);
 					else
+						//USER LEAVES ANY PREVIOUS GROUP
 						$this->group_model->leave_group($user);
 			
+			//LOAD GROUPS VIEW
 			$this->load->view('templates/header_view', array('title' => lang('voc.i18n_groups')));
 			$this->load->view('content/group_view', array('wiki' => $wikiname, 'groupsaved' => true, 'users' => $users));
 			$this->load->view('templates/footer_view');

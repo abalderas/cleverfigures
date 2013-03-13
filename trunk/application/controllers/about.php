@@ -18,7 +18,7 @@
 // along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
 
-
+//ABOUT CONTROLLER
 class About extends CI_Controller {
 
 	function About(){
@@ -27,7 +27,7 @@ class About extends CI_Controller {
    	}
    	
    	function index(){
-   	
+		//IF SESSION EXPIRED, LOAD LOGIN VIEW
 		if(!$this->session->userdata('username')){
 			$datah = array('title' => lang('voc.i18n_login'));
 			
@@ -37,8 +37,10 @@ class About extends CI_Controller {
 		}
 		else{
 			
+			//CREATE HEADER ARRAY
 			$datah = array('title' => lang('voc.i18n_about'));
 			
+			//LOAD VIEWS
 			$this->load->view('templates/header_view', $datah);
 			$this->load->view('content/about_view');
 			$this->load->view('templates/footer_view');

@@ -26,20 +26,28 @@ class Configure extends CI_Controller {
       		$this->load->model('user_model');
    	}
    	
+   	//MAIN FUNCTION
 	function index(){
 	
+		//IF SESSION EXPIRED
 		if(!$this->session->userdata('username')){
+		
+			//CREATE HEADER ARRAY
 			$datah = array('title' => lang('voc.i18n_login'));
 			
+			//LOAD LOGIN VIEW
 			$this->load->view('templates/header_view', $datah);
 			$this->load->view('content/login_view');
 			$this->load->view('templates/footer_view');
 		}
 		else{
 		
+			//CREATE HEADER ARRAY
 			$datah = array('title' => lang('voc.i18n_configuration'));
+			
+			//LOAD CONFIGURATION VIEW WITH WIKI AND COLOR LISTS
 			$this->load->view('templates/header_view', $datah);
-			$this->load->view('content/configuration_view', array('admin' => $this->session->userdata('is_admin'), 'wikilist' => $this->user_model->get_wiki_list($this->session->userdata('username')), 'colorlist' => $this->user_model->get_color_list($this->session->userdata('username'))));
+			$this->load->view('content/configuration_view', array('wikilist' => $this->user_model->get_wiki_list($this->session->userdata('username')), 'colorlist' => $this->user_model->get_color_list($this->session->userdata('username'))));
 			$this->load->view('templates/footer_view');
 		}
 	}

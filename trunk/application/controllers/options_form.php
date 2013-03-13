@@ -18,7 +18,7 @@
 // along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
 
-
+//REPORT OPTIONS CONTROLLER
 class Options_form extends CI_Controller {
 
 	function Options_form(){
@@ -33,7 +33,7 @@ class Options_form extends CI_Controller {
    	}
    	
 	function index(){
-   	
+		//IF SESSION EXPIRED, LOAD LOGIN VIEW
 		if(!$this->session->userdata('username')){
 			$datah = array('title' => lang('voc.i18n_login'));
 			
@@ -43,7 +43,9 @@ class Options_form extends CI_Controller {
 		}
 	}
 	
+	//DELETE ANALISIS FUNCTION
 	function delete($name){
+		//IF SESSION EXPIRED, LOAD LOGIN VIEW
 		if(!$this->session->userdata('username')){
 			$datah = array('title' => lang('voc.i18n_login'));
 			
@@ -52,16 +54,20 @@ class Options_form extends CI_Controller {
 			$this->load->view('templates/footer_view');
 		}
 		else{
-		
+			
+			//CREATE HEADER ARRAY
 			$datah = array('title' => lang('voc.i18n_delete_analisis'));
-				
+			
+			//LOAD VIEW
 			$this->load->view('templates/header_view', $datah);
 			$this->load->view('content/delete_analisis_view', array('analisis' => $name));
 			$this->load->view('templates/footer_view');
 		}
 	}
 	
+	//VIEW REPORT FUNCTION
 	function view($name){
+		//IF SESSION EXPIRED, LOAD LOGIN VIEW
 		if(!$this->session->userdata('username')){
 			$datah = array('title' => lang('voc.i18n_login'));
 			
@@ -71,10 +77,13 @@ class Options_form extends CI_Controller {
 		}
 		else{
 		
+			//CREATE HEADER ARRAY
 			$datah = array('title' => lang('voc.i18n_check_results'));
 			
+			//LOAD ANALISIS DATA
 			$adata = $this->analisis_model->get_analisis_data($name);
 			
+			//LOAD VIEWS WITH DATA
 			$this->load->view('templates/header_view', $datah);
 			$this->load->view('content/check_results_view', array('aname' => $name, 'data' => $adata));
 			$this->load->view('templates/footer_view');

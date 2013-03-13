@@ -18,14 +18,13 @@
 // along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
 
-
+//CONFIRM DELETION CONTROLLER
 class Confirm_delete extends CI_Controller {
 
 	function Confirm_delete(){
       		parent::__construct();
       		$this->load->model('wiki_model');
       		$this->load->model('color_model');
-//       	$this->load->model('filter_model');
       		$this->load->model('analisis_model');
       		$this->load->model('user_model');
       		$this->load->model('csv_model');
@@ -34,25 +33,38 @@ class Confirm_delete extends CI_Controller {
    	
    	function index(){
    	
+		//IF SESSION EXPIRED
 		if(!$this->session->userdata('username')){
+		
+			//CREATE HEADER ARRAY
 			$datah = array('title' => lang('voc.i18n_login'));
 			
+			//LOAD LOGIN VIEW
 			$this->load->view('templates/header_view', $datah);
 			$this->load->view('content/login_view');
 			$this->load->view('templates/footer_view');
 		}
 		else{
-		
+			
+			//IF DELETION CONFIRMED
 			if(isset($_POST['confirm'])){
+			
+				//CREATE HEADER ARRAY
 				$datah = array('title' => lang('voc.i18n_delete_analisis'));
 				
+				//DELETE ANALYSIS
 				$this->analisis_model->delete_analisis($_POST['aname']);
+				
+				//REDIRECT TO TEACHER CONTROLLER
 				redirect('teacher');
 			}
-			else if(isset($_POST['cancel'])){
+			//IF DELETION CANCELLED
+			else if(isset($_POST['cancel']))
+			
+				//REDIRECT TO TEACHER CONTROLLER
 				redirect('teacher');
-			}
-			else die('FATAL ERROR');
+			//ANY OTHER CASE, ERROR
+			else die('DELETION FORM ERROR');
 		}
 	}
 }

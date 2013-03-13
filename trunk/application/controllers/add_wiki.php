@@ -18,7 +18,7 @@
 // along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
 
-
+//ADD WIKI CONTROLLER
 class Add_wiki extends CI_Controller {
 
 	function Add_wiki(){
@@ -27,6 +27,8 @@ class Add_wiki extends CI_Controller {
 		$this->load->model('user_model');
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
+   	
+   	//TEST_CONNECTION FUNCTION
    	private function test_connection(){
 		$db = @mysqli_connect($_POST['dbserver'], $_POST['dbuser'], $_POST['dbpassword'], $_POST['dbname'], TRUE);
 		if($db)
@@ -35,46 +37,65 @@ class Add_wiki extends CI_Controller {
 			return FALSE;
 	}
 	
+	//MAIN FUNCTION
 	function index(){
 	
+		//IF SESSION EXPIRED
 		if(!$this->session->userdata('username')){
+			
+			//CREATE HEADER ARRAY
 			$datah = array('title' => lang('voc.i18n_login'));
 			
+			//LOAD LOGIN VIEW
 			$this->load->view('templates/header_view', $datah);
 			$this->load->view('content/login_view');
 			$this->load->view('templates/footer_view');
 		}
 		else{
-			//Form validation rules
+			//VALIDATING FORM
 			$this->form_validation->set_rules('wiki_name', lang('voc.i18n_wiki_name'), 'required|alpha_dash|xss_clean');
 			$this->form_validation->set_rules('dbname', lang('voc.i18n_dbname'), 'required|alpha_dash|xss_clean');
 			$this->form_validation->set_rules('dbserver', lang('voc.i18n_dbserver'), 'required|alpha_dash|xss_clean');
 			$this->form_validation->set_rules('dbpassword', lang('voc.i18n_dbpassword'), 'required|xss_clean');
 			$this->form_validation->set_rules('dbuser', lang('voc.i18n_dbuser'), 'required|alpha_dash|xss_clean');
 
-			//If invalid form, reload view
+			//IF INVALID FORM
 			if ($this->form_validation->run() == FALSE){
+				
+				//CREATE HEADER ARRAY
 				$datah = array('title' => lang('voc.i18n_add_wiki'));
+				
+				//LOAD ADD WIKI VIEW
 				$this->load->view('templates/header_view', $datah);
 				$this->load->view('content/add_wiki_view');
 				$this->load->view('templates/footer_view');
 			}
 			else{
-				//If connection failure with given data, reload and show error
+				//IF CONNECTION FAILURE
 				if(!$this->test_connection()){
+				
+					//CREATE HEADER ARRAY
 					$datah = array('title' => lang('voc.i18n_add_wiki'));
+					
+					//CREATE ERROR ARRAY
 					$error = array('connection_error'=> lang('voc.i18n_connection_error'));
+					
+					//LOAD ADD WIKI VIEW
 					$this->load->view('templates/header_view', $datah);
 					$this->load->view('content/add_wiki_view', $error);
 					$this->load->view('templates/footer_view');
 				}
-				//Else, save wiki and load configuration view
 				else{
-					//Saving database
+					//SAVING DATABASE
 					$this->wiki_model->new_wiki($_POST['wiki_name'], $_POST['dbserver'], $_POST['dbname'], $_POST['dbuser'], $_POST['dbpassword'], $_POST['wiki_baseurl']);
+					
+					//RELATE WIKI TO THE USER
 					$this->user_model->relate_wiki($_POST['wiki_name']);
 			
+					//CREATE HEADER ARRAY
 					$datah = array('title' => lang('voc.i18n_installation'));
+					
+					//LOAD CONFIGURATION VIEW
 					$this->load->view('templates/header_view', $datah);
 					$this->load->view('content/configuration_view');
 					$this->load->view('templates/footer_view');
@@ -82,4 +103,4 @@ class Add_wiki extends CI_Controller {
 			}
 		}
 	}
-} 
+}

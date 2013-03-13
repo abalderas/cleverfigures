@@ -18,7 +18,7 @@
 // along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
 
-
+//GROUP CREATE ARRAY
 class Index_controller extends CI_Controller {
 
 	function Index_controller(){
@@ -30,6 +30,7 @@ class Index_controller extends CI_Controller {
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	
+   	//FIRST TIME FUNCTION
 	private function first_time(){
 		$dbs = $this->dbutil->list_databases();
 		if(!array_search('cleverfigures', $dbs)) return true;
@@ -38,50 +39,59 @@ class Index_controller extends CI_Controller {
 	
 	function index(){
 			
-		//If first time running CleverFigures,load installation
+		//IF FIRST TIME RUNNING CLEVERFIGURES
 		if($this->first_time()){
 			
-			//Just in case something strange happens, clear the session
+			//CLEAR SESSION (JUST IN CASE SOMETHING HAPPENS)
 			$this->session->sess_destroy();
 			
-			//Loading installation
+			//CREATE HEADER ARRAY
 			$datah = array('title' => lang('voc.i18n_installation'));
+			
+			//LOAD INSTALLATION VIEW
 			$this->load->view('templates/header_view', $datah);
 			$this->load->view('content/installation1_view');
 			$this->load->view('templates/footer_view');
 		}
-		//If not, check session
+		//IF NOT, CHECK ACTIVE SESSION
 		else{
-			//If user logged in, load teacher view
+			//IF USER LOGGED IN
 			if($this->session->userdata('username')){
+				//CREATE HEADER ARRAY
 				$datah = array('title' => lang('voc.i18n_teacher_view'));
 				
+				//LOAD ANALYSIS LIST
 				foreach($this->user_model->get_analisis_list($this->session->userdata('username')) as $analisis){
 					$adate = $analisis;
 					$awiki = $this->analisis_model->get_analisis_wiki($analisis);
 					$acolor = $this->analisis_model->get_analisis_color($analisis);
 				}
-			
+				
+				//IF THERE ARE ANALYSIS IN THE LIST, CREATE ARRAY
 				if(isset($adate)) $tdata = array('adate' => $adate, 'awiki' => $awiki, 'acolor' => $acolor);
 				else $tdata = array();
 				
+				//LOAD INITIAL VIEW WITH DATA
 				$this->load->view('templates/header_view', $datah);
 				$this->load->view('content/teacher_view', $tdata);
 				$this->load->view('templates/footer_view');
 			}
 			else{
-				//If an user already exists
+				//IF AN USER ALREADY EXISTS
 				if($this->db->query('select * from user')->result()){
+					//CREATE HEADER ARRAY
 					$datah = array('title' => lang('voc.i18n_login'));
-			
+					
+					//LOAD LOGIN VIEW
 					$this->load->view('templates/header_view', $datah);
 					$this->load->view('content/login_view');
 					$this->load->view('templates/footer_view');
 				}
-				//Else, load user creation view
 				else{
+					//CREATE HEADER ARRAY
 					$datah = array('title' => lang('voc.i18n_installation'));
 			
+					//LOAD USER CREATION VIEW
 					$this->load->view('templates/header_view', $datah);
 					$this->load->view('content/installation2_view');
 					$this->load->view('templates/footer_view');

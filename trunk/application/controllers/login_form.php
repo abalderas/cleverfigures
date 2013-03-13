@@ -18,7 +18,7 @@
 // along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
 
-
+//LOGIN CONTROLLER
 class Login_form extends CI_Controller {
 
 	function Login_form(){
@@ -30,36 +30,41 @@ class Login_form extends CI_Controller {
    	}
    	
 	function index(){
+		//IF USER FORGOT PASSWORD
 		if(isset($_POST['forgot'])){
+			//CREATE HEADER ARRAY
 			$datah = array('title' => lang('voc.i18n_forgot_view'));
 			
+			//LOAD FORGOT VIEW
 			$this->load->view('templates/header_view', $datah);
 			$this->load->view('content/forgot_view');
 			$this->load->view('templates/footer_view');
 		}
 		else{
-			//If logged in correctly
+			//IF USER LOGGED CORRECTLY
 			if($this->user_model->login($this->input->post('username'), $this->input->post('password'))){
-				//Get data for header
+				//CREATE HEADER ARRAY
 				$datah = array('title' => lang('voc.i18n_teacher_view'));
 			
-				//If there are analisis performed by he user
+				//IF THE USER HAS PERFORMED ANALYSIS
 				if($this->user_model->get_analisis_list($this->session->userdata('username'))){
+					//LOAD ANALYSIS
 					foreach($this->user_model->get_analisis_list($this->session->userdata('username')) as $analisis){
 						$adata = $this->analisis_model->get_analisis_data($analisis);
 						$adate[] = $analisis;
 						$awiki[] = $this->analisis_model->get_analisis_wiki($analisis);
 						$acolor[] = $this->analisis_model->get_analisis_color($analisis);
 					}
-			
+					
+					//CREATE VIEW DATA
 					$tdata = array('adate' => $adate, 'awiki' => $awiki, 'acolor' => $acolor);
 				
-					//And give the data to the view
+					//LOAD VIEW WITH DATA
 					$this->load->view('templates/header_view', $datah);
 					$this->load->view('content/teacher_view', $tdata);
 					$this->load->view('templates/footer_view');
 				}
-				//Else, load view without data
+				//ELSE, LOAD VIEW WITHOUT DATA
 				else{
 					$this->load->view('templates/header_view', $datah);
 					$this->load->view('content/teacher_view');
@@ -87,9 +92,12 @@ class Login_form extends CI_Controller {
 // 				}
 //			}
 			
-			//Else, reload login view showing error
+			//ELSE, INCORRECT LOGIN CREDENTIALS
 			else{
+				//CREATE HEADER ARRAY
 				$datah = array('title' => lang('voc.i18n_login'));
+				
+				//LOAD VIEW SHOWING ERROR
 				$this->load->view('templates/header_view', $datah);
 				$this->load->view('content/login_view', array('error' => true));
 				$this->load->view('templates/footer_view');

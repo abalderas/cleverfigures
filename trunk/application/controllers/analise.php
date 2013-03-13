@@ -18,7 +18,7 @@
 // along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
 
-
+//ANALISE CONTROLLER
 class Analise extends CI_Controller {
 
 	function Analise(){
@@ -28,27 +28,37 @@ class Analise extends CI_Controller {
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	
+   	//MAIN FUNCTION
    	function index(){
    	
+		//IF SESSION EXPIRED
 		if(!$this->session->userdata('username')){
+		
+			//CREATE HEADER ARRAY
 			$datah = array('title' => lang('voc.i18n_login'));
 			
+			//LOAD LOGIN VIEW
 			$this->load->view('templates/header_view', $datah);
 			$this->load->view('content/login_view');
 			$this->load->view('templates/footer_view');
 		}
 		else{
 		
+			//CREATE HEADER ARRAY
 			$datah = array('title' => lang('voc.i18n_analise'));
 			
+			//CREATE COLOR LIST ARRAY
 			$colors = array(lang('voc.i18n_no_color') => lang('voc.i18n_no_color'));
 			$colors = array_merge($colors, $this->user_model->get_color_list($this->session->userdata('username')));
 			
+			//CREAT WIKI LIST ARRAY
 			$wikis = array(lang('voc.i18n_no_wiki') => lang('voc.i18n_no_wiki')); 
 			$wikis = array_merge($wikis, $this->user_model->get_wiki_list($this->session->userdata('username')));
 			
+			//CREATE DATA ARRAY
 			$adata = array('wikis' => $wikis, 'colors' => $colors);
 			
+			//LOAD ANALISE VIEW
 			$this->load->view('templates/header_view', $datah);
 			$this->load->view('content/analise_view', $adata);
 			$this->load->view('templates/footer_view');

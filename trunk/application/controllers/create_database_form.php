@@ -18,7 +18,7 @@
 // along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
 
-
+//CREATE DATABASE CONTROLLER
 class Create_database_form extends CI_Controller {
 
 	function Create_database_form(){
@@ -31,6 +31,8 @@ class Create_database_form extends CI_Controller {
 		$this->load->dbutil();
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
+   	
+   	//TEST_CONNECTION FUNCTION: TESTS IF A MYSQL CONNECTION IS WORKING CORRECTLY
    	private function test_connection(){
 		$db = @mysqli_connect($_POST['dbserver'], $_POST['dbuser'], $_POST['dbpassword']);
 		if($db)
@@ -39,36 +41,51 @@ class Create_database_form extends CI_Controller {
 			return FALSE;
 	}
 	
+	//MAIN FUNCTION
 	function index(){
 	
-		//Form validation rules
+		//VALIDATING FORM
 		$this->form_validation->set_rules('dbserver', lang('voc.i18n_dbserver'), 'required|alpha_dash|xss_clean');
 		$this->form_validation->set_rules('dbpassword', lang('voc.i18n_dbpassword'), 'required|xss_clean');
 		$this->form_validation->set_rules('dbuser', lang('voc.i18n_dbuser'), 'required|alpha_dash|xss_clean');
 
-		//If invalid form, reload database config view
+		//IF INVALID FORM
 		if ($this->form_validation->run() == FALSE){
+		
+			//CREATE HEADER ARRAY
 			$datah = array('title' => lang('voc.i18n_installation'));
+			
+			//LOAD DATABASE CONFIGURATION VIEW
 			$this->load->view('templates/header_view', $datah);
 			$this->load->view('content/dbconfig_view');
 			$this->load->view('templates/footer_view');
 		}
 		else{
-			//If connection failure with given data, reload and show error
+			//IF CONNECTION FAILS
 			if(!$this->test_connection()){
+				
+				//CREATE HEADER ARRAY
 				$datah = array('title' => lang('voc.i18n_installation'));
+				
+				//CREATE CONNECTION ERROR ARRAY
 				$error = array('connection_error'=> lang('voc.i18n_connection_error'));
+				
+				//LOAD DATABASE CONFIGURATION VIEW
 				$this->load->view('templates/header_view', $datah);
 				$this->load->view('content/dbconfig_view', $error);
 				$this->load->view('templates/footer_view');
 			}
-			//Else, save connection data and load next step
 			else{
-				//Saving connection database & creating tables
+				//SAVE COONECTION DATABASE
 				$this->dbconfig_model->config_database('cleverfigures', $_POST['dbserver'], $_POST['dbuser'], $_POST['dbpassword']);
+				
+				//CREATE TABLES
 				$this->dbforge_model->build_database('cleverfigures', $_POST['dbserver'], $_POST['dbuser'], $_POST['dbpassword']);
 				
+				//CREATE HEADER ARRAY
 				$datah = array('title' => lang('voc.i18n_installation'));
+				
+				//LOAD INSTALLATION VIEW 2
 				$this->load->view('templates/header_view', $datah);
 				$this->load->view('content/installation2_view');
 				$this->load->view('templates/footer_view');

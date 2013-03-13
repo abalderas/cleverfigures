@@ -18,7 +18,7 @@
 // along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
 
-
+//REPORT CONTROLLER
 class Report extends CI_Controller {
 
 	function Report(){
@@ -27,7 +27,7 @@ class Report extends CI_Controller {
    	}
 
 	function index(){
-	
+		//IF SESSION EXPIRED
 		if(!$this->session->userdata('username')){
 			$datah = array('title' => lang('voc.i18n_login'));
 			
@@ -36,9 +36,10 @@ class Report extends CI_Controller {
 			$this->load->view('templates/footer_view');
 		}
 		else{
-		
+			//CREATE HEADER ARRAY
 			$datah = array('title' => lang('voc.i18n_analising'));
 		
+			//LOAD VIEW
 			$this->load->view('templates/header_view', $datah);
 			$this->load->view('content/check_results_view', $result);
 			$this->load->view('templates/footer_view');

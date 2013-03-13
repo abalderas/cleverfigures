@@ -18,7 +18,7 @@
 // along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
 
-
+//FORGOTTEN PASSWORD CONTROLLER
 class Forgot_form extends CI_Controller {
 
 	function Forgot_form(){
@@ -28,6 +28,8 @@ class Forgot_form extends CI_Controller {
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	
+   	//RANDOM PASSWORD GENERATION FUNCTION
+   	//THANKS (http://www.webtoolkit.info/php-random-password-generator.html) FOR THE CODE
    	function randPass($length, $strength=8) {
 		$vowels = 'aeuy';
 		$consonants = 'bdghjmnpqrstvz';
@@ -58,12 +60,17 @@ class Forgot_form extends CI_Controller {
 		return $password;
 	}
 
+	//MAIN FUNCTION
 	function index(){
+		//IF STORED MAIL FOR THE USER
 		if($username = $this->user_model->search_mail_user($_POST['email'])){
+			//GENERATE NEW PASSWORD
 			$password = $this->randPass(8);
-
+			
+			//UPDATE USER PASSWORD
 			//$this->user_model->update_password($username, $password);
 			
+			//EMAIL HIM WITH THE NEW CREDENTIALS
 			$this->email->from('cleverfigures@cleverfigures.com', 'Cleverfigures');
 			$this->email->to($_POST['email']);
 
@@ -76,7 +83,10 @@ class Forgot_form extends CI_Controller {
 			$this->email->send();
 			//echo $this->email->print_debugger();
 			
+			//CREATE HEADER ARRAY
 			$datah = array('title' => lang('voc.i18n_login'));
+			
+			//LOAD LOGIN VIEW SAYING 'EMAIL SENT'
 			$this->load->view('templates/header_view', $datah);
 			$this->load->view('content/login_view', array('emailsent' => true));
 			$this->load->view('templates/footer_view');

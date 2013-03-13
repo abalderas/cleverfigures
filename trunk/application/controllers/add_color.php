@@ -18,7 +18,7 @@
 // along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
 
-
+//ADD COLOR CONTROLLER
 class Add_color extends CI_Controller {
 
 	function Add_color(){
@@ -29,6 +29,7 @@ class Add_color extends CI_Controller {
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	
+   	//TEST_CONNECTION FUNCTION
    	private function test_connection(){
 		$db = @mysqli_connect($_POST['dbserver'], $_POST['dbuser'], $_POST['dbpassword'], $_POST['dbname'], TRUE);
 		if($db)
@@ -37,51 +38,66 @@ class Add_color extends CI_Controller {
 			return FALSE;
 	}
 	
+	//MAIN FUNCTION
 	function index(){
-	
+		
+		//IF SESSION EXPIRED
 		if(!$this->session->userdata('username')){
+			
+			//CREATE HEADER ARRAY
 			$datah = array('title' => lang('voc.i18n_login'));
 			
+			//LOAD LOGIN VIEW
 			$this->load->view('templates/header_view', $datah);
 			$this->load->view('content/login_view');
 			$this->load->view('templates/footer_view');
 		}
 		else{
 		
-			//Form validation rules
+			//VALIDATING FORM
 			$this->form_validation->set_rules('color_name', lang('voc.i18n_color_name'), 'required|alpha_dash|xss_clean');
 			$this->form_validation->set_rules('dbname', lang('voc.i18n_dbname'), 'required|alpha_dash|xss_clean');
 			$this->form_validation->set_rules('dbserver', lang('voc.i18n_dbserver'), 'required|alpha_dash|xss_clean');
 			$this->form_validation->set_rules('dbpassword', lang('voc.i18n_dbpassword'), 'required|xss_clean');
 			$this->form_validation->set_rules('dbuser', lang('voc.i18n_dbuser'), 'required|alpha_dash|xss_clean');
 
-			//If invalid form, reload view
+			//IF INVALID FORM
 			if ($this->form_validation->run() == FALSE){
+				
+				//CREATE HEADER ARRAY
 				$datah = array('title' => lang('voc.i18n_add_color'));
+				
+				//LOAD ADD COLOR VIEW
 				$this->load->view('templates/header_view', $datah);
 				$this->load->view('content/add_color_view');
 				$this->load->view('templates/footer_view');
 			}
 			else{
-				//If connection failure with given data, reload and show error
+				//IF CONNECTION ERROR
 				if(!$this->test_connection()){
+					
+					//CREATE HEADER ARRAY
 					$datah = array('title' => lang('voc.i18n_add_color'));
+					
+					//CREATE ERROR ARRAY
 					$error = array('connection_error'=> lang('voc.i18n_connection_error'));
+					
+					//LOAD ADD COLOR VIEW
 					$this->load->view('templates/header_view', $datah);
 					$this->load->view('content/add_color_view', $error);
 					$this->load->view('templates/footer_view');
 				}
-				//Else, save color and load configuration view
 				else{
-					//Saving database
+					//SAVING DATABASE
 					$this->color_model->new_color($_POST['color_name'], $_POST['dbserver'], $_POST['dbname'], $_POST['dbuser'], $_POST['dbpassword']);
+					
+					//RELATE COLOR TO THE USER
 					$this->user_model->relate_color($_POST['color_name']);
 					
-// 					$filters = array(0 => lang('voc.i18n_no_filter'));
-// 					$filters = array_merge($filters, $this->filter_model->get_filter_list($this->session->userdata('username')));
-// 					$confdata = array('filters' => $filters, 'userdefaultfilter' => $this->user_model->default_filter($this->session->userdata('username')));
-			
+					//CREATE HEADER ARRAY
 					$datah = array('title' => lang('voc.i18n_installation'));
+					
+					//LOAD CONFIGURATION VIEW
 					$this->load->view('templates/header_view', $datah);
 					$this->load->view('content/configuration_view');
 					$this->load->view('templates/footer_view');

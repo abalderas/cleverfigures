@@ -18,7 +18,7 @@
 // along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
 
-
+//GROUP CREATION CONTROLLER
 class Groupcreate extends CI_Controller {
 
 	function Groupcreate(){
@@ -28,6 +28,7 @@ class Groupcreate extends CI_Controller {
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	
+   	//DOES NOTHING, JUST CHECKS SESSION IN CASE OF FAILURE
 	function index(){
    	
 		if(!$this->session->userdata('username')){
@@ -39,32 +40,48 @@ class Groupcreate extends CI_Controller {
 		}
 	}
 	
+	//CREATE GROUP FUNCTION
 	function crgroup($wikiname){
    	
+		//IF SESSION EXPIRED
 		if(!$this->session->userdata('username')){
+			//CREATE HEADER ARRAY
 			$datah = array('title' => lang('voc.i18n_login'));
 			
+			//LOAD LOGIN VIEW
 			$this->load->view('templates/header_view', $datah);
 			$this->load->view('content/login_view');
 			$this->load->view('templates/footer_view');
 		}
 		else{
+			//CREATE HEADER ARRAY
 			$datah = array('title' => lang('voc.i18n_groups'));
+			
+			//LOAD HEADER VIEW
 			$this->load->view('templates/header_view', $datah);
 			
+			//GET USERS LIST
 			$users = $this->wiki_model->get_user_list($wikiname);
 			
+			//IF GROUP NAME SPECIFIED
 			if($_POST['groupnameinput'] != ""){
+				//CREATE GROUP WITH THAT NAME
 				$created = $this->group_model->new_group($_POST['groupnameinput'], $wikiname);
+				
+				//IF SUCCESSFUL
 				if($created)
+					//LOAD GROUP VIEW SHOWING 'GROUP CREATED'
 					$this->load->view('content/group_view', array('wiki' => $wikiname, 'groupcreated' => true, 'users' => $users));
 				else
+					//LOAD GROUP VIEW SHOWING 'GROUP EXISTS' ERROR
 					$this->load->view('content/group_view', array('wiki' => $wikiname, 'groupexists' => true, 'users' => $users));
 			}
 			else{
+				//LOAD GROUP VIEW SHOWING 'NAME NOT SET' ERROR
 				$this->load->view('content/group_view', array('wiki' => $wikiname, 'errgroupnamenotset' => true, 'users' => $users));
 			}
 			
+			//LOAD FOOTER VIEW
 			$this->load->view('templates/footer_view');
 		}
 	}

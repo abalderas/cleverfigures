@@ -18,7 +18,7 @@
 // along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
 
-
+//ANALYSIS FORM CONTROLLER
 class Analisis_form extends CI_Controller {
 
 	function Analisis_form(){
@@ -31,6 +31,7 @@ class Analisis_form extends CI_Controller {
 // 		$this->lang->load('voc', $this->session->userdata('language'));
    	}
 
+	//STANDARD DEVIATION FUNCTION
 	private function standard_deviation($aValues, $bSample = false){
 		$fMean = array_sum($aValues) / count($aValues);
 		$fVariance = 0.0;
@@ -41,9 +42,13 @@ class Analisis_form extends CI_Controller {
 		return (float) sqrt($fVariance);
 	}
 	
+	//EXTRA INFO FUNCTION: GETS COMBINED NUMERICAL AND QUALITATIVE INFORMATION
 	private function extra_info($wikidata, $colordata){
+		
+		//CREATING EMPTY ARRAY TO PUT THE DATA IN
 		$finaldata = array();
 		
+		//GETTING COMBINED INFO...
 		foreach(array_keys($wikidata['revisionpage']) as $key){
 			foreach(array_keys($wikidata['revisionpage'][$key]) as $revision){
 				if(isset($wikidata['revisionpage'][$key][$revision]) and isset($colordata['totalmark'][$revision])){
@@ -61,7 +66,10 @@ class Analisis_form extends CI_Controller {
 			}
 		}
 		
+		//IF GRADES SET
 		if(isset($pagegrades))
+		
+			//ADD QUALITATIVE DATA TO THE ARRAY
 			$finaldata = array_merge($finaldata, array(
 				'pagesd' => $pagesd, 
 				'pageusersd' => $pageusersd, 
@@ -72,7 +80,9 @@ class Analisis_form extends CI_Controller {
 				'pageminvalue' => $pageminvalue,
 				'pagemaxvalue' => $pagemaxvalue));
 				
+		//IF THERE ARE CATEGORIES
 		if(isset($wikidata['revisioncategory']))
+			//COMBINE THEIR DATA
 			foreach(array_keys($wikidata['revisioncategory']) as $key){
 				$catmaxvalue[$key] = 0;
 				$catminvalue[$key] = 10;
@@ -93,73 +103,108 @@ class Analisis_form extends CI_Controller {
 				}
 			}
 		
+		//ADD CATEGORIES DATA TO THE FINAL ARRAY
 		if(isset($catmaxvalue))
 			$finaldata = array_merge($finaldata, array(
 				'catmaxvalue' => $catmaxvalue, 
 				'catminvalue' => $catminvalue, 
 				'cataveragevalue' => $cataveragevalue));
 				
+		//RETURN FINAL ARRAY
 		return $finaldata;
 	}
 	
+	//ANALISE FUNCTION
    	private function analise($analisis_data, $name){
+   	
+		//SET SERVER ANSWER TIME TO UNLIMITED TO ALLOW LONG ANALYSIS
 		set_time_limit (0);
 		
+		//SETTING UP ARRAYS
 		$wiki_result = array();
 		$assess_result = array();
 		
+		//GETTING DATA FROM THE WIKI
 		$wiki_result = $this->wiki_model->fetch($analisis_data['wiki'], $name);
+		
+		//IF NO DATA, END AND RETURN -1 ERROR
 		if(!$wiki_result)
 			return -1;
 			
+		//IF COLOR SET
 		if($analisis_data['color'] != lang('voc.i18n_no_color')){
+			
+			//GETTING COLOR DATA
 			$assess_result = $this->color_model->fetch($analisis_data['color'], $name);
 			
+			//IF EMPTY RESULT, ERROR
 			if(empty($assess_result))
 				return -2;
-				
+			
+			//GETTING EXTRA INFO
 			$extra = $this->extra_info($wiki_result, $assess_result);
 			
+			//IF EMPTY RESULT, ERROR
 			if(empty($extra))
 				return -3;
-				
+			
+			//WRITE ANALYSIS RESULT TO FILE INCLUDING COLOR AND EXTRA INFO
 			write_file("analisis/$name.dat", serialize(array_merge($wiki_result, $assess_result, $extra)));
 		}
 		else{
+			//WRITE ANALYSIS RESULT TO FILE
 			write_file("analisis/$name.dat", serialize(array_merge($wiki_result)));
 		}
 		
+		//RETURN 1, SUCCESS
 		return 1;
    	}
    	
+   	//MAIN FUNCTION
    	function index(){
-   	
+		
+		//IF SESSION EXPIRED
 		if(!$this->session->userdata('username')){
+			
+			//CREATE HEADER ARRAY
 			$datah = array('title' => lang('voc.i18n_login'));
 			
+			//LOAD LOGIN VIEW
 			$this->load->view('templates/header_view', $datah);
 			$this->load->view('content/login_view');
 			$this->load->view('templates/footer_view');
 		}
 		else{
+			//IF WIKI SELECTED
 			if($_POST['select_wiki'] != lang('voc.i18n_no_wiki')){
+				
+				//CREATE ANALYSIS DATA ARRAY
 				$adata = array('wiki' => $_POST['select_wiki'], 
 						'color' => $_POST['select_color']
 					);
+					
+				//CREATE HEADER ARRAY
 				$datah = array('title' => lang('voc.i18n_analising'));
-			
+				
+				//ANALYSIS NAME IS DATETIME
 				$analisis = now();
+				
+				//INCLUDYING ANALYSIS NAME IN THE COOKIE
 				$this->session->set_flashdata(array('aname' => $analisis));
 				
+				//SHOWING ANALISING VIEW
 				echo $this->load->view('templates/header_view', $datah, true);
 				echo $this->load->view('content/analising_view', $adata, true);
 				ob_flush(); flush();
 				
+				//START CHRONOMETER
 				$start = microtime(true);
-
+				
+				//ANALISE
 				$valid_analisis = $this->analise($adata, $analisis);
 				ob_flush(); flush();
 				
+				//IN CASE OF ERRORS, PRINT ERRORS
 				if($valid_analisis == -1)
 					echo "<b>EMPTY WIKI. No analisis performed.</b>";
 				else if($valid_analisis == -2)
@@ -167,30 +212,41 @@ class Analisis_form extends CI_Controller {
 				else if($valid_analisis == -3)
 					echo "<b>INCOMPATIBLE QUALITATIVE DATA SOURCE. The qualitative data source that you chose is not compatible with the data in the wiki. Please select another.</b>";
 				else{
+					//PRINT TOTAL TIME
 					printf("Performed in %.02f seconds.</br>", (microtime(true)-$start));
 					ob_flush(); flush();
-			
+				
+					//RECORD THE ANALYSIS IN THE DB
 					$this->analisis_model->register_analisis($_POST['select_wiki'], isset($_POST['select_color'])? $_POST['select_color'] : false, $analisis);
+					
+					//RELATE ANALYSIS TO THE USER
 					$this->user_model->relate_analisis($analisis);
 				
+					//FINAL MESSAGE
 					echo "<b>Analisis saved. You can check it in \"Performed Analisis\".</b>";
 				}
 			}
 			else{
+				//SHOW MESSAGE IF NO WIKI SELECTED
 				echo 	"<script language=\"javascript\" type=\"text/javascript\">
 						alert('".lang('voc.i18n_must_choose_wiki')."');
 					 </script>";
 			
+				//CREATE HEADER ARRAY
 				$datah = array('title' => lang('voc.i18n_analise'));
 			
+				//CREATE COLOR LIST ARRAY
 				$colors = array(lang('voc.i18n_no_color') => lang('voc.i18n_no_color'));
 				$colors = array_merge($colors, $this->color_model->get_color_list($this->session->userdata('username')));
 				
+				//CREATE WIKI LIST ARRAY
 				$wikis = array(lang('voc.i18n_no_wiki') => lang('voc.i18n_no_wiki')); 
 				$wikis = array_merge($wikis, $this->wiki_model->get_wiki_list($this->session->userdata('username')));
 				
+				//CREATE DATA ARRAY
 				$adata = array('wikis' => $wikis, 'colors' => $colors, 'filters' => $filters);
 				
+				//LOAD ANALISE VIEW
 				$this->load->view('templates/header_view', $datah);
 				$this->load->view('content/analise_view', $adata);
 				$this->load->view('templates/footer_view');

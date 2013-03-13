@@ -17,6 +17,7 @@
 // You should have received a copy of the GNU General Public License
 // along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
+//CONTROLLER TO LOAD THE MAIN VIEW
 class Teacher extends CI_Controller {
 
 	function Teacher(){
@@ -29,6 +30,7 @@ class Teacher extends CI_Controller {
    	
 	function index(){
 		
+		//IF SESSION EXPIRED, LOAD LOGIN VIEW
 		if(!$this->session->userdata('username')){
 			$datah = array('title' => lang('voc.i18n_login'));
 			
@@ -37,19 +39,23 @@ class Teacher extends CI_Controller {
 			$this->load->view('templates/footer_view');
 		}
 		else{
+			//LOAD ALL PERFORMED ANALISIS
 			foreach($this->user_model->get_analisis_list($this->session->userdata('username')) as $analisis){
 				$adate[] = $analisis;
 				$awiki[] = $this->analisis_model->get_analisis_wiki($analisis);
 				$acolor[] = $this->analisis_model->get_analisis_color($analisis);
 			}
 			
+			//IF THERE ARE ANALYSIS, CREATE VIEW ARRAY
 			if(isset($adate))
 				$tdata = array('adate' => $adate, 'awiki' => $awiki, 'acolor' => $acolor);
 			else
 				$tdata = array();
 				
+			//CREATE HEADER ARRAY
 			$datah = array('title' => lang('voc.i18n_teacher_view'));
 			
+			//LOAD VIEWS WITH CREATED ARRAYS
 			$this->load->view('templates/header_view', $datah);
 			$this->load->view('content/teacher_view', $tdata);
 			$this->load->view('templates/footer_view');
