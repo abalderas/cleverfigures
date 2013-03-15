@@ -18,8 +18,27 @@
 // along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
 if(isset($wikideleteerror)) echo "<em>".lang('voc.i18n_error_deleting_wiki')."</em>";
+if(isset($userdeleteerror)) echo "<em>".lang('voc.i18n_error_deleting_user')."</em>";
 
 echo form_open('configuration_form');
+
+if($this->session->userdata('is_admin')){
+		echo
+		"<table id = 'variabletable'>
+			<tr>
+				<th colspan = '3'>".lang('voc.i18n_users')."</th>
+			</tr>
+			<tr>";
+		
+		$users = $this->user_model->get_users_list();
+		foreach($users as $user){
+			echo "<tr><td>$user</td><td>".($this->user_model->is_admin($user) ? lang('voc.i18n_admin') : lang('voc.i18n_teacher')) ."</td><td>".(($this->session->userdata('username') != $user) ? anchor("delete_user/deleteuser/$user",lang('voc.i18n_delete'), array('onClick' => "return confirm('".lang('voc.i18n_delete_user_confirmation')."');")) : "" )."</td><tr>";
+		}
+		
+		echo
+			"</tr>
+		</table><br>";
+	}
 ?>
 
 <?
@@ -77,7 +96,7 @@ echo form_open('configuration_form');
 			<td><?=form_checkbox('high_contrast', '', $this->session->userdata('high_contrast'));?></td>
 		</tr>
 		<tr>
-			<th colspan = "2"><?=form_submit(array('name' => 'save_conf', 'value' => lang('voc.i18n_save_conf'), 'class' => 'next'));?></th>
+			<th class = 'low' colspan = "2"><?=form_submit(array('name' => 'save_conf', 'value' => lang('voc.i18n_save_conf'), 'class' => 'next'));?></th>
 		</tr>
 		</table>
 	</td>
@@ -105,7 +124,7 @@ echo form_open('configuration_form');
 		?>
 	</td></table>
 		
-<?=form_close();?>
+<?= form_close();?>
 
 
 <div id ="footer">

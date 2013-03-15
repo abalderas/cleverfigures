@@ -50,13 +50,20 @@ class User_model extends CI_Model{
 //    	function default_language(){}
    	
    	function is_admin($uname){
-		$result = $this->db->query("select user_is_admin from `user-analisis` where user_username = '$uname'")->result();
+		$result = $this->db->query("select user_is_admin from user where user_username = '$uname'")->result();
 		
 		if($result)
 			foreach($result as $row)
 				return $row->user_is_admin;
 		else
 			return false;
+   	}
+   	
+   	function update_wiki_table(){
+		$query = $this->db->query('select wiki.wiki_name from wiki where wiki.wiki_name not in (select `user-wiki`.wiki_name from `user-wiki`)');
+		if($query->result())
+			foreach($query->result() as $row)
+				$this->delete_wiki($row->wiki_name);
    	}
    	
    	function update_last_session($uname){
@@ -77,7 +84,20 @@ class User_model extends CI_Model{
 		$this->db->update('user', $data); 
    	}
    	
-   	function get_wiki_list($username = 'default'){
+   	function get_users_list(){
+		//Consultamos la conexión
+   		$query = $this->db->query("select * from user");
+   		if(!$query->result())
+   			die('no users in the database');
+   		else{
+   			foreach($query->result() as $row){
+   				$users[] = $row->user_username;
+   			}
+   		}	
+   		return $users;
+   	}
+   	
+   	function get_wiki_list($username){
 		//Consultamos la conexión
    		$query = $this->db->query("select wiki.wiki_name from wiki, `user-wiki` where wiki.wiki_name = `user-wiki`.wiki_name and `user-wiki`.user_username = '$username'");
    		if(!$query->result())
@@ -222,14 +242,24 @@ class User_model extends CI_Model{
       		return false;
    	}
    	
-   	function delete_user(){
-   		$check = $this->db->get_where('user', array('user_username' => $this->session->userdata('username')));
+   	function delete_user($username){
+   		$check = $this->db->get_where('user', array('user_username' => $username));
    		if(!$check)
-   			return "delete(): ERR_NONEXISTENT";
-   		else
-   		 	$this->db->delete('user', array('user_username' => $this->session->userdata('username')));
-   		 	
-   		 	$this->session->sess_destroy();
-   		 	return true;
+   			return false;
+   		else{
+			//GET USER WIKI LIST
+			$wikis = $this->get_wiki_list($username);
+			
+			//UNRELATE THEM
+			foreach($wikis as $wiki)
+				$this->unrelate_wiki($wiki);
+			
+			//ERASE WIKIS THAT WERE RELATED ONLY TO THIS USER
+			$this->update_wiki_table();
+			
+			//DELETE THE USER
+   		 	$this->db->delete('user', array('user_username' => $username));
+   		}
+   		return true;
    	}
 }

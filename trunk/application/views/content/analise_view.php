@@ -21,7 +21,7 @@
 <?=form_open('analisis_form')?>
 <table id = "bodytable">
 	<tr>
-		<th colspan = "2"><?=lang('voc.i18n_data_source')?></th>
+		<th class = 'only' colspan = "2"><?=lang('voc.i18n_data_source')?></th>
 	</tr>
 	<tr>
 		<td><?=lang('voc.i18n_wiki')?></td>
@@ -32,7 +32,7 @@
 		<td><?=form_dropdown('select_color', $colors);?></td>
 	</tr>
 	<tr>
-		<th colspan = "2"><?=form_submit('analise_submit', lang('voc.i18n_analise'));?></th>
+		<th class = 'low' colspan = "2"><?=form_submit('analise_submit', lang('voc.i18n_analise'));?></th>
 	</tr>
 </table>
 

@@ -20,10 +20,10 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 <?echo form_open('options_form');?>
 <table id = "bodytable">
 <tr>
-	<th><?=lang('voc.i18n_date_hour')?></th>
-	<th><?=lang('voc.i18n_wiki')?></th>
-	<th><?=lang('voc.i18n_color')?></th>
-	<th><?=lang('voc.i18n_options')?></th>
+	<th class = 'leftside'><?=lang('voc.i18n_date_hour')?></th>
+	<th class = 'central'><?=lang('voc.i18n_wiki')?></th>
+	<th class = 'central'><?=lang('voc.i18n_color')?></th>
+	<th class = 'rightside'><?=lang('voc.i18n_options')?></th>
 </tr>
 
 <? 
