@@ -108,7 +108,7 @@ if($this->session->userdata('is_admin')){
 				echo "<tr><th colspan = '2'>".lang('voc.i18n_your_wikis')."</th></tr>";
 				foreach($wikilist as $wiki)
 					echo "<tr><td>".$wiki."</td><td>".anchor("groups/getgroups/$wiki",lang('voc.i18n_manage_groups'))
-					."  |  ".anchor("delete_wiki/deletewiki/$wiki",lang('voc.i18n_delete_wiki'), array('onClick' => "return confirm('".lang('voc.i18n_delete_wiki_confirmation')."');"))."</td></tr>";
+					."  |  ".anchor("delete_wiki/deletewiki/$wiki",lang('voc.i18n_delete'), array('onClick' => "return confirm('".lang('voc.i18n_delete_wiki_confirmation')."');"))."</td></tr>";
 				echo "</table><br>";
 			}
 		?>
@@ -118,7 +118,7 @@ if($this->session->userdata('is_admin')){
 				echo "<table id = 'variabletable'>";
 				echo "<tr><th colspan = '2'>".lang('voc.i18n_your_qualitative_sources')."</th></tr>";
 				foreach($colorlist as $color)
-					echo "<tr><td>".$color."</td><td></td></tr>";
+					echo "<tr><td>".$color."</td><td>".anchor("delete_color/deletecolor/$color",lang('voc.i18n_delete'), array('onClick' => "return confirm('".lang('voc.i18n_delete_color_confirmation')."');"))."</td></tr>";
 				echo "</table>";
 			}
 		?>

@@ -45,13 +45,11 @@ class Connection_model extends CI_Model{
    				'connection_user' => "$user",
    				'connection_password' => "$password"
    			);
-					$this->db->insert('connection', $sql);
-	
-			if($this->db->affected_rows() != 1) 
-				return false;
-			else 
-				return  $this->db->insert_id();
+			
+			$this->db->insert('connection', $sql);
 		}
+		
+		return  $this->db->insert_id();
 	}
 	
 	function connect($id){

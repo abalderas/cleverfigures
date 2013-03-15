@@ -66,30 +66,28 @@ class Color_model extends CI_Model{
    	}
    	
    	function new_color($colorname, $db_server, $db_name, $db_user, $db_password){
+   		//Consultamos si la wiki ya existe, si es así devolvemos error
+   		$check = $this->db->query("select * from color where color_name = '$colorname'");
+   		if($check->result())
+   			return false;
+   			
    		//Creamos una nueva conexión
    		$my_con = $this->connection_model->new_connection($db_server, $db_name, $db_user, $db_password);
    		
    		//Si hay error, devolvemos el mensaje de error
-   		if(gettype($my_con) != "integer")
-   			return "new_color(): $my_con";
-   		
-   		//Consultamos si la fuente ya existe, si es así devolvemos error
-   		$check = $this->db->query("select * from color where color_name = '$colorname'");
-   		if($check->result())
-   			return "new_color(): ERR_ALREADY_EXISTS";
+   		if(!$my_con)
+   			die ('new_color: bad connection');
    		else{
-   			//Creamos el array a insertar, con la info de la fuente e insertamos
+   			//Creamos el array a insertar, con la info de la wiki e insertamos
    			$sql = array('color_id' => "",
-   				'color_name' => "$colorname",
-   				'color_connection' => $my_con
+   				'color_name' => "$wikiname",
+   				'color_connection' => "$my_con"
    				);
 			$this->db->insert('color', $sql);
 		
-			//Si no hay error de inserción, devolvemos el id de la fuente
+			//Si no hay error de inserción, devolvemos el id de la wiki
 			if($this->db->affected_rows() != 1) 
-				return "new_color(): ERR_AFFECTED_ROWS (".$this->db->affected_rows().")";
-			else
-				return  $this->db->insert_id();
+				return false;
 		}
    	}
    	
@@ -209,12 +207,36 @@ class Color_model extends CI_Model{
    	}
    	
    	function delete_color($colorname){
-   		//Comprobamos que existe y devuelve error si no
+   	
+   		//CHECK IF COLOR EXISTS
    		$check = $this->db->query("select * from color where color_name = '$colorname'");
-   		if($check->result()->num_rows() == 0)
-   			return "delete_color(): NONEXISTENT";
-   		else
-   			//Elimina la fuente de la base de datos
-   		 	$this->db->delete('color', array('color_name' => $colorname));
+   		
+   		//IF NOT, ERROR
+   		if(!$check->result())
+   			return false;
+   		
+		//UNRELATE WIKI
+		$this->user_model->unrelate_color($colorname);
+   		
+   		//CHECKING IF ANOTHER USER IS USING THE WIKI
+   		$check = $this->db->query("select * from `user-color` where color_name = '$colorname' and user_username != '".$this->session->userdata('username')."'");
+   		
+   		//IF NOBODY USES THE WIKI
+   		if(!$check->result()){
+			
+			//GET CONNECTION
+			$con = $this->wconnection($colorname);
+			
+			//CHECK IF ANOTHER WIKI USES THE CONNECTION
+			$check = $this->db->query("select * from color where color_name != '$colorname' and color_connection = '$con'");
+			if(!$check->result())
+				//DELETE CONNECTION
+				$this->connection_model->delete_connection($con);
+			
+			//DELETE WIKI
+			$this->db->delete('color', array('color_name' => $colorname));
+   		}
+   		
+   		return true;
    	}
 }

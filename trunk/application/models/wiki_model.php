@@ -102,7 +102,7 @@ class Wiki_model extends CI_Model{
    		
    		//Si hay error, devolvemos el mensaje de error
    		if(!$my_con)
-   			return false;
+   			die ('new_wiki: bad connection');
    		else{
    			//Creamos el array a insertar, con la info de la wiki e insertamos
    			$sql = array('wiki_id' => "",
@@ -923,14 +923,17 @@ class Wiki_model extends CI_Model{
    		//CHECKING IF ANOTHER USER IS USING THE WIKI
    		$check = $this->db->query("select * from `user-wiki` where wiki_name = '$wikiname' and user_username != '".$this->session->userdata('username')."'");
    		
-   		//IF NOBODY USES IT
+   		//IF NOBODY USES THE WIKI
    		if(!$check->result()){
 			
 			//GET CONNECTION
 			$con = $this->wconnection($wikiname);
 			
-			//DELETE CONNECTION
-			$this->connection_model->delete_connection($con);
+			//CHECK IF ANOTHER WIKI USES THE CONNECTION
+			$check = $this->db->query("select * from wiki where wiki_name != '$wikiname' and wiki_connection = '$con'");
+			if(!$check->result())
+				//DELETE CONNECTION
+				$this->connection_model->delete_connection($con);
 			
 			//DELETE WIKI
 			$this->db->delete('wiki', array('wiki_name' => $wikiname));

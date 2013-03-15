@@ -191,6 +191,20 @@ class User_model extends CI_Model{
    			die( "relate_color(): ERR_ALREADY_EXISTS");
    	}
    	
+   	function unrelate_color($colorname){
+   		$query = $this->db->query("select * from `user-color` where color_name = '$colorname' and user_username = '".$this->session->userdata('username')."'");
+   		if($query->result()){
+			$sql = array('user_username' => $this->session->userdata('username'),
+					'color_name' => "$colorname"
+				);
+	
+			$this->db->delete('user-color', $sql);
+			return TRUE;
+		}
+   		else
+   			return "relate_color(): ERR_NONEXISTENT";
+   	}
+   	
    	function relate_analisis($analisis){
    		$query = $this->db->query("select * from analisis where analisis_date = '$analisis'");
    		if($query->result()){
