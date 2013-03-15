@@ -37,13 +37,15 @@ class Wiki_model extends CI_Model{
    		//Llamamos al constructor heredado.
    	   	parent::__construct();
    	   	$this->load->database();
+		$this->load->helper('file');
    	   	
    	   	//Cargamos models necesarios
    	   	$ci =& get_instance();
 		$ci->load->model('connection_model');
 		$ct =& get_instance();
 		$ct->load->model('system_model');
-		$ci->load->helper('file');
+   	   	$cl =& get_instance();
+		$cl->load->model('user_model');
    	}
 	
 	private function mwtime_to_unix($mwtime){
@@ -90,17 +92,17 @@ class Wiki_model extends CI_Model{
    	}
    	
    	function new_wiki($wikiname, $db_server, $db_name, $db_user, $db_password, $wiki_baseurl){
+   		//Consultamos si la wiki ya existe, si es así devolvemos error
+   		$check = $this->db->query("select * from wiki where wiki_name = '$wikiname'");
+   		if($check->result())
+   			return false;
+   			
    		//Creamos una nueva conexión
    		$my_con = $this->connection_model->new_connection($db_server, $db_name, $db_user, $db_password);
    		
    		//Si hay error, devolvemos el mensaje de error
-   		if(gettype($my_con) != "integer")
-   			return "new_wiki(): $my_con";
-   		
-   		//Consultamos si la wiki ya existe, si es así devolvemos error
-   		$check = $this->db->query("select * from wiki where wiki_name = '$wikiname'");
-   		if($check->result())
-   			return "new_wiki(): ERR_ALREADY_EXISTS";
+   		if(!$my_con)
+   			return false;
    		else{
    			//Creamos el array a insertar, con la info de la wiki e insertamos
    			$sql = array('wiki_id' => "",
@@ -112,7 +114,7 @@ class Wiki_model extends CI_Model{
 		
 			//Si no hay error de inserción, devolvemos el id de la wiki
 			if($this->db->affected_rows() != 1) 
-				return "new_wiki(): ERR_AFFECTED_ROWS (".$this->db->affected_rows().")";
+				return false;
 		}
    	}
    	
@@ -907,12 +909,33 @@ class Wiki_model extends CI_Model{
    	}
    	
    	function delete_wiki($wikiname){
-   		//Comprobamos que existe y devuelve error si no
-   		$check = $this->db->query("select * from wiki where wiki_name == $wikiname");
-   		if($check->result()->num_rows() == 0)
-   			return "delete_wiki(): NONEXISTENT";
-   		else
-   			//Elimina la wiki de la base de datos
-   		 	$this->db->delete('wiki', array('wiki_name' => $wikiname));
+   	
+   		//CHECK IF WIKI EXISTS
+   		$check = $this->db->query("select * from wiki where wiki_name = '$wikiname'");
+   		
+   		//IF NOT, ERROR
+   		if(!$check->result())
+   			return false;
+   		
+		//UNRELATE WIKI
+		$this->user_model->unrelate_wiki($wikiname);
+   		
+   		//CHECKING IF ANOTHER USER IS USING THE WIKI
+   		$check = $this->db->query("select * from `user-wiki` where wiki_name = '$wikiname' and user_username != '".$this->session->userdata('username')."'");
+   		
+   		//IF NOBODY USES IT
+   		if(!$check->result()){
+			
+			//GET CONNECTION
+			$con = $this->wconnection($wikiname);
+			
+			//DELETE CONNECTION
+			$this->connection_model->delete_connection($con);
+			
+			//DELETE WIKI
+			$this->db->delete('wiki', array('wiki_name' => $wikiname));
+   		}
+   		
+   		return true;
    	}
 }

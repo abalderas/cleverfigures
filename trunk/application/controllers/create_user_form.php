@@ -57,7 +57,7 @@ class Create_user_form extends CI_Controller {
 				$this->user_model->new_user($this->input->post('username'), $this->input->post('password'), now(), $this->input->post('real_name'), $this->input->post('email'), $this->input->post('is_admin'));
 				
 				//CREATE HEADER ARRAY
-				$datah = array('title' => lang('voc.i18n_configuration'));
+				$datah = array('title' => lang('voc.i18n_configuration_view'));
 				
 				//LOAD CONFIGURATION VIEW
 				$this->load->view('templates/header_view', $datah);
@@ -69,7 +69,7 @@ class Create_user_form extends CI_Controller {
 				$this->user_model->new_user($this->input->post('username'), $this->input->post('password'), now(), $this->input->post('real_name'), $this->input->post('email'), true);
 				
 				//CREATE HEADER ARRAY
-				$datah = array('title' => lang('voc.i18n_installation'));
+				$datah = array('title' => lang('voc.i18n_installation_view'));
 				
 				//LOAD INSTALLATION VIEW 3
 				$this->load->view('templates/header_view', $datah);

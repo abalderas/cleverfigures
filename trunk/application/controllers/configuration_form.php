@@ -97,7 +97,7 @@ class Configuration_form extends CI_Controller {
 				$this->session->set_userdata(array('language' => $lang, 'high_contrast' => $high_contrast));
 				
 				//CREATE HEADER ARRAY
-				$datah = array('title' => lang('voc.i18n_configuration'));
+				$datah = array('title' => lang('voc.i18n_configuration_view'));
 				
 				//LOAD CONFIGURATION VIEW
 				$this->load->view('templates/header_view', $datah);
@@ -109,7 +109,7 @@ class Configuration_form extends CI_Controller {
 			else if($this->input->post('cancel_conf')){
 				
 				//CREATE HEADER ARRAY
-				$datah = array('title' => lang('voc.i18n_configuration'));
+				$datah = array('title' => lang('voc.i18n_configuration_view'));
 				
 				//LOAD CONFIGURATION VIEW
 				$this->load->view('templates/header_view', $datah);

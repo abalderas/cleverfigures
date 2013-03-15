@@ -43,7 +43,7 @@ class Configure extends CI_Controller {
 		else{
 		
 			//CREATE HEADER ARRAY
-			$datah = array('title' => lang('voc.i18n_configuration'));
+			$datah = array('title' => lang('voc.i18n_configuration_view'));
 			
 			//LOAD CONFIGURATION VIEW WITH WIKI AND COLOR LISTS
 			$this->load->view('templates/header_view', $datah);

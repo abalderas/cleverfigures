@@ -127,8 +127,42 @@ table-layout:fixed;
 border:solid 1px black;
 }
 
-
 #bodytable th 
+{
+	font-size:14px;
+	padding-top:5px;
+	padding-bottom:4px;
+	color: white;
+	background-color:rgba(0,0,0,0.8);
+}
+
+#bodytable td 
+{
+	color:#000000;
+	font-size:12px;
+	min-height:29px;
+	padding:2px;
+	padding-bottom:10px;
+}
+
+#bodytable input.cssform{
+	width:87%;
+}
+
+#variabletable
+{
+	font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+	width:100%;
+	height:100%;
+	top:0px;
+	margin-left: auto;
+	margin-right: auto;
+	table-layout:fixed;
+	border:solid 1px black;
+}
+
+
+#variabletable th 
 {
 font-size:14px;
 padding-top:5px;
@@ -137,7 +171,7 @@ color: white;
 background-color:rgba(0,0,0,0.8);
 }
 
-#bodytable td 
+#variabletable td 
 {
 	color:#000000;
 	font-size:12px;
@@ -146,7 +180,7 @@ padding:2px;
 padding-bottom:10px;
 }
 
-#bodytable input.cssform{
+#variabletable input.cssform{
 	width:87%;
 }
 
@@ -224,16 +258,24 @@ padding:3px 7px 2px 7px;
 }
 
 #menu td, #menu th 
-{
-padding:2px 2px 2px 2px;
+{/*
+padding:2px 2px 2px 2px;*/
 }
 
 #menu th.user 
 {
+	text-shadow: 0.1em 0.1em 0.05em #333;
+	padding-left:10px;
 text-align:left;
 font-family: 'Playball', cursive;
 font-size:20px;
 color:white;
+background-image: -ms-radial-gradient(left center, ellipse farthest-side, rgba(88, 172, 250, 0.8) 50%, rgba(0, 0, 0, 0) 90%);
+background-image: -moz-radial-gradient(left center, ellipse farthest-side, rgba(88, 172, 250, 0.8) 50%, rgba(0, 0, 0, 0) 90%);
+background-image: -o-radial-gradient(left center, ellipse farthest-side, rgba(88, 172, 250, 0.8) 50%, rgba(0, 0, 0, 0) 90%);
+background-image: -webkit-gradient(radial, left center, 0, left center, 954, color-stop(0, rgba(88, 172, 250, 0.8)), color-stop(1, rgba(0, 0, 0, 0)));
+background-image: -webkit-radial-gradient(left center, ellipse farthest-side, rgba(88, 172, 250, 0.8) 50%, rgba(0, 0, 0, 0) 90%);
+background-image: radial-gradient(ellipse farthest-side at left center, rgba(88, 172, 250, 0.8) 50%, rgba(0, 0, 0, 0) 90%);
 }
 
 /* FOOTER  */
@@ -246,7 +288,7 @@ color:white;
 	right:0px;
 	left:0px;
 	bottom:0px;
-	background: rgba(0, 0, 0, 0.8);
+	background: rgba(0, 0, 0, 0.5);
 	z-index:10;
 }
 

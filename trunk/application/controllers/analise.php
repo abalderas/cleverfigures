@@ -45,7 +45,7 @@ class Analise extends CI_Controller {
 		else{
 		
 			//CREATE HEADER ARRAY
-			$datah = array('title' => lang('voc.i18n_analise'));
+			$datah = array('title' => lang('voc.i18n_analise_view'));
 			
 			//CREATE COLOR LIST ARRAY
 			$colors = array(lang('voc.i18n_no_color') => lang('voc.i18n_no_color'));

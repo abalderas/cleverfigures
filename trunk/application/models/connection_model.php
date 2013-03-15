@@ -36,7 +36,8 @@ class Connection_model extends CI_Model{
    	function new_connection($server, $name, $user, $password){
    	   	$check = $this->db->query("select * from connection where connection_server = '$server' and connection_name = '$name' and connection_user = '$user'");
    		if($check->result())
-   			return "new_connection(): ERR_ALREADY_EXISTS";
+   			foreach($check->result() as $row)
+				return $row->connection_id;
    		else{
    			$sql = array('connection_id' => "",
    				'connection_name' => "$name",
@@ -47,7 +48,7 @@ class Connection_model extends CI_Model{
 					$this->db->insert('connection', $sql);
 	
 			if($this->db->affected_rows() != 1) 
-				return "new_connection(): ERR_AFFECTED_ROWS (".$this->db->affected_rows().")";
+				return false;
 			else 
 				return  $this->db->insert_id();
 		}

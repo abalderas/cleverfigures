@@ -17,6 +17,8 @@
 // You should have received a copy of the GNU General Public License
 // along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
+if(isset($wikideleteerror)) echo "<em>".lang('voc.i18n_error_deleting_wiki')."</em>";
+
 echo form_open('configuration_form');
 ?>
 
@@ -29,10 +31,11 @@ echo form_open('configuration_form');
 		                //'german' => lang('voc.i18n_german'),
 		             );
 		?>
-	
-		<table id = "bodytable">
+	<table><tr>
+	<td>
+		<table id = "variabletable">
 		<tr>
-			<th colspan = "2"><?=lang('voc.i18n_your_data');?></th>
+			<th colspan = "2"><?=lang('voc.i18n_options');?></th>
 		</tr>
 		<tr>
 			<td><?=form_label(lang('voc.i18n_name'), lang('voc.i18n_name'));?></td><td><?=$this->session->userdata('realname')?></td>
@@ -51,14 +54,8 @@ echo form_open('configuration_form');
 			</td>
 		</tr>
 		<tr>
-			<th colspan = "2"><?=lang('voc.i18n_language');?></th>
-		</tr>
-		<tr>
 			<td><?=form_label(lang('voc.i18n_select_language'), 'select_language');?></td>
 			<td><?=form_dropdown('select_language', $languages, 'english');?></td>
-		</tr>
-		<tr>
-			<th colspan = "2"><?=lang('voc.i18n_data_source');?></th>
 		</tr>
 		<tr>
 			<td><?=form_label(lang('voc.i18n_add_wiki'), 'add_wiki');?></td>
@@ -71,56 +68,42 @@ echo form_open('configuration_form');
 		
 		<? if(!$this->session->userdata('is_admin')) echo "<!--" ?>
 		<tr>
-			<th colspan = "2"><?=lang('voc.i18n_users');?></th>
-		</tr>
-		<tr>
 			<td><?=form_label(lang('voc.i18n_add_user'), 'add_user');?></td>
 			<td><?=form_submit('add_user', lang('voc.i18n_add_user'));?></td>
 		</tr>
 		<? if(!$this->session->userdata('is_admin')) echo "-->" ?>
 		<tr>
-			<th colspan = "2"><?=lang('voc.i18n_accessibility');?></th>
-		</tr>
-		<tr>
 			<td><?=form_label(lang('voc.i18n_high_contrast'), 'high_contrast');?></td>
 			<td><?=form_checkbox('high_contrast', '', $this->session->userdata('high_contrast'));?></td>
-		</tr>
-		<tr>
-			<td><br></td>
 		</tr>
 		<tr>
 			<th colspan = "2"><?=form_submit(array('name' => 'save_conf', 'value' => lang('voc.i18n_save_conf'), 'class' => 'next'));?></th>
 		</tr>
 		</table>
-		
+	</td>
+	<td style = "vertical-align:top;">
 		
 		<? 
-			if(!isset($wikilist)) 
-				echo "<!--";
-			else{
-				echo "<br><table id = 'bodytable'>";
+			if(!empty($wikilist)){
+				echo "<table id = 'variabletable'>";
 				echo "<tr><th colspan = '2'>".lang('voc.i18n_your_wikis')."</th></tr>";
 				foreach($wikilist as $wiki)
-					echo "<tr><td>".$wiki."</td><td>".anchor("groups/getgroups/$wiki",lang('voc.i18n_manage_groups'))."</td></tr>";
-				echo "</table>";
+					echo "<tr><td>".$wiki."</td><td>".anchor("groups/getgroups/$wiki",lang('voc.i18n_manage_groups'))
+					."  |  ".anchor("delete_wiki/deletewiki/$wiki",lang('voc.i18n_delete_wiki'), array('onClick' => "return confirm('".lang('voc.i18n_delete_wiki_confirmation')."');"))."</td></tr>";
+				echo "</table><br>";
 			}
-		
-			if(!isset($wikilist)) echo "-->";
 		?>
 		
 		<?
-			if(empty($colorlist)) 
-				echo "<!--";
-			else{
-				echo "<br><table id = 'bodytable'>";
+			if(!empty($colorlist)){
+				echo "<table id = 'variabletable'>";
 				echo "<tr><th colspan = '2'>".lang('voc.i18n_your_qualitative_sources')."</th></tr>";
 				foreach($colorlist as $color)
 					echo "<tr><td>".$color."</td><td></td></tr>";
 				echo "</table>";
 			}
-		
-			if(empty($colorlist)) echo "-->";
 		?>
+	</td></table>
 		
 <?=form_close();?>
 

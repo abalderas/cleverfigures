@@ -79,13 +79,14 @@ class User_model extends CI_Model{
    	
    	function get_wiki_list($username = 'default'){
 		//Consultamos la conexión
-   		$query = $this->db->query("select * from wiki, `user-wiki` where wiki.wiki_name = `user-wiki`.wiki_name and `user-wiki`.user_username = '$username'");
+   		$query = $this->db->query("select wiki.wiki_name from wiki, `user-wiki` where wiki.wiki_name = `user-wiki`.wiki_name and `user-wiki`.user_username = '$username'");
    		if(!$query->result())
    			return array();
-   		else
-   			foreach($query->result() as $row)
+   		else{
+   			foreach($query->result() as $row){
    				$wikis[$row->wiki_name] = $row->wiki_name;
-   		
+   			}
+   		}	
    		return $wikis;
    	}
    	
@@ -121,18 +122,36 @@ class User_model extends CI_Model{
    	function relate_wiki($wikiname){
    		$query = $this->db->query("select * from wiki where wiki_name = '$wikiname'");
    		if($query->result()){
-   			$sql = array('user_username' => $this->session->userdata('username'),
-   					'wiki_name' => "$wikiname"
-   				);
+			if(!$this->db->query("select * from `user-wiki` where wiki_name = '$wikiname' and user_username = '".$this->session->userdata('username')."'")->result()){
+				$sql = array('user_username' => $this->session->userdata('username'),
+						'wiki_name' => "$wikiname"
+					);
 	
-			$this->db->insert('user-wiki', $sql);
+				$this->db->insert('user-wiki', $sql);
 		
-			if($this->db->affected_rows() != 1) 
-				return "relate_wiki(): ERR_AFFECTED_ROWS";
-			else return TRUE;
+				if($this->db->affected_rows() != 1) 
+					return "relate_wiki(): ERR_AFFECTED_ROWS";
+				else return TRUE;
+			}
+			else
+				return "relate_wiki(): ERR_REL_ALREADY_EXISTS";
 		}
    		else
-   			return "relate_wiki(): ERR_ALREADY_EXISTS";
+   			return "relate_wiki(): ERR_NONEXISTENT";
+   	}
+   	
+   	function unrelate_wiki($wikiname){
+   		$query = $this->db->query("select * from `user-wiki` where wiki_name = '$wikiname' and user_username = '".$this->session->userdata('username')."'");
+   		if($query->result()){
+			$sql = array('user_username' => $this->session->userdata('username'),
+					'wiki_name' => "$wikiname"
+				);
+	
+			$this->db->delete('user-wiki', $sql);
+			return TRUE;
+		}
+   		else
+   			return "relate_wiki(): ERR_NONEXISTENT";
    	}
    	
    	function relate_color($colorname){
