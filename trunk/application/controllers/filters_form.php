@@ -41,14 +41,6 @@ class Filters_form extends CI_Controller {
 		return $result;
 	}
 	
-	//SPLIT STRING FUNCTION: SPLITS A STRING ACCORDING TO THE GIVEN DELIMITER
-	private function split_string($string, $delimiter){
-		$ufstring = str_replace(' ','',$string);
-		$finalarray = explode($delimiter, $ufstring);
-		
-		return $finalarray;
-	}
-	
 	//MAIN FUNCTION
 	function index(){
 		//IF SESSION EXPIRED
@@ -64,6 +56,9 @@ class Filters_form extends CI_Controller {
 		else{
 			//SEPARATE STRING INTO SINGLE NAMES
 			$filterstrings = explode(',', $_POST['filterstring']);
+			array_pop($filterstrings);
+			foreach($filterstrings as $key => $value)
+				$filterstrings[$key] = trim($value);
 			
 			//GET ANALISIS DATA
 			$adata = $this->analisis_model->get_analisis_data($this->input->post('aname'));

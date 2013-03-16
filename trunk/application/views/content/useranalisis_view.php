@@ -21,56 +21,56 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	
 	<table id = "charttable">
 	<tr>
-		<th><?=lang('voc.i18n_edits_evolution')?></th>
+		<th class = 'only'><?=lang('voc.i18n_edits_evolution')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotaledits<?=$data['userid'][$username]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
-		<th><?=lang('voc.i18n_content_evolution')?></th>
+		<th class = 'only'><?=lang('voc.i18n_content_evolution')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalbytes<?=$data['userid'][$username]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
-		<th><?=lang('voc.i18n_activity_hour')?></th>
+		<th class = 'only'><?=lang('voc.i18n_activity_hour')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalactivityhour<?=$data['userid'][$username]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
-		<th><?=lang('voc.i18n_activity_wday')?></th>
+		<th class = 'only'><?=lang('voc.i18n_activity_wday')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalactivitywday<?=$data['userid'][$username]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
-		<th><?=lang('voc.i18n_activity_week')?></th>
+		<th class = 'only'><?=lang('voc.i18n_activity_week')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalactivityweek<?=$data['userid'][$username]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
-		<th><?=lang('voc.i18n_activity_month')?></th>
+		<th class = 'only'><?=lang('voc.i18n_activity_month')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalactivitymonth<?=$data['userid'][$username]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
-		<th><?=lang('voc.i18n_activity_year')?></th>
+		<th class = 'only'><?=lang('voc.i18n_activity_year')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalactivityyear<?=$data['userid'][$username]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<? if (!isset($data['useruploads'][$username])) echo "<!--";?>
 	<tr>
-		<th><?=lang('voc.i18n_uploads')?></th>
+		<th class = 'only'><?=lang('voc.i18n_uploads')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotaluploads<?=$data['userid'][$username]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
-		<th><?=lang('voc.i18n_upsize')?></th>
+		<th class = 'only'><?=lang('voc.i18n_upsize')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalupsize<?=$data['userid'][$username]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
@@ -78,19 +78,19 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	<? if (!isset($data['useruploads'][$username])) echo "-->";?>
 	<? if (!isset($data['useraveragevalue'][$username])) echo "<!--";?>
 	<tr>
-		<th><?=lang('voc.i18n_average_quality')?></th>
+		<th class = 'only'><?=lang('voc.i18n_average_quality')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalquality<?=$data['userid'][$username]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
-		<th><?=lang('voc.i18n_bytesxquality')?></th>
+		<th class = 'only'><?=lang('voc.i18n_bytesxquality')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalbytesxquality<?=$data['userid'][$username]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
-		<th><?=lang('voc.i18n_hourquality')?></th>
+		<th class = 'only'><?=lang('voc.i18n_hourquality')?></th>
 	</tr>
 	<tr>
 		<td><div id='qualityhourchart<?=$data['userid'][$username]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
@@ -98,14 +98,14 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	<? if (!isset($data['useraveragevalue'][$username])) echo "-->";?>
 	
 	<tr>
-		<th><?=lang('voc.i18n_pages')?></th>
+		<th class = 'only'><?=lang('voc.i18n_pages')?></th>
 	</tr>
 	<tr>
 		<td><div id = "page_table<?=$data['userid'][$username]?>"></div></td>
 	</tr>
 	<? if(!isset($data['usercat'][$username])) echo "<!--";?>
 	<tr>
-		<th><?=lang('voc.i18n_categories')?></th>
+		<th class = 'only'><?=lang('voc.i18n_categories')?></th>
 	</tr>
 	<tr>
 		<td><div id = "categories_table<?=$data['userid'][$username]?>"></div></td>
@@ -114,7 +114,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	
 	<? if(!isset($data['userimages'][$username])) echo "<!--";?>
 	<tr>
-		<th><?=lang('voc.i18n_images')?></th>
+		<th class = 'only'><?=lang('voc.i18n_images')?></th>
 	</tr>
 	<tr>
 		<td><div id = "img_table<?=$data['userid'][$username]?>"></div></td>

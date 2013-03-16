@@ -33,7 +33,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 				echo "<td>".unix_to_human($adate[$i])."</td>";
 				echo "<td>".$awiki[$i]."</td>";
 				echo "<td>".$acolor[$i]."</td>";
-				echo "<td>".anchor('options_form/view/'.$adate[$i], 'View')." - ".anchor('options_form/delete/'.$adate[$i], 'Delete')."</td>";
+				echo "<td>".anchor('options_form/view/'.$adate[$i], 'View')." - ".anchor('options_form/delete/'.$adate[$i], lang('voc.i18n_delete'), array('onClick' => "return confirm('".lang('voc.i18n_delete_analysis_confirmation')."');"))."</td>";
 					
 			echo "</tr>";
 		}

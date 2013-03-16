@@ -55,13 +55,11 @@ class Options_form extends CI_Controller {
 		}
 		else{
 			
-			//CREATE HEADER ARRAY
-			$datah = array('title' => lang('voc.i18n_delete_analisis'));
-			
-			//LOAD VIEW
-			$this->load->view('templates/header_view', $datah);
-			$this->load->view('content/delete_analisis_view', array('analisis' => $name));
-			$this->load->view('templates/footer_view');
+			//DELETE ANALYSIS
+			$this->analisis_model->delete_analisis($name);
+				
+			//REDIRECT TO TEACHER CONTROLLER
+			redirect('teacher');
 		}
 	}
 	

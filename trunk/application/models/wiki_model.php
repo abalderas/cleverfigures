@@ -693,12 +693,24 @@ class Wiki_model extends CI_Model{
 			//Initializing arrays for storing information
 			foreach($query->result() as $row){
 				
+				for($i = 0; $i <= 24; $i++)
+					$catactivityhour[$row->cl_to][$i] = 0;
+				
+				for($i = 0; $i < 7; $i++)
+					$catactivitywday[$row->cl_to][$this->codewday($i)] = 0;
+				
+				for($i = 0; $i < 52; $i++)
+					$catactivityweek[$row->cl_to][($i < 10) ? "0$i" : $i] = 0;
+			
+				for($i = 0; $i <12; $i++)
+					$catactivitymonth[$row->cl_to][$this->codemonth($i)] = 0;
+			
 				$cateditscount[$row->cl_to] = 0;
-				$catbytescount[$row->cl_to] = 0;
+				$catbytescount[$row->cl_to] = 0;/*
 				$catactivityhour[$row->cl_to][date('G', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
 				$catactivitywday[$row->cl_to][$this->codewday(date('w', $this->mwtime_to_unix($row->rev_timestamp)))] = 0;
 				$catactivityweek[$row->cl_to][date('W', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
-				$catactivitymonth[$row->cl_to][$this->codemonth(date('n', $this->mwtime_to_unix($row->rev_timestamp)))] = 0;
+				$catactivitymonth[$row->cl_to][$this->codemonth(date('n', $this->mwtime_to_unix($row->rev_timestamp)))] = 0;*/
 				$catactivityyear[$row->cl_to][date('Y', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
 				$catusereditscount[$row->cl_to][$row->user_name] = 0;
 				$catuserbytescount[$row->cl_to][$row->user_name] = 0;

@@ -75,7 +75,7 @@ class Add_color extends CI_Controller {
 			else{
 				//IF CONNECTION ERROR
 				if(!$this->test_connection()){
-					
+					die('lol');
 					//CREATE HEADER ARRAY
 					$datah = array('title' => lang('voc.i18n_add_color'));
 					

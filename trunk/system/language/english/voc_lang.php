@@ -60,6 +60,7 @@ $lang['voc.i18n_delete'] = "Delete";
 $lang['voc.i18n_delete_wiki_confirmation'] = "Are you sure that you want to delete this wiki?";
 $lang['voc.i18n_delete_user_confirmation'] = "Are you sure that you want to delete this user?";
 $lang['voc.i18n_delete_color_confirmation'] = "Are you sure that you want to delete this qualitative source?";
+$lang['voc.i18n_delete_analysis_confirmation'] = "Are you sure that you want to delete this analysis?";
 $lang['voc.i18n_download'] = "Download";
 $lang['voc.i18n_edits'] = "Editions";
 $lang['voc.i18n_edits_evolution'] = "Editions Evolution";

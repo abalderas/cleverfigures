@@ -80,7 +80,7 @@ class Color_model extends CI_Model{
    		else{
    			//Creamos el array a insertar, con la info de la wiki e insertamos
    			$sql = array('color_id' => "",
-   				'color_name' => "$wikiname",
+   				'color_name' => "$colorname",
    				'color_connection' => "$my_con"
    				);
 			$this->db->insert('color', $sql);

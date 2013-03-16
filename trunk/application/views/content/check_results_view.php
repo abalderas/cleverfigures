@@ -700,12 +700,12 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 					} 
 				
 					<?
-						if(isset($data['catedits'])){
+						if(isset($data['catid'])){
 							echo "else if(SelValue == '".lang('voc.i18n_category')."'){
 								return [";
-							foreach(array_keys($data['catedits']) as $key){
+							foreach(array_keys($data['catid']) as $key){
 								echo "'".$key."'";
-								if($key != end(array_keys($data['catedits']))) echo ",";
+								if($key != end(array_keys($data['catid']))) echo ",";
 							}
 							echo "];
 							}";
@@ -740,18 +740,18 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	<tr>
 		<td>
 		<?
-			if(isset($data['catedits']) and !$this->group_model->there_are_groups())
+			if(isset($data['catid']) and !$this->group_model->there_are_groups())
 				$options = array(lang('voc.i18n_user') => lang('voc.i18n_user'),
 								lang('voc.i18n_page') => lang('voc.i18n_page'),
 								lang('voc.i18n_category') => lang('voc.i18n_category')
 							);
-			else if(isset($data['catedits']) and $this->group_model->there_are_groups())
+			else if(isset($data['catid']) and $this->group_model->there_are_groups())
 				$options = array(lang('voc.i18n_user') => lang('voc.i18n_user'),
 								lang('voc.i18n_page') => lang('voc.i18n_page'),
 								lang('voc.i18n_category') => lang('voc.i18n_category'),
 								lang('voc.i18n_group') => lang('voc.i18n_group')
 							);
-			else if(!isset($data['catedits']) and !$this->group_model->there_are_groups())
+			else if(!isset($data['catid']) and !$this->group_model->there_are_groups())
 				$options = array(lang('voc.i18n_user') => lang('voc.i18n_user'),
 								lang('voc.i18n_page') => lang('voc.i18n_page')
 								);

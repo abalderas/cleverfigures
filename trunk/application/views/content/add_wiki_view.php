@@ -25,7 +25,7 @@ echo form_open('add_wiki');
 
 <table id = "bodytable">
 	<tr>
-		<th colspan = "2" ><?=lang('voc.i18n_config_database')?></th>
+		<th  class = 'only' colspan = "2" ><?=lang('voc.i18n_config_database')?></th>
 	</tr>
 	<tr>
 		<td class="fieldbox"><?=lang('voc.i18n_wiki_name')?>:</td>
@@ -58,7 +58,7 @@ echo form_open('add_wiki');
 	<?php if(form_error('dbpassword')) echo "<tr><td colspan = \"2\"><em>".form_error('dbpassword')."</em></td></tr>"; ?>
 	<?php if(isset($connection_error)) echo "<tr><td colspan = \"2\"><em>$connection_error</em></td></tr>"; ?>
 	<tr>
-		<th colspan = "2"><?=form_submit(array('id' => 'submit', 'value' => lang('voc.i18n_save')));?></th>
+		<th  class = 'low' colspan = "2"><?=form_submit(array('id' => 'submit', 'value' => lang('voc.i18n_save')));?></th>
 	</tr>
 </table>
 
