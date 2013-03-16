@@ -99,7 +99,7 @@ class Add_color extends CI_Controller {
 					
 					//LOAD CONFIGURATION VIEW
 					$this->load->view('templates/header_view', $datah);
-					$this->load->view('content/configuration_view');
+					$this->load->view('content/configuration_view', array('wikilist' => $this->user_model->get_wiki_list($this->session->userdata('username')), 'colorlist' => $this->user_model->get_color_list($this->session->userdata('username'))));
 					$this->load->view('templates/footer_view');
 				}
 			}
