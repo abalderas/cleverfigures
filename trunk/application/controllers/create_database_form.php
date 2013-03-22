@@ -29,7 +29,7 @@ class Create_database_form extends CI_Controller {
 		$this->load->model('dbconfig_model');
 		$this->load->helper('file');
 		$this->load->dbutil();
-// 		$this->lang->load('voc', $this->session->userdata('language'));
+      		$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	
    	//TEST_CONNECTION FUNCTION: TESTS IF A MYSQL CONNECTION IS WORKING CORRECTLY

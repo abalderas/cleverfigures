@@ -23,7 +23,7 @@ class Close_session extends CI_Controller {
 
 	function Close_session(){
       		parent::__construct();
-// 		$this->lang->load('voc', $this->session->userdata('language'));
+      		$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	
    	function index(){

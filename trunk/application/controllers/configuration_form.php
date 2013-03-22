@@ -25,7 +25,7 @@ class Configuration_form extends CI_Controller {
       		parent::__construct();
       		$this->load->database();
       		$this->load->model('user_model');
-// 		$this->lang->load('voc', $this->session->userdata('language'));
+      		$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	
    	//MAIN FUNCTION
@@ -84,7 +84,7 @@ class Configuration_form extends CI_Controller {
 			else if($this->input->post('save_conf')){
 				
 				//SET LANGUAGE
-				$lang = $_POST['select_language'];
+				$l = $_POST['select_language'];
 				
 				//SET USERNAME
 				$user = $this->session->userdata('username');
@@ -93,8 +93,9 @@ class Configuration_form extends CI_Controller {
 				$high_contrast = (isset($_POST['high_contrast'])) ? true : false ;
 				
 				//SAVE CONFIGURATION INTO DATABASE AND UPDATE COOKIE
-				$this->db->query("UPDATE user SET user_language='$lang', user_high_contrast = '$high_contrast' WHERE user_username = '$user'");
-				$this->session->set_userdata(array('language' => $lang, 'high_contrast' => $high_contrast));
+				$this->db->query("UPDATE user SET user_high_contrast = '$high_contrast' WHERE user_username = '$user'");
+				$this->session->set_userdata(array('language' => $l, 'high_contrast' => $high_contrast));
+				$this->user_model->update_language($l);
 				
 				//CREATE HEADER ARRAY
 				$datah = array('title' => lang('voc.i18n_configuration_view'));

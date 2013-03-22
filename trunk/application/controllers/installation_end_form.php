@@ -22,7 +22,7 @@ class Installation_end_form extends CI_Controller {
 
 	function Installation_end_form(){
       		parent::__construct();
-// 		$this->lang->load('voc', $this->session->userdata('language'));
+      		$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	
 	function index(){

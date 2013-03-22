@@ -72,9 +72,9 @@ class User_model extends CI_Model{
 		$this->db->update('user', $data); 
    	}
    	
-   	function update_language($uname, $lang){
+   	function update_language($lang){
    		$data = array('user_language' => $lang);
-		$this->db->where('user_username', $uname);
+		$this->db->where('user_username', $this->session->userdata('username'));
 		$this->db->update('user', $data); 
    	}
    	

@@ -120,7 +120,7 @@ class Wiki_model extends CI_Model{
    				return $row->wiki_connection;
    	}
    	
-   	function new_wiki($wikiname, $db_server, $db_name, $db_user, $db_password, $wiki_baseurl){
+   	function new_wiki($wikiname, $db_server, $db_name, $db_user, $db_password, $wiki_baseurl, $qfunction = ''){
    		//Consultamos si la wiki ya existe, si es así devolvemos error
    		$check = $this->db->query("select * from wiki where wiki_name = '$wikiname'");
    		if($check->result())

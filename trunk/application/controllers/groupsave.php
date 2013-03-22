@@ -25,7 +25,7 @@ class Groupsave extends CI_Controller {
       		parent::__construct();
       		$this->load->model('wiki_model');
       		$this->load->model('group_model');
-// 		$this->lang->load('voc', $this->session->userdata('language'));
+      		$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	
    	//NOT USED, JUST CHECKS SESSION IF ERROR HAPPENS

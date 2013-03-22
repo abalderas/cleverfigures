@@ -26,7 +26,7 @@ class Login_form extends CI_Controller {
       		$this->load->model('user_model');
 		$this->load->model('analisis_model');
 		$this->load->model('wiki_model');
-// 		$this->lang->load('voc', $this->session->userdata('language'));
+      		$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	
 	function index(){

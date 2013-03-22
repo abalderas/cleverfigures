@@ -28,8 +28,7 @@ class Options_form extends CI_Controller {
       		$this->load->model('analisis_model');
       		$this->load->model('user_model');
       		$this->load->model('group_model');
-      		$this->load->model('csv_model');
-// 		$this->lang->load('voc', $this->session->userdata('language'));
+      		$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	
 	function index(){

@@ -25,7 +25,7 @@ class Forgot_form extends CI_Controller {
       		parent::__construct();
       		$this->load->model('user_model');
       		$this->load->library('email');
-// 		$this->lang->load('voc', $this->session->userdata('language'));
+      		$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	
    	//RANDOM PASSWORD GENERATION FUNCTION

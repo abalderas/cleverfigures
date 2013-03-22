@@ -25,8 +25,7 @@ class Add_color extends CI_Controller {
       		parent::__construct();
 		$this->load->model('color_model');
 		$this->load->model('user_model');
-// 		$this->load->model('filter_model');
-// 		$this->lang->load('voc', $this->session->userdata('language'));
+      		$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	
    	//TEST_CONNECTION FUNCTION

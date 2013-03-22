@@ -27,23 +27,16 @@ class Index_controller extends CI_Controller {
 		$this->load->model('dbforge_model');
 		$this->load->model('user_model');
 		$this->load->dbutil();
-// 		$this->lang->load('voc', $this->session->userdata('language'));
+   	   	$this->load->helper('file');
    	}
    	
-   	//FIRST TIME FUNCTION
-	private function first_time(){
-		$dbs = $this->dbutil->list_databases();
-		if(!array_search('cleverfigures', $dbs)) return true;
-		return false;
-	}
-	
-	function index(){
+   	function index(){
 			
 		//IF FIRST TIME RUNNING CLEVERFIGURES
-		if($this->first_time()){
-			
-			//CLEAR SESSION (JUST IN CASE SOMETHING HAPPENS)
+		if(!strpos(read_file('application/config/database.php'),'cleverfigures') !== false){
+		
 			$this->session->sess_destroy();
+			$this->lang->load('voc', 'en');
 			
 			//CREATE HEADER ARRAY
 			$datah = array('title' => lang('voc.i18n_installation'));
@@ -57,6 +50,9 @@ class Index_controller extends CI_Controller {
 		else{
 			//IF USER LOGGED IN
 			if($this->session->userdata('username')){
+				
+				$this->lang->load('voc', $this->session->userdata('language'));
+				
 				//CREATE HEADER ARRAY
 				$datah = array('title' => lang('voc.i18n_teacher_view'));
 				
@@ -77,6 +73,8 @@ class Index_controller extends CI_Controller {
 				$this->load->view('templates/footer_view');
 			}
 			else{
+				$this->lang->load('voc', 'en');
+				
 				//IF AN USER ALREADY EXISTS
 				if($this->db->query('select * from user')->result()){
 					//CREATE HEADER ARRAY

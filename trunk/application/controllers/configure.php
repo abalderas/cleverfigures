@@ -24,6 +24,7 @@ class Configure extends CI_Controller {
       		$this->load->model('wiki_model');
       		$this->load->model('color_model');
       		$this->load->model('user_model');
+      		$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	
    	//MAIN FUNCTION

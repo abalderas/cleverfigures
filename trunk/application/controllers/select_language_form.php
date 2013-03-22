@@ -22,7 +22,7 @@ class Select_language_form extends CI_Controller {
 
 	function Select_language_form(){
       		parent::__construct();
-// 		$this->session->set_userdata('language', $this->input->post('select_language'));
+      		$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	
 	function index(){

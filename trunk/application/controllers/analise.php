@@ -25,7 +25,7 @@ class Analise extends CI_Controller {
       		parent::__construct();
       		$this->load->model('color_model');
       		$this->load->model('user_model');
-// 		$this->lang->load('voc', $this->session->userdata('language'));
+      		$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	
    	//MAIN FUNCTION

@@ -24,7 +24,7 @@ class Delete_user extends CI_Controller {
 	function Delete_user(){
       		parent::__construct();
 		$this->load->model('user_model');
-// 		$this->lang->load('voc', $this->session->userdata('language'));
+      		$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	
    	//MAIN FUNCTION

@@ -26,7 +26,7 @@ class Filters_form extends CI_Controller {
       		$this->load->model('analisis_model');
       		$this->load->model('group_model');
       		$this->load->model('wiki_model');
-// 		$this->lang->load('voc', $this->session->userdata('language'));
+      		$this->lang->load('voc', $this->session->userdata('language'));
    	}
 	
 	//PREVIOUS HIGHEST KEY FUNCTION: GETS THE LAST HIGHEST KEY OF AN ARRAY CHECKING BACKWARDS FROM THE GIVEN ONE

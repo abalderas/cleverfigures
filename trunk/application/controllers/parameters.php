@@ -17,18 +17,26 @@
 // You should have received a copy of the GNU General Public License
 // along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
-class Groups extends CI_Controller {
 
-	function Groups(){
+//REPORT OPTIONS CONTROLLER
+class Parameters extends CI_Controller {
+
+	function Parameters(){
       		parent::__construct();
       		$this->load->model('wiki_model');
+      		$this->load->model('color_model');
+      		$this->load->model('analisis_model');
+      		$this->load->model('user_model');
       		$this->load->model('group_model');
       		$this->lang->load('voc', $this->session->userdata('language'));
    	}
    	
-   	//DOES NOTHING, JUST CHECKS SESSION IN CASE OF FAILURE
+   	private function is_valid_expression($exp){
+		
+   	}
+   	
 	function index(){
-	
+		//IF SESSION EXPIRED, LOAD LOGIN VIEW
 		if(!$this->session->userdata('username')){
 			$datah = array('title' => lang('voc.i18n_login'));
 			
@@ -38,27 +46,49 @@ class Groups extends CI_Controller {
 		}
 	}
 	
-	//GET STUDENT GROUP FUNCTION
-	function getgroups($wiki){
-		
-		//IF SESSION EXPIRED
+	//DELETE ANALISIS FUNCTION
+	function openparameters($wiki){
+		//IF SESSION EXPIRED, LOAD LOGIN VIEW
 		if(!$this->session->userdata('username')){
-			//CREATE HEADER ARRAY
 			$datah = array('title' => lang('voc.i18n_login'));
 			
-			//LOAD LOGIN VIEW
 			$this->load->view('templates/header_view', $datah);
 			$this->load->view('content/login_view');
 			$this->load->view('templates/footer_view');
 		}
 		else{
-			//CREATE HEADER ARRAY
-			$datah = array('title' => lang('voc.i18n_groups'));
+			$datah = array('title' => lang('voc.i18n_parameters'));
 			
-			//LOAD GROUP VIEW WITH USERS LIST AND WIKI NAME
 			$this->load->view('templates/header_view', $datah);
-			$this->load->view('content/group_view', array('wiki' => $wiki, 'users' => $this->wiki_model->get_user_list($wiki)));
+			$this->load->view('content/parameters_view');
 			$this->load->view('templates/footer_view');
 		}
 	}
-} 
+	
+	//VIEW REPORT FUNCTION
+	function saveparameters($wiki){
+		//IF SESSION EXPIRED, LOAD LOGIN VIEW
+		if(!$this->session->userdata('username')){
+			$datah = array('title' => lang('voc.i18n_login'));
+			
+			$this->load->view('templates/header_view', $datah);
+			$this->load->view('content/login_view');
+			$this->load->view('templates/footer_view');
+		}
+		else{
+		
+			
+			
+			//CREATE HEADER ARRAY
+			$datah = array('title' => lang('voc.i18n_check_results'));
+			
+			//LOAD ANALISIS DATA
+			$adata = $this->analisis_model->get_analisis_data($name);
+			
+			//LOAD VIEWS WITH DATA
+			$this->load->view('templates/header_view', $datah);
+			$this->load->view('content/check_results_view', array('aname' => $name, 'data' => $adata));
+			$this->load->view('templates/footer_view');
+		}
+	}
+}
