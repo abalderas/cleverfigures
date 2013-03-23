@@ -513,8 +513,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			data.addColumn('number', 'Bytes %');
 			data.addColumn('number', 'Bytes in articles');
 			data.addColumn('number', 'Bytes in articles %');
-			<? if(isset($data['useruploads'])) echo "data.addColumn('number', 'Uploads');";?>
-			<? if(isset($data['useruploads'])) echo "data.addColumn('number', 'Uploads %');";?>
+			data.addColumn('number', 'Uploads');
+			data.addColumn('number', 'Uploads %');
 			<? if(isset($data['useraverage'])) echo "
 				data.addColumn('number', 'Average Grade');
 				data.addColumn('number', 'Standard Deviation');
@@ -529,36 +529,33 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 				foreach(array_keys($data['useredits']) as $key){
 					echo "['".$key."','".
 						$data['userrealname'][$key]."',".
-						round(end($data['useredits'][$key]), 3).",".
-						round(end($data['useredits_per'][$key]), 3).",".
-						(isset($data['useredits_art'][$key])?round(end($data['useredits_art'][$key]), 3):"0").",".
-						(isset($data['useredits_art_per'][$key])?round(end($data['useredits_art_per'][$key]), 3):"0").",".
+						round(end($data['useredits'][$key]), 2).",".
+						round((end($data['useredits'][$key])/end($data['totaledits']))*100, 2).",".
+						round(end($data['useredits_art'][$key]), 3).",".
+						round((end($data['useredits_art'][$key])/end($data['totaledits_art']))*100, 2).",".
 						round(end($data['userbytes'][$key]), 3).",".
-						round(end($data['userbytes_per'][$key]), 3).",".
-						(isset($data['userbytes_art'][$key])?round(end($data['userbytes_art'][$key]), 3):"0").",".
-						(isset($data['userbytes_art_per'][$key])?round(end($data['userbytes_art_per'][$key]), 3):"0");
-					if(isset($data['useruploads']))
-						if(isset($data['useruploads'][$key])) 
-							echo ",".round(end($data['useruploads'][$key]), 3).",".
-							round(end($data['useruploads_per'][$key]), 3);
-					else
-						echo ", 0, 0";
-					if(isset($data['useraverage']))
+						round((end($data['userbytes'][$key])/end($data['totalbytes']))*100, 2).",".
+						round(end($data['userbytes_art'][$key]), 3).",".
+						round((end($data['userbytes_art'][$key])/end($data['totalbytes_art']))*100, 2).",".
+						round(end($data['useruploads'][$key]), 3).",".
+						round((end($data['useruploads'][$key]) / end($data['totaluploads']))*100, 2);
+					if(isset($data['useraverage'])){
 						if(isset($data['useraverage'][$data['userid'][$key]])) 
-							echo ",".round(end($data['useraverage'][$data['userid'][$key]]), 3).",".
-								round(end($data['usersd'][$data['userid'][$key]]), 3).",".
+							echo ",".round(end($data['useraverage'][$data['userid'][$key]]), 2).",".
+								round(end($data['usersd'][$data['userid'][$key]]), 2).",".
 								round(end($data['usermaxvalue'][$data['userid'][$key]]), 3).",".
 								round(end($data['userminvalue'][$data['userid'][$key]]), 3);
 						else
 							echo ", -1, -1, -1, -1";
-					
-					if(isset($data['useraverage']))
+							
 						if(isset($data['revisoraverage'][$data['userid'][$key]])) 
-							echo ",".round(end($data['revisoraverage'][$data['userid'][$key]]), 3).",".
+							echo ",".round(end($data['revisoraverage'][$data['userid'][$key]]), 2).",".
 								round(end($data['revisormaxvalue'][$data['userid'][$key]]), 3).",".
 								round(end($data['revisorminvalue'][$data['userid'][$key]]), 3);
 						else
 							echo ", -1, -1, -1";
+					}
+						
 					echo "]\n";
 					
 					if($key != end(array_keys($data['useredits']))) echo ",";
@@ -577,8 +574,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			pagedata.addColumn('number', 'Edits %');
 			pagedata.addColumn('number', 'Bytes');
 			pagedata.addColumn('number', 'Bytes %');
-			<? if(isset($data['pageuploads'])) echo "pagedata.addColumn('number', 'Uploads');";?>
-			<? if(isset($data['pageuploads'])) echo "pagedata.addColumn('number', 'Uploads %');";?>
+			pagedata.addColumn('number', 'Uploads');
+			pagedata.addColumn('number', 'Uploads %');
 			<? if(isset($data['pageaveragevalue'])) echo "
 				pagedata.addColumn('number', 'Average Grade');
 				pagedata.addColumn('number', 'Standard Deviation');
@@ -593,25 +590,25 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 					echo "['".$key."', '".
 						$data['pagenamespace'][$key]."', ".
 						round(end($data['pageedits'][$key]), 3).",".
-						round(end($data['pageedits_per'][$key]), 3).",".
+						round((end($data['pageedits'][$key]) / end($data['totaledits']))*100, 2).",".
 						round(end($data['pagebytes'][$key]), 3).",".
-						round(end($data['pagebytes_per'][$key]), 3);
-					if(isset($data['pageuploads']))
-						if(isset($data['pageuploads'][$key])) 
+						round((end($data['pagebytes'][$key]) / end($data['totalbytes']))*100, 2);
+						if(isset($data['pageuploads'][$key]))
 							echo ", ".round(end($data['pageuploads'][$key]), 3).",".
-							round(end($data['pageuploads_per'][$key]), 3);
-					else
-						echo ", 0, 0";
+							round((end($data['pageuploads'][$key]) / end($data['totaluploads']))*100, 2);
+						else
+							echo ", 0, 0";
 					if(isset($data['pageaveragevalue']))
 						if(isset($data['pageaveragevalue'][$key])) 
-							echo ", ".round(end($data['pageaveragevalue'][$key]), 3).",".
-								round(end($data['pagesd'][$key]), 3).",".
+							echo ", ".round(end($data['pageaveragevalue'][$key]), 2).",".
+								round(end($data['pagesd'][$key]), 2).",".
 								round(end($data['pageminvalue'][$key]), 3).",".
 								round(end($data['pagemaxvalue'][$key]), 3);
 						else
 							echo ", -1, -1, -1, -1";
 						
-					echo ", ".$data['pagevisits'][$key].", ".round($data['pagevisits'][$key] / array_sum($data['pagevisits']), 3);
+					echo ", ".$data['pagevisits'][$key].", ".
+						round($data['pagevisits'][$key] / array_sum($data['pagevisits']), 3);
 					
 					echo "]\n";
 					
@@ -633,22 +630,22 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 						catdata.addColumn('number', 'Bytes');
 						catdata.addColumn('number', 'Bytes %');
 						catdata.addColumn('number', 'Pages');
-						catdata.addColumn('number', 'Pages %');";
-						if(isset($data['catuploads'])) echo "catdata.addColumn('number', 'Uploads');";
-						if(isset($data['catuploads'])) echo "catdata.addColumn('number', 'Uploads %');";
+						catdata.addColumn('number', 'Pages %');
+						catdata.addColumn('number', 'Uploads');
+						catdata.addColumn('number', 'Uploads %');";
 			
 					echo "catdata.addRows([";
 					foreach(array_keys($data['catedits']) as $key){
 						echo "['".$key."', ".
 							round(end($data['catedits'][$key]), 3).",".
-							round(end($data['catedits_per'][$key]), 3).",".
+							round((end($data['catedits'][$key]) / end($data['totaledits'])) * 100, 2).",".
 							round(end($data['catbytes'][$key]), 3).",".
-							round(end($data['catbytes_per'][$key]), 3).",".
+							round((end($data['catbytes'][$key]) / end($data['totalbytes'])) * 100, 2).",".
 							round(end($data['catpages'][$key]), 3).", ".
-							round(end($data['catpages_per'][$key]), 3);
+							round((end($data['catpages'][$key]) / end($data['totalpages'])) * 100, 2);
 						if(isset($data['catuploads'][$key])) 
 							echo ", ".round(end($data['catuploads'][$key]), 3).",".
-								round(end($data['catuploads_per'][$key]), 3);
+								round((end($data['catuploads'][$key]) / end($data['totaluploads'])) * 100, 2);
 						else
 							echo ", 0, 0";
 					

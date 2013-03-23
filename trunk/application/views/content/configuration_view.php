@@ -32,7 +32,7 @@ if($this->session->userdata('is_admin')){
 		
 		$users = $this->user_model->get_users_list();
 		foreach($users as $user){
-			echo "<tr><td>$user</td><td>".($this->user_model->is_admin($user) ? $this->lang->line('voc.i18n_admin', 'spanish') : lang('voc.i18n_teacher')) ."</td><td>".(($this->session->userdata('username') != $user) ? anchor("delete_user/deleteuser/$user",lang('voc.i18n_delete'), array('onClick' => "return confirm('".lang('voc.i18n_delete_user_confirmation')."');")) : "" )."</td><tr>";
+			echo "<tr><td>$user</td><td>".($this->user_model->is_admin($user) ? lang('voc.i18n_admin') : lang('voc.i18n_teacher')) ."</td><td>".(($this->session->userdata('username') != $user) ? anchor("delete_user/deleteuser/$user",lang('voc.i18n_delete'), array('onClick' => "return confirm('".lang('voc.i18n_delete_user_confirmation')."');")) : "" )."</td><tr>";
 		}
 		
 		echo
@@ -42,12 +42,12 @@ if($this->session->userdata('is_admin')){
 ?>
 
 <?
-			$languages = array(/*
-		           	'es'  => lang('voc.i18n_spanish'),*/
-		                'en'    => lang('voc.i18n_english')/*,
-		                'fr'   => lang('voc.i18n_french'),
-		                'ru' => lang('voc.i18n_russian'),
-		                'ge' => lang('voc.i18n_german'),*/
+			$languages = array(
+		           	'spanish'  => lang('voc.i18n_spanish'),
+		                'english'    => lang('voc.i18n_english'),
+		                'french'   => lang('voc.i18n_french'),
+		                'russian' => lang('voc.i18n_russian'),
+		                'german' => lang('voc.i18n_german'),
 		             );
 		?>
 	<table><tr>

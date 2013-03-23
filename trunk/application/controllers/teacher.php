@@ -27,6 +27,7 @@ class Teacher extends CI_Controller {
       		$this->load->model('user_model');
       		$this->load->model('analisis_model');
       		$this->lang->load('voc', $this->session->userdata('language'));
+      		
    	}
    	
 	function index(){

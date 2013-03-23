@@ -36,7 +36,7 @@ class Index_controller extends CI_Controller {
 		if(!strpos(read_file('application/config/database.php'),'cleverfigures') !== false){
 		
 			$this->session->sess_destroy();
-			$this->lang->load('voc', 'en');
+			$this->lang->load('voc', 'english');
 			
 			//CREATE HEADER ARRAY
 			$datah = array('title' => lang('voc.i18n_installation'));
@@ -73,7 +73,7 @@ class Index_controller extends CI_Controller {
 				$this->load->view('templates/footer_view');
 			}
 			else{
-				$this->lang->load('voc', 'en');
+				$this->lang->load('voc', 'english');
 				
 				//IF AN USER ALREADY EXISTS
 				if($this->db->query('select * from user')->result()){

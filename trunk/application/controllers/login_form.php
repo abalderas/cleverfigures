@@ -43,33 +43,7 @@ class Login_form extends CI_Controller {
 		else{
 			//IF USER LOGGED CORRECTLY
 			if($this->user_model->login($this->input->post('username'), $this->input->post('password'))){
-				//CREATE HEADER ARRAY
-				$datah = array('title' => lang('voc.i18n_teacher_view'));
-			
-				//IF THE USER HAS PERFORMED ANALYSIS
-				if($this->user_model->get_analisis_list($this->session->userdata('username'))){
-					//LOAD ANALYSIS
-					foreach($this->user_model->get_analisis_list($this->session->userdata('username')) as $analisis){
-						$adata = $this->analisis_model->get_analisis_data($analisis);
-						$adate[] = $analisis;
-						$awiki[] = $this->analisis_model->get_analisis_wiki($analisis);
-						$acolor[] = $this->analisis_model->get_analisis_color($analisis);
-					}
-					
-					//CREATE VIEW DATA
-					$tdata = array('adate' => $adate, 'awiki' => $awiki, 'acolor' => $acolor);
-				
-					//LOAD VIEW WITH DATA
-					$this->load->view('templates/header_view', $datah);
-					$this->load->view('content/teacher_view', $tdata);
-					$this->load->view('templates/footer_view');
-				}
-				//ELSE, LOAD VIEW WITHOUT DATA
-				else{
-					$this->load->view('templates/header_view', $datah);
-					$this->load->view('content/teacher_view');
-					$this->load->view('templates/footer_view');
-				}
+				redirect('teacher');
 			}
 //			else if($this->wiki_model->student_login($this->input->post('username'), $this->input->post('password'))){
 // 				$reports = $this->report_model->get_my_reports($this->session->userdata('username'));

@@ -351,8 +351,15 @@ class Wiki_model extends CI_Model{
 			$totalbytes_file[$this->mwtime_to_unix($row->rev_timestamp)] = 0;
 			$totalbytes_temp[$this->mwtime_to_unix($row->rev_timestamp)] = 0;
 			$totalbytes_cat[$this->mwtime_to_unix($row->rev_timestamp)] = 0;
-			
-			
+			$useredits_art[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = 0;
+			$userbytes_art[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = 0;
+			$useruploads[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = 0;
+			$userupsize[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = 0;
+			$useruploadscount[$row->user_name] = 0;
+			$pageuploadscount[$row->page_title] = 0;
+			$userupsizecount[$row->user_name] = 0;
+			$pageupsizecount[$row->page_title] = 0;
+				
 			$pagebytes[$row->page_title] = array();
 			$pagebytes_art[$row->page_title] = array();
 			$userpage[$row->user_name] = array();
@@ -360,6 +367,8 @@ class Wiki_model extends CI_Model{
 			$usercreatedpages[$row->user_name]= array();
 			$pageusereditscount[$row->page_title][$row->user_name] = 0;
 			$pageuserbytescount[$row->page_title][$row->user_name] = 0;
+			
+			$aux_users_art [$row->user_name] = 0;
    		}
    		
    		$aux_edits_art = array();
@@ -386,6 +395,9 @@ class Wiki_model extends CI_Model{
 		$totalbytesfilecount = 0;
 		$totalbytestempcount = 0;
 		$totalbytescatcount = 0;
+			
+		$totaluploadscount = 0;
+		$totalupsizecount = 0;
 		
    		//Storing classified information in arrays
    		
@@ -706,11 +718,7 @@ class Wiki_model extends CI_Model{
 					$catactivitymonth[$row->cl_to][$this->codemonth($i)] = 0;
 			
 				$cateditscount[$row->cl_to] = 0;
-				$catbytescount[$row->cl_to] = 0;/*
-				$catactivityhour[$row->cl_to][date('G', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
-				$catactivitywday[$row->cl_to][$this->codewday(date('w', $this->mwtime_to_unix($row->rev_timestamp)))] = 0;
-				$catactivityweek[$row->cl_to][date('W', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
-				$catactivitymonth[$row->cl_to][$this->codemonth(date('n', $this->mwtime_to_unix($row->rev_timestamp)))] = 0;*/
+				$catbytescount[$row->cl_to] = 0;
 				$catactivityyear[$row->cl_to][date('Y', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
 				$catusereditscount[$row->cl_to][$row->user_name] = 0;
 				$catuserbytescount[$row->cl_to][$row->user_name] = 0;
@@ -830,21 +838,17 @@ class Wiki_model extends CI_Model{
    		if($query->result()){
 			echo "done.</br>";
 			echo "Storing uploads information...";
-			ob_flush(); flush();
+			ob_flush(); flush();			
    		
 			//Initializing arrays
 			foreach($query->result() as $row){
 			
 				$userupsize[$row->user_name][$this->mwtime_to_unix($row->img_timestamp)] = 0;
+				$useruploads[$row->user_name][$this->mwtime_to_unix($row->img_timestamp)] = 0;
 				$pageupsize[$row->page_title][$this->mwtime_to_unix($row->img_timestamp)] = 0;
+				$pageuploads[$row->page_title][$this->mwtime_to_unix($row->img_timestamp)] = 0;
 				$totaluploads[$this->mwtime_to_unix($row->img_timestamp)] = 0;
 				$totalupsize[$this->mwtime_to_unix($row->img_timestamp)] = 0;
-				$useruploadscount[$row->user_name] = 0;
-				$pageuploadscount[$row->page_title] = 0;
-				$userupsizecount[$row->user_name] = 0;
-				$pageupsizecount[$row->page_title] = 0;
-				$totaluploadscount = 0;
-				$totalupsizecount = 0;
 				
 			}
 			

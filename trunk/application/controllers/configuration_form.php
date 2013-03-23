@@ -96,14 +96,10 @@ class Configuration_form extends CI_Controller {
 				$this->db->query("UPDATE user SET user_high_contrast = '$high_contrast' WHERE user_username = '$user'");
 				$this->session->set_userdata(array('language' => $l, 'high_contrast' => $high_contrast));
 				$this->user_model->update_language($l);
-				
-				//CREATE HEADER ARRAY
-				$datah = array('title' => lang('voc.i18n_configuration_view'));
+				$this->config->set_item('language', $l);
 				
 				//LOAD CONFIGURATION VIEW
-				$this->load->view('templates/header_view', $datah);
-				$this->load->view('content/configuration_view', array('wikilist' => $this->user_model->get_wiki_list($this->session->userdata('username')), 'colorlist' => $this->user_model->get_color_list($this->session->userdata('username'))));
-				$this->load->view('templates/footer_view');
+				redirect('configure');
 			}
 			
 			//IF CANNCEL SELECTED
