@@ -131,9 +131,7 @@ if($this->session->userdata('is_admin')){
 <div id ="footer">
 	<table>
 	<tr>
-		<th><?=safe_mailto('alvaro.almagrodoello@alum.uca.es', lang('voc.i18n_contact'))?></th>
-		<th><?=anchor('license/gpl.txt',lang('voc.i18n_license'))?></th>
-		<th><?=anchor('about',lang('voc.i18n_about'))?></th>
+		<th style = 'color:white;'><?=safe_mailto('alvaro.almagrodoello@alum.uca.es', lang('voc.i18n_contact'))?> | <?=anchor('license/gpl.txt',lang('voc.i18n_license'))?> | <?=anchor('about',lang('voc.i18n_about'))?></th>
 		</tr>
 	</table>
 </div>
