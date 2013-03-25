@@ -26,12 +26,6 @@ class Select_language_form extends CI_Controller {
    	}
    	
 	function index(){
-//       		$newdata = array(
-//                    'language'  => $this->input->post('select_language')
-// 		);
-// 
-// 		$this->session->set_userdata($newdata);
-//       		$this->lang->load('voc', $this->session->userdata('language'));
       		
 		$datah = array('title' => lang('voc.i18n_installation'));
 		$this->load->view('templates/header_view', $datah);

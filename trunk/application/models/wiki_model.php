@@ -53,15 +53,6 @@ class Wiki_model extends CI_Model{
 		return mktime($hour, $min, $sec, $month, $day, $year);
 	}
 	
-	private function lang_date($date){
-// 		if($this->session->userdata('language') == 'english' or $this->session->userdata('language') == 'german')
-// 			return $date;
-// 		else{
-			list($day, $month, $year) = sscanf($date, '%d/%d/%d');
-			return $month."/".$day."/".$year;
-// 		}
-	}
-	
 	private function codewday($wday){
 		switch($wday){
 			case "0":return lang('voc.i18n_sunday');
@@ -108,13 +99,13 @@ class Wiki_model extends CI_Model{
 		return false;
 	}
 	
-   	private function wconnection($wikiname){
+   	function wconnection($wikiname){
    		//Consultamos la conexión
    		$query = $this->db->query("select wiki_connection from wiki where wiki_name = '$wikiname'");
    		
    		//Comprobamos que existe y devolvemos el id de conexión
    		if(!$query->result())
-   			return "wconnection(): ERR_NONEXISTENT";
+   			return false;
    		else
    			foreach($query->result() as $row)
    				return $row->wiki_connection;
@@ -173,38 +164,6 @@ class Wiki_model extends CI_Model{
 			$res[] = $row->group_name;
 				
 		return $res;
-   	}
-   	
-   	function student_login($uname, $pass){
-		$wikis = $this->db->query("select wiki_name from wiki")->result();
-		
-		if(!$link) die("student_login::Invalid database connection.");
-		
-		foreach($wikis as $wiki){
-			$link = $this->connection_model->connect($this->wconnection($wiki));
-			
-			$link -> from('user') 
-			-> where('user_name = ' . "'" . $uname . "'") 
-			-> where('user_password = ' . "'" . MD5($pass) . "'") 
-			-> limit(1);
-   
-			$query = $link -> get();
-       
-			if($query->result()){
-				foreach($query->result() as $row) 
-					$sess_array = array('username' => $row -> user_name,
-        						'language' => 'english',
-        						'is_student' => 1,
-        						'student_wiki' => $wiki,
-        						'realname' => $row -> user_real_name
-        						); 
-				$this -> session -> set_userdata($sess_array);
-				$this->update_last_session($uname);
-				return true;
-			}
-		}
-		
-		return false;
    	}
    	
    	private function namespacestring($ns){

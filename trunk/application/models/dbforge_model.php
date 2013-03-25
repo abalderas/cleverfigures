@@ -59,5 +59,6 @@ class Dbforge_model extends CI_Model{
 
 		$this->db->query("CREATE TABLE `member` ( `member_name` VARCHAR(20) NOT NULL, `member_group` VARCHAR(50) NOT NULL, KEY `member_name` (`member_name`) ) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
 
+		$this->db->query("CREATE TABLE `student-analysis` ( `student_name` VARCHAR(30) NOT NULL, `analisis_date` VARCHAR(50) NOT NULL, KEY `student_name` (`student_name`) ) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
    	}
 }

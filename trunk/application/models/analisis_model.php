@@ -86,4 +86,8 @@ class Analisis_model extends CI_Model{
 		foreach($data->result() as $row)
 			return $row->analisis_color_name;
    	}
+   	
+   	function shared_with($analysis_date, $student_name){
+		return $this->db->query("select * from `student-analysis` where student_name = '$student_name' and analysis_date = '$analysis_date'")->result() ? true : false;
+   	}
 }
