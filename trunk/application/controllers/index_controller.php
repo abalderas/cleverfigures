@@ -50,27 +50,10 @@ class Index_controller extends CI_Controller {
 		else{
 			//IF USER LOGGED IN
 			if($this->session->userdata('username')){
-				
-				$this->lang->load('voc', $this->session->userdata('language'));
-				
-				//CREATE HEADER ARRAY
-				$datah = array('title' => lang('voc.i18n_teacher_view'));
-				
-				//LOAD ANALYSIS LIST
-				foreach($this->user_model->get_analisis_list($this->session->userdata('username')) as $analisis){
-					$adate = $analisis;
-					$awiki = $this->analisis_model->get_analisis_wiki($analisis);
-					$acolor = $this->analisis_model->get_analisis_color($analisis);
-				}
-				
-				//IF THERE ARE ANALYSIS IN THE LIST, CREATE ARRAY
-				if(isset($adate)) $tdata = array('adate' => $adate, 'awiki' => $awiki, 'acolor' => $acolor);
-				else $tdata = array();
-				
-				//LOAD INITIAL VIEW WITH DATA
-				$this->load->view('templates/header_view', $datah);
-				$this->load->view('content/teacher_view', $tdata);
-				$this->load->view('templates/footer_view');
+				if(!$this->session->userdata('is_student'))
+					redirect('teacher');
+				else
+					redirect('student');
 			}
 			else{
 				$this->lang->load('voc', 'english');

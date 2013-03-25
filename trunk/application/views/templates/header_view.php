@@ -104,6 +104,8 @@ var overlay = {
 				echo "<th>".anchor('configure', lang('voc.i18n_configuration'))."</th>";
 			if(!$this->session->userdata('is_student') == 1)
 				echo "<th>".anchor('teacher', lang('voc.i18n_view_analisis'))."</th>";
+			else
+				echo "<th>".anchor('student', lang('voc.i18n_report_list'))."</th>";
 			if(!$this->session->userdata('is_student') == 1)
 				echo "<th>".anchor('analise', lang('voc.i18n_analise'))."</th>";
 			echo "<th>".anchor('close_session', lang('voc.i18n_close_session'));

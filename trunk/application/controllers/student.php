@@ -24,6 +24,7 @@ class Student extends CI_Controller {
       		parent::__construct();
       		$this->lang->load('voc', $this->config->item('language'));
       		$this->load->model('student_model');
+      		$this->load->model('analisis_model');
    	}
    	
 	function index(){

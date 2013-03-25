@@ -49,7 +49,6 @@ class Analisis_model extends CI_Model{
    	}
    	
    	function delete_analisis($analisis){
-		echo $analisis;
 		$check = $this->db->query("select analisis_date from analisis where analisis_date = '$analisis'");
    		if(!$check->result())
    			die( "delete_analisis(): ERR_NONEXISTENT");
@@ -85,6 +84,14 @@ class Analisis_model extends CI_Model{
 			return false;
 		foreach($data->result() as $row)
 			return $row->analisis_color_name;
+   	}
+   	
+   	function share($analysis_date, $student_name){
+		$this->db->insert('student-analysis', array('student_name' => $student_name, 'analysis_date' => $analysis_date));
+   	}
+   	
+   	function unshare($analysis_date, $student_name){
+		$this->db->query("DELETE FROM `student-analysis` WHERE analysis_date = '$analysis_date' and student_name = '$student_name'");
    	}
    	
    	function shared_with($analysis_date, $student_name){

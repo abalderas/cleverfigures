@@ -174,81 +174,52 @@ class Analisis_form extends CI_Controller {
 			$this->load->view('templates/footer_view');
 		}
 		else{
-			//IF WIKI SELECTED
-			if($_POST['select_wiki'] != lang('voc.i18n_no_wiki')){
+			//CREATE ANALYSIS DATA ARRAY
+			$adata = array('wiki' => $_POST['select_wiki'], 
+					'color' => $_POST['select_color']
+				);
 				
-				//CREATE ANALYSIS DATA ARRAY
-				$adata = array('wiki' => $_POST['select_wiki'], 
-						'color' => $_POST['select_color']
-					);
-					
-				//CREATE HEADER ARRAY
-				$datah = array('title' => lang('voc.i18n_analising'));
-				
-				//ANALYSIS NAME IS DATETIME
-				$analisis = now();
-				
-				//INCLUDYING ANALYSIS NAME IN THE COOKIE
-				$this->session->set_flashdata(array('aname' => $analisis));
-				
-				//SHOWING ANALISING VIEW
-				echo $this->load->view('templates/header_view', $datah, true);
-				echo $this->load->view('content/analising_view', $adata, true);
-				ob_flush(); flush();
-				
-				//START CHRONOMETER
-				$start = microtime(true);
-				
-				//ANALISE
-				$valid_analisis = $this->analise($adata, $analisis);
-				ob_flush(); flush();
-				
-				//IN CASE OF ERRORS, PRINT ERRORS
-				if($valid_analisis == -1)
-					echo "<b>EMPTY WIKI. No analisis performed.</b>";
-				else if($valid_analisis == -2)
-					echo "<b>EMPTY QUALITATIVE DATA SOURCE. The qualitative data source that you chose is empty. Please select another.</b>";
-				else if($valid_analisis == -3)
-					echo "<b>INCOMPATIBLE QUALITATIVE DATA SOURCE. The qualitative data source that you chose is not compatible with the data in the wiki. Please select another.</b>";
-				else{
-					//PRINT TOTAL TIME
-					printf("Performed in %.02f seconds.</br>", (microtime(true)-$start));
-					ob_flush(); flush();
-				
-					//RECORD THE ANALYSIS IN THE DB
-					$this->analisis_model->register_analisis($_POST['select_wiki'], isset($_POST['select_color'])? $_POST['select_color'] : false, $analisis);
-					
-					//RELATE ANALYSIS TO THE USER
-					$this->user_model->relate_analisis($analisis);
-				
-					//FINAL MESSAGE
-					echo "<b>Analisis saved. You can check it in \"Performed Analisis\".</b>";
-				}
-			}
+			//CREATE HEADER ARRAY
+			$datah = array('title' => lang('voc.i18n_analising'));
+			
+			//ANALYSIS NAME IS DATETIME
+			$analisis = now();
+			
+			//INCLUDYING ANALYSIS NAME IN THE COOKIE
+			$this->session->set_flashdata(array('aname' => $analisis));
+			
+			//SHOWING ANALISING VIEW
+			echo $this->load->view('templates/header_view', $datah, true);
+			echo $this->load->view('content/analising_view', $adata, true);
+			ob_flush(); flush();
+			
+			//START CHRONOMETER
+			$start = microtime(true);
+			
+			//ANALISE
+			$valid_analisis = $this->analise($adata, $analisis);
+			ob_flush(); flush();
+			
+			//IN CASE OF ERRORS, PRINT ERRORS
+			if($valid_analisis == -1)
+				echo "<b>EMPTY WIKI. No analisis performed.</b>";
+			else if($valid_analisis == -2)
+				echo "<b>EMPTY QUALITATIVE DATA SOURCE. The qualitative data source that you chose is empty. Please select another.</b>";
+			else if($valid_analisis == -3)
+				echo "<b>INCOMPATIBLE QUALITATIVE DATA SOURCE. The qualitative data source that you chose is not compatible with the data in the wiki. Please select another.</b>";
 			else{
-				//SHOW MESSAGE IF NO WIKI SELECTED
-				echo 	"<script language=\"javascript\" type=\"text/javascript\">
-						alert('".lang('voc.i18n_must_choose_wiki')."');
-					 </script>";
+				//PRINT TOTAL TIME
+				printf("Performed in %.02f seconds.</br>", (microtime(true)-$start));
+				ob_flush(); flush();
 			
-				//CREATE HEADER ARRAY
-				$datah = array('title' => lang('voc.i18n_analise_view'));
+				//RECORD THE ANALYSIS IN THE DB
+				$this->analisis_model->register_analisis($_POST['select_wiki'], isset($_POST['select_color'])? $_POST['select_color'] : false, $analisis);
+				
+				//RELATE ANALYSIS TO THE USER
+				$this->user_model->relate_analisis($analisis);
 			
-				//CREATE COLOR LIST ARRAY
-				$colors = array(lang('voc.i18n_no_color') => lang('voc.i18n_no_color'));
-				$colors = array_merge($colors, $this->color_model->get_color_list($this->session->userdata('username')));
-				
-				//CREATE WIKI LIST ARRAY
-				$wikis = array(lang('voc.i18n_no_wiki') => lang('voc.i18n_no_wiki')); 
-				$wikis = array_merge($wikis, $this->wiki_model->get_wiki_list($this->session->userdata('username')));
-				
-				//CREATE DATA ARRAY
-				$adata = array('wikis' => $wikis, 'colors' => $colors, 'filters' => $filters);
-				
-				//LOAD ANALISE VIEW
-				$this->load->view('templates/header_view', $datah);
-				$this->load->view('content/analise_view', $adata);
-				$this->load->view('templates/footer_view');
+				//FINAL MESSAGE
+				echo "<b>Analisis saved. You can check it in \"Performed Analisis\".</b>";
 			}
 		}
 	}

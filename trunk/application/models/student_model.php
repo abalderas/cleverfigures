@@ -76,7 +76,7 @@ class Student_model extends CI_Model{
 		
 		if($result){
 			foreach($result as $row){
-				$alist[] = $row->analisis_date;
+				$alist[] = $row->analysis_date;
 			}
 			
 			return $alist;

@@ -96,6 +96,10 @@ if($this->session->userdata('is_admin')){
 			<td><?=form_checkbox('high_contrast', '', $this->session->userdata('high_contrast'));?></td>
 		</tr>
 		<tr>
+			<td><?=form_label(lang('voc.i18n_change_password'), 'change_password');?></td>
+			<td><?=form_submit('change_password', lang('voc.i18n_change_password'));?></td>
+		</tr>
+		<tr>
 			<th class = 'low' colspan = "2"><?=form_submit(array('name' => 'save_conf', 'value' => lang('voc.i18n_save_conf'), 'class' => 'next'));?></th>
 		</tr>
 		</table>

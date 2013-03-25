@@ -174,4 +174,17 @@ $lang['voc.i18n_thursday'] = "Jueves";
 $lang['voc.i18n_friday'] = "Viernes";
 $lang['voc.i18n_saturday'] = "Sábado";
 $lang['voc.i18n_sunday'] = "Domingo";
+$lang['voc.i18n_share'] = "Compartir";
+$lang['voc.i18n_sharing_view'] = "Vista de Compartición";
+$lang['voc.i18n_sharing_options'] = "Opciones de compartición";
+$lang['voc.i18n_select_all'] = "Seleccionar todos";
+$lang['voc.i18n_student_view'] = "Vista de Estudiante";
+$lang['voc.i18n_nothing_shared'] = "Nada ha sido compartido contigo.";
+$lang['voc.i18n_change_password'] = "Cambiar contraseña";
+$lang['voc.i18n_mismatching_passwords'] = "Las contraseñas escritas no coinciden";
+$lang['voc.i18n_empty_fields'] = "Todos los camposdeben ser completados";
+$lang['voc.i18n_password_changed'] = "Contraseña cambiada";
+$lang['voc.i18n_check_all'] = "Marcar todos";
+$lang['voc.i18n_uncheck_all'] = "Desmarcar todos";
+$lang['voc.i18n_report_list'] = "Lista de Informes";
 ?>

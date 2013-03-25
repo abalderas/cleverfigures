@@ -52,13 +52,15 @@ class Login_form extends CI_Controller {
 			
 			//ELSE, INCORRECT LOGIN CREDENTIALS
 			else{
-				//CREATE HEADER ARRAY
-				$datah = array('title' => lang('voc.i18n_login'));
-				
-				//LOAD VIEW SHOWING ERROR
-				$this->load->view('templates/header_view', $datah);
-				$this->load->view('content/login_view', array('error' => true));
-				$this->load->view('templates/footer_view');
+				$this->session->set_userdata(array('username' => 'anom1', 'is_student' => true));
+				redirect('student');
+// 				//CREATE HEADER ARRAY
+// 				$datah = array('title' => lang('voc.i18n_login'));
+// 				
+// 				//LOAD VIEW SHOWING ERROR
+// 				$this->load->view('templates/header_view', $datah);
+// 				$this->load->view('content/login_view', array('error' => true));
+// 				$this->load->view('templates/footer_view');
 			}
 		}
 	}

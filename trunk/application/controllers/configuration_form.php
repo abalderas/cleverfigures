@@ -80,6 +80,18 @@ class Configuration_form extends CI_Controller {
 				$this->load->view('templates/footer_view');
 			}
 			
+			//IF CHANGE PASSWORD SELECTED
+			else if($this->input->post('change_password')){
+				
+				//CREATE HEADER ARRAY
+				$datah = array('title' => lang('voc.i18n_change_password'));
+				
+				//LOAD USER CREATION FORM
+				$this->load->view('templates/header_view', $datah);
+				$this->load->view('content/password_change_view');
+				$this->load->view('templates/footer_view');
+			}
+			
 			//IF SAVE CONFIGURATION SELECTED
 			else if($this->input->post('save_conf')){
 				
@@ -103,16 +115,8 @@ class Configuration_form extends CI_Controller {
 			}
 			
 			//IF CANNCEL SELECTED
-			else if($this->input->post('cancel_conf')){
-				
-				//CREATE HEADER ARRAY
-				$datah = array('title' => lang('voc.i18n_configuration_view'));
-				
-				//LOAD CONFIGURATION VIEW
-				$this->load->view('templates/header_view', $datah);
-				$this->load->view('content/configuration_view', array('wikilist' => $this->user_model->get_wiki_list($this->session->userdata('username')), 'colorlist' => $this->user_model->get_color_list($this->session->userdata('username'))));
-				$this->load->view('templates/footer_view');
-			}
+			else
+				redirect('configure');
 		}
 	}
 }  

@@ -79,7 +79,7 @@ class User_model extends CI_Model{
    	}
    	
    	function update_password($uname, $password){
-   		$data = array('user_password' => $lang);
+   		$data = array('user_password' => MD5($password));
 		$this->db->where('user_username', $uname);
 		$this->db->update('user', $data); 
    	}

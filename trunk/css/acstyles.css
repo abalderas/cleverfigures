@@ -1,77 +1,94 @@
 /*
-<<Copyright 2013 Alvaro Almagro Doello>>
-
-This file is part of CleverFigures.
-
-CleverFigures is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-CleverFigures is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * <<Copyright 2013 Alvaro Almagro Doello>>
+ * 
+ * This file is part of CleverFigures.
+ * 
+ * CleverFigures is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * CleverFigures is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /* GENERAL SETTINGS */
 
-html{
-}
-
 body
 {
-font-family: 'Donegal One', serif;
-z-index:1;
-height:100%;
+	/* font-family: 'Donegal One', serif; */
+	z-index:1;
+	height:100%;
 }
 
 h1
 {
-text-align:center;
-font-family: 'Cinzel', serif;
+	text-align:center;
+	font-family: 'Cinzel', serif;
 }
 p
 {
-font-family:"Trebuchet MS";
-font-size:20px;
+	font-family:"Trebuchet MS";
+	font-size:16px;
 }
 
 img{
-  display:block;
-  margin:0 auto 0 auto;
+	display:block;
+	margin:0 auto 0 auto;
 }
 
 a:link {
-  color:#40FF00;
-  font-weight:bold;
-  text-decoration:none;
+	color:green;
+	font-weight:bold;
+	text-decoration:none;
 }
 a:visited {
-  color:#40FF00;
-  font-weight:bold;
-  text-decoration:none;
+	color:green;
+	font-weight:bold;
+	text-decoration:none;
 }
 a:hover {
-  color:#40FF00;
-  font-weight:bold;
-  text-decoration:none;
+	color:green;
+	font-weight:bold;
+	text-decoration:none;
 }
 a:active {
-  color:#40FF00;
-  text-decoration:none;
+	color:white;
+	text-decoration:none;
 }
 
 em{
-	color:red;
+	color:white;
 	font-size:0.8em;
+	position:absolute;
+	right:5px;
+	bottom:5px;
+	font-weight:bold;
+	border:1px solid red;
+	border-radius:5px;
+	padding:20px;
+	background:red;
+}
+
+info{
+	color:white;
+	font-size:0.8em;
+	position:absolute;
+	right:5px;
+	bottom:5px;
+	border:1px solid green;
+	border-radius:5px;
+	padding:20px;
+	background:green;
 }
 
 #overlay{
-	background-color:rgba(0,0,0,0.8);
+	background-color:black;
 	position:absolute;
 	top:0px;
 	left:0px;
@@ -102,41 +119,115 @@ em{
 
 #bodytable
 {
-font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
-min-width:800px;
-margin-left: auto;
-margin-right: auto;
-table-layout:fixed;
-border: solid 1px black;
+	font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+	min-width:800px;
+	margin-left: auto;
+	margin-right: auto;
+	table-layout:fixed;
+	border:solid 1px black;
+	border-radius:10px;
 }
 
+#bodytable td.separated
+{
+	border-bottom:1px solid black;
+}
 
 #bodytable th 
 {
-font-size:1em;
-padding-top:5px;
-padding-bottom:4px;
-color: white;
-background-color:black;
+	font-size:14px;
+	padding-top:5px;
+	padding-bottom:4px;
+	color: white;
+	background-color:black;
+}
+
+#bodytable th.rightside
+{
+	border-radius:0px 10px 0px 0px;
+}
+
+#bodytable th.leftside
+{
+	border-radius:10px 0px 0px 0px;
+}
+
+#bodytable th.low
+{
+	border-radius:0px 0px 10px 10px;
+}
+
+#bodytable th.only
+{
+	border-radius:10px 10px 0px 0px;
 }
 
 #bodytable td 
 {
-color:#000000;
-min-height:29px;
-padding:2px;
+	color:#000000;
+	font-size:12px;
+	min-height:29px;
+	padding:2px;
+	padding-bottom:10px;
 }
 
 #bodytable input.cssform{
-	width:60%;
+	width:87%;
+}
+
+#variabletable
+{
+	font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+	width:100%;
+	height:100%;
+	top:0px;
+	margin-left: auto;
+	margin-right: auto;
+	table-layout:fixed;
+	border:solid 1px black;
+	border-radius:10px;
+}
+
+
+#variabletable th 
+{
+	font-size:14px;
+	padding-top:5px;
+	padding-bottom:4px;
+	color: white;
+	background-color:black;
+	border-radius:10px 10px 0px 0px;
+}
+
+#variabletable th.low
+{
+	font-size:14px;
+	padding-top:5px;
+	padding-bottom:4px;
+	color: white;
+	background-color:black;
+	border-radius:0px 0px 10px 10px;
+}
+
+#variabletable td 
+{
+	color:#000000;
+	font-size:12px;
+	min-height:29px;
+	padding:2px;
+	padding-bottom:10px;
+}
+
+#variabletable input.cssform{
+	width:87%;
 }
 
 #charttable
 {
-margin-left: auto;
-margin-right: auto;
-padding:2px;
-width:100%;
+	margin-left: auto;
+	margin-right: auto;
+	padding:2px;
+	width:100%;
 }
 
 #charttable th 
@@ -154,12 +245,14 @@ width:100%;
 	text-align:left;
 	font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
 	margin: auto;
-	font-size:1em;
+	font-size:1em;/*
+	border: 1px solid #000000;
+	border-radius:10px;*/
 }
 
 #formins td, #formins th 
 {
-padding:3px 7px 2px 7px;
+	padding:3px 7px 2px 7px;
 }
 
 
@@ -169,15 +262,18 @@ padding:3px 7px 2px 7px;
 {
 	font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
 	width:100%;
-	height:30px;
+	min-width:800px;
+	height:25px;
 	table-layout: fixed;
-	border-collapse:collapse;
 	text-align:center;
 	background: black; 
 	position:fixed;
 	top:0px;
 	left:0px;
 	z-index:100;
+	-moz-box-shadow: 0 0 5px 5px #888;
+	-webkit-box-shadow: 0 0 5px 5px #888;
+	box-shadow: 0 0 5px 5px #888;
 }
 
 #menu a:link {
@@ -200,66 +296,56 @@ padding:3px 7px 2px 7px;
 }
 
 #menu td, #menu th 
-{
-border:0px solid black;
-padding:3px 7px 2px 7px;
+{/*
+padding:2px 2px 2px 2px;*/
 }
 
-#menu th 
+#menu th.user 
 {
-text-align:center;
-padding-top:5px;
-padding-bottom:4px;
-color:#000000;
-}
-
-#menu th.user
-{
-text-align:center;
-font-family: 'Playball', cursive;
-font-size:28px;
-color:white;
+	text-shadow: 0.1em 0.1em 0.05em #333;
+	padding-left:10px;
+	text-align:left;
+	font-size:20px;
+	color:white;
+	background-color:blue;
 }
 
 /* FOOTER  */
 
 #footer
 {
-	width:100%;
-	height:25px;
+	height:20px;
 	text-align:center;
-	table-layout: fixed;
-	position:absolute;
+	position:fixed;
+	right:0px;
 	left:0px;
-	bottom:0;
-	background: black; 
-	padding-bottom:5px;
+	bottom:0px;
+	background: black;
+	z-index:10;
 }
 
 #footer td, #footer th 
 {
-	font-size:1em;
-	padding:3px 7px 0px 7px;
+	font-size:12px;
+	padding:2px 2px 2px 2px;
 }
 
-#footer td { background-color:black; }
-
 #footer a:link {
-  color:white;
-  text-decoration:none;
+	color:white;
+	text-decoration:none;
 }
 
 #footer a:visited {
-  color:white;
-  text-decoration:none;
+	color:white;
+	text-decoration:none;
 }
 
 #footer a:hover {
-  color:white;
-  text-decoration:none;
+	color:white;
+	text-decoration:none;
 }
 
 #footer a:active {
-  color:white;
-  text-decoration:none;
+	color:white;
+	text-decoration:none;
 }

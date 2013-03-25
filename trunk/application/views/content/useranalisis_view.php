@@ -319,7 +319,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 					'wmode': 'transparent'}
 					);";
 					
-					
+			}
+			if(isset($data['userimages'][$username])){
 				echo "var imgs".$data['userid'][$username]." = new google.visualization.DataTable();
 				imgs".$data['userid'][$username].".addColumn('string', 'Name');
 				imgs".$data['userid'][$username].".addColumn('number', 'Size');

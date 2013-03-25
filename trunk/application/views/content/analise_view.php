@@ -18,6 +18,16 @@
 
 ?>
 
+<script>
+	function checkwiki(){
+		if (document.getElementsByName('select_wiki')[0].value == '<?=lang('voc.i18n_no_wiki')?>'){
+			alert('<?=lang('voc.i18n_must_choose_wiki')?>');
+			return false;
+		}
+		return true;
+	}
+</script>
+
 <?=form_open('analisis_form')?>
 <table id = "bodytable">
 	<tr>
@@ -32,7 +42,7 @@
 		<td><?=form_dropdown('select_color', $colors);?></td>
 	</tr>
 	<tr>
-		<th class = 'low' colspan = "2"><?=form_submit('analise_submit', lang('voc.i18n_analise'));?></th>
+		<th class = 'low' colspan = "2"><?=form_submit(array('id' => 'analise_submit','name' => 'analise_submit','value' => lang('voc.i18n_analise'),'onClick' => "return checkwiki()"));?></th>
 	</tr>
 </table>
 
