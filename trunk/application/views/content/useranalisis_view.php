@@ -446,8 +446,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			data<?=$data['userid'][$username]?>.addColumn('number', 'Standard Deviation');
 			data<?=$data['userid'][$username]?>.addRows([<? 
 				foreach(array_keys($data['userpage'][$username]) as $key){
-					echo "['".$key."','".
-						$data['pagenamespace'][$key]."',".
+					echo "['".utf8_encode($key)."','".
+						utf8_encode($data['pagenamespace'][$key])."',".
 						round(end($data['pageuseredits'][$key][$username]), 2).",".
 						round(end($data['pageusereditscount'][$key][$username])/end($data['useredits'][$username]), 2).",";
 					if(end($data['userbytes'][$username]) != 0){
@@ -479,7 +479,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 				catdata".$data['userid'][$username].".addColumn('string', 'Name');
 				catdata".$data['userid'][$username].".addRows([";
 					foreach(array_keys($data['usercat'][$username]) as $key){
-						echo "['".$key."']\n";
+						echo "['".utf8_encode($key)."']\n";
 						if($key != end(array_keys($data['usercat'][$username]))) echo ",";
 					}
 				echo "]);

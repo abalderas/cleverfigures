@@ -32,16 +32,8 @@ class Configuration_form extends CI_Controller {
 	function index(){
 	
 		//IF SESSION EXPIRED
-		if(!$this->session->userdata('username')){
-		
-			//CREATE HEADER ARRAY
-			$datah = array('title' => lang('voc.i18n_login'));
-			
-			//LOAD LOGIN VIEW
-			$this->load->view('templates/header_view', $datah);
-			$this->load->view('content/login_view');
-			$this->load->view('templates/footer_view');
-		}
+		if(!$this->session->userdata('username'))
+			redirect('login/loadlogin/');
 		else{
 		
 			//IF WIKI ADDITION SELECTED

@@ -449,8 +449,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			data<?=$data['pageid'][$pagename]?>.addRows([
 			<? 
 				foreach(array_keys($data['pageuser'][$pagename]) as $key){
-					echo "['".$key."','".
-						$data['userrealname'][$key]."',".
+					echo "['".utf8_encode($key)."','".
+						utf8_encode($data['userrealname'][$key])."',".
 						round(end($data['pageuseredits'][$pagename][$key]), 2).",".
 						round(end($data['pageusereditscount'][$pagename][$key])/end($data['pageedits'][$pagename]), 2).",";
 					if(end($data['pagebytes'][$pagename]) != 0){
@@ -482,7 +482,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 				catdata".$data['pageid'][$pagename].".addColumn('string', 'Name');
 				catdata".$data['pageid'][$pagename].".addRows([";
 					foreach(array_keys($data['pagecat'][$pagename]) as $key){
-						echo "['".$key."']\n";
+						echo "['".utf8_encode($key)."']\n";
 						
 						if($key != end(array_keys($data['pagecat'][$pagename]))) echo ",";
 					}

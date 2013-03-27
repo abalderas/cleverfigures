@@ -76,8 +76,6 @@ class Parameters extends CI_Controller {
 			$this->load->view('templates/footer_view');
 		}
 		else{
-		
-			
 			
 			//CREATE HEADER ARRAY
 			$datah = array('title' => lang('voc.i18n_check_results'));

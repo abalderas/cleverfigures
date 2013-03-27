@@ -59,15 +59,8 @@ class Index_controller extends CI_Controller {
 				$this->lang->load('voc', 'english');
 				
 				//IF AN USER ALREADY EXISTS
-				if($this->db->query('select * from user')->result()){
-					//CREATE HEADER ARRAY
-					$datah = array('title' => lang('voc.i18n_login'));
-					
-					//LOAD LOGIN VIEW
-					$this->load->view('templates/header_view', $datah);
-					$this->load->view('content/login_view');
-					$this->load->view('templates/footer_view');
-				}
+				if($this->db->query('select * from user')->result())
+					redirect('login/loadlogin/');
 				else{
 					//CREATE HEADER ARRAY
 					$datah = array('title' => lang('voc.i18n_installation'));

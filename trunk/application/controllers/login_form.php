@@ -42,26 +42,15 @@ class Login_form extends CI_Controller {
 			$this->load->view('templates/footer_view');
 		}
 		else{
-			//IF USER LOGGED CORRECTLY
-			if($this->user_model->login($this->input->post('username'), $this->input->post('password'))){
+			//IF USER LOGGED CORRECTLY AS TEACHER
+			if($this->user_model->login($this->input->post('username'), $this->input->post('password')))
 				redirect('teacher');
-			}
-			else if($this->student_model->login($this->input->post('username'), $this->input->post('password'))){
+			//IF USER LOGGED CORRECTLY AS STUDENT
+			else if($this->student_model->login($this->input->post('username'), $this->input->post('password')))
 				redirect('student');
-			}
-			
 			//ELSE, INCORRECT LOGIN CREDENTIALS
-			else{
-				$this->session->set_userdata(array('username' => 'anom1', 'is_student' => true));
-				redirect('student');
-// 				//CREATE HEADER ARRAY
-// 				$datah = array('title' => lang('voc.i18n_login'));
-// 				
-// 				//LOAD VIEW SHOWING ERROR
-// 				$this->load->view('templates/header_view', $datah);
-// 				$this->load->view('content/login_view', array('error' => true));
-// 				$this->load->view('templates/footer_view');
-			}
+			else
+				redirect('login/loadlogin/error');
 		}
 	}
 }  

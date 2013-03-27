@@ -44,15 +44,8 @@ class Filters_form extends CI_Controller {
 	//MAIN FUNCTION
 	function index(){
 		//IF SESSION EXPIRED
-		if(!$this->session->userdata('username')){
-			//CREATE HEADER ARRAY
-			$datah = array('title' => lang('voc.i18n_login'));
-			
-			//load login view
-			$this->load->view('templates/header_view', $datah);
-			$this->load->view('content/login_view');
-			$this->load->view('templates/footer_view');
-		}
+		if(!$this->session->userdata('username'))
+			redirect('login/loadlogin/');
 		else{
 			//SEPARATE STRING INTO SINGLE NAMES
 			$filterstrings = explode(',', $_POST['filterstring']);

@@ -24,7 +24,7 @@ echo br();
 echo "<p align = \"center\">".lang('voc.i18n_installation_end')."</p>";
 ?>
 
-<?echo form_open('installation_end_form');?>
+<?echo form_open('login/loadlogin');?>
 <table id = "formins" class = "next">
 	<tr><th><? echo form_submit(array('id' => 'go_to_login_submit', 'value' => lang('voc.i18n_go_to_login'), 'class' => 'next'));?></th></tr>
 </table>

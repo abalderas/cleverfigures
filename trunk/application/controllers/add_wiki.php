@@ -42,14 +42,7 @@ class Add_wiki extends CI_Controller {
 	
 		//IF SESSION EXPIRED
 		if(!$this->session->userdata('username')){
-			
-			//CREATE HEADER ARRAY
-			$datah = array('title' => lang('voc.i18n_login'));
-			
-			//LOAD LOGIN VIEW
-			$this->load->view('templates/header_view', $datah);
-			$this->load->view('content/login_view');
-			$this->load->view('templates/footer_view');
+			redirect('login/loadlogin/');
 		}
 		else{
 			//VALIDATING FORM
@@ -88,18 +81,11 @@ class Add_wiki extends CI_Controller {
 				
 					//SAVING DATABASE
 					$this->wiki_model->new_wiki($_POST['wiki_name'], $_POST['dbserver'], $_POST['dbname'], $_POST['dbuser'], $_POST['dbpassword'], $_POST['wiki_baseurl']);
-						
 					
 					//RELATE WIKI TO THE USER
 					$this->user_model->relate_wiki($_POST['wiki_name']);
 			
-					//CREATE HEADER ARRAY
-					$datah = array('title' => lang('voc.i18n_configuration_view'));
-					
-					//LOAD CONFIGURATION VIEW
-					$this->load->view('templates/header_view', $datah);
-					$this->load->view('content/configuration_view', array('wikilist' => $this->user_model->get_wiki_list($this->session->userdata('username')), 'colorlist' => $this->user_model->get_color_list($this->session->userdata('username'))));
-					$this->load->view('templates/footer_view');
+					redirect('configure');
 				}
 			}
 		}

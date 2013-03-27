@@ -30,29 +30,16 @@ class Groupsave extends CI_Controller {
    	
    	//NOT USED, JUST CHECKS SESSION IF ERROR HAPPENS
    	function index(){
-   	
-		if(!$this->session->userdata('username')){
-			$datah = array('title' => lang('voc.i18n_login'));
-			
-			$this->load->view('templates/header_view', $datah);
-			$this->load->view('content/login_view');
-			$this->load->view('templates/footer_view');
-		}
+		if(!$this->session->userdata('username'))
+			redirect('login/loadlogin/');
 	}
 	
 	//SAVE STUDENTS GROUP FUNCTION
 	function savegroup($wikiname){
 		
 		//IF SESSION EXPIRED
-		if(!$this->session->userdata('username')){
-			//CREATE HEADER ARRAY
-			$datah = array('title' => lang('voc.i18n_login'));
-			
-			//LOAD LOGIN VIEW
-			$this->load->view('templates/header_view', $datah);
-			$this->load->view('content/login_view');
-			$this->load->view('templates/footer_view');
-		}
+		if(!$this->session->userdata('username'))
+			redirect('login/loadlogin/');
 		else{
 			//GET WIKI USERS LIST
 			$users = $this->wiki_model->get_user_list($wikiname);

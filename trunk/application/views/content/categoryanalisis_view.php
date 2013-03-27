@@ -457,8 +457,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			data<?=$data['catid'][$categoryname]?>.addRows([
 			<? 
 				foreach(array_keys($data['catuser'][$categoryname]) as $key){
-					echo "['".$key."','".
-						$data['userrealname'][$key]."',".
+					echo "['".utf8_encode($key)."','".
+						utf8_encode($data['userrealname'][$key])."',".
 						round(end($data['catuseredits'][$categoryname][$key]), 2).",".
 						round(end($data['catuseredits'][$categoryname][$key])/end($data['catedits'][$categoryname]), 2).",";
 					if(end($data['catbytes'][$categoryname]) != 0){

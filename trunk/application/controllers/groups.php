@@ -28,29 +28,16 @@ class Groups extends CI_Controller {
    	
    	//DOES NOTHING, JUST CHECKS SESSION IN CASE OF FAILURE
 	function index(){
-	
-		if(!$this->session->userdata('username')){
-			$datah = array('title' => lang('voc.i18n_login'));
-			
-			$this->load->view('templates/header_view', $datah);
-			$this->load->view('content/login_view');
-			$this->load->view('templates/footer_view');
-		}
+		if(!$this->session->userdata('username'))
+			redirect('login/loadlogin/');
 	}
 	
 	//GET STUDENT GROUP FUNCTION
 	function getgroups($wiki){
 		
 		//IF SESSION EXPIRED
-		if(!$this->session->userdata('username')){
-			//CREATE HEADER ARRAY
-			$datah = array('title' => lang('voc.i18n_login'));
-			
-			//LOAD LOGIN VIEW
-			$this->load->view('templates/header_view', $datah);
-			$this->load->view('content/login_view');
-			$this->load->view('templates/footer_view');
-		}
+		if(!$this->session->userdata('username'))
+			redirect('login/loadlogin/');
 		else{
 			//CREATE HEADER ARRAY
 			$datah = array('title' => lang('voc.i18n_groups'));

@@ -17,22 +17,25 @@
 // You should have received a copy of the GNU General Public License
 // along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
-//END OF INSTALLATION CONTROLLER
-class Installation_end_form extends CI_Controller {
 
-	function Installation_end_form(){
+//LOGIN CONTROLLER
+class Login extends CI_Controller {
+
+	function Login(){
       		parent::__construct();
-      		$this->lang->load('voc', $this->session->userdata('language'));
+		$this->lang->load('voc', 'english');
    	}
    	
-	function index(){
-	
+	function loadlogin($error = false){
 		//CREATE HEADER ARRAY
-		$datah = array('title' => lang('voc.i18n_login'));
+		$datah = array('title' => lang('voc.i18n_login_view'));
 		
-		//LOAD VIEW
+		//LOAD FORGOT VIEW
 		$this->load->view('templates/header_view', $datah);
-		$this->load->view('content/login_view');
+		if($error)
+			$this->load->view('content/login_view', array('error' => $error));
+		else
+			$this->load->view('content/login_view');
 		$this->load->view('templates/footer_view');
 	}
 }  

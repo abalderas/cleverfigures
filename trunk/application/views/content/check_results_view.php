@@ -527,8 +527,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			data.addRows([
 			<? 
 				foreach(array_keys($data['useredits']) as $key){
-					echo "['".$key."','".
-						$data['userrealname'][$key]."',".
+					echo "['".utf8_encode($key)."','".
+						utf8_encode($data['userrealname'][$key])."',".
 						round(end($data['useredits'][$key]), 2).",".
 						round((end($data['useredits'][$key])/end($data['totaledits']))*100, 2).",".
 						round(end($data['useredits_art'][$key]), 3).",".
@@ -587,8 +587,8 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			pagedata.addRows([
 			<? 
 				foreach(array_keys($data['pageedits']) as $key){
-					echo "['".$key."', '".
-						$data['pagenamespace'][$key]."', ".
+					echo "['".utf8_encode($key)."', '".
+						utf8_encode($data['pagenamespace'][$key])."', ".
 						round(end($data['pageedits'][$key]), 3).",".
 						round((end($data['pageedits'][$key]) / end($data['totaledits']))*100, 2).",".
 						round(end($data['pagebytes'][$key]), 3).",".
@@ -636,7 +636,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			
 					echo "catdata.addRows([";
 					foreach(array_keys($data['catedits']) as $key){
-						echo "['".$key."', ".
+						echo "['".utf8_encode($key)."', ".
 							round(end($data['catedits'][$key]), 3).",".
 							round((end($data['catedits'][$key]) / end($data['totaledits'])) * 100, 2).",".
 							round(end($data['catbytes'][$key]), 3).",".

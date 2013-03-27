@@ -42,14 +42,7 @@ class Add_color extends CI_Controller {
 		
 		//IF SESSION EXPIRED
 		if(!$this->session->userdata('username')){
-			
-			//CREATE HEADER ARRAY
-			$datah = array('title' => lang('voc.i18n_login'));
-			
-			//LOAD LOGIN VIEW
-			$this->load->view('templates/header_view', $datah);
-			$this->load->view('content/login_view');
-			$this->load->view('templates/footer_view');
+			redirect('login/loadlogin/');
 		}
 		else{
 		
@@ -93,13 +86,7 @@ class Add_color extends CI_Controller {
 					//RELATE COLOR TO THE USER
 					$this->user_model->relate_color($_POST['color_name']);
 					
-					//CREATE HEADER ARRAY
-					$datah = array('title' => lang('voc.i18n_installation'));
-					
-					//LOAD CONFIGURATION VIEW
-					$this->load->view('templates/header_view', $datah);
-					$this->load->view('content/configuration_view', array('wikilist' => $this->user_model->get_wiki_list($this->session->userdata('username')), 'colorlist' => $this->user_model->get_color_list($this->session->userdata('username'))));
-					$this->load->view('templates/footer_view');
+					redirect('configure');
 				}
 			}
 		}

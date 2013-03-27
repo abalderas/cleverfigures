@@ -67,16 +67,16 @@ class Wiki_model extends CI_Model{
 	
 	private function codemonth($mon){
 		switch($mon){
-			case "00":return lang('voc.i18n_january');
-			case "01":return lang('voc.i18n_february');
-			case "02":return lang('voc.i18n_march');
-			case "03":return lang('voc.i18n_april');
-			case "04":return lang('voc.i18n_may');
-			case "05":return lang('voc.i18n_june');
-			case "06":return lang('voc.i18n_july');
-			case "07":return lang('voc.i18n_august');
-			case "08":return lang('voc.i18n_september');
-			case "09":return lang('voc.i18n_october');
+			case "0":return lang('voc.i18n_january');
+			case "1":return lang('voc.i18n_february');
+			case "2":return lang('voc.i18n_march');
+			case "3":return lang('voc.i18n_april');
+			case "4":return lang('voc.i18n_may');
+			case "5":return lang('voc.i18n_june');
+			case "6":return lang('voc.i18n_july');
+			case "7":return lang('voc.i18n_august');
+			case "8":return lang('voc.i18n_september');
+			case "9":return lang('voc.i18n_october');
 			case "10":return lang('voc.i18n_november');
 			case "11":return lang('voc.i18n_december');
 		}
