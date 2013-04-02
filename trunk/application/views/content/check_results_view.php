@@ -17,11 +17,34 @@ You should have received a copy of the GNU General Public License
 along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
+<div id = 'overlay'><p>Loading charts...</p></div>
+
+<script>
+	function hideoverlay(){
+		document.getElementById('overlay').style.visibility="hidden";
+	}
+</script>
+
+
+
+<script language="javascript">
+function tooglethis(chartname) {
+	var chart = document.getElementById(chartname);
+	if (chart.style.display == "none"){
+		chart.style.display = "block";
+	}
+	else{
+		chart.style.display = "none";
+	}
+}﻿
+</script>
+
 
 <!-- CHARTS SCRIPTS -->
 
 <script type='text/javascript' src='http://www.google.com/jsapi'></script>
 	<script type='text/javascript'>
+		
 		google.load('visualization', '1', {'packages':['annotatedtimeline', 'corechart', 'table']});
 		google.setOnLoadCallback(drawChart);
 		function drawChart() {
@@ -727,13 +750,12 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			});
 		});
 		
+		hideoverlay();
+		
 	</script>
 
 	<? echo form_open('filters_form', array('class' => "yui3-skin-sam")); ?>
-	<table id = "bodytable">
-	<tr>
-		<th class = 'only'><?=lang('voc.i18n_filter_by')?></th>
-	</tr>
+	<table id = "filtertable">
 	<tr>
 		<td>
 		<?
@@ -765,27 +787,75 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			echo form_input(array('id' => 'filterstring', 'name' => 'filterstring', 'class' => 'cssform'));
 		?>
 		</td>
+		<th><?=lang('voc.i18n_filters')?></th>
 	</tr>
 	</table>
 	
 	<? echo form_close(); ?>
-
-	<br><br>
+	
+	<table id = "chartselector">
+		<td style = 'width:85%;'>
+		<table>
+		<tr>
+			<td><?=form_checkbox(lang('voc.i18n_edits'),lang('voc.i18n_edits'),true,'onClick = "tooglethis(\'chartfinaledits\')"')?><?=lang('voc.i18n_edits')?></td>
+			<td><?=form_checkbox(lang('voc.i18n_bytes'),lang('voc.i18n_bytes'),true,'onClick = "tooglethis(\'chartfinalbytes\')"')?><?=lang('voc.i18n_bytes')?></td>
+			<td><?=form_checkbox(lang('voc.i18n_pages'),lang('voc.i18n_pages'),true,'onClick = "tooglethis(\'chartfinalpages\')"')?><?=lang('voc.i18n_pages')?></td>
+			<td><?=form_checkbox(lang('voc.i18n_users'),lang('voc.i18n_users'),true,'onClick = "tooglethis(\'chartfinalusers\')"')?><?=lang('voc.i18n_users')?></td>
+		</tr>
+		<tr>
+			<td><?=form_checkbox(lang('voc.i18n_edits_evolution'), lang('voc.i18n_edits_evolution'), true, 'onClick = "tooglethis(\'charttotaledits\')"')?><?=lang('voc.i18n_edits_evolution')?></td>
+			<td><?=form_checkbox(lang('voc.i18n_content_evolution'),lang('voc.i18n_content_evolution'),true,'onClick = "tooglethis(\'charttotalbytes\')"')?><?=lang('voc.i18n_content_evolution')?></td>
+			<td><?=form_checkbox(lang('voc.i18n_pages'),lang('voc.i18n_pages'),true,'onClick = "tooglethis(\'charttotalpages\')"')?><?=lang('voc.i18n_pages')?></td>
+			<td><?=form_checkbox(lang('voc.i18n_users'),lang('voc.i18n_users'),true,'onClick = "tooglethis(\'charttotalusers\')"')?><?=lang('voc.i18n_users')?></td>
+		</tr>
+		<tr>
+			<td><?=form_checkbox(lang('voc.i18n_categories'),lang('voc.i18n_categories'),true,'onClick = "tooglethis(\'charttotalcategories\')"')?><?=lang('voc.i18n_categories')?></td>
+			<td><?=form_checkbox(lang('voc.i18n_activity_hour'),lang('voc.i18n_activity_hour'),true,'onClick = "tooglethis(\'charttotalactivityhour\')"')?><?=lang('voc.i18n_activity_hour')?></td>
+			<td><?=form_checkbox(lang('voc.i18n_activity_wday'),lang('voc.i18n_activity_wday'),true,'onClick = "tooglethis(\'charttotalactivitywday\')"')?><?=lang('voc.i18n_activity_wday')?></td>
+			<td><?=form_checkbox(lang('voc.i18n_activity_week'),lang('voc.i18n_activity_week'),true,'onClick = "tooglethis(\'charttotalactivityweek\')"')?><?=lang('voc.i18n_activity_week')?></td>
+		</tr>
+		<tr>
+			<td><?=form_checkbox(lang('voc.i18n_uploads'),lang('voc.i18n_uploads'),true,'onClick = "tooglethis(\'charttotaluploads\')"')?><?=lang('voc.i18n_uploads')?></td>
+			<td><?=form_checkbox(lang('voc.i18n_upsize'),lang('voc.i18n_upsize'),true,'onClick = "tooglethis(\'charttotalupsize\')"')?><?=lang('voc.i18n_upsize')?></td>
+			<td><?=form_checkbox(lang('voc.i18n_average_quality'),lang('voc.i18n_average_quality'),true,'onClick = "tooglethis(\'charttotalquality\')"')?><?=lang('voc.i18n_average_quality')?></td>
+			<td><?=form_checkbox(lang('voc.i18n_bytesxquality'),lang('voc.i18n_bytesxquality'),true,'onClick = "tooglethis(\'charttotalbytesxquality\')"')?><?=lang('voc.i18n_bytesxquality')?></td>
+		</tr>
+		<tr>
+			<td><?=form_checkbox(lang('voc.i18n_hourquality'),lang('voc.i18n_hourquality'),true,'onClick = "tooglethis(\'qualityhourchart\')"')?><?=lang('voc.i18n_hourquality')?></td>
+			<td><?=form_checkbox(lang('voc.i18n_users'),lang('voc.i18n_users'),lang('voc.i18n_users'),true,'onClick = "tooglethis(\'user_table\')"')?><?=lang('voc.i18n_users')?></td>
+			<td><?=form_checkbox(lang('voc.i18n_pages'),lang('voc.i18n_pages'),true,'onClick = "tooglethis(\'pages_table\')"')?><?=lang('voc.i18n_pages')?></td>
+			<td><?=form_checkbox(lang('voc.i18n_categories'),lang('voc.i18n_categories'),true,'onClick = "tooglethis(\'categories_table\')"')?><?=lang('voc.i18n_categories')?></td>
+		</tr>
+		</table>
+		</td>
+		<td>
+		<table>
+		<tr>
+			<th><?=lang('voc.i18n_chart_selector')?></th>
+		</tr>
+		</table>
+		</td>
+	</table>
 	
 <!-- CHARTS -->
 
 	<table id = "bodytable">
 	<tr>
-		<th><?=lang('voc.i18n_edits')?></th>
-		<th><?=lang('voc.i18n_bytes')?></th>
+		<th class = 'leftside'><?=lang('voc.i18n_edits')?></th>
+		<th class = 'rightside'><?=lang('voc.i18n_bytes')?></th>
 	</tr>
 	<tr>
 		<td><div id='chartfinaledits' style='width: 400px; height: 400px; border: 0px; padding: 0px;'></div></td>
 		<td><div id='chartfinalbytes' style='width: 400px; height: 400px; border: 0px; padding: 0px;'></div></td>
 	</tr>
+	</table>
+	
+	<br><br>
+	
+	<table id = "bodytable">
 	<tr>
-		<th><?=lang('voc.i18n_pages')?></th>
-		<th><?=lang('voc.i18n_users')?></th>
+		<th class = 'leftside'><?=lang('voc.i18n_pages')?></th>
+		<th class = 'rightside'><?=lang('voc.i18n_users')?></th>
 	</tr>
 	<tr>
 		<td><div id='chartfinalpages' style='width: 400px; height: 400px; border: 0px; padding: 0px;'></div></td>
@@ -802,25 +872,45 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	<tr>
 		<td><div id='charttotaledits' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
+	</table>
+	
+	<br><br>
+	
+	<table id = "bodytable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_content_evolution')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalbytes' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
+	</table>
+	
+	<br><br>
+	
+	<table id = "bodytable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_pages')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalpages' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
+	</table>
+	
+	<br><br>
+	
+	<table id = "bodytable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_users')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalusers' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
+	</table>
+	
+	<br><br>
+	
 	<?if(!isset($data['totalcategories'])) echo "<!--";?>
+	<table id = "bodytable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_categories')?></th>
 	</tr>
@@ -828,49 +918,87 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 		<td><div id='charttotalcategories' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
 	<?if(!isset($data['totalcategories'])) echo "-->";?>
+	</table>
+	
+	<br><br>
+	
+	<table id = "bodytable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_activity_hour')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalactivityhour' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
+	</table>
+	
+	<br><br>
+	
+	<table id = "bodytable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_activity_wday')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalactivitywday' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
+	</table>
+	
+	<br><br>
+	
+	<table id = "bodytable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_activity_week')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalactivityweek' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
+	</table>
+	
+	<br><br>
+	
+	<table id = "bodytable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_activity_month')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalactivitymonth' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
+	</table>
+	
+	<br><br>
+	
+	<table id = "bodytable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_activity_year')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalactivityyear' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
+	</table>
+	
+	<br><br>
+	
 	<? if (!isset($data['totaluploads'])) echo "<!--";?>
+	<table id = "bodytable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_uploads')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotaluploads' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
+	</table>
+	
+	<br><br>
+	
+	<table id = "bodytable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_upsize')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalupsize' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
+	</table>
+	
+	<br><br>
 	<? if (!isset($data['totaluploads'])) echo "-->";?>
 	<? if (!isset($data['totalaverage'])) echo "<!--";?>
 	<tr>
@@ -879,20 +1007,32 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	<tr>
 		<td><div id='charttotalquality' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
+	</table>
+	
+	<br><br>
+	
+	<table id = "bodytable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_bytesxquality')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalbytesxquality' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
+	</table>
+	
+	<br><br>
+	
+	<table id = "bodytable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_hourquality')?></th>
 	</tr>
 	<tr>
 		<td><div id='qualityhourchart' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
 	</tr>
-	<? if (!isset($data['totalaverage'])) echo "-->";?>
 	</table>
+	
+	<br><br>
+	<? if (!isset($data['totalaverage'])) echo "-->";?>
 	
 	<br><br>
 	
@@ -927,6 +1067,6 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	</tr>
 	</table>
 	<?if(!isset($data['catedits'])) echo "-->";?>
-			
+	
 <!-- [2] www.christophermonnat.com/2008/08/generating-pdf-files-using-codeigniter -->
 <!--[2] TO_DO: generate pdf-->

@@ -17,6 +17,14 @@ You should have received a copy of the GNU General Public License
 along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
+<div id = 'overlay' style = 'visibility:hidden;'><p>Loading charts...</p></div>
+
+<script>
+	function showoverlay(){
+		document.getElementById('overlay').style.visibility="visible";
+	}
+</script>
+
 <?echo form_open('options_form');?>
 <table id = "bodytable">
 <tr>
@@ -33,7 +41,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 				echo "<td>".unix_to_human($adate[$i])."</td>";
 				echo "<td>".$awiki[$i]."</td>";
 				echo "<td>".$acolor[$i]."</td>";
-				echo "<td>".anchor('options_form/view/'.$adate[$i], lang('voc.i18n_view'))." - ".anchor("analysis/share/".$adate[$i], lang('voc.i18n_share'))." - ".anchor('options_form/delete/'.$adate[$i], lang('voc.i18n_delete'), array('onClick' => "return confirm('".lang('voc.i18n_delete_analysis_confirmation')."');"))."</td>";
+				echo "<td>".anchor('options_form/view/'.$adate[$i], lang('voc.i18n_view'), array("onClick" => "showoverlay()"))." - ".anchor("analysis/share/".$adate[$i], lang('voc.i18n_share'))." - ".anchor('options_form/delete/'.$adate[$i], lang('voc.i18n_delete'), array('onClick' => "return confirm('".lang('voc.i18n_delete_analysis_confirmation')."');"))."</td>";
 					
 			echo "</tr>";
 		}

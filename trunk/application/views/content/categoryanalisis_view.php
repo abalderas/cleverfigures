@@ -479,7 +479,6 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			table<?=$data['catid'][$categoryname]?>.draw(data<?=$data['catid'][$categoryname]?>, {showRowNumber: true});
 			
 		}
-		
 	</script>
 	
-	<script>drawChart<?=$data['catid'][$categoryname]?>();</script>
+	<script>drawChart<?=$data['catid'][$categoryname]?>(); </script>

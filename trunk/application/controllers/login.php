@@ -28,7 +28,7 @@ class Login extends CI_Controller {
    	
 	function loadlogin($error = false){
 		//CREATE HEADER ARRAY
-		$datah = array('title' => lang('voc.i18n_login_view'));
+		$datah = array('title' => lang('voc.i18n_login'));
 		
 		//LOAD FORGOT VIEW
 		$this->load->view('templates/header_view', $datah);

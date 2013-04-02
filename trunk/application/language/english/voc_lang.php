@@ -18,7 +18,7 @@ $lang['voc.i18n_analise_view'] = "Analise View";
 $lang['voc.i18n_analising'] = "Analising";
 $lang['voc.i18n_average_quality'] = "Average Quality";
 $lang['voc.i18n_building_database'] = "Building database...";
-$lang['voc.i18n_bytesxquality'] = "Bytes X Quality <i>(Bytes + (Average Mark - 5) * (Bytes/5))</i>";
+$lang['voc.i18n_bytesxquality'] = "Bytes X Quality";
 $lang['voc.i18n_bytes'] = "Bytes";
 $lang['voc.i18n_cancel_conf'] = "Cancel";
 $lang['voc.i18n_cancel'] = "Cancel";
@@ -193,4 +193,5 @@ $lang['voc.i18n_password_changed'] = "Password changed";
 $lang['voc.i18n_check_all'] = "Check All";
 $lang['voc.i18n_uncheck_all'] = "Uncheck All";
 $lang['voc.i18n_report_list'] = "Report List";
+$lang['voc.i18n_chart_selector'] = "Chart Selector";
 ?>
