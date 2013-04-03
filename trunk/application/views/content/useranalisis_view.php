@@ -17,6 +17,22 @@ You should have received a copy of the GNU General Public License
 along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
+
+
+
+<script language="javascript">
+function tooglethis(chartname) {
+	var chart = document.getElementById(chartname);
+	if (chart.style.display == "none"){
+		chart.style.display = "block";
+	}
+	else{
+		chart.style.display = "none";
+	}
+}﻿
+</script>
+
+
 <!-- CHARTS -->
 	
 	<table id = "charttable">
@@ -24,56 +40,56 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 		<th class = 'only'><?=lang('voc.i18n_edits_evolution')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotaledits<?=$data['userid'][$username]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotaledits<?=$data['userid'][$username]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_content_evolution')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalbytes<?=$data['userid'][$username]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotalbytes<?=$data['userid'][$username]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_activity_hour')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivityhour<?=$data['userid'][$username]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotalactivityhour<?=$data['userid'][$username]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_activity_wday')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivitywday<?=$data['userid'][$username]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotalactivitywday<?=$data['userid'][$username]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_activity_week')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivityweek<?=$data['userid'][$username]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotalactivityweek<?=$data['userid'][$username]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_activity_month')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivitymonth<?=$data['userid'][$username]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotalactivitymonth<?=$data['userid'][$username]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_activity_year')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivityyear<?=$data['userid'][$username]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotalactivityyear<?=$data['userid'][$username]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<? if (!isset($data['useruploads'][$username])) echo "<!--";?>
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_uploads')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotaluploads<?=$data['userid'][$username]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotaluploads<?=$data['userid'][$username]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_upsize')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalupsize<?=$data['userid'][$username]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotalupsize<?=$data['userid'][$username]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<? if (!isset($data['useruploads'][$username])) echo "-->";?>
 	<? if (!isset($data['useraveragevalue'][$username])) echo "<!--";?>
@@ -81,19 +97,19 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 		<th class = 'only'><?=lang('voc.i18n_average_quality')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalquality<?=$data['userid'][$username]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotalquality<?=$data['userid'][$username]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_bytesxquality')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalbytesxquality<?=$data['userid'][$username]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotalbytesxquality<?=$data['userid'][$username]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_hourquality')?></th>
 	</tr>
 	<tr>
-		<td><div id='qualityhourchart<?=$data['userid'][$username]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='qualityhourchart<?=$data['userid'][$username]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<? if (!isset($data['useraveragevalue'][$username])) echo "-->";?>
 	
@@ -337,7 +353,9 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
 
 				var imgtable".$data['userid'][$username]." = new google.visualization.Table(document.getElementById('img_table".$data['userid'][$username]."'));
-				imgtable".$data['userid'][$username].".draw(imgs".$data['userid'][$username].", {showRowNumber: true});";
+				imgtable".$data['userid'][$username].".draw(imgs".$data['userid'][$username].", {showRowNumber: true,
+						page: 'enable',
+						pageSize: 20});";
 			}
 			?>
 			
@@ -470,7 +488,9 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
 
 			var table<?=$data['userid'][$username]?> = new google.visualization.Table(document.getElementById('page_table<?=$data['userid'][$username]?>'));
-			table<?=$data['userid'][$username]?>.draw(data<?=$data['userid'][$username]?>, {showRowNumber: true});
+			table<?=$data['userid'][$username]?>.draw(data<?=$data['userid'][$username]?>, {showRowNumber: true,
+						page: 'enable',
+						pageSize: 20});
 			
 			<?
 			if(isset($data['usercat'][$username])){
@@ -486,10 +506,13 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
 
 				var cattable".$data['userid'][$username]." = new google.visualization.Table(document.getElementById('categories_table".$data['userid'][$username]."'));
-				cattable".$data['userid'][$username].".draw(catdata".$data['userid'][$username].", {showRowNumber: true});";
+				cattable".$data['userid'][$username].".draw(catdata".$data['userid'][$username].", {showRowNumber: true,
+						page: 'enable',
+						pageSize: 20});";
 			}
 			?>
 		}
 	</script>
 	
 	<script>drawChart<?=$data['userid'][$username]?>();</script>
+	

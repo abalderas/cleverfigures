@@ -61,7 +61,7 @@ class Filters_form extends CI_Controller {
 				die('No such analisis data.');
 			
 			//CREATE HEADER ARRAY
-			$datah = array('title' => lang('voc.i18n_check_results'));
+			$datah = array('title' => lang('voc.i18n_check_results'), 'wiki' => $this->input->post('wname'), 'data' => $adata, 'aname' => $this->input->post('aname'));
 			
 			//LOAD HEADER VIEW
 			$this->load->view('templates/header_view', $datah);
@@ -77,7 +77,7 @@ class Filters_form extends CI_Controller {
 			//IF FILTERING BY CATEGORY
 			else if($_POST['select_filter'] == lang('voc.i18n_category'))
 				//LOAD TABBED VIEW FOR CATEGORIES
-				$this->load->view('content/tabbed_view', array('data' => $adata, 'names' => $filterstrings, 'type' => 'category', 'panid' => '1', 'wiki' => $this->input->post('wname')));
+				$this->load->view('content/tabbed_view', array('data' => $adata, 'names' => $filterstrings, 'type' => 'category', 'panid' => '1','wiki' => $this->input->post('wname')));
 			//IF FILTERING BY GROUP
 			else if($_POST['select_filter'] == lang('voc.i18n_group')){
 				$id = 1;
@@ -89,7 +89,7 @@ class Filters_form extends CI_Controller {
 					//IF THERE ARE MEMBERS
 					if($members){
 						//LOAD TABBED VIEW FOR USERS
-						$this->load->view('content/tabbed_view', array('data' => $adata, 'names' => $members, 'type' => 'user', 'panid' => $id, 'wiki' => $this->input->post('wname')));
+						$this->load->view('content/tabbed_view', array('data' => $adata, 'names' => $members, 'type' => 'user', 'panid' => $id));
 						echo "<br><br>";
 					}
 					$id++;

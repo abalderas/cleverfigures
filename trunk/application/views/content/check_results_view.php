@@ -47,6 +47,8 @@ function tooglethis(chartname) {
 		
 		google.load('visualization', '1', {'packages':['annotatedtimeline', 'corechart', 'table']});
 		google.setOnLoadCallback(drawChart);
+		
+		
 		function drawChart() {
 			var data1 = new google.visualization.DataTable();
 			data1.addColumn('datetime', 'Date');
@@ -588,7 +590,9 @@ function tooglethis(chartname) {
 
 
 			var table = new google.visualization.Table(document.getElementById('user_table'));
-			table.draw(data, {showRowNumber: true});
+			table.draw(data, {showRowNumber: true,
+						page: 'enable',
+						pageSize: 20});
 			
 			var pagedata = new google.visualization.DataTable();
 			pagedata.addColumn('string', 'Name');
@@ -642,7 +646,9 @@ function tooglethis(chartname) {
 
 
 			var pagetable = new google.visualization.Table(document.getElementById('pages_table'));
-			pagetable.draw(pagedata, {showRowNumber: true});
+			pagetable.draw(pagedata, {showRowNumber: true,
+						page: 'enable',
+						pageSize: 20});
 			
 			<?
 				if(isset($data['catedits'])){
@@ -679,322 +685,173 @@ function tooglethis(chartname) {
 					echo "]);
 					
 					var cattable = new google.visualization.Table(document.getElementById('categories_table'));
-					cattable.draw(catdata, {showRowNumber: true});";
+					cattable.draw(catdata, {showRowNumber: true,
+						page: 'enable',
+						pageSize: 20});";
 				}
 			?>
 		}
 	</script>
-	
-	<!-- FILTERS FORM -->
-	
-	<script>
-	
-		YUI().use('autocomplete', 'autocomplete-highlighters', 'autocomplete-filters', function (Y) {
-			Y.one('body').addClass('yui3-skin-sam');
-			Y.one('#filterstring').plug(Y.Plugin.AutoComplete, {
-				resultHighlighter: 'phraseMatch',
-				resultFilters: ['subWordMatch'],
-				queryDelimiter: ',',
-				source: function(query){
-					var myindex  = document.getElementById("select_filter").selectedIndex;
-					var SelValue = document.getElementById("select_filter").options[myindex].value;
-			
-					if(SelValue == "<?=lang('voc.i18n_user')?>"){
-						return [
-						<?
-							foreach(array_keys($data['useredits']) as $key){
-								echo "'".$key."'";
-								if($key != end(array_keys($data['useredits']))) echo ",";
-							}
-						?>
-						];
-					} else if(SelValue == "<?=lang('voc.i18n_page')?>"){
-						return [
-						<?
-							foreach(array_keys($data['pageedits']) as $key){
-								echo "'".$key."'";
-								if($key != end(array_keys($data['pageedits']))) echo ",";
-							}
-						?>
-						];
-					} 
-				
-					<?
-						if(isset($data['catid'])){
-							echo "else if(SelValue == '".lang('voc.i18n_category')."'){
-								return [";
-							foreach(array_keys($data['catid']) as $key){
-								echo "'".$key."'";
-								if($key != end(array_keys($data['catid']))) echo ",";
-							}
-							echo "];
-							}";
-						}
-					?>
-					
-					<?
-						if($this->group_model->there_are_groups()){
-							echo "else if(SelValue == '".lang('voc.i18n_group')."'){
-								return [";
-							$groups = $this->group_model->get_groups();
-							
-							foreach($groups as $group){
-								echo "'".$group."'";
-								if($group != end($groups)) echo ",";
-							}
-							echo "];
-							}";
-						}
-					?>
-				}
-			});
-		});
-		
-		hideoverlay();
-		
-	</script>
-
-	<? echo form_open('filters_form', array('class' => "yui3-skin-sam")); ?>
-	<table id = "filtertable">
-	<tr>
-		<td>
-		<?
-			if(isset($data['catid']) and !$this->group_model->there_are_groups())
-				$options = array(lang('voc.i18n_user') => lang('voc.i18n_user'),
-								lang('voc.i18n_page') => lang('voc.i18n_page'),
-								lang('voc.i18n_category') => lang('voc.i18n_category')
-							);
-			else if(isset($data['catid']) and $this->group_model->there_are_groups())
-				$options = array(lang('voc.i18n_user') => lang('voc.i18n_user'),
-								lang('voc.i18n_page') => lang('voc.i18n_page'),
-								lang('voc.i18n_category') => lang('voc.i18n_category'),
-								lang('voc.i18n_group') => lang('voc.i18n_group')
-							);
-			else if(!isset($data['catid']) and !$this->group_model->there_are_groups())
-				$options = array(lang('voc.i18n_user') => lang('voc.i18n_user'),
-								lang('voc.i18n_page') => lang('voc.i18n_page')
-								);
-			else
-				$options = array(lang('voc.i18n_user') => lang('voc.i18n_user'),
-								lang('voc.i18n_page') => lang('voc.i18n_page'),
-								lang('voc.i18n_group') => lang('voc.i18n_group')
-							);
-							
-			echo form_dropdown('select_filter', $options, lang('voc.i18n_user'), "id = 'select_filter'");
-			echo "   ";
-			echo form_hidden('aname', $aname);
-			echo form_hidden('wname', $data['wikiname']);
-			echo form_input(array('id' => 'filterstring', 'name' => 'filterstring', 'class' => 'cssform'));
-		?>
-		</td>
-		<th><?=lang('voc.i18n_filters')?></th>
-	</tr>
-	</table>
-	
-	<? echo form_close(); ?>
-	
-	<table id = "chartselector">
-		<td style = 'width:85%;'>
-		<table>
-		<tr>
-			<td><?=form_checkbox(lang('voc.i18n_edits'),lang('voc.i18n_edits'),true,'onClick = "tooglethis(\'chartfinaledits\')"')?><?=lang('voc.i18n_edits')?></td>
-			<td><?=form_checkbox(lang('voc.i18n_bytes'),lang('voc.i18n_bytes'),true,'onClick = "tooglethis(\'chartfinalbytes\')"')?><?=lang('voc.i18n_bytes')?></td>
-			<td><?=form_checkbox(lang('voc.i18n_pages'),lang('voc.i18n_pages'),true,'onClick = "tooglethis(\'chartfinalpages\')"')?><?=lang('voc.i18n_pages')?></td>
-			<td><?=form_checkbox(lang('voc.i18n_users'),lang('voc.i18n_users'),true,'onClick = "tooglethis(\'chartfinalusers\')"')?><?=lang('voc.i18n_users')?></td>
-		</tr>
-		<tr>
-			<td><?=form_checkbox(lang('voc.i18n_edits_evolution'), lang('voc.i18n_edits_evolution'), true, 'onClick = "tooglethis(\'charttotaledits\')"')?><?=lang('voc.i18n_edits_evolution')?></td>
-			<td><?=form_checkbox(lang('voc.i18n_content_evolution'),lang('voc.i18n_content_evolution'),true,'onClick = "tooglethis(\'charttotalbytes\')"')?><?=lang('voc.i18n_content_evolution')?></td>
-			<td><?=form_checkbox(lang('voc.i18n_pages'),lang('voc.i18n_pages'),true,'onClick = "tooglethis(\'charttotalpages\')"')?><?=lang('voc.i18n_pages')?></td>
-			<td><?=form_checkbox(lang('voc.i18n_users'),lang('voc.i18n_users'),true,'onClick = "tooglethis(\'charttotalusers\')"')?><?=lang('voc.i18n_users')?></td>
-		</tr>
-		<tr>
-			<td><?=form_checkbox(lang('voc.i18n_categories'),lang('voc.i18n_categories'),true,'onClick = "tooglethis(\'charttotalcategories\')"')?><?=lang('voc.i18n_categories')?></td>
-			<td><?=form_checkbox(lang('voc.i18n_activity_hour'),lang('voc.i18n_activity_hour'),true,'onClick = "tooglethis(\'charttotalactivityhour\')"')?><?=lang('voc.i18n_activity_hour')?></td>
-			<td><?=form_checkbox(lang('voc.i18n_activity_wday'),lang('voc.i18n_activity_wday'),true,'onClick = "tooglethis(\'charttotalactivitywday\')"')?><?=lang('voc.i18n_activity_wday')?></td>
-			<td><?=form_checkbox(lang('voc.i18n_activity_week'),lang('voc.i18n_activity_week'),true,'onClick = "tooglethis(\'charttotalactivityweek\')"')?><?=lang('voc.i18n_activity_week')?></td>
-		</tr>
-		<tr>
-			<td><?=form_checkbox(lang('voc.i18n_uploads'),lang('voc.i18n_uploads'),true,'onClick = "tooglethis(\'charttotaluploads\')"')?><?=lang('voc.i18n_uploads')?></td>
-			<td><?=form_checkbox(lang('voc.i18n_upsize'),lang('voc.i18n_upsize'),true,'onClick = "tooglethis(\'charttotalupsize\')"')?><?=lang('voc.i18n_upsize')?></td>
-			<td><?=form_checkbox(lang('voc.i18n_average_quality'),lang('voc.i18n_average_quality'),true,'onClick = "tooglethis(\'charttotalquality\')"')?><?=lang('voc.i18n_average_quality')?></td>
-			<td><?=form_checkbox(lang('voc.i18n_bytesxquality'),lang('voc.i18n_bytesxquality'),true,'onClick = "tooglethis(\'charttotalbytesxquality\')"')?><?=lang('voc.i18n_bytesxquality')?></td>
-		</tr>
-		<tr>
-			<td><?=form_checkbox(lang('voc.i18n_hourquality'),lang('voc.i18n_hourquality'),true,'onClick = "tooglethis(\'qualityhourchart\')"')?><?=lang('voc.i18n_hourquality')?></td>
-			<td><?=form_checkbox(lang('voc.i18n_users'),lang('voc.i18n_users'),lang('voc.i18n_users'),true,'onClick = "tooglethis(\'user_table\')"')?><?=lang('voc.i18n_users')?></td>
-			<td><?=form_checkbox(lang('voc.i18n_pages'),lang('voc.i18n_pages'),true,'onClick = "tooglethis(\'pages_table\')"')?><?=lang('voc.i18n_pages')?></td>
-			<td><?=form_checkbox(lang('voc.i18n_categories'),lang('voc.i18n_categories'),true,'onClick = "tooglethis(\'categories_table\')"')?><?=lang('voc.i18n_categories')?></td>
-		</tr>
-		</table>
-		</td>
-		<td>
-		<table>
-		<tr>
-			<th><?=lang('voc.i18n_chart_selector')?></th>
-		</tr>
-		</table>
-		</td>
-	</table>
+	<script>hideoverlay();</script>
 	
 <!-- CHARTS -->
 
-	<table id = "bodytable">
+	<table id = "charttable">
 	<tr>
 		<th class = 'leftside'><?=lang('voc.i18n_edits')?></th>
 		<th class = 'rightside'><?=lang('voc.i18n_bytes')?></th>
 	</tr>
 	<tr>
-		<td><div id='chartfinaledits' style='width: 400px; height: 400px; border: 0px; padding: 0px;'></div></td>
-		<td><div id='chartfinalbytes' style='width: 400px; height: 400px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='chartfinaledits' style='width: 300px; height: 300px; border: 0px; padding: 0px; margin:auto; display:block;'></div></td>
+		<td><div id='chartfinalbytes' style='width: 300px; height: 300px; border: 0px; padding: 0px; margin:auto; display:block;'></div></td>
 	</tr>
 	</table>
 	
 	<br><br>
 	
-	<table id = "bodytable">
+	<table id = "charttable">
 	<tr>
 		<th class = 'leftside'><?=lang('voc.i18n_pages')?></th>
 		<th class = 'rightside'><?=lang('voc.i18n_users')?></th>
 	</tr>
 	<tr>
-		<td><div id='chartfinalpages' style='width: 400px; height: 400px; border: 0px; padding: 0px;'></div></td>
-		<td><div id='chartfinalusers' style='width: 400px; height: 400px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='chartfinalpages' style='width: 300px; height: 300px; border: 0px; padding: 0px; margin:auto; display:block;'></div></td>
+		<td><div id='chartfinalusers' style='width: 300px; height: 300px; border: 0px; padding: 0px; margin:auto; display:block;'></div></td>
 	</tr>
 	</table>
 	
 	<br><br>
 	
-	<table id = "bodytable">
+	<table id = "charttable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_edits_evolution')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotaledits' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotaledits' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block;'></div></td>
 	</tr>
 	</table>
 	
 	<br><br>
 	
-	<table id = "bodytable">
+	<table id = "charttable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_content_evolution')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalbytes' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalbytes' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block;'></div></td>
 	</tr>
 	</table>
 	
 	<br><br>
 	
-	<table id = "bodytable">
+	<table id = "charttable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_pages')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalpages' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalpages' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block;'></div></td>
 	</tr>
 	</table>
 	
 	<br><br>
 	
-	<table id = "bodytable">
+	<table id = "charttable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_users')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalusers' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalusers' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block;'></div></td>
 	</tr>
 	</table>
 	
 	<br><br>
 	
 	<?if(!isset($data['totalcategories'])) echo "<!--";?>
-	<table id = "bodytable">
+	<table id = "charttable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_categories')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalcategories' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalcategories' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block;'></div></td>
 	</tr>
 	<?if(!isset($data['totalcategories'])) echo "-->";?>
 	</table>
 	
 	<br><br>
 	
-	<table id = "bodytable">
+	<table id = "charttable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_activity_hour')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivityhour' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalactivityhour' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block;'></div></td>
 	</tr>
 	</table>
 	
 	<br><br>
 	
-	<table id = "bodytable">
+	<table id = "charttable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_activity_wday')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivitywday' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalactivitywday' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block;'></div></td>
 	</tr>
 	</table>
 	
 	<br><br>
 	
-	<table id = "bodytable">
+	<table id = "charttable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_activity_week')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivityweek' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalactivityweek' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block;'></div></td>
 	</tr>
 	</table>
 	
 	<br><br>
 	
-	<table id = "bodytable">
+	<table id = "charttable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_activity_month')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivitymonth' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalactivitymonth' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block;'></div></td>
 	</tr>
 	</table>
 	
 	<br><br>
 	
-	<table id = "bodytable">
+	<table id = "charttable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_activity_year')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivityyear' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalactivityyear' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block;'></div></td>
 	</tr>
 	</table>
 	
 	<br><br>
 	
 	<? if (!isset($data['totaluploads'])) echo "<!--";?>
-	<table id = "bodytable">
+	<table id = "charttable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_uploads')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotaluploads' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotaluploads' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block;'></div></td>
 	</tr>
 	</table>
 	
 	<br><br>
 	
-	<table id = "bodytable">
+	<table id = "charttable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_upsize')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalupsize' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalupsize' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block;'></div></td>
 	</tr>
 	</table>
 	
@@ -1005,29 +862,29 @@ function tooglethis(chartname) {
 		<th class = 'only'><?=lang('voc.i18n_average_quality')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalquality' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalquality' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block;'></div></td>
 	</tr>
 	</table>
 	
 	<br><br>
 	
-	<table id = "bodytable">
+	<table id = "charttable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_bytesxquality')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalbytesxquality' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='charttotalbytesxquality' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block;'></div></td>
 	</tr>
 	</table>
 	
 	<br><br>
 	
-	<table id = "bodytable">
+	<table id = "charttable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_hourquality')?></th>
 	</tr>
 	<tr>
-		<td><div id='qualityhourchart' style='width: 800px; height: 700px; border: 0px; padding: 0px;'></div></td>
+		<td><div id='qualityhourchart' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block;'></div></td>
 	</tr>
 	</table>
 	
@@ -1036,7 +893,7 @@ function tooglethis(chartname) {
 	
 	<br><br>
 	
-	<table id = "bodytable">
+	<table id = "charttable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_users')?></th>
 	</tr>
@@ -1047,7 +904,7 @@ function tooglethis(chartname) {
 	
 	<br><br>
 	
-	<table id = "bodytable">
+	<table id = "charttable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_pages')?></th>
 	</tr>
@@ -1058,7 +915,7 @@ function tooglethis(chartname) {
 	
 	<br><br>
 	<?if(!isset($data['catedits'])) echo "<!--";?>
-	<table id = 'bodytable'>
+	<table id = 'charttable'>
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_categories')?></th>
 	</tr>
@@ -1067,6 +924,7 @@ function tooglethis(chartname) {
 	</tr>
 	</table>
 	<?if(!isset($data['catedits'])) echo "-->";?>
+	
 	
 <!-- [2] www.christophermonnat.com/2008/08/generating-pdf-files-using-codeigniter -->
 <!--[2] TO_DO: generate pdf-->

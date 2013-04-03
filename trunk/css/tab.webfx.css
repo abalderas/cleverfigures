@@ -10,8 +10,9 @@ dark:	rgb(0,66,174);
 
 
 .dynamic-tab-pane-control.tab-pane {
-	position:	relative;
-	width:		100%;
+	display:	block;
+	margin:		auto;
+	width:		90%;
 }
 
 .dynamic-tab-pane-control .tab-row .tab {

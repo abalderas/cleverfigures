@@ -17,6 +17,21 @@ You should have received a copy of the GNU General Public License
 along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
+
+
+<script language="javascript">
+function tooglethis(chartname) {
+	var chart = document.getElementById(chartname);
+	if (chart.style.display == "none"){
+		chart.style.display = "block";
+	}
+	else{
+		chart.style.display = "none";
+	}
+}﻿
+</script>
+
+
 <!-- CHARTS -->
 	
 	<table id = "charttable">
@@ -24,62 +39,62 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 		<th class = 'only'><?=lang('voc.i18n_edits_evolution')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotaledits<?=$data['pageid'][$pagename]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotaledits<?=$data['pageid'][$pagename]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px;  margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_content_evolution')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalbytes<?=$data['pageid'][$pagename]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotalbytes<?=$data['pageid'][$pagename]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px;  margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_users')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalusers<?=$data['pageid'][$pagename]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotalusers<?=$data['pageid'][$pagename]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px;  margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_activity_hour')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivityhour<?=$data['pageid'][$pagename]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotalactivityhour<?=$data['pageid'][$pagename]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px;  margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_activity_wday')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivitywday<?=$data['pageid'][$pagename]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotalactivitywday<?=$data['pageid'][$pagename]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px;  margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_activity_week')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivityweek<?=$data['pageid'][$pagename]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotalactivityweek<?=$data['pageid'][$pagename]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px;  margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_activity_month')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivitymonth<?=$data['pageid'][$pagename]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotalactivitymonth<?=$data['pageid'][$pagename]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px;  margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_activity_year')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivityyear<?=$data['pageid'][$pagename]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotalactivityyear<?=$data['pageid'][$pagename]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px;  margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<? if (!isset($data['pageuploads'][$pagename])) echo "<!--";?>
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_uploads')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotaluploads<?=$data['pageid'][$pagename]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotaluploads<?=$data['pageid'][$pagename]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px;  margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_upsize')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalupsize<?=$data['pageid'][$pagename]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotalupsize<?=$data['pageid'][$pagename]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px;  margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<? if (!isset($data['pageuploads'][$pagename])) echo "-->";?>
 	<? if (!isset($data['pageaveragevalue'][$pagename])) echo "<!--";?>
@@ -87,19 +102,19 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 		<th class = 'only'><?=lang('voc.i18n_average_quality')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalquality<?=$data['pageid'][$pagename]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotalquality<?=$data['pageid'][$pagename]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px;  margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_bytesxquality')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalbytesxquality<?=$data['pageid'][$pagename]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotalbytesxquality<?=$data['pageid'][$pagename]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px;  margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_hourquality')?></th>
 	</tr>
 	<tr>
-		<td><div id='qualityhourchart<?=$data['pageid'][$pagename]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='qualityhourchart<?=$data['pageid'][$pagename]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px;  margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<? if (!isset($data['pageaveragevalue'][$pagename])) echo "-->";?>
 	

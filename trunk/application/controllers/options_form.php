@@ -73,12 +73,12 @@ class Options_form extends CI_Controller {
 			$this->load->view('templates/footer_view');
 		}
 		else{
-		
-			//CREATE HEADER ARRAY
-			$datah = array('title' => lang('voc.i18n_check_results'));
 			
 			//LOAD ANALISIS DATA
 			$adata = $this->analisis_model->get_analisis_data($name);
+		
+			//CREATE HEADER ARRAY
+			$datah = array('title' => lang('voc.i18n_check_results'), 'aname' => $name, 'data' => $adata);
 			
 			//LOAD VIEWS WITH DATA
 			$this->load->view('templates/header_view', $datah);

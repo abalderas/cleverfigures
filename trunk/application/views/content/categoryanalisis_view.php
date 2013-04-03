@@ -17,74 +17,87 @@ You should have received a copy of the GNU General Public License
 along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
+<script language="javascript">
+function tooglethis(chartname) {
+	var chart = document.getElementById(chartname);
+	if (chart.style.display == "none"){
+		chart.style.display = "block";
+	}
+	else{
+		chart.style.display = "none";
+	}
+}﻿
+</script>
+
+
 <!-- CHARTS -->
 	<table id = "charttable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_edits_evolution')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotaledits<?=$data['catid'][$categoryname]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotaledits<?=$data['catid'][$categoryname]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_content_evolution')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalbytes<?=$data['catid'][$categoryname]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotalbytes<?=$data['catid'][$categoryname]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_users')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalusers<?=$data['catid'][$categoryname]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotalusers<?=$data['catid'][$categoryname]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_pages')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalpages<?=$data['catid'][$categoryname]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotalpages<?=$data['catid'][$categoryname]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_activity_hour')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivityhour<?=$data['catid'][$categoryname]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotalactivityhour<?=$data['catid'][$categoryname]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_activity_wday')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivitywday<?=$data['catid'][$categoryname]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotalactivitywday<?=$data['catid'][$categoryname]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_activity_week')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivityweek<?=$data['catid'][$categoryname]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotalactivityweek<?=$data['catid'][$categoryname]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_activity_month')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivitymonth<?=$data['catid'][$categoryname]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotalactivitymonth<?=$data['catid'][$categoryname]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_activity_year')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalactivityyear<?=$data['catid'][$categoryname]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotalactivityyear<?=$data['catid'][$categoryname]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<? if (!isset($data['catuploads'][$categoryname])) echo "<!--";?>
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_uploads')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotaluploads<?=$data['catid'][$categoryname]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotaluploads<?=$data['catid'][$categoryname]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_upsize')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalupsize<?=$data['catid'][$categoryname]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotalupsize<?=$data['catid'][$categoryname]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<? if (!isset($data['catuploads'][$categoryname])) echo "-->";?>
 	<? if (!isset($data['cataveragevalue'][$categoryname])) echo "<!--";?>
@@ -92,13 +105,13 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 		<th class = 'only'><?=lang('voc.i18n_average_quality')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalquality<?=$data['catid'][$categoryname]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotalquality<?=$data['catid'][$categoryname]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_bytesxquality')?></th>
 	</tr>
 	<tr>
-		<td><div id='charttotalbytesxquality<?=$data['catid'][$categoryname]?>' style='width: 800px; height: 700px; border: 0px; padding: 0px; display: block; margin: 0 auto;'></div></td>
+		<td><div id='charttotalbytesxquality<?=$data['catid'][$categoryname]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
 	<? if (!isset($data['cataveragevalue'][$categoryname])) echo "-->";?>
 	
