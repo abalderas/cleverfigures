@@ -69,4 +69,9 @@ class Csv_model extends CI_Model{
 		return $output;
 	}
 	
+	function createcsv($arr, $name){
+		$str = $this->array_to_csv($arr);
+		write_file("./csv/$name.csv");
+	}
+	
 }

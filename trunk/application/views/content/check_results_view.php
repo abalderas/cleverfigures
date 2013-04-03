@@ -700,10 +700,9 @@ function tooglethis(chartname) {
 	<tr>
 		<th class = 'leftside'><?=lang('voc.i18n_edits')?></th>
 		<th class = 'rightside'><?=lang('voc.i18n_bytes')?></th>
-	</tr>
-	<tr>
-		<td><div id='chartfinaledits' style='width: 300px; height: 300px; border: 0px; padding: 0px; margin:auto; display:block;'></div></td>
-		<td><div id='chartfinalbytes' style='width: 300px; height: 300px; border: 0px; padding: 0px; margin:auto; display:block;'></div></td>
+		
+		<td><div id='chartfinaledits' style='width: 300px; height: 300px; border: 0px; padding: 0px; margin:auto; display:block;'></td>
+		<td><div id='chartfinalbytes' style='width: 300px; height: 300px; border: 0px; padding: 0px; margin:auto; display:block;'></td>
 	</tr>
 	</table>
 	
