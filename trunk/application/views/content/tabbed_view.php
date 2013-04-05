@@ -23,19 +23,16 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
 <div class="tab-pane" id="tab-pane-<?=$panid?>">
 	<?
-		$view = "content/".$type."analisis_view";
-		$item = $type."name";
-		
-		foreach($names as $name){
-			if(!($type == 'user' and !$this->wiki_model->user_has_worked($name, $wiki))){
+		foreach($this->group_model->get_members($name) as $user){
+			if(!(!$this->wiki_model->user_has_worked($user, $wiki))){
 				echo "<div class = \"tab-page\">";
-				echo "<h2 class = \"tab\">".$name."</h2>";
-				$this->load->view($view, array('data' => $data, "$item" => $name));
+				echo "<h2 class = \"tab\">".$user."</h2>";
+				$this->load->view('content/useranalisis_view', array('data' => $data, 'username' => $user));
 				echo "</div>";
 			}
 			else{
 				echo "<div class = \"tab-page\">";
-				echo "<h2 class = \"tab\">".$name."</h2>";
+				echo "<h2 class = \"tab\">".$user."</h2>";
 				echo lang('voc.i18n_user_did_not_work');
 				echo "</div>";
 			}

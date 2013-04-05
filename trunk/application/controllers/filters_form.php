@@ -41,20 +41,14 @@ class Filters_form extends CI_Controller {
 		return $result;
 	}
 	
-	//MAIN FUNCTION
-	function index(){
+	function filter($analysis, $type, $name){
 		//IF SESSION EXPIRED
 		if(!$this->session->userdata('username'))
 			redirect('login/loadlogin/');
 		else{
-			//SEPARATE STRING INTO SINGLE NAMES
-			$filterstrings = explode(',', $_POST['filterstring']);
-			array_pop($filterstrings);
-			foreach($filterstrings as $key => $value)
-				$filterstrings[$key] = trim($value);
 			
 			//GET ANALISIS DATA
-			$adata = $this->analisis_model->get_analisis_data($this->input->post('aname'));
+			$adata = $this->analisis_model->get_analisis_data($analysis);
 			
 			//IF NO DATA, ERROR
 			if(!$adata)
@@ -67,34 +61,21 @@ class Filters_form extends CI_Controller {
 			$this->load->view('templates/header_view', $datah);
 			
 			//IF FILTERING BY USER
-			if($_POST['select_filter'] == lang('voc.i18n_user'))
+			if($type == 'user')
 				//LOAD TABBED VIEW FOR USERS
-				$this->load->view('content/tabbed_view', array('data' => $adata, 'names' => $filterstrings, 'type' => 'user', 'panid' => '1', 'wiki' => $this->input->post('wname')));
+				$this->load->view('content/useranalisis_view', array('data' => $adata, 'username' => $name));
 			//IF FILTERING BY PAGE
-			else if($_POST['select_filter'] == lang('voc.i18n_page'))
+			else if($type == 'page')
 				//LOAD TABBED VIEW FOR PAGES
-				$this->load->view('content/tabbed_view', array('data' => $adata, 'names' => $filterstrings, 'type' => 'page', 'panid' => '1', 'wiki' => $this->input->post('wname')));
+				$this->load->view('content/pageanalisis_view', array('data' => $adata, 'pagename' => $name));
 			//IF FILTERING BY CATEGORY
-			else if($_POST['select_filter'] == lang('voc.i18n_category'))
+			else if($type == 'category')
 				//LOAD TABBED VIEW FOR CATEGORIES
-				$this->load->view('content/tabbed_view', array('data' => $adata, 'names' => $filterstrings, 'type' => 'category', 'panid' => '1','wiki' => $this->input->post('wname')));
+				$this->load->view('content/categoryanalisis_view', array('data' => $adata, 'categoryname' => $name));			
 			//IF FILTERING BY GROUP
-			else if($_POST['select_filter'] == lang('voc.i18n_group')){
-				$id = 1;
-				//FOR EACH GROUP
-				foreach($filterstrings as $groupname){
-					//GET MEMBERS
-					$members = $this->group_model->get_members($groupname);
-					
-					//IF THERE ARE MEMBERS
-					if($members){
-						//LOAD TABBED VIEW FOR USERS
-						$this->load->view('content/tabbed_view', array('data' => $adata, 'names' => $members, 'type' => 'user', 'panid' => $id));
-						echo "<br><br>";
-					}
-					$id++;
-				}
-			}
+			else if($type == 'group')
+				$this->load->view('content/tabbed_view', array('data' => $adata, 'name' => $name));
+			
 			else{
 				//FILTER NOT DEFINED, ERROR
 				die('FILTER NOT DEFINED');

@@ -464,7 +464,7 @@ function tooglethis(chartname) {
 			data<?=$data['userid'][$username]?>.addColumn('number', 'Standard Deviation');
 			data<?=$data['userid'][$username]?>.addRows([<? 
 				foreach(array_keys($data['userpage'][$username]) as $key){
-					echo "['".utf8_encode($key)."','".
+					echo "['".$key."','".
 						utf8_encode($data['pagenamespace'][$key])."',".
 						round(end($data['pageuseredits'][$key][$username]), 2).",".
 						round(end($data['pageusereditscount'][$key][$username])/end($data['useredits'][$username]), 2).",";

@@ -552,7 +552,7 @@ function tooglethis(chartname) {
 			data.addRows([
 			<? 
 				foreach(array_keys($data['useredits']) as $key){
-					echo "['".utf8_encode($key)."','".
+					echo "['".anchor("filters_form/filter/".$aname."/user/".$key, $key, array('target' => '_blank'))."','".
 						utf8_encode($data['userrealname'][$key])."',".
 						round(end($data['useredits'][$key]), 2).",".
 						round((end($data['useredits'][$key])/end($data['totaledits']))*100, 2).",".
@@ -592,6 +592,7 @@ function tooglethis(chartname) {
 			var table = new google.visualization.Table(document.getElementById('user_table'));
 			table.draw(data, {showRowNumber: true,
 						page: 'enable',
+						allowHtml: true,
 						pageSize: 20});
 			
 			var pagedata = new google.visualization.DataTable();
@@ -614,7 +615,7 @@ function tooglethis(chartname) {
 			pagedata.addRows([
 			<? 
 				foreach(array_keys($data['pageedits']) as $key){
-					echo "['".utf8_encode($key)."', '".
+					echo "['".anchor("filters_form/filter/".$aname."/page/".$key, $key, array('target' => '_blank'))."', '".
 						utf8_encode($data['pagenamespace'][$key])."', ".
 						round(end($data['pageedits'][$key]), 3).",".
 						round((end($data['pageedits'][$key]) / end($data['totaledits']))*100, 2).",".
@@ -648,6 +649,7 @@ function tooglethis(chartname) {
 			var pagetable = new google.visualization.Table(document.getElementById('pages_table'));
 			pagetable.draw(pagedata, {showRowNumber: true,
 						page: 'enable',
+						allowHtml: true,
 						pageSize: 20});
 			
 			<?
@@ -665,7 +667,7 @@ function tooglethis(chartname) {
 			
 					echo "catdata.addRows([";
 					foreach(array_keys($data['catedits']) as $key){
-						echo "['".utf8_encode($key)."', ".
+						echo "['".anchor("filters_form/filter/".$aname."/category/".$key, $key, array('target' => '_blank'))."', ".
 							round(end($data['catedits'][$key]), 3).",".
 							round((end($data['catedits'][$key]) / end($data['totaledits'])) * 100, 2).",".
 							round(end($data['catbytes'][$key]), 3).",".
@@ -687,6 +689,7 @@ function tooglethis(chartname) {
 					var cattable = new google.visualization.Table(document.getElementById('categories_table'));
 					cattable.draw(catdata, {showRowNumber: true,
 						page: 'enable',
+						allowHtml: true,
 						pageSize: 20});";
 				}
 			?>
@@ -700,7 +703,8 @@ function tooglethis(chartname) {
 	<tr>
 		<th class = 'leftside'><?=lang('voc.i18n_edits')?></th>
 		<th class = 'rightside'><?=lang('voc.i18n_bytes')?></th>
-		
+	</tr>
+	<tr>		
 		<td><div id='chartfinaledits' style='width: 300px; height: 300px; border: 0px; padding: 0px; margin:auto; display:block;'></td>
 		<td><div id='chartfinalbytes' style='width: 300px; height: 300px; border: 0px; padding: 0px; margin:auto; display:block;'></td>
 	</tr>

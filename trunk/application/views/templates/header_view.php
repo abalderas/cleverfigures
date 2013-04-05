@@ -36,68 +36,10 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	?>
 	<script src="http://yui.yahooapis.com/3.8.0/build/yui/yui-min.js"></script>
 	<script type='text/javascript' src='http://www.google.com/jsapi'></script>
-	<?if($title == lang('voc.i18n_check_results')){
-		echo "<script>
-		
-			YUI().use('autocomplete', 'autocomplete-highlighters', 'autocomplete-filters', function (Y) {
-				Y.one('body').addClass('yui3-skin-sam');
-				Y.one('#filterstring').plug(Y.Plugin.AutoComplete, {
-					resultHighlighter: 'phraseMatch',
-					resultFilters: ['subWordMatch'],
-					queryDelimiter: ',',
-					source: function(query){
-						var myindex  = document.getElementById('select_filter').selectedIndex;
-						var SelValue = document.getElementById('select_filter').options[myindex].value;
-				
-						if(SelValue == '".lang('voc.i18n_user')."'){
-							return [";
-								foreach(array_keys($data['useredits']) as $key){
-									echo "'".$key."'";
-									if($key != end(array_keys($data['useredits']))) echo ",";
-								}
-							echo "];
-						} else if(SelValue == '".lang('voc.i18n_page')."'){
-							return [";
-								foreach(array_keys($data['pageedits']) as $key){
-									echo "'".$key."'";
-									if($key != end(array_keys($data['pageedits']))) echo ",";
-								}
-							echo "];
-						}";
-					
-						if(isset($data['catid'])){
-							echo "else if(SelValue == '".lang('voc.i18n_category')."'){
-								return [";
-							foreach(array_keys($data['catid']) as $key){
-								echo "'".$key."'";
-								if($key != end(array_keys($data['catid']))) echo ",";
-							}
-							echo "];
-							}";
-						}
-						
-						if($this->group_model->there_are_groups()){
-							echo "else if(SelValue == '".lang('voc.i18n_group')."'){
-								return [";
-							$groups = $this->group_model->get_groups();
-							
-							foreach($groups as $group){
-								echo "'".$group."'";
-								if($group != end($groups)) echo ",";
-							}
-							echo "];
-							}";
-						}
-					echo "}";
-				echo "});
-			});
-			
-		</script>";
-	}
 
-echo "</head>
-
-<body>";
+</head>
+<body>
+	<?
 		if($this->session->userdata('username')){
 			echo "<table id = 'menu'><tr>";
 			
@@ -116,42 +58,7 @@ echo "</head>
 		}
 		
 		if($title == lang('voc.i18n_check_results')){
-			echo form_open('filters_form', array('class' => "yui3-skin-sam")) . "
-				<table id = 'filtertable'>
-				<tr>
-					<td>";
-					if(isset($data['catid']) and !$this->group_model->there_are_groups())
-						$options = array(lang('voc.i18n_user') => lang('voc.i18n_user'),
-									lang('voc.i18n_page') => lang('voc.i18n_page'),
-									lang('voc.i18n_category') => lang('voc.i18n_category')
-								);
-					else if(isset($data['catid']) and $this->group_model->there_are_groups())
-						$options = array(lang('voc.i18n_user') => lang('voc.i18n_user'),
-										lang('voc.i18n_page') => lang('voc.i18n_page'),
-										lang('voc.i18n_category') => lang('voc.i18n_category'),
-										lang('voc.i18n_group') => lang('voc.i18n_group')
-									);
-					else if(!isset($data['catid']) and !$this->group_model->there_are_groups())
-						$options = array(lang('voc.i18n_user') => lang('voc.i18n_user'),
-										lang('voc.i18n_page') => lang('voc.i18n_page')
-										);
-					else
-						$options = array(lang('voc.i18n_user') => lang('voc.i18n_user'),
-										lang('voc.i18n_page') => lang('voc.i18n_page'),
-										lang('voc.i18n_group') => lang('voc.i18n_group')
-									);
-									
-			echo form_dropdown('select_filter', $options, lang('voc.i18n_user'), "id = 'select_filter'");
-			echo "   ";
-			echo form_hidden('aname', $aname);
-			echo form_hidden('wname', $data['wikiname']);
-			echo form_input(array('id' => 'filterstring', 'name' => 'filterstring', 'class' => 'cssform'));
-			echo "		</td>
-						<th>".lang('voc.i18n_filters')."</th>
-				</tr>
-				</table>".form_close()."
-
-				<table id = 'chartselector'>
+			echo "<table id = 'chartselector'>
 					<td style = 'width:85%;'>
 						<table>
 						<tr>
@@ -185,15 +92,15 @@ echo "</head>
 							<td>".form_checkbox(lang('voc.i18n_categories'),lang('voc.i18n_categories'),true,'onClick = "tooglethis(\'categories_table\')"').lang('voc.i18n_categories')."</td>
 						</tr>
 						</table>
-						</td>
-						<td>
+					</td>
+					<td>
 						<table>
 						<tr>
 							<th>".lang('voc.i18n_chart_selector')."</th>
 						</tr>
 						</table>
-						</td>
-					</table>";
+					</td>
+				</table>";
 		}?>
 
 <div id = "wrap">
