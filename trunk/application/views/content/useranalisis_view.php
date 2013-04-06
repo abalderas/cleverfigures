@@ -464,7 +464,7 @@ function tooglethis(chartname) {
 			data<?=$data['userid'][$username]?>.addColumn('number', 'Standard Deviation');
 			data<?=$data['userid'][$username]?>.addRows([<? 
 				foreach(array_keys($data['userpage'][$username]) as $key){
-					echo "['".$key."','".
+					echo "['".anchor("filters_form/filter/".$this->session->userdata('analysis')."/page/".$key, $key, array('target' => '_blank'))."','".
 						utf8_encode($data['pagenamespace'][$key])."',".
 						round(end($data['pageuseredits'][$key][$username]), 2).",".
 						round(end($data['pageusereditscount'][$key][$username])/end($data['useredits'][$username]), 2).",";
@@ -488,8 +488,10 @@ function tooglethis(chartname) {
 
 
 			var table<?=$data['userid'][$username]?> = new google.visualization.Table(document.getElementById('page_table<?=$data['userid'][$username]?>'));
-			table<?=$data['userid'][$username]?>.draw(data<?=$data['userid'][$username]?>, {showRowNumber: true,
+			table<?=$data['userid'][$username]?>.draw(data<?=$data['userid'][$username]?>, {
+						showRowNumber: true,
 						page: 'enable',
+						allowHtml: true,
 						pageSize: 20});
 			
 			<?
@@ -499,15 +501,17 @@ function tooglethis(chartname) {
 				catdata".$data['userid'][$username].".addColumn('string', 'Name');
 				catdata".$data['userid'][$username].".addRows([";
 					foreach(array_keys($data['usercat'][$username]) as $key){
-						echo "['".utf8_encode($key)."']\n";
+						echo "['".anchor("filters_form/filter/".$this->session->userdata('analysis')."/category/".$key, $key, array('target' => '_blank'))."']\n";
 						if($key != end(array_keys($data['usercat'][$username]))) echo ",";
 					}
 				echo "]);
 
 
 				var cattable".$data['userid'][$username]." = new google.visualization.Table(document.getElementById('categories_table".$data['userid'][$username]."'));
-				cattable".$data['userid'][$username].".draw(catdata".$data['userid'][$username].", {showRowNumber: true,
+				cattable".$data['userid'][$username].".draw(catdata".$data['userid'][$username].", {
+						showRowNumber: true,
 						page: 'enable',
+						allowHtml: true,
 						pageSize: 20});";
 			}
 			?>

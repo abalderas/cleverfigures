@@ -699,6 +699,79 @@ function tooglethis(chartname) {
 	
 <!-- CHARTS -->
 
+	<a name = 'top'></a>
+	
+	<div id = 'chartmenu' style = 'width:800px; display:block; margin:auto;'>
+		<table id = 'variabletable'>
+		<tr>
+			<th colspan = '6'><?=lang('voc.i18n_chart_menu')?></th></tr>
+		</tr>
+		<tr>
+			<td><a href = '#chartfinaledits'><?=lang('voc.i18n_edits')?></a></td>
+			<td><a href = '#chartfinalbytes'><?=lang('voc.i18n_bytes')?></a></td>
+			<td><a href = '#chartfinalpages'><?=lang('voc.i18n_pages')?></a></td>
+			<td><a href = '#chartfinalusers'><?=lang('voc.i18n_users')?></a></td>
+			<td class = 'type' colspan = '2'><?=lang('voc.i18n_percentage_charts')?></td>
+		</tr>
+		<tr>
+			<td><a href = '#charttotaledits'><?=lang('voc.i18n_edits_evolution')?></a></td>
+			<td><a href = '#charttotalbytes'><?=lang('voc.i18n_content_evolution')?></a></td>
+			<td><a href = '#charttotalpages'><?=lang('voc.i18n_pages_evolution')?></a></td>
+			<td><a href = '#charttotalusers'><?=lang('voc.i18n_users_evolution')?></a></td>
+			<?
+				if(isset($data['totalcategories'])) 
+					echo "
+					<td><a href = '#charttotalcategories'>".lang('voc.i18n_categories_evolution')."</a></td>
+					<td class = 'type'>".lang('voc.i18n_evolution_charts')."</td>";
+				else
+					echo "
+					<td colspan = '2' class = 'type'>".lang('voc.i18n_evolution_charts')."</td>";
+			?>
+		</tr>
+		<tr>
+			<td><a href = '#charttotalactivityhour'><?=lang('voc.i18n_activity_hour')?></a></td>
+			<td><a href = '#charttotalactivitywday'><?=lang('voc.i18n_activity_wday')?></a></td>
+			<td><a href = '#charttotalactivityweek'><?=lang('voc.i18n_activity_week')?></a></td>
+			<td><a href = '#charttotalactivitymonth'><?=lang('voc.i18n_activity_month')?></a></td>
+			<td><a href = '#charttotalactivityyear'><?=lang('voc.i18n_activity_year')?></a></td>
+			<td class = 'type'><?=lang('voc.i18n_activity_charts')?></td>
+		</tr>
+		<? if (!isset($data['totaluploads'])) echo "<!--";?>
+		<tr>
+			<td><a href = '#charttotaluploads'><?=lang('voc.i18n_uploads')?></a></td>
+			<td><a href = '#charttotalupsize'><?=lang('voc.i18n_upsize')?></a></td>
+			<td class = 'type'  colspan = '4'><?=lang('voc.i18n_uploads_charts')?></td>
+		</tr>
+		<? if (!isset($data['totaluploads'])) echo "-->";?>
+		<? if (!isset($data['totalaverage'])) echo "<!--";?>
+		<tr>
+			<td><a href = '#charttotalquality'><?=lang('voc.i18n_average_quality')?></a></td>
+			<td><a href = '#charttotalbytesxquality'><?=lang('voc.i18n_bytesxquality')?></a></td>
+			<td><a href = '#qualityhourchart'><?=lang('voc.i18n_hourquality')?></a></td>
+			<td class = 'type'  colspan = '3'><?=lang('voc.i18n_quality_charts')?></td>
+		</tr>
+		<? if (!isset($data['totalaverage'])) echo "-->";?>
+		<tr>
+			<td><a href = '#user_table'><?=lang('voc.i18n_users_table')?></a></td>
+			<td><a href = '#pages_table'><?=lang('voc.i18n_pages_table')?></a></td>
+			<?
+				if(isset($data['totalcategories'])) 
+					echo "
+					<td><a href = '#categories_table'>".lang('voc.i18n_categories_table')."</a></td>
+					<td class = 'type' colspan = '3'>".lang('voc.i18n_tables')."</td>";
+				else
+					echo "
+					<td class = 'type' colspan = '4'>".lang('voc.i18n_tables')."</td>";
+			?>
+		</tr>
+		</table>
+	</div>
+	
+	<br><br>
+	
+	<a name = 'chartfinaledits'></a>
+	<a name = 'chartfinalbytes'></a>
+	
 	<table id = "charttable">
 	<tr>
 		<th class = 'leftside'><?=lang('voc.i18n_edits')?></th>
@@ -711,6 +784,9 @@ function tooglethis(chartname) {
 	</table>
 	
 	<br><br>
+	
+	<a name = 'chartfinalpages'></a>
+	<a name = 'chartfinalusers'></a>
 	
 	<table id = "charttable">
 	<tr>
@@ -725,6 +801,8 @@ function tooglethis(chartname) {
 	
 	<br><br>
 	
+	<a name = 'charttotaledits'></a>
+	
 	<table id = "charttable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_edits_evolution')?></th>
@@ -735,6 +813,8 @@ function tooglethis(chartname) {
 	</table>
 	
 	<br><br>
+	
+	<a name = 'charttotalbytes'></a>
 	
 	<table id = "charttable">
 	<tr>
@@ -747,9 +827,11 @@ function tooglethis(chartname) {
 	
 	<br><br>
 	
+	<a name = 'charttotalpages'></a>
+	
 	<table id = "charttable">
 	<tr>
-		<th class = 'only'><?=lang('voc.i18n_pages')?></th>
+		<th class = 'only'><?=lang('voc.i18n_pages_evolution')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalpages' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block;'></div></td>
@@ -758,9 +840,11 @@ function tooglethis(chartname) {
 	
 	<br><br>
 	
+	<a name = 'charttotalusers'></a>
+	
 	<table id = "charttable">
 	<tr>
-		<th class = 'only'><?=lang('voc.i18n_users')?></th>
+		<th class = 'only'><?=lang('voc.i18n_users_evolution')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalusers' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block;'></div></td>
@@ -770,9 +854,12 @@ function tooglethis(chartname) {
 	<br><br>
 	
 	<?if(!isset($data['totalcategories'])) echo "<!--";?>
+	
+	<a name = 'charttotalcategories'></a>
+	
 	<table id = "charttable">
 	<tr>
-		<th class = 'only'><?=lang('voc.i18n_categories')?></th>
+		<th class = 'only'><?=lang('voc.i18n_categories_evolution')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalcategories' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block;'></div></td>
@@ -781,6 +868,8 @@ function tooglethis(chartname) {
 	</table>
 	
 	<br><br>
+	
+	<a name = 'charttotalactivityhour'></a>
 	
 	<table id = "charttable">
 	<tr>
@@ -793,6 +882,8 @@ function tooglethis(chartname) {
 	
 	<br><br>
 	
+	<a name = 'charttotalactivitywday'></a>
+	
 	<table id = "charttable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_activity_wday')?></th>
@@ -803,6 +894,8 @@ function tooglethis(chartname) {
 	</table>
 	
 	<br><br>
+	
+	<a name = 'charttotalactivityweek'></a>
 	
 	<table id = "charttable">
 	<tr>
@@ -815,6 +908,8 @@ function tooglethis(chartname) {
 	
 	<br><br>
 	
+	<a name = 'charttotalactivitymonth'></a>
+	
 	<table id = "charttable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_activity_month')?></th>
@@ -825,6 +920,8 @@ function tooglethis(chartname) {
 	</table>
 	
 	<br><br>
+	
+	<a name = 'charttotalactivityyear'></a>
 	
 	<table id = "charttable">
 	<tr>
@@ -838,6 +935,9 @@ function tooglethis(chartname) {
 	<br><br>
 	
 	<? if (!isset($data['totaluploads'])) echo "<!--";?>
+	
+	<a name = 'charttotaluploads'></a>
+	
 	<table id = "charttable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_uploads')?></th>
@@ -848,6 +948,8 @@ function tooglethis(chartname) {
 	</table>
 	
 	<br><br>
+	
+	<a name = 'charttotalupsize'></a>
 	
 	<table id = "charttable">
 	<tr>
@@ -861,6 +963,10 @@ function tooglethis(chartname) {
 	<br><br>
 	<? if (!isset($data['totaluploads'])) echo "-->";?>
 	<? if (!isset($data['totalaverage'])) echo "<!--";?>
+	
+	<a name = 'charttotalquality'></a>
+	
+	<table id = "charttable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_average_quality')?></th>
 	</tr>
@@ -870,6 +976,8 @@ function tooglethis(chartname) {
 	</table>
 	
 	<br><br>
+	
+	<a name = 'charttotalbytesxquality'></a>
 	
 	<table id = "charttable">
 	<tr>
@@ -881,6 +989,8 @@ function tooglethis(chartname) {
 	</table>
 	
 	<br><br>
+	
+	<a name = 'qualityhourchart'></a>
 	
 	<table id = "charttable">
 	<tr>
@@ -896,9 +1006,11 @@ function tooglethis(chartname) {
 	
 	<br><br>
 	
+	<a name = 'user_table'></a>
+	
 	<table id = "charttable">
 	<tr>
-		<th class = 'only'><?=lang('voc.i18n_users')?></th>
+		<th class = 'only'><?=lang('voc.i18n_users_table')?></th>
 	</tr>
 	<tr>
 		<td><div id = "user_table"></div></td>
@@ -907,9 +1019,11 @@ function tooglethis(chartname) {
 	
 	<br><br>
 	
+	<a name = 'pages_table'></a>
+	
 	<table id = "charttable">
 	<tr>
-		<th class = 'only'><?=lang('voc.i18n_pages')?></th>
+		<th class = 'only'><?=lang('voc.i18n_pages_table')?></th>
 	</tr>
 	<tr>
 		<td><div id = "pages_table"></div></td>
@@ -918,9 +1032,12 @@ function tooglethis(chartname) {
 	
 	<br><br>
 	<?if(!isset($data['catedits'])) echo "<!--";?>
+	
+	<a name = 'categories_table'></a>
+	
 	<table id = 'charttable'>
 	<tr>
-		<th class = 'only'><?=lang('voc.i18n_categories')?></th>
+		<th class = 'only'><?=lang('voc.i18n_categories_table')?></th>
 	</tr>
 	<tr>
 		<td><div id = 'categories_table'></div></td>

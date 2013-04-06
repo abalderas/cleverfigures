@@ -56,52 +56,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			
 			echo "</tr></table>";
 		}
-		
-		if($title == lang('voc.i18n_check_results')){
-			echo "<table id = 'chartselector'>
-					<td style = 'width:85%;'>
-						<table>
-						<tr>
-							<td>".form_checkbox(lang('voc.i18n_edits'),lang('voc.i18n_edits'),true,'onClick = "tooglethis(\'chartfinaledits\')"').lang('voc.i18n_edits')."</td>
-							<td>".form_checkbox(lang('voc.i18n_bytes'),lang('voc.i18n_bytes'),true,'onClick = "tooglethis(\'chartfinalbytes\')"').lang('voc.i18n_bytes')."</td>
-							<td>".form_checkbox(lang('voc.i18n_pages'),lang('voc.i18n_pages'),true,'onClick = "tooglethis(\'chartfinalpages\')"').lang('voc.i18n_pages')."</td>
-							<td>".form_checkbox(lang('voc.i18n_users'),lang('voc.i18n_users'),true,'onClick = "tooglethis(\'chartfinalusers\')"').lang('voc.i18n_users')."</td>
-						</tr>
-						<tr>
-							<td>".form_checkbox(lang('voc.i18n_edits_evolution'), lang('voc.i18n_edits_evolution'), true, 'onClick = "tooglethis(\'charttotaledits\')"').lang('voc.i18n_edits_evolution')."</td>
-							<td>".form_checkbox(lang('voc.i18n_content_evolution'),lang('voc.i18n_content_evolution'),true,'onClick = "tooglethis(\'charttotalbytes\')"').lang('voc.i18n_content_evolution')."</td>
-							<td>".form_checkbox(lang('voc.i18n_pages'),lang('voc.i18n_pages'),true,'onClick = "tooglethis(\'charttotalpages\')"').lang('voc.i18n_pages')."</td>
-							<td>".form_checkbox(lang('voc.i18n_users'),lang('voc.i18n_users'),true,'onClick = "tooglethis(\'charttotalusers\')"').lang('voc.i18n_users')."</td>
-						</tr>
-						<tr>
-							<td>".form_checkbox(lang('voc.i18n_categories'),lang('voc.i18n_categories'),true,'onClick = "tooglethis(\'charttotalcategories\')"').lang('voc.i18n_categories')."</td>
-							<td>".form_checkbox(lang('voc.i18n_activity_hour'),lang('voc.i18n_activity_hour'),true,'onClick = "tooglethis(\'charttotalactivityhour\')"').lang('voc.i18n_activity_hour')."</td>
-							<td>".form_checkbox(lang('voc.i18n_activity_wday'),lang('voc.i18n_activity_wday'),true,'onClick = "tooglethis(\'charttotalactivitywday\')"').lang('voc.i18n_activity_wday')."</td>
-							<td>".form_checkbox(lang('voc.i18n_activity_week'),lang('voc.i18n_activity_week'),true,'onClick = "tooglethis(\'charttotalactivityweek\')"').lang('voc.i18n_activity_week')."</td>
-						</tr>
-						<tr>
-							<td>".form_checkbox(lang('voc.i18n_uploads'),lang('voc.i18n_uploads'),true,'onClick = "tooglethis(\'charttotaluploads\')"').lang('voc.i18n_uploads')."</td>
-							<td>".form_checkbox(lang('voc.i18n_upsize'),lang('voc.i18n_upsize'),true,'onClick = "tooglethis(\'charttotalupsize\')"').lang('voc.i18n_upsize')."</td>
-							<td>".form_checkbox(lang('voc.i18n_average_quality'),lang('voc.i18n_average_quality'),true,'onClick = "tooglethis(\'charttotalquality\')"').lang('voc.i18n_average_quality')."</td>
-							<td>".form_checkbox(lang('voc.i18n_bytesxquality'),lang('voc.i18n_bytesxquality'),true,'onClick = "tooglethis(\'charttotalbytesxquality\')"').lang('voc.i18n_bytesxquality')."</td>
-						</tr>
-						<tr>
-							<td>".form_checkbox(lang('voc.i18n_hourquality'),lang('voc.i18n_hourquality'),true,'onClick = "tooglethis(\'qualityhourchart\')"').lang('voc.i18n_hourquality')."</td>
-							<td>".form_checkbox(lang('voc.i18n_users'),lang('voc.i18n_users'),lang('voc.i18n_users'),true,'onClick = "tooglethis(\'user_table\')"').lang('voc.i18n_users')."</td>
-							<td>".form_checkbox(lang('voc.i18n_pages'),lang('voc.i18n_pages'),true,'onClick = "tooglethis(\'pages_table\')"').lang('voc.i18n_pages')."</td>
-							<td>".form_checkbox(lang('voc.i18n_categories'),lang('voc.i18n_categories'),true,'onClick = "tooglethis(\'categories_table\')"').lang('voc.i18n_categories')."</td>
-						</tr>
-						</table>
-					</td>
-					<td>
-						<table>
-						<tr>
-							<th>".lang('voc.i18n_chart_selector')."</th>
-						</tr>
-						</table>
-					</td>
-				</table>";
-		}?>
+	?>
 
 <div id = "wrap">
 <br>

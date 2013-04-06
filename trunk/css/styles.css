@@ -111,122 +111,6 @@ info{
 	z-index:0;
 }
 
-#chartselector
-{
-	font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
-	table-layout:fixed;
-	border-radius:0px 10px 10px 0px;
-	width:840px;
-	padding-left:40px;
-	text-align:left;
-	position:absolute;
-	top:150px;
-	left:0px;
-	background: rgba(88, 172, 250, 1);
-	z-index:10;               
-	-moz-transition: all 1s ease-in-out;
-	-webkit-transition: all 1s ease-in-out;
-	-o-transition: all 1s ease-in-out;
-	transition: all 1s ease-in-out;
-	margin-left: -810px; 
-	transition-delay: 1s;
-	-moz-transition-delay: 1s; /* Firefox 4 */
-	-webkit-transition-delay: 1s; /* Safari and Chrome */
-	-o-transition-delay: 1s; /* Opera */ 
-}
-
-#chartselector:hover{
-	
-	margin-left: 0px; 
-	transition-delay: 0s;
-	-moz-transition-delay: 0s; /* Firefox 4 */
-	-webkit-transition-delay: 0s; /* Safari and Chrome */
-	-o-transition-delay: 0s; /* Opera */ 
-}
-
-#chartselector th
-{
-	color:white;
-	font-size:16px;
-	-webkit-transform: rotate(-90deg);
-	-moz-transform: rotate(-90deg);
-	-ms-transform: rotate(-90deg);
-	-o-transform: rotate(-90deg);
-	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
-	padding-top:95px;
-}
-
-#filtertable
-{
-	font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
-	table-layout:fixed;
-	border-radius:0px 10px 10px 0px;
-	
-	height:60px;
-	width:840px;
-	padding-left:40px;
-	text-align:center;
-	position:absolute;
-	top:80px;
-	left:0px;
-	background: rgba(88, 172, 250, 1);
-	z-index:10;               
-	-moz-transition: all 1s ease-in-out;
-	-webkit-transition: all 1s ease-in-out;
-	-o-transition: all 1s ease-in-out;
-	transition: all 1s ease-in-out;
-	margin-left: -810px; 
-	transition-delay: 1s;
-	-moz-transition-delay: 1s; /* Firefox 4 */
-	-webkit-transition-delay: 1s; /* Safari and Chrome */
-	-o-transition-delay: 1s; /* Opera */ 
-}
-
-#filtertable:hover{
-	
-	margin-left: 0px;
-	transition-delay: 0s;
-	-moz-transition-delay: 0s; /* Firefox 4 */
-	-webkit-transition-delay: 0s; /* Safari and Chrome */
-	-o-transition-delay: 0s; /* Opera */ 
-}
-
-#filtertable td.separated
-{
-	border-bottom:1px solid black;
-}
-
-#filtertable th 
-{
-	font-size:16px;
-	padding-top:5px;
-	padding-bottom:4px;
-	vertical-align:bottom;
-	margin-top:10px;
-	width:50px;
-	color: white;
-	border-radius:10px;
-	-webkit-transform: rotate(-90deg);
-	-moz-transform: rotate(-90deg);
-	-ms-transform: rotate(-90deg);
-	-o-transform: rotate(-90deg);
-	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
-}
-
-#filtertable td 
-{
-	color:#000000;
-	font-size:12px;
-	min-height:29px;
-	padding:2px;
-	padding-bottom:10px;
-	width:95%;
-}
-
-#filtertable input.cssform{
-	width:87%;
-}
-
 #bodytable
 {
 	font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
@@ -234,13 +118,6 @@ info{
 	margin-left: auto;
 	margin-right: auto;
 	table-layout:fixed;
-	border:solid 1px black;
-	border-radius:10px;
-}
-
-#bodytable td.separated
-{
-	border-bottom:1px solid black;
 }
 
 #bodytable th 
@@ -252,24 +129,13 @@ info{
 	background-color:rgba(0,0,0,0.8);
 }
 
-#bodytable th.rightside
-{
-	border-radius:0px 10px 0px 0px;
-}
-
-#bodytable th.leftside
-{
-	border-radius:10px 0px 0px 0px;
-}
-
 #bodytable th.low
 {
-	border-radius:0px 0px 10px 10px;
-}
-
-#bodytable th.only
-{
-	border-radius:10px 10px 0px 0px;
+	font-size:14px;
+	padding-top:5px;
+	padding-bottom:4px;
+	color: white;
+	background-color:rgba(0,0,0,0.8);
 }
 
 #bodytable td 
@@ -278,7 +144,9 @@ info{
 	font-size:12px;
 	min-height:29px;
 	padding:2px;
-	padding-bottom:10px;
+	padding-left:8px;
+	background-color:rgba(204,228,230,0.8);
+	vertical-align:center;
 }
 
 #bodytable input.cssform{
@@ -294,8 +162,6 @@ info{
 	margin-left: auto;
 	margin-right: auto;
 	table-layout:fixed;
-	border:solid 1px black;
-	border-radius:10px;
 }
 
 
@@ -306,7 +172,6 @@ info{
 	padding-bottom:4px;
 	color: white;
 	background-color:rgba(0,0,0,0.8);
-	border-radius:10px 10px 0px 0px;
 }
 
 #variabletable th.low
@@ -316,7 +181,6 @@ info{
 	padding-bottom:4px;
 	color: white;
 	background-color:rgba(0,0,0,0.8);
-	border-radius:0px 0px 10px 10px;
 }
 
 #variabletable td 
@@ -325,7 +189,20 @@ info{
 	font-size:12px;
 	min-height:29px;
 	padding:2px;
-	padding-bottom:10px;
+	padding-left:8px;
+	background-color:rgba(204,228,230,0.8);
+	vertical-align:center;
+}
+
+#variabletable td.type
+{
+	color:white;
+	font-size:12px;
+	text-align:right;
+	padding:2px;
+	padding-right:8px;
+	background-color:rgba(88, 172, 250, 0.8);
+	vertical-align:center;
 }
 
 #variabletable input.cssform{
@@ -338,7 +215,7 @@ info{
 	table-layout: fixed;
 	margin-right: auto;
 	padding:2px;
-	width:88%;
+	width:100%;
 }
 
 #charttable th 
@@ -356,9 +233,7 @@ info{
 	text-align:left;
 	font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
 	margin: auto;
-	font-size:1em;/*
-	border: 1px solid #000000;
-	border-radius:10px;*/
+	font-size:1em;
 }
 
 #formins td, #formins th 

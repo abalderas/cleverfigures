@@ -29,8 +29,45 @@ function tooglethis(chartname) {
 }﻿
 </script>
 
-
+<a name = 'top'></a>
+	
+	<div id = 'chartmenu' style = 'width:800px; display:block; margin:auto;'>
+		<table id = 'variabletable'>
+		<tr>
+			<th colspan = '4'><?=lang('voc.i18n_chart_menu')?></th></tr>
+		</tr>
+		<tr>
+			<td><a href = '#charttotaledits'><?=lang('voc.i18n_edits_evolution')?></a></td>
+			<td><a href = '#charttotalbytes'><?=lang('voc.i18n_content_evolution')?></a></td>
+			<td><a href = '#charttotalusers'><?=lang('voc.i18n_users_evolution')?></a></td>
+			<td><a href = '#charttotalpages'><?=lang('voc.i18n_pages_evolution')?></a></td>
+		</tr>
+		<tr>
+			<td><a href = '#charttotalactivityhour'><?=lang('voc.i18n_activity_hour')?></a></td>
+			<td><a href = '#charttotalactivitywday'><?=lang('voc.i18n_activity_wday')?></a></td>
+			<td><a href = '#charttotalactivityweek'><?=lang('voc.i18n_activity_week')?></a></td>
+			<td><a href = '#charttotalactivitymonth'><?=lang('voc.i18n_activity_month')?></a></td>
+		</tr>
+		<tr>
+			<td><a href = '#charttotalactivityyear'><?=lang('voc.i18n_activity_year')?></a></td>
+			<td><a href = '#charttotaluploads'><?=lang('voc.i18n_uploads')?></a></td>
+			<td><a href = '#charttotalupsize'><?=lang('voc.i18n_upsize')?></a></td>
+			<td><a href = '#charttotalquality'><?=lang('voc.i18n_average_quality')?></a></td>
+		</tr>
+		<tr>
+			<td><a href = '#charttotalbytesxquality'><?=lang('voc.i18n_bytesxquality')?></a></td>
+			<td><a href = '#user_table'><?=lang('voc.i18n_users_table')?></a></td>
+			<td><a href = '#images_table'><?=lang('voc.i18n_images_table')?></a></td>
+		</tr>
+		</table>
+	</div>
+	
+	<br><br>
+	
 <!-- CHARTS -->
+
+	<a name = 'charttotaledits'></a>
+	
 	<table id = "charttable">
 	<tr>
 		<th class = 'only'><?=lang('voc.i18n_edits_evolution')?></th>
@@ -38,92 +75,149 @@ function tooglethis(chartname) {
 	<tr>
 		<td><div id='charttotaledits<?=$data['catid'][rawurldecode($categoryname)]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
-	<tr>
+	</table>
+	<br>
+	<table id = 'charttable'>
+	<tr><a name = 'charttotalbytes'></a>
+	
 		<th class = 'only'><?=lang('voc.i18n_content_evolution')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalbytes<?=$data['catid'][rawurldecode($categoryname)]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
-	<tr>
+	</table>
+	<br>
+	<table id = 'charttable'>
+	<tr><a name = 'charttotalusers'></a>
+	
 		<th class = 'only'><?=lang('voc.i18n_users')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalusers<?=$data['catid'][rawurldecode($categoryname)]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
-	<tr>
+	</table>
+	<br>
+	<table id = 'charttable'>
+	<tr><a name = 'charttotalpages'></a>
+	
 		<th class = 'only'><?=lang('voc.i18n_pages')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalpages<?=$data['catid'][rawurldecode($categoryname)]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
-	<tr>
+	</table>
+	<br>
+	<table id = 'charttable'>
+	<tr><a name = 'charttotalactivityhour'></a>
+	
 		<th class = 'only'><?=lang('voc.i18n_activity_hour')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalactivityhour<?=$data['catid'][rawurldecode($categoryname)]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
-	<tr>
+	</table>
+	<br>
+	<table id = 'charttable'>
+	<tr><a name = 'charttotalactivitywday'></a>
+	
 		<th class = 'only'><?=lang('voc.i18n_activity_wday')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalactivitywday<?=$data['catid'][rawurldecode($categoryname)]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
-	<tr>
+	</table>
+	<br>
+	<table id = 'charttable'>
+	<tr><a name = 'charttotalactivityweek'></a>
+	
 		<th class = 'only'><?=lang('voc.i18n_activity_week')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalactivityweek<?=$data['catid'][rawurldecode($categoryname)]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
-	<tr>
+	</table>
+	<br>
+	<table id = 'charttable'>
+	<tr><a name = 'charttotalactivitymonth'></a>
+	
 		<th class = 'only'><?=lang('voc.i18n_activity_month')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalactivitymonth<?=$data['catid'][rawurldecode($categoryname)]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
-	<tr>
+	</table>
+	<br>
+	<table id = 'charttable'>
+	<tr><a name = 'charttotalactivityyear'></a>
+	
 		<th class = 'only'><?=lang('voc.i18n_activity_year')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalactivityyear<?=$data['catid'][rawurldecode($categoryname)]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
+	</table>
 	<? if (!isset($data['catuploads'][rawurldecode($categoryname)])) echo "<!--";?>
-	<tr>
+	<br>
+	<table id = 'charttable'>
+	<tr><a name = 'charttotaluploads'></a>
+	
 		<th class = 'only'><?=lang('voc.i18n_uploads')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotaluploads<?=$data['catid'][rawurldecode($categoryname)]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
-	<tr>
+	</table>
+	<br>
+	<table id = 'charttable'>
+	<tr><a name = 'charttotalupsize'></a>
+	
 		<th class = 'only'><?=lang('voc.i18n_upsize')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalupsize<?=$data['catid'][rawurldecode($categoryname)]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
+	</table>
 	<? if (!isset($data['catuploads'][rawurldecode($categoryname)])) echo "-->";?>
 	<? if (!isset($data['cataveragevalue'][rawurldecode($categoryname)])) echo "<!--";?>
-	<tr>
+	<br>
+	<table id = 'charttable'>
+	<tr><a name = 'charttotalquality'></a>
+	
 		<th class = 'only'><?=lang('voc.i18n_average_quality')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalquality<?=$data['catid'][rawurldecode($categoryname)]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
-	<tr>
+	</table>
+	<br>
+	<table id = 'charttable'>
+	<tr><a name = 'charttotalbytesxquality'></a>
+	
 		<th class = 'only'><?=lang('voc.i18n_bytesxquality')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalbytesxquality<?=$data['catid'][rawurldecode($categoryname)]?>' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block; display: block; margin: 0 auto;'></div></td>
 	</tr>
+	</table>
 	<? if (!isset($data['cataveragevalue'][rawurldecode($categoryname)])) echo "-->";?>
+	<br>
+	<table id = 'charttable'>
 	
-	<tr>
+	<tr><a name = 'user_table'></a>
+	
 		<th class = 'only'><?=lang('voc.i18n_users')?></th>
 	</tr>
 	<tr>
 		<td><div id = "user_table<?=$data['catid'][rawurldecode($categoryname)]?>"></div></td>
 	</tr>
 	
+	</table>
 	<? if(!isset($data['catimages'][rawurldecode($categoryname)])) echo "<!--";?>
-	<tr>
+	
+	<br>
+	<table id = 'charttable'>
+	<tr><a name = 'images_table'></a>
+	
 		<th class = 'only'><?=lang('voc.i18n_images')?></th>
 	</tr>
 	<tr>
@@ -146,8 +240,7 @@ function tooglethis(chartname) {
 			<?
 				foreach(array_keys($data['catedits'][rawurldecode($categoryname)]) as $key){
 					echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
-						$data['catedits'][rawurldecode($categoryname)][$key].
-						"]";
+						$data['catedits'][rawurldecode($categoryname)][$key]."]";
 					if($key != end(array_keys($data['catedits'][rawurldecode($categoryname)]))) echo ",";
 				}
 			?>
@@ -470,7 +563,7 @@ function tooglethis(chartname) {
 			data<?=$data['catid'][rawurldecode($categoryname)]?>.addRows([
 			<? 
 				foreach(array_keys($data['catuser'][rawurldecode($categoryname)]) as $key){
-					echo "['".$key."','".
+					echo "['".anchor("filters_form/filter/".$this->session->userdata('analysis')."/user/".$key, $key, array('target' => '_blank'))."','".
 						$data['userrealname'][$key]."',".
 						round(end($data['catuseredits'][rawurldecode($categoryname)][$key]), 2).",".
 						round(end($data['catuseredits'][rawurldecode($categoryname)][$key])/end($data['catedits'][rawurldecode($categoryname)]), 2).",";
@@ -489,7 +582,10 @@ function tooglethis(chartname) {
 
 
 			var table<?=$data['catid'][rawurldecode($categoryname)]?> = new google.visualization.Table(document.getElementById('user_table<?=$data['catid'][rawurldecode($categoryname)]?>'));
-			table<?=$data['catid'][rawurldecode($categoryname)]?>.draw(data<?=$data['catid'][rawurldecode($categoryname)]?>, {showRowNumber: true});
+			table<?=$data['catid'][rawurldecode($categoryname)]?>.draw(data<?=$data['catid'][rawurldecode($categoryname)]?>, {showRowNumber: true,
+						page: 'enable',
+						allowHtml: true,
+						pageSize: 20});
 			
 		}
 	</script>

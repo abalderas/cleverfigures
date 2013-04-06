@@ -464,7 +464,7 @@ function tooglethis(chartname) {
 			data<?=$data['pageid'][rawurldecode($pagename)]?>.addRows([
 			<? 
 				foreach(array_keys($data['pageuser'][rawurldecode($pagename)]) as $key){
-					echo "['".$key."','".
+					echo "['".anchor("filters_form/filter/".$this->session->userdata('analysis')."/user/".$key, $key, array('target' => '_blank'))."','".
 						$data['userrealname'][rawurldecode($key)]."',".
 						round(end($data['pageuseredits'][rawurldecode($pagename)][$key]), 2).",".
 						round(end($data['pageusereditscount'][rawurldecode($pagename)][$key])/end($data['pageedits'][rawurldecode($pagename)]), 2).",";
@@ -489,7 +489,11 @@ function tooglethis(chartname) {
 
 
 			var table<?=$data['pageid'][rawurldecode($pagename)]?> = new google.visualization.Table(document.getElementById('user_table<?=$data['pageid'][rawurldecode($pagename)]?>'));
-			table<?=$data['pageid'][rawurldecode($pagename)]?>.draw(data<?=$data['pageid'][rawurldecode($pagename)]?>, {showRowNumber: true});
+			table<?=$data['pageid'][rawurldecode($pagename)]?>.draw(data<?=$data['pageid'][rawurldecode($pagename)]?>, {
+						showRowNumber: true,
+						page: 'enable',
+						allowHtml: true,
+						pageSize: 20});
 			
 			<?
 			if(isset($data['pagecat'][rawurldecode($pagename)])){
@@ -497,7 +501,7 @@ function tooglethis(chartname) {
 				catdata".$data['pageid'][rawurldecode($pagename)].".addColumn('string', 'Name');
 				catdata".$data['pageid'][rawurldecode($pagename)].".addRows([";
 					foreach(array_keys($data['pagecat'][rawurldecode($pagename)]) as $key){
-						echo "['".$key."']\n";
+						echo "['".anchor("filters_form/filter/".$this->session->userdata('analysis')."/category/".$key, $key, array('target' => '_blank'))."']\n";
 						
 						if($key != end(array_keys($data['pagecat'][rawurldecode($pagename)]))) echo ",";
 					}
@@ -505,7 +509,11 @@ function tooglethis(chartname) {
 
 
 				var cattable".$data['pageid'][rawurldecode($pagename)]." = new google.visualization.Table(document.getElementById('categories_table".$data['pageid'][rawurldecode($pagename)]."'));
-				cattable".$data['pageid'][rawurldecode($pagename)].".draw(catdata".$data['pageid'][rawurldecode($pagename)].", {showRowNumber: true});";
+				cattable".$data['pageid'][rawurldecode($pagename)].".draw(catdata".$data['pageid'][rawurldecode($pagename)].", {
+						showRowNumber: true,
+						page: 'enable',
+						allowHtml: true,
+						pageSize: 20});";
 			}
 			?>
 		}
