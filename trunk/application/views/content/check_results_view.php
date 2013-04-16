@@ -39,6 +39,14 @@ function tooglethis(chartname) {
 }﻿
 </script>
 
+<script>
+	html2canvas(document.body, {
+		onrendered: function(canvas) {
+			document.body.appendChild(canvas);
+		}
+	});
+</script>
+
 
 <!-- CHARTS SCRIPTS -->
 
@@ -538,8 +546,10 @@ function tooglethis(chartname) {
 			data.addColumn('number', 'Bytes %');
 			data.addColumn('number', 'Bytes in articles');
 			data.addColumn('number', 'Bytes in articles %');
-			data.addColumn('number', 'Uploads');
-			data.addColumn('number', 'Uploads %');
+			<? if(isset($data['useruploads'])) echo "
+				data.addColumn('number', 'Uploads');
+				data.addColumn('number', 'Uploads %');";
+			?>
 			<? if(isset($data['useraverage'])) echo "
 				data.addColumn('number', 'Average Grade');
 				data.addColumn('number', 'Standard Deviation');
@@ -561,9 +571,11 @@ function tooglethis(chartname) {
 						round(end($data['userbytes'][$key]), 3).",".
 						round((end($data['userbytes'][$key])/end($data['totalbytes']))*100, 2).",".
 						round(end($data['userbytes_art'][$key]), 3).",".
-						round((end($data['userbytes_art'][$key])/end($data['totalbytes_art']))*100, 2).",".
-						round(end($data['useruploads'][$key]), 3).",".
+						round((end($data['userbytes_art'][$key])/end($data['totalbytes_art']))*100, 2);
+					if(isset($data['useruploads'])){
+						echo ", ".round(end($data['useruploads'][$key]), 3).",".
 						round((end($data['useruploads'][$key]) / end($data['totaluploads']))*100, 2);
+					}
 					if(isset($data['useraverage'])){
 						if(isset($data['useraverage'][$data['userid'][$key]])) 
 							echo ",".round(end($data['useraverage'][$data['userid'][$key]]), 2).",".
@@ -695,7 +707,9 @@ function tooglethis(chartname) {
 			?>
 		}
 	</script>
-	<script>hideoverlay();</script>
+	<script>
+		hideoverlay();
+	</script>
 	
 <!-- CHARTS -->
 
@@ -864,8 +878,8 @@ function tooglethis(chartname) {
 	<tr>
 		<td><div id='charttotalcategories' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block;'></div></td>
 	</tr>
-	<?if(!isset($data['totalcategories'])) echo "-->";?>
 	</table>
+	<?if(!isset($data['totalcategories'])) echo "-->";?>
 	
 	<br><br>
 	
@@ -1045,6 +1059,10 @@ function tooglethis(chartname) {
 	</table>
 	<?if(!isset($data['catedits'])) echo "-->";?>
 	
+	
+	<script>
+		html2canvas('charttable');
+	</script>
 	
 <!-- [2] www.christophermonnat.com/2008/08/generating-pdf-files-using-codeigniter -->
 <!--[2] TO_DO: generate pdf-->

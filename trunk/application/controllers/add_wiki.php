@@ -46,11 +46,11 @@ class Add_wiki extends CI_Controller {
 		}
 		else{
 			//VALIDATING FORM
-			$this->form_validation->set_rules('wiki_name', lang('voc.i18n_wiki_name'), 'required|alpha_dash|xss_clean');
-			$this->form_validation->set_rules('dbname', lang('voc.i18n_dbname'), 'required|alpha_dash|xss_clean');
-			$this->form_validation->set_rules('dbserver', lang('voc.i18n_dbserver'), 'required|alpha_dash|xss_clean');
+			$this->form_validation->set_rules('wiki_name', lang('voc.i18n_wiki_name'), 'required|xss_clean');
+			$this->form_validation->set_rules('dbname', lang('voc.i18n_dbname'), 'required|xss_clean');
+			$this->form_validation->set_rules('dbserver', lang('voc.i18n_dbserver'), 'required|xss_clean');
 			$this->form_validation->set_rules('dbpassword', lang('voc.i18n_dbpassword'), 'required|xss_clean');
-			$this->form_validation->set_rules('dbuser', lang('voc.i18n_dbuser'), 'required|alpha_dash|xss_clean');
+			$this->form_validation->set_rules('dbuser', lang('voc.i18n_dbuser'), 'required|xss_clean');
 
 			//IF INVALID FORM
 			if ($this->form_validation->run() == FALSE){
