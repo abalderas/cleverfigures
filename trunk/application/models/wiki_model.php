@@ -365,9 +365,7 @@ class Wiki_model extends CI_Model{
    			
    			//USEFUL VARIABLES
    			
-   			$LAST_PAGE_SIZE = ($row->page_is_new == 0) ? end($pagebytes[$row->page_title]) : 0;
    			$LAST_PAGEBYTES_ARRAY = $pagebytes;
-   			$tamdiff = $row->rev_len - $LAST_PAGE_SIZE;
    			
    			//RELATION ARRAYS
    			
@@ -377,7 +375,7 @@ class Wiki_model extends CI_Model{
 			//USER INFORMATION
 			
 			$usereditscount		[$row->user_name] += 1;								// Counts the total editions per user
-			$userbytescount		[$row->user_name] += $tamdiff;
+			$userbytescount		[$row->user_name] += $row->rev_len;
 			
 			if($row->page_is_new == 1){
 				$usercreationcount[$row->user_name] += 1;							// Counts number of pages created by the user
@@ -394,7 +392,7 @@ class Wiki_model extends CI_Model{
 				
 			if ($row->page_namespace == 0){											// If article
 				$usereditscount_art	[$row->user_name] += 1;								// Counts total article editions per user
-				$userbytescount_art	[$row->user_name] += $tamdiff;							// Counts total bytes per user 
+				$userbytescount_art	[$row->user_name] += $row->rev_len;							// Counts total bytes per user 
 					
 				$useredits_art		[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $usereditscount_art[$row->user_name];	// Editions of article per user/date
 				$userbytes_art		[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $userbytescount_art[$row->user_name];	// Bytes per user/date
@@ -414,8 +412,8 @@ class Wiki_model extends CI_Model{
 			$pageid			[$row->page_title] = $row->page_id;
 			$pageeditscount		[$row->page_title] += 1;							// Count of the total editions per page
 			$pageusereditscount	[$row->page_title][$row->user_name] += 1;					// Count of the total editions per page & user
-			$pagebytescount		[$row->page_title] += $tamdiff;							// Count of the total bytes per page
-			$pageuserbytescount	[$row->page_title][$row->user_name] += $tamdiff;				// Count of the total bytes per page & user
+			$pagebytescount		[$row->page_title] += $row->rev_len;							// Count of the total bytes per page
+			$pageuserbytescount	[$row->page_title][$row->user_name] += $row->rev_len;				// Count of the total bytes per page & user
 				
 			$pageusercount	[$row->page_title][$this->mwtime_to_unix($row->rev_timestamp)] = count($pageuser[$row->page_title]);						// Users per page/date
 				
@@ -495,23 +493,23 @@ class Wiki_model extends CI_Model{
 			$totalusers_art[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_users_art);
 			
 			
-			$totalbytesdiff[$this->mwtime_to_unix($row->rev_timestamp)] = $tamdiff;
+			$totalbytesdiff[$this->mwtime_to_unix($row->rev_timestamp)] = $row->rev_len;
 			
-			$totalbytescount += $tamdiff;
+			$totalbytescount += $row->rev_len;
 			if($row->page_namespace == 0)
-				$totalbytesartcount += $tamdiff;
+				$totalbytesartcount += $row->rev_len;
 			if($row->page_namespace == 1)
-				$totalbytestalkcount += $tamdiff;
+				$totalbytestalkcount += $row->rev_len;
 			if($row->page_namespace == 2)
-				$totalbytesuscount += $tamdiff;
+				$totalbytesuscount += $row->rev_len;
 			if($row->page_namespace == 3)
-				$totalbytesustalkcount += $tamdiff;
+				$totalbytesustalkcount += $row->rev_len;
 			if($row->page_namespace == 6)
-				$totalbytesfilecount += $tamdiff;
+				$totalbytesfilecount += $row->rev_len;
 			if($row->page_namespace == 10)
-				$totalbytestempcount += $tamdiff;
+				$totalbytestempcount += $row->rev_len;
 			if($row->page_namespace == 14)
-				$totalbytescatcount += $tamdiff;
+				$totalbytescatcount += $row->rev_len;
 				
 			$totalbytes[$this->mwtime_to_unix($row->rev_timestamp)] = $totalbytescount;
 			$totalbytes_art[$this->mwtime_to_unix($row->rev_timestamp)] = $totalbytesartcount;
@@ -696,9 +694,7 @@ class Wiki_model extends CI_Model{
 				
 				//USEFUL VARIABLES
 				
-				$LAST_PAGE_SIZE = ($row->page_is_new == 0) ? end($pagebytes[$row->page_title]) : 0;
 				$LAST_PAGEBYTES_ARRAY = $pagebytes;
-				$tamdiff = $row->rev_len - $LAST_PAGE_SIZE;
 				
 				//RELATION ARRAYS
 				
@@ -713,7 +709,7 @@ class Wiki_model extends CI_Model{
 				
 				$usercatcount[$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = count($usercat[$row->user_name]);	// Categories per cat/date
 				$catusereditscount	[$row->cl_to][$row->user_name] += 1;					// Count of the total editions per cat & user
-				$catuserbytescount	[$row->cl_to][$row->user_name] += $tamdiff;				// Count of the total bytes per cat & user
+				$catuserbytescount	[$row->cl_to][$row->user_name] += $row->rev_len;				// Count of the total bytes per cat & user
 				$catuseredits		[$row->cl_to][$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $catusereditscount[$row->cl_to][$row->user_name];	// Count of editions per cat & user
 				$catuserbytes		[$row->cl_to][$row->user_name][$this->mwtime_to_unix($row->rev_timestamp)] = $catuserbytescount[$row->cl_to][$row->user_name];	// Bytes per cat/date
 				
