@@ -59,6 +59,16 @@ class User_model extends CI_Model{
 			return false;
    	}
    	
+   	function get_real_name($uname){
+		$result = $this->db->query("select user_realname from user where user_username = '$uname'")->result();
+		
+		if($result)
+			foreach($result as $row)
+				return $row->user_realname;
+		else
+			return false;
+   	}
+   	
    	function update_wiki_table(){
 		$query = $this->db->query('select wiki.wiki_name from wiki where wiki.wiki_name not in (select `user-wiki`.wiki_name from `user-wiki`)');
 		if($query->result())

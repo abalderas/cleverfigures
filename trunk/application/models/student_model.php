@@ -34,40 +34,66 @@ class Student_model extends CI_Model{
 		$cl->load->model('wiki_model');
    	}
    	
+   	function wikihash($user, $wiki, $pw){
+		$link = $this->connection_model->connect($this->wiki_model->wconnection($wiki));
+		if(!$link) 
+			die("student_login::Invalid database connection.");
+		
+		$query = $this->db->query("select user_password from user where user_username = '$user'");
+
+		if($query->result())
+			$hash = $row->user_password;
+		else
+			return false;
+					
+		$m = false;
+		$type = substr( $hash, 0, 3 );					
+		$access = false;
+
+		// Si estamos en modo de desarrollo, cualquier contraseña vale
+		if ( $type == ':A:' ) 
+		{
+			# Unsalted
+			if (md5( $pw ) === substr( $hash, 3 ))
+				$access = true;
+		} 
+		elseif ( $type == ':B:' ) 
+		{
+			# Salted
+			list( $salt, $realHash ) = explode( ':', substr( $hash, 3 ), 2 );
+			if (md5( $salt.'-'.md5( $pw ) ) == $realHash)						
+				$access = true;
+		} 
+		else 
+		{
+			# Old-style
+			if (md5($pw) === $hash)
+				$access = true;
+		}
+		
+		return $access;
+   	}
+   	
    	function login($uname, $pass){
 		$wikis = $this->db->query("select wiki_name from wiki")->result();
 		
 		$studentwikis = array();
 		
-		if($wikis)
+		if($wikis){
 			foreach($wikis as $row){
-				$link = $this->connection_model->connect($this->wiki_model->wconnection($row->wiki_name));
-				if(!$link) 
-					die("student_login::Invalid database connection.");
-				
-				$link -> from("user") 
-				-> where("user_name = '$uname'") 
-				-> where("user_password = '".MD5($pass)."'");
-	
-				$query = $link -> get();
-	
-				if($query->result())
-					$studentwikis[] = $wiki;
-			}
-		else
-			return false;
-		
-		if(empty($studentwikis))
-			return false;
-		else{
-			$sess_array = array('username' => $row -> user_name,
+				if($this->wikihash($uname, $row->wiki_name, $pass)){
+					$sess_array = array('username' => $uname,
 						'language' => $this->config->item('language'),
         					'is_student' => true
         				); 
+        				$this->session->set_userdata($sess_array);
         				
-        		$this->session->set_userdata($sess_array);
-			
-			return true;
+					return true;
+				}
+			}
+		}
+		else{
+			return false;
 		}
    	}
    	

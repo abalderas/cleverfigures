@@ -70,7 +70,12 @@ function tooglethis(chartname) {
 			data1.addColumn('number', 'Category');
 			data1.addRows([
 			<?
+				$csvarray[] = array('date', 'edits', 'edits_art', 'edits_talks', 'edits_userpage', 'edits_usertalks', 'edits_files', 'edits_templates', 'edits_categories');
 				foreach(array_keys($data['totaledits']) as $key){
+					$csvarray[] = array($key, $data['totaledits'][$key], $data['totaledits_art'][$key], $data['totaledits_talk'][$key], 
+						$data['totaledits_us'][$key], $data['totaledits_ustalk'][$key], $data['totaledits_file'][$key], 
+						$data['totaledits_temp'][$key], $data['totaledits_cat'][$key]);
+						
 					echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
 						$data['totaledits'][$key].", ".
 						$data['totaledits_art'][$key].", ".
@@ -83,6 +88,7 @@ function tooglethis(chartname) {
 						"]";
 					if($key != end(array_keys($data['totaledits']))) echo ",";
 				}
+				$this->csv_model->createcsv($csvarray, $aname, 'edits_evolution');
 			?>
 			]);
 
@@ -107,7 +113,14 @@ function tooglethis(chartname) {
 			data2.addColumn('number', 'Categories');
 			data2.addRows([
 			<?
+				$csvarray = array();
+				$csvarray[] = array('date', 'bytes', 'bytes_art', 'bytes_talks', 'bytes_userpage', 'bytes_usertalks', 'bytes_files', 'bytes_templates', 'bytes_categories');
 				foreach(array_keys($data['totalbytes']) as $key){
+				
+				$csvarray[] = array($key, $data['totalbytes'][$key], $data['totalbytes_art'][$key], $data['totalbytes_talk'][$key], 
+						$data['totalbytes_us'][$key], $data['totalbytes_ustalk'][$key], $data['totalbytes_file'][$key], 
+						$data['totalbytes_temp'][$key], $data['totalbytes_cat'][$key]);
+						
 					echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
 					$data['totalbytes'][$key].", ".
 					$data['totalbytes_art'][$key].", ".
@@ -120,6 +133,7 @@ function tooglethis(chartname) {
 					"]";
 					if($key != end(array_keys($data['totalbytes']))) echo ",";
 				}
+				$this->csv_model->createcsv($csvarray, $aname, 'bytes_evolution');
 			?>
 			]);
 
@@ -705,6 +719,73 @@ function tooglethis(chartname) {
 						pageSize: 20});";
 				}
 			?>
+			
+			<?if(isset($data['groups'])){?>
+				var groupdata = new google.visualization.DataTable();
+				
+				groupdata.addColumn('string', 'Group Name');
+				groupdata.addColumn('number', 'Edits');
+				groupdata.addColumn('number', 'Edits %');
+				groupdata.addColumn('number', 'Bytes');
+				groupdata.addColumn('number', 'Bytes %');
+			
+				<?if(isset($data['useraverage'])){?>
+					groupdata.addColumn('number', 'Average Grade');
+					groupdata.addColumn('number', 'Standard Deviation');
+				<?}?>
+			
+			
+				<?if(isset($data['groups'])){?>
+					groupdata.addRows([
+				<?}?>
+				
+				<?if(isset($data['groups'])){
+					foreach($data['groups'] as $key){
+						
+						$edits = 0;
+						$editsper = 0;
+						$bytes = 0;
+						$bytesper = 0;
+						
+						$members = $this->group_model->get_members($key);
+						if($members)
+							foreach($members as $member){
+								if(isset($data['useredits'][$member]))
+									$edits += round(end($data['useredits'][$member]));
+								if(isset($data['userbytes'][$member]))
+									$bytes += round(end($data['userbytes'][$member]));
+							}
+						
+						$editsper = round(($edits / end($data['totaledits'])) * 100, 2);
+						$bytesper = round(($bytes / end($data['totalbytes'])) * 100, 2);
+						
+						if($members){
+							echo "['".anchor("filters_form/filter/".$aname."/group/".$key, $key, array('target' => '_blank'))."', ".
+								$edits.",".$editsper.",".$bytes.",".$bytesper;
+							if(isset($data['useraverage'])) 
+								echo ", ".round(end($data['useraverage'][$key]), 3).",".
+									round((end($data['usersd'][$key])), 2);
+							if(isset($data['useraverage'])) 
+								echo ", ".round(end($data['useraverage'][$key]), 3).",".
+									round((end($data['usersd'][$key])), 2);
+						}
+						else
+							echo "['".$key."', 0, 0, 0 ,0";
+						
+						
+						echo "]\n";
+					
+						if($key != end(array_keys($data['groups']))) echo ",";
+					}
+						echo "]);
+						
+						var grouptable = new google.visualization.Table(document.getElementById('groups_table'));
+						grouptable.draw(groupdata, {showRowNumber: true,
+							page: 'enable',
+							allowHtml: true,
+							pageSize: 20});";
+				}?>
+			<?}?>
 		}
 	</script>
 	<script>
@@ -769,13 +850,22 @@ function tooglethis(chartname) {
 			<td><a href = '#user_table'><?=lang('voc.i18n_users_table')?></a></td>
 			<td><a href = '#pages_table'><?=lang('voc.i18n_pages_table')?></a></td>
 			<?
-				if(isset($data['totalcategories'])) 
-					echo "
-					<td><a href = '#categories_table'>".lang('voc.i18n_categories_table')."</a></td>
-					<td class = 'type' colspan = '3'>".lang('voc.i18n_tables')."</td>";
-				else
-					echo "
-					<td class = 'type' colspan = '4'>".lang('voc.i18n_tables')."</td>";
+				if(isset($data['totalcategories'])) {
+					echo "<td><a href = '#categories_table'>".lang('voc.i18n_categories_table')."</a></td>";
+					
+					if(isset($data['groups'])) 
+						echo "<td><a href = '#groups_table'>".lang('voc.i18n_groups_table')."</a></td>
+						<td class = 'type' colspan = '2'>".lang('voc.i18n_tables')."</td>";
+					else
+						echo "<td class = 'type' colspan = '3'>".lang('voc.i18n_tables')."</td>";
+					
+				}else{
+					if(isset($data['groups'])) 
+						echo "<td><a href = '#groups_table'>".lang('voc.i18n_groups_table')."</a></td>
+						<td class = 'type' colspan = '3'>".lang('voc.i18n_tables')."</td>";
+					else
+						echo "<td class = 'type' colspan = '4'>".lang('voc.i18n_tables')."</td>";
+				}
 			?>
 		</tr>
 		</table>
@@ -819,7 +909,7 @@ function tooglethis(chartname) {
 	
 	<table id = "charttable">
 	<tr>
-		<th class = 'only'><?=lang('voc.i18n_edits_evolution')?></th>
+		<th class = 'only'><?=lang('voc.i18n_edits_evolution')?> | <?=anchor("csv/$aname/edits_evolution.csv", 'csv')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotaledits' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block;'></div></td>
@@ -832,7 +922,7 @@ function tooglethis(chartname) {
 	
 	<table id = "charttable">
 	<tr>
-		<th class = 'only'><?=lang('voc.i18n_content_evolution')?></th>
+		<th class = 'only'><?=lang('voc.i18n_content_evolution')?> | <?=anchor("csv/$aname/bytes_evolution.csv", 'csv')?></th>
 	</tr>
 	<tr>
 		<td><div id='charttotalbytes' style='width: 600px; height: 500px; border: 0px; padding: 0px; margin:auto; display:block;'></div></td>
@@ -1059,6 +1149,19 @@ function tooglethis(chartname) {
 	</table>
 	<?if(!isset($data['catedits'])) echo "-->";?>
 	
+	<?if(!isset($data['groups'])) echo "<!--";?>
+	
+	<a name = 'groups_table'></a>
+	
+	<table id = 'charttable'>
+	<tr>
+		<th class = 'only'><?=lang('voc.i18n_groups_table')?></th>
+	</tr>
+	<tr>
+		<td><div id = 'groups_table'></div></td>
+	</tr>
+	</table>
+	<?if(!isset($data['groups'])) echo "-->";?>
 	
 	<script>
 		html2canvas('charttable');

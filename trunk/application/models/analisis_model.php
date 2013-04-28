@@ -30,6 +30,8 @@ class Analisis_model extends CI_Model{
 		$co->load->model('merging_model');
 		$ci =& get_instance();
 		$ci->load->model('wiki_model');
+		$cl =& get_instance();
+		$cl->load->model('csv_model');
    	}
    	
    	function register_analisis($wikiname, $colorname = "", $date){
@@ -60,6 +62,8 @@ class Analisis_model extends CI_Model{
 		delete_files("analisis/$analisis/");
 		rmdir("analisis/$analisis/");
 		unlink("analisis/$analisis.dat");
+		
+		$this->csv_model->destroy_csvs($analisis);
 		
 		return true;
    	}

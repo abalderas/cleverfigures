@@ -66,6 +66,9 @@ function tooglethis(chartname) {
 	
 <!-- CHARTS -->
 
+
+<h3><?=$categoryname?></h3>
+
 	<a name = 'charttotaledits'></a>
 	
 	<table id = "charttable">

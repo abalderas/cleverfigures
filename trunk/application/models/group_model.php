@@ -53,8 +53,14 @@ class Group_model extends CI_Model{
    	}
    	
    	function there_are_groups(){ return ($this->db->query("select * from groups")->result()) ? true : false; }
-   	function get_groups(){
-		$check = $this->db->query("select * from groups");
+   	function get_groups($wiki = false){
+		if($wiki){
+			$check = $this->db->query("select * from groups where wiki_name = '$wiki'");
+		}
+		else{
+			$check = $this->db->query("select * from groups");
+		}
+		
    		if(!$check->result())
    			return false;
    		else
@@ -76,15 +82,23 @@ class Group_model extends CI_Model{
    	function join_group($groupname, $membername){
 		$check = $this->db->get_where('groups', array('group_name' => $groupname));
    		if(!$check)
-   			return false;
+   			die('Groups error');
    		else{
-			$check = $this->db->get_where('member', array('member_name' => $membername, 'member_group' => $groupname));
+			$check = $this->db->get_where('member', array('member_name' => $membername));
 			if(!$check->result()){
 				$sql = array('member_name' => $membername,
 						'member_group' => $groupname
 					);
 	
 				$this->db->insert('member', $sql);
+			}
+			else{
+				$sql = array('member_name' => $membername,
+						'member_group' => $groupname
+					);
+	
+				$this->db->where('member_name', $membername);
+				$this->db->update('member', $sql); 
 			}
    		}
    	}

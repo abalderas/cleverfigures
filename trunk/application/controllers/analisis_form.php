@@ -27,6 +27,7 @@ class Analisis_form extends CI_Controller {
       		$this->load->model('color_model');
       		$this->load->model('analisis_model');
       		$this->load->model('user_model');
+      		$this->load->model('group_model');
       		$this->lang->load('voc', $this->session->userdata('language'));
    	}
 
@@ -129,7 +130,10 @@ class Analisis_form extends CI_Controller {
 		//IF NO DATA, END AND RETURN -1 ERROR
 		if(!$wiki_result)
 			return -1;
-			
+		
+		//GET GROUPS
+		$groups = $this->group_model->get_groups($analisis_data['wiki']);
+		
 		//IF COLOR SET
 		if($analisis_data['color'] != lang('voc.i18n_no_color')){
 			
@@ -148,11 +152,17 @@ class Analisis_form extends CI_Controller {
 				return -3;
 			
 			//WRITE ANALYSIS RESULT TO FILE INCLUDING COLOR AND EXTRA INFO
-			write_file("analisis/$name.dat", serialize(array_merge($wiki_result, $assess_result, $extra)));
+			if($groups)
+				write_file("analisis/$name.dat", serialize(array_merge($wiki_result, $assess_result, $extra, array('groups' => $groups))));
+			else
+				write_file("analisis/$name.dat", serialize(array_merge($wiki_result, $assess_result, $extra)));
 		}
 		else{
 			//WRITE ANALYSIS RESULT TO FILE
-			write_file("analisis/$name.dat", serialize(array_merge($wiki_result)));
+			if($groups)
+				write_file("analisis/$name.dat", serialize(array_merge($wiki_result, array('groups' => $groups))));
+			else
+				write_file("analisis/$name.dat", serialize(array_merge($wiki_result)));
 		}
 		
 		//RETURN 1, SUCCESS

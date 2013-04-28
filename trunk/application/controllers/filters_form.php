@@ -50,6 +50,7 @@ class Filters_form extends CI_Controller {
 			//GET ANALISIS DATA
 			$adata = $this->analisis_model->get_analisis_data($analysis);
 			
+			$this->session->set_flashdata(array('aname' => $analysis));
 			//IF NO DATA, ERROR
 			if(!$adata)
 				die('No such analisis data.');
@@ -63,18 +64,18 @@ class Filters_form extends CI_Controller {
 			//IF FILTERING BY USER
 			if($type == 'user')
 				//LOAD TABBED VIEW FOR USERS
-				$this->load->view('content/useranalisis_view', array('data' => $adata, 'username' => $name));
+				$this->load->view('content/useranalisis_view', array('data' => $adata, 'username' => $name, 'aname' => $analysis));
 			//IF FILTERING BY PAGE
 			else if($type == 'page')
 				//LOAD TABBED VIEW FOR PAGES
-				$this->load->view('content/pageanalisis_view', array('data' => $adata, 'pagename' => $name));
+				$this->load->view('content/pageanalisis_view', array('data' => $adata, 'pagename' => $name, 'aname' => $analysis));
 			//IF FILTERING BY CATEGORY
 			else if($type == 'category')
 				//LOAD TABBED VIEW FOR CATEGORIES
-				$this->load->view('content/categoryanalisis_view', array('data' => $adata, 'categoryname' => $name));			
+				$this->load->view('content/categoryanalisis_view', array('data' => $adata, 'categoryname' => $name, 'aname' => $analysis));			
 			//IF FILTERING BY GROUP
 			else if($type == 'group')
-				$this->load->view('content/tabbed_view', array('data' => $adata, 'name' => $name));
+				$this->load->view('content/groupanalysis_view', array('data' => $adata, 'groupname' => $name, 'aname' => $analysis));
 			
 			else{
 				//FILTER NOT DEFINED, ERROR

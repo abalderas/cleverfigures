@@ -34,12 +34,24 @@ class Csv_model extends CI_Model{
    	   	$this->load->helper('file');
    	}
    	
+   	private function delTree($dir) {
+		$files = glob( $dir . '*', GLOB_MARK );
+		foreach( $files as $file ){
+			if( substr( $file, -1 ) == '/' )
+				delTree( $file );
+			else
+				unlink( $file );
+		}
+		rmdir( $dir );
+	} 
+   	
    	/**
 	* Generatting CSV formatted string from an array.
 	* By Sergey Gurevich.
 	*/
-	function array_to_csv($array, $header_row = true, $col_sep = ",", $row_sep = "\n", $qut = '"')
+	function array_to_csv($array, $header_row = false, $col_sep = ",", $row_sep = "\n", $qut = '"')
 	{
+		$output = "";
 		if (!is_array($array) or !is_array($array[0])) return false;
 		
 		//Header row.
@@ -69,9 +81,15 @@ class Csv_model extends CI_Model{
 		return $output;
 	}
 	
-	function createcsv($arr, $name){
+	function createcsv($arr, $analysis_name, $name){
 		$str = $this->array_to_csv($arr);
-		write_file("./csv/$name.csv");
+		if(!file_exists("csv/$analysis_name/"))
+			mkdir("csv/$analysis_name/");
+		write_file("csv/$analysis_name/$name.csv", $str);
+	}
+	
+	function destroy_csvs($analysis_name){
+		$this->delTree("csv/$analysis_name/");
 	}
 	
 }

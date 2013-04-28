@@ -208,4 +208,5 @@ $lang['voc.i18n_activity_charts'] = "Activity Charts";
 $lang['voc.i18n_quality_charts'] = "Quality Charts";
 $lang['voc.i18n_uploads_charts'] = "Uploads Charts";
 $lang['voc.i18n_tables'] = "Tables";
+$lang['voc.i18n_groups_table'] = "Groups Table";
 ?>

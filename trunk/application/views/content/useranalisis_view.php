@@ -33,6 +33,8 @@ function tooglethis(chartname) {
 </script>
 
 
+<h3><?=$username?></h3>
+
 <!-- CHARTS -->
 	
 	<table id = "charttable">

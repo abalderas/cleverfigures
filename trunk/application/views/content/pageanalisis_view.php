@@ -32,6 +32,8 @@ function tooglethis(chartname) {
 </script>
 
 
+<h3><?=$pagename?></h3>
+
 <!-- CHARTS -->
 	
 	<table id = "charttable">

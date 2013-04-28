@@ -47,7 +47,7 @@ if($this->session->userdata('is_admin')){
 		                'english'    => lang('voc.i18n_english'),
 		                'french'   => lang('voc.i18n_french'),
 		                'russian' => lang('voc.i18n_russian'),
-		                'german' => lang('voc.i18n_german'),
+		                'german' => lang('voc.i18n_german')
 		             );
 		?>
 	<table><tr>
@@ -113,7 +113,8 @@ if($this->session->userdata('is_admin')){
 				foreach($wikilist as $wiki)
 					echo "<tr><td>".$wiki."</td><td>".anchor("groups/getgroups/$wiki",lang('voc.i18n_manage_groups'))
 					."  |  ".anchor("delete_wiki/deletewiki/$wiki",lang('voc.i18n_delete'), array('onClick' => "return confirm('".lang('voc.i18n_delete_wiki_confirmation')."');"))
-					."  |  ".anchor("parameters/openparameters/$wiki",lang('voc.i18n_parameters'))."</td></tr>";
+					."  |  ".anchor("parameters/openparameters/$wiki",lang('voc.i18n_parameters'))
+					."</td></tr>";
 				echo "</table><br>";
 			}
 		?>
