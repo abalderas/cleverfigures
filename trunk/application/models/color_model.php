@@ -45,14 +45,14 @@ class Color_model extends CI_Model{
 		return (float) sqrt($fVariance);
 	}
 	
-   	function countdim($array){
+   	/*function countdim($array){
 		if (is_array(reset($array)))
 			$return = $this->countdim(reset($array)) + 1;
 		else
 			$return = 1;
 
 		return $return;
-	}
+	}*/
 	
    	private function wconnection($colorname){
    		//Consultamos la conexión

@@ -25,6 +25,15 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	}
 </script>
 
+<script type="text/javascript" src="application/libraries/mbostock/prtovis.js"></script>
+    <style type="text/css">
+
+#fig {
+  width: 880px;
+  height: 400px;
+}
+
+    </style>
 
 
 <script language="javascript">
@@ -70,11 +79,11 @@ function tooglethis(chartname) {
 			data1.addColumn('number', 'Category');
 			data1.addRows([
 			<?
-				$csvarray[] = array('date', 'edits', 'edits_art', 'edits_talks', 'edits_userpage', 'edits_usertalks', 'edits_files', 'edits_templates', 'edits_categories');
+				//$csvarray[] = array('date', 'edits', 'edits_art', 'edits_talks', 'edits_userpage', 'edits_usertalks', 'edits_files', 'edits_templates', 'edits_categories');
 				foreach(array_keys($data['totaledits']) as $key){
-					$csvarray[] = array($key, $data['totaledits'][$key], $data['totaledits_art'][$key], $data['totaledits_talk'][$key], 
+					/*$csvarray[] = array($key, $data['totaledits'][$key], $data['totaledits_art'][$key], $data['totaledits_talk'][$key], 
 						$data['totaledits_us'][$key], $data['totaledits_ustalk'][$key], $data['totaledits_file'][$key], 
-						$data['totaledits_temp'][$key], $data['totaledits_cat'][$key]);
+						$data['totaledits_temp'][$key], $data['totaledits_cat'][$key]);*/
 						
 					echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
 						$data['totaledits'][$key].", ".
@@ -88,7 +97,7 @@ function tooglethis(chartname) {
 						"]";
 					if($key != end(array_keys($data['totaledits']))) echo ",";
 				}
-				$this->csv_model->createcsv($csvarray, $aname, 'edits_evolution');
+				//$this->csv_model->createcsv($csvarray, $aname, 'edits_evolution');
 			?>
 			]);
 
@@ -113,13 +122,13 @@ function tooglethis(chartname) {
 			data2.addColumn('number', 'Categories');
 			data2.addRows([
 			<?
-				$csvarray = array();
-				$csvarray[] = array('date', 'bytes', 'bytes_art', 'bytes_talks', 'bytes_userpage', 'bytes_usertalks', 'bytes_files', 'bytes_templates', 'bytes_categories');
+				/*$csvarray = array();
+				$csvarray[] = array('date', 'bytes', 'bytes_art', 'bytes_talks', 'bytes_userpage', 'bytes_usertalks', 'bytes_files', 'bytes_templates', 'bytes_categories');*/
 				foreach(array_keys($data['totalbytes']) as $key){
 				
-				$csvarray[] = array($key, $data['totalbytes'][$key], $data['totalbytes_art'][$key], $data['totalbytes_talk'][$key], 
+				/*$csvarray[] = array($key, $data['totalbytes'][$key], $data['totalbytes_art'][$key], $data['totalbytes_talk'][$key], 
 						$data['totalbytes_us'][$key], $data['totalbytes_ustalk'][$key], $data['totalbytes_file'][$key], 
-						$data['totalbytes_temp'][$key], $data['totalbytes_cat'][$key]);
+						$data['totalbytes_temp'][$key], $data['totalbytes_cat'][$key]);*/
 						
 					echo "[new Date(".date('Y', $key).", ".date('m', $key).", ".date('d', $key).", ".date('H', $key).", ".date('i', $key).", ".date('s', $key)."), ".
 					$data['totalbytes'][$key].", ".
@@ -133,7 +142,7 @@ function tooglethis(chartname) {
 					"]";
 					if($key != end(array_keys($data['totalbytes']))) echo ",";
 				}
-				$this->csv_model->createcsv($csvarray, $aname, 'bytes_evolution');
+				//$this->csv_model->createcsv($csvarray, $aname, 'bytes_evolution');
 			?>
 			]);
 
@@ -787,6 +796,7 @@ function tooglethis(chartname) {
 				}?>
 			<?}?>
 		}
+
 	</script>
 	<script>
 		hideoverlay();
@@ -799,7 +809,7 @@ function tooglethis(chartname) {
 	<div id = 'chartmenu' style = 'width:800px; display:block; margin:auto;'>
 		<table id = 'variabletable'>
 		<tr>
-			<th colspan = '6'><?=lang('voc.i18n_chart_menu')?></th></tr>
+			<th colspan = '6'><?=lang('voc.i18n_chart_menu')?></th>
 		</tr>
 		<tr>
 			<td><a href = '#chartfinaledits'><?=lang('voc.i18n_edits')?></a></td>
@@ -1163,9 +1173,18 @@ function tooglethis(chartname) {
 	</table>
 	<?if(!isset($data['groups'])) echo "-->";?>
 	
-	<script>
+	<table id = 'charttable'>
+	<tr>
+		<th class = 'only'><?=lang('voc.i18n_relations_graph')?></th>
+	</tr>
+	<tr>
+		<td style = "text-align:center; width:100%;"><?=anchor("charts/relations_graph/$aname", lang('voc.i18n_open_relations_graph'), array('target' => '_blank'))?></td>
+	</tr>
+	</table>
+	
+	<!--<script>
 		html2canvas('charttable');
-	</script>
+	</script>-->
 	
 <!-- [2] www.christophermonnat.com/2008/08/generating-pdf-files-using-codeigniter -->
 <!--[2] TO_DO: generate pdf-->

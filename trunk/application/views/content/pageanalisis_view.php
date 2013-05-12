@@ -31,6 +31,16 @@ function tooglethis(chartname) {
 }﻿
 </script>
 
+<script type="text/javascript" src="application/libraries/mbostock/prtovis.js"></script>
+    <style type="text/css">
+
+#fig {
+  width: 880px;
+  height: 400px;
+}
+
+    </style>
+
 
 <h3><?=$pagename?></h3>
 
@@ -135,6 +145,15 @@ function tooglethis(chartname) {
 		<td><div id = "categories_table<?=$data['pageid'][rawurldecode($pagename)]?>"></div></td>
 	</tr>
 	<? if(!isset($data['pagecat'][rawurldecode($pagename)])) echo "-->";?>
+	</table>
+	
+	<table id = 'charttable'>
+	<tr>
+		<th class = 'only'><?=lang('voc.i18n_relations_graph')?></th>
+	</tr>
+	<tr>
+		<td style = "text-align:center; width:100%;"><?=anchor("charts/relations_graph/$aname/page/$pagename", lang('voc.i18n_open_relations_graph'), array('target' => '_blank'))?></td>
+	</tr>
 	</table>
 	
 	
@@ -466,7 +485,7 @@ function tooglethis(chartname) {
 			data<?=$data['pageid'][rawurldecode($pagename)]?>.addRows([
 			<? 
 				foreach(array_keys($data['pageuser'][rawurldecode($pagename)]) as $key){
-					echo "['".anchor("filters_form/filter/".$this->session->userdata('analysis')."/user/".$key, $key, array('target' => '_blank'))."','".
+					echo "['".anchor("filters_form/filter/".$aname."/user/".$key, $key, array('target' => '_blank'))."','".
 						$data['userrealname'][rawurldecode($key)]."',".
 						round(end($data['pageuseredits'][rawurldecode($pagename)][$key]), 2).",".
 						round(end($data['pageusereditscount'][rawurldecode($pagename)][$key])/end($data['pageedits'][rawurldecode($pagename)]), 2).",";
@@ -503,7 +522,7 @@ function tooglethis(chartname) {
 				catdata".$data['pageid'][rawurldecode($pagename)].".addColumn('string', 'Name');
 				catdata".$data['pageid'][rawurldecode($pagename)].".addRows([";
 					foreach(array_keys($data['pagecat'][rawurldecode($pagename)]) as $key){
-						echo "['".anchor("filters_form/filter/".$this->session->userdata('analysis')."/category/".$key, $key, array('target' => '_blank'))."']\n";
+						echo "['".anchor("filters_form/filter/".$aname."/category/".$key, $key, array('target' => '_blank'))."']\n";
 						
 						if($key != end(array_keys($data['pagecat'][rawurldecode($pagename)]))) echo ",";
 					}

@@ -29,6 +29,16 @@ function tooglethis(chartname) {
 }﻿
 </script>
 
+<script type="text/javascript" src="application/libraries/mbostock/prtovis.js"></script>
+    <style type="text/css">
+
+#fig {
+  width: 880px;
+  height: 400px;
+}
+
+    </style>
+
 <a name = 'top'></a>
 	
 	<div id = 'chartmenu' style = 'width:800px; display:block; margin:auto;'>
@@ -227,6 +237,15 @@ function tooglethis(chartname) {
 		<td><div id = "img_table<?=$data['catid'][rawurldecode($categoryname)]?>"></div></td>
 	</tr>
 	<? if(!isset($data['catimages'][rawurldecode($categoryname)])) echo "-->";?>
+	</table>
+	
+	<table id = 'charttable'>
+	<tr>
+		<th class = 'only'><?=lang('voc.i18n_relations_graph')?></th>
+	</tr>
+	<tr>
+		<td style = "text-align:center; width:100%;"><?=anchor("charts/relations_graph/$aname/category/$categoryname", lang('voc.i18n_open_relations_graph'), array('target' => '_blank'))?></td>
+	</tr>
 	</table>
 	
 	
@@ -566,7 +585,7 @@ function tooglethis(chartname) {
 			data<?=$data['catid'][rawurldecode($categoryname)]?>.addRows([
 			<? 
 				foreach(array_keys($data['catuser'][rawurldecode($categoryname)]) as $key){
-					echo "['".anchor("filters_form/filter/".$this->session->userdata('analysis')."/user/".$key, $key, array('target' => '_blank'))."','".
+					echo "['".anchor("filters_form/filter/".$aname."/user/".$key, $key, array('target' => '_blank'))."','".
 						$data['userrealname'][$key]."',".
 						round(end($data['catuseredits'][rawurldecode($categoryname)][$key]), 2).",".
 						round(end($data['catuseredits'][rawurldecode($categoryname)][$key])/end($data['catedits'][rawurldecode($categoryname)]), 2).",";

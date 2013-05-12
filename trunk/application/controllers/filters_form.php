@@ -50,7 +50,7 @@ class Filters_form extends CI_Controller {
 			//GET ANALISIS DATA
 			$adata = $this->analisis_model->get_analisis_data($analysis);
 			
-			$this->session->set_flashdata(array('aname' => $analysis));
+			$this->session->set_userdata(array('aname' => $analysis));
 			//IF NO DATA, ERROR
 			if(!$adata)
 				die('No such analisis data.');

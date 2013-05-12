@@ -78,6 +78,8 @@ class Options_form extends CI_Controller {
 			//LOAD ANALISIS DATA
 			$adata = $this->analisis_model->get_analisis_data($name);
 		
+			$this->session->set_userdata('analysis', $name);
+			
 			//CREATE HEADER ARRAY
 			$datah = array('title' => lang('voc.i18n_check_results'), 'aname' => $name, 'data' => $adata);
 			
@@ -85,8 +87,6 @@ class Options_form extends CI_Controller {
 			$this->load->view('templates/header_view', $datah);
 			$this->load->view('content/check_results_view', array('aname' => $name, 'data' => $adata));
 			$this->load->view('templates/footer_view');
-			
-			$this->session->set_userdata('analysis', $name);
 		}
 	}
 	

@@ -28,6 +28,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	<link href='http://fonts.googleapis.com/css?family=Playball&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Cinzel' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Donegal+One' rel='stylesheet' type='text/css'>
+    	<?=link_tag('css/ex.css');?>
 	<?
 		if($this->session->userdata('high_contrast')) 
 			echo link_tag('css/acstyles.css');

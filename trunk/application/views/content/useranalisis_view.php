@@ -32,6 +32,16 @@ function tooglethis(chartname) {
 }﻿
 </script>
 
+<script type="text/javascript" src="application/libraries/mbostock/prtovis.js"></script>
+    <style type="text/css">
+
+#fig {
+  width: 880px;
+  height: 400px;
+}
+
+    </style>
+
 
 <h3><?=$username?></h3>
 
@@ -138,6 +148,15 @@ function tooglethis(chartname) {
 		<td><div id = "img_table<?=$data['userid'][$username]?>"></div></td>
 	</tr>
 	<? if(!isset($data['userimages'][$username])) echo "-->";?>
+	</table>
+	
+	<table id = 'charttable'>
+	<tr>
+		<th class = 'only'><?=lang('voc.i18n_relations_graph')?></th>
+	</tr>
+	<tr>
+		<td style = "text-align:center; width:100%;"><?=anchor("charts/relations_graph/$aname/user/$username", lang('voc.i18n_open_relations_graph'), array('target' => '_blank'))?></td>
+	</tr>
 	</table>
 	
 	
@@ -466,7 +485,7 @@ function tooglethis(chartname) {
 			data<?=$data['userid'][$username]?>.addColumn('number', 'Standard Deviation');
 			data<?=$data['userid'][$username]?>.addRows([<? 
 				foreach(array_keys($data['userpage'][$username]) as $key){
-					echo "['".anchor("filters_form/filter/".$this->session->userdata('analysis')."/page/".$key, $key, array('target' => '_blank'))."','".
+					echo "['".anchor("filters_form/filter/".$aname."/page/".$key, $key, array('target' => '_blank'))."','".
 						utf8_encode($data['pagenamespace'][$key])."',".
 						round(end($data['pageuseredits'][$key][$username]), 2).",".
 						round(end($data['pageusereditscount'][$key][$username])/end($data['useredits'][$username]), 2).",";
@@ -503,7 +522,7 @@ function tooglethis(chartname) {
 				catdata".$data['userid'][$username].".addColumn('string', 'Name');
 				catdata".$data['userid'][$username].".addRows([";
 					foreach(array_keys($data['usercat'][$username]) as $key){
-						echo "['".anchor("filters_form/filter/".$this->session->userdata('analysis')."/category/".$key, $key, array('target' => '_blank'))."']\n";
+						echo "['".anchor("filters_form/filter/".$aname."/category/".$key, $key, array('target' => '_blank'))."']\n";
 						if($key != end(array_keys($data['usercat'][$username]))) echo ",";
 					}
 				echo "]);
