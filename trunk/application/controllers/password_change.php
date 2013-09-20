@@ -25,9 +25,9 @@ class Password_change extends CI_Controller {
       		parent::__construct();
       		$this->load->model('user_model');
       		$this->lang->load('voc', $this->session->userdata('language'));
-   	}
+ 	}
    	
-   	function index(){
+ 	function index(){
 		//IF SESSION EXPIRED, LOAD LOGIN VIEW
 		if(!$this->session->userdata('username')){
 			$datah = array('title' => lang('voc.i18n_login'));

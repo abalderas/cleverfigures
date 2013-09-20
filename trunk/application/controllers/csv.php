@@ -24,9 +24,9 @@ class Csv extends CI_Controller {
       		$this->load->model('csv_model');
       		$this->load->helper('file');
       		$this->lang->load('voc', $this->session->userdata('language'));
-   	}
+ 	}
    	
-   	//DOES NOTHING, JUST CHECKS SESSION IN CASE OF FAILURE
+ 	//DOES NOTHING, JUST CHECKS SESSION IN CASE OF FAILURE
 	function index(){
 		if(!$this->session->userdata('username'))
 			redirect('login/loadlogin/');
@@ -37,4 +37,4 @@ class Csv extends CI_Controller {
 		$this->csv_model->createcsv($arr, $name);
 		redirect("csv/$name.csv");
 	}
-} 
+}

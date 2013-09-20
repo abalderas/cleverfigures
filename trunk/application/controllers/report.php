@@ -24,7 +24,7 @@ class Report extends CI_Controller {
 	function Report(){
       		parent::__construct();
       		$this->lang->load('voc', $this->session->userdata('language'));
-   	}
+ 	}
 
 	function index(){
 		//IF SESSION EXPIRED

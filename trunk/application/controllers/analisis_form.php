@@ -205,14 +205,16 @@ class Analisis_form extends CI_Controller {
 			
 			//IN CASE OF ERRORS, PRINT ERRORS
 			if($valid_analisis == -1)
-				echo "<b>EMPTY WIKI. No analisis performed.</b>";
+				echo "<b>" . lang('voc.i18n_empty_wiki') . "</b>";
 			else if($valid_analisis == -2)
-				echo "<b>EMPTY QUALITATIVE DATA SOURCE. The qualitative data source that you chose is empty. Please select another.</b>";
+				echo "<b>" . lang('voc.i18n_empty_color') . "</b>";
 			else if($valid_analisis == -3)
-				echo "<b>INCOMPATIBLE QUALITATIVE DATA SOURCE. The qualitative data source that you chose is not compatible with the data in the wiki. Please select another.</b>";
+				echo "<b>" . lang('voc.i18n_incompatible_color') . "</b>";
 			else{
 				//PRINT TOTAL TIME
-				printf("Performed in %.02f seconds.</br>", (microtime(true)-$start));
+				printf(lang('voc.i18n_performed_in'), (microtime(true)-$start));
+				echo lang('voc.i18n_seconds');
+				echo "<br>";
 				ob_flush(); flush();
 			
 				//RECORD THE ANALYSIS IN THE DB
@@ -222,7 +224,7 @@ class Analisis_form extends CI_Controller {
 				$this->user_model->relate_analisis($analisis);
 			
 				//FINAL MESSAGE
-				echo "<b>Analisis saved. You can check it in \"Performed Analisis\".</b>";
+				echo "<b>" . lang('voc.i18n_analysis_saved') . "</b>";
 			}
 		}
 	}

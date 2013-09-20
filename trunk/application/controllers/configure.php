@@ -25,9 +25,9 @@ class Configure extends CI_Controller {
       		$this->load->model('color_model');
       		$this->load->model('user_model');
       		$this->lang->load('voc', $this->session->userdata('language'));
-   	}
+ 	}
    	
-   	//MAIN FUNCTION
+ 	//MAIN FUNCTION
 	function index(){
 	
 		//IF SESSION EXPIRED
@@ -44,4 +44,4 @@ class Configure extends CI_Controller {
 			$this->load->view('templates/footer_view');
 		}
 	}
-} 
+}

@@ -22,14 +22,14 @@
 class Add_wiki extends CI_Controller {
 
 	function Add_wiki(){
-      		parent::__construct();
+    parent::__construct();
 		$this->load->model('wiki_model');
 		$this->load->model('user_model');
-      		$this->lang->load('voc', $this->session->userdata('language'));
-   	}
+    $this->lang->load('voc', $this->session->userdata('language'));
+  }
    	
-   	//TEST_CONNECTION FUNCTION
-   	private function test_connection(){
+  //TEST_CONNECTION FUNCTION
+  private function test_connection(){
 		$db = @mysqli_connect($_POST['dbserver'], $_POST['dbuser'], $_POST['dbpassword'], $_POST['dbname'], TRUE);
 		if($db)
 			return TRUE;

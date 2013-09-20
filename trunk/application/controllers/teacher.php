@@ -28,7 +28,7 @@ class Teacher extends CI_Controller {
       		$this->load->model('analisis_model');
       		$this->lang->load('voc', $this->session->userdata('language'));
       		
-   	}
+ 	}
    	
 	function index(){
 		
@@ -63,4 +63,4 @@ class Teacher extends CI_Controller {
 			$this->load->view('templates/footer_view');
 		}
 	}
-} 
+}

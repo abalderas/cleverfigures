@@ -22,15 +22,15 @@
 class Login extends CI_Controller {
 
 	function Login(){
-      		parent::__construct();
+		parent::__construct();
 		$this->lang->load('voc', 'english');
-   	}
+ 	}
    	
 	function loadlogin($error = false){
 		//CREATE HEADER ARRAY
 		$datah = array('title' => lang('voc.i18n_login'));
 		
-		//LOAD FORGOT VIEW
+		//LOAD LOGIN VIEW
 		$this->load->view('templates/header_view', $datah);
 		if($error)
 			$this->load->view('content/login_view', array('error' => $error));
@@ -38,4 +38,4 @@ class Login extends CI_Controller {
 			$this->load->view('content/login_view');
 		$this->load->view('templates/footer_view');
 	}
-}  
+}

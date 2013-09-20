@@ -26,7 +26,7 @@ class Share extends CI_Controller {
       		$this->load->model('wiki_model');
       		$this->load->model('analisis_model');
       		$this->lang->load('voc', $this->session->userdata('language'));
-   	}
+	}
 
 	function index(){
 		//IF SESSION EXPIRED

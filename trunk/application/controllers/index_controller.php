@@ -22,15 +22,15 @@
 class Index_controller extends CI_Controller {
 
 	function Index_controller(){
-      		parent::__construct();
+		parent::__construct();
 		$this->load->model('analisis_model');
 		$this->load->model('dbforge_model');
 		$this->load->model('user_model');
 		$this->load->dbutil();
    	   	$this->load->helper('file');
-   	}
+ 	}
    	
-   	function index(){
+ 	function index(){
 			
 		//IF FIRST TIME RUNNING CLEVERFIGURES
 		if(!strpos(read_file('application/config/database.php'),'cleverfigures') !== false){
@@ -73,4 +73,4 @@ class Index_controller extends CI_Controller {
 			}
 		}
 	}
-} 
+}

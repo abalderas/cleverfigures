@@ -211,4 +211,13 @@ $lang['voc.i18n_tables'] = "Tables";
 $lang['voc.i18n_groups_table'] = "Groups Table";
 $lang['voc.i18n_open_relations_graph'] = "Open Relations Graph";
 $lang['voc.i18n_relations_graph'] = "Relations Graph";
+$lang['voc.i18n_empty_wiki'] = "EMPTY WIKI. No analysis performed.";
+$lang['voc.i18n_empty_color'] = "EMPTY QUALITATIVE SOURCE. No analysis performed.";
+$lang['voc.i18n_incompatible_color'] = "INCOMPATIBLE QUALITATIVE SOURCE. The data in the source is not compatible with the data in the wiki.";
+$lang['voc.i18n_performed_in'] = "Performed in ";
+$lang['voc.i18n_seconds'] = " seconds";
+$lang['voc.i18n_analysis_saved'] = "ANALYSIS SAVED";
+$lang['voc.i18n_recovery_mail_subject'] = "Cleverfigures :: Password Recovery";
+$lang['voc.i18n_recovery_mail_text'] = "These are your login credentials for CleverFigures: </br></br>";
+$lang['voc.i18n_new_password'] = "New password";
 ?>

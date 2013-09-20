@@ -26,9 +26,9 @@ class Configuration_form extends CI_Controller {
       		$this->load->database();
       		$this->load->model('user_model');
       		$this->lang->load('voc', $this->session->userdata('language'));
-   	}
+ 	}
    	
-   	//MAIN FUNCTION
+  //MAIN FUNCTION
 	function index(){
 	
 		//IF SESSION EXPIRED
@@ -94,7 +94,7 @@ class Configuration_form extends CI_Controller {
 				$user = $this->session->userdata('username');
 				
 				//SET HIGH CONTRAST
-				$high_contrast = (isset($_POST['high_contrast'])) ? true : false ;
+				$high_contrast = isset($_POST['high_contrast']);
 				
 				//SAVE CONFIGURATION INTO DATABASE AND UPDATE COOKIE
 				$this->db->query("UPDATE user SET user_high_contrast = '$high_contrast' WHERE user_username = '$user'");

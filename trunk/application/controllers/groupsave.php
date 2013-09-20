@@ -26,10 +26,10 @@ class Groupsave extends CI_Controller {
       		$this->load->model('wiki_model');
       		$this->load->model('group_model');
       		$this->lang->load('voc', $this->session->userdata('language'));
-   	}
+ 	}
    	
-   	//NOT USED, JUST CHECKS SESSION IF ERROR HAPPENS
-   	function index(){
+ 	//NOT USED, JUST CHECKS SESSION IF ERROR HAPPENS
+ 	function index(){
 		if(!$this->session->userdata('username'))
 			redirect('login/loadlogin/');
 	}

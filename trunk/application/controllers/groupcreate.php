@@ -26,9 +26,9 @@ class Groupcreate extends CI_Controller {
       		$this->load->model('group_model');
       		$this->load->model('wiki_model');
       		$this->lang->load('voc', $this->session->userdata('language'));
-   	}
+ 	}
    	
-   	//DOES NOTHING, JUST CHECKS SESSION IN CASE OF FAILURE
+ 	//DOES NOTHING, JUST CHECKS SESSION IN CASE OF FAILURE
 	function index(){
 		if(!$this->session->userdata('username'))
 			redirect('login/loadlogin/');

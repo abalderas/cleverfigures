@@ -22,13 +22,13 @@
 class Login_form extends CI_Controller {
 
 	function Login_form(){
-      		parent::__construct();
-      		$this->load->model('user_model');
+ 		parent::__construct();
+ 		$this->load->model('user_model');
 		$this->load->model('analisis_model');
 		$this->load->model('student_model');
 		$this->load->model('wiki_model');
-      		$this->lang->load('voc', $this->session->userdata('language'));
-   	}
+ 		$this->lang->load('voc', $this->session->userdata('language'));
+ 	}
    	
 	function index(){
 		//IF USER FORGOT PASSWORD
@@ -53,4 +53,4 @@ class Login_form extends CI_Controller {
 				redirect('login/loadlogin/error');
 		}
 	}
-}  
+}

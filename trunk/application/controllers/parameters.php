@@ -29,7 +29,7 @@ class Parameters extends CI_Controller {
       		$this->load->model('user_model');
       		$this->load->model('group_model');
       		$this->lang->load('voc', $this->session->userdata('language'));
-   	}
+ 	}
    	
    	private function is_valid_expression($exp){
 		
@@ -46,7 +46,7 @@ class Parameters extends CI_Controller {
 		}
 	}
 	
-	//DELETE ANALISIS FUNCTION
+	//LOADS PARAMETERS VIEW
 	function openparameters($wiki){
 		//IF SESSION EXPIRED, LOAD LOGIN VIEW
 		if(!$this->session->userdata('username')){
@@ -75,18 +75,6 @@ class Parameters extends CI_Controller {
 			$this->load->view('content/login_view');
 			$this->load->view('templates/footer_view');
 		}
-		else{
-			
-			//CREATE HEADER ARRAY
-			$datah = array('title' => lang('voc.i18n_check_results'));
-			
-			//LOAD ANALISIS DATA
-			$adata = $this->analisis_model->get_analisis_data($name);
-			
-			//LOAD VIEWS WITH DATA
-			$this->load->view('templates/header_view', $datah);
-			$this->load->view('content/check_results_view', array('aname' => $name, 'data' => $adata));
-			$this->load->view('templates/footer_view');
-		}
+		else{}
 	}
 }

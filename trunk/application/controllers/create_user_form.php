@@ -25,9 +25,9 @@ class Create_user_form extends CI_Controller {
       		parent::__construct();
       		$this->load->model('user_model');
       		$this->lang->load('voc', $this->session->userdata('language'));
-   	}
+ 	}
    	
-   	//MAIN FUNCTION
+ 	//MAIN FUNCTION
 	function index(){
 		
 		//VALIDATING FORMS
@@ -72,4 +72,4 @@ class Create_user_form extends CI_Controller {
 			}
 		}
 	}
-}  
+}

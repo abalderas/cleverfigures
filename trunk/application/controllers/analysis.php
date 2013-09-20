@@ -28,7 +28,7 @@ class Analysis extends CI_Controller {
       		$this->load->model('analisis_model');
       		$this->load->model('user_model');
       		$this->lang->load('voc', $this->session->userdata('language'));
-   	}
+  }
 	
 	private function extra_info($wikidata, $colordata){
 		
@@ -102,14 +102,14 @@ class Analysis extends CI_Controller {
 	}
 	
 	//SHARE FUNCTION
-   	function share($analysis_date){
+  function share($analysis_date){
 		$this->load->view('templates/header_view', array('title' => lang('voc.i18n_sharing_view')));
 		$this->load->view('content/sharing_view', array('analysis_date' => $analysis_date));
 		$this->load->view('templates/footer_view');
-   	}
+  }
    	
-   	//MAIN FUNCTION
-   	function index(){
+  //MAIN FUNCTION
+  function index(){
 		
 		//IF SESSION EXPIRED
 		if(!$this->session->userdata('username')){

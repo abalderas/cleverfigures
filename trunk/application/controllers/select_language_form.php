@@ -23,10 +23,9 @@ class Select_language_form extends CI_Controller {
 	function Select_language_form(){
       		parent::__construct();
       		$this->lang->load('voc', $this->session->userdata('language'));
-   	}
+ 	}
    	
 	function index(){
-      		
 		$datah = array('title' => lang('voc.i18n_installation'));
 		$this->load->view('templates/header_view', $datah);
 		$this->load->view('content/dbconfig_view');

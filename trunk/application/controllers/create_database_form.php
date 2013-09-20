@@ -22,7 +22,7 @@
 class Create_database_form extends CI_Controller {
 
 	function Create_database_form(){
-      		parent::__construct();
+ 		parent::__construct();
 		$this->load->model('analisis_model');
 		$this->load->model('user_analisis_model');
 		$this->load->model('dbforge_model');
@@ -30,10 +30,10 @@ class Create_database_form extends CI_Controller {
 		$this->load->helper('file');
 		$this->load->dbutil();
       		$this->lang->load('voc', $this->session->userdata('language'));
-   	}
+ 	}
    	
-   	//TEST_CONNECTION FUNCTION: TESTS IF A MYSQL CONNECTION IS WORKING CORRECTLY
-   	private function test_connection(){
+ 	//TEST_CONNECTION FUNCTION: TESTS IF A MYSQL CONNECTION IS WORKING CORRECTLY
+ 	private function test_connection(){
 		$db = @mysqli_connect($_POST['dbserver'], $_POST['dbuser'], $_POST['dbpassword']);
 		if($db)
 			return TRUE;

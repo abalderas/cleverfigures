@@ -24,9 +24,9 @@ class Close_session extends CI_Controller {
 	function Close_session(){
       		parent::__construct();
       		$this->lang->load('voc', $this->session->userdata('language'));
-   	}
+  }
    	
-   	function index(){
+  function index(){
 		$this->session->sess_destroy();
 		redirect('login/loadlogin/');
 	}

@@ -26,11 +26,11 @@ class Forgot_form extends CI_Controller {
       		$this->load->model('user_model');
       		$this->load->library('email');
       		$this->lang->load('voc', $this->session->userdata('language'));
-   	}
+ 	}
    	
-   	//RANDOM PASSWORD GENERATION FUNCTION
-   	//THANKS (http://www.webtoolkit.info/php-random-password-generator.html) FOR THE CODE
-   	function randPass($length, $strength=8) {
+ 	//RANDOM PASSWORD GENERATION FUNCTION
+ 	//THANKS (http://www.webtoolkit.info/php-random-password-generator.html) FOR THE CODE
+ 	function randPass($length, $strength=8) {
 		$vowels = 'aeuy';
 		$consonants = 'bdghjmnpqrstvz';
 		if ($strength >= 1) {
@@ -74,11 +74,8 @@ class Forgot_form extends CI_Controller {
 			$this->email->from('cleverfigures@cleverfigures.com', 'Cleverfigures');
 			$this->email->to($_POST['email']);
 
-			$this->email->subject('Password Recovery');
-			$this->email->message("These are your login credentials for CleverFigures: </br></br> 
-						Username: ".$username."</br>
-						New Password: ".$password
-					);
+			$this->email->subject(lang('voc.i18n_recovery_mail_subject')'Password Recovery');
+			$this->email->message(lang('voc.i18n_recovery_mail_text') . lang('voc.i18n_username') . ": " . $username . "</br>" . lang('voc.i18n_new_password') . ": " . $password);
 
 			$this->email->send();
 			//echo $this->email->print_debugger();
@@ -92,4 +89,4 @@ class Forgot_form extends CI_Controller {
 			$this->load->view('templates/footer_view');
 		}
 	}
-} 
+}
