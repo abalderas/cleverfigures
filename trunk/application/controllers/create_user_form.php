@@ -44,32 +44,13 @@ class Create_user_form extends CI_Controller {
 			
 			//LOAD INSTALLATION VIEW
 			$this->load->view('templates/header_view', $datah);
-			$this->load->view('content/installation2_view');
+			$this->load->view('content/create_user_view');
 			$this->load->view('templates/footer_view');
 		}
 		else{
-			//GETTING USERS
-			$result = $this->db->query("select * from user")->result();
+			//CREATE USER WITH ADMINISTRATION SET BY USER
+			$this->user_model->new_user($this->input->post('username'), $this->input->post('password'), now(), $this->input->post('real_name'), $this->input->post('email'), $this->input->post('is_admin'));
 			
-			//IF NOT THE FIRST USER
-			if($result){
-				//CREATE USER WITH ADMINISTRATION SET BY USER
-				$this->user_model->new_user($this->input->post('username'), $this->input->post('password'), now(), $this->input->post('real_name'), $this->input->post('email'), $this->input->post('is_admin'));
-				
-				redirect('configure');
-			}
-			else{
-				//CREATE ADMIN USER
-				$this->user_model->new_user($this->input->post('username'), $this->input->post('password'), now(), $this->input->post('real_name'), $this->input->post('email'), true);
-				
-				//CREATE HEADER ARRAY
-				$datah = array('title' => lang('voc.i18n_installation_view'));
-				
-				//LOAD INSTALLATION VIEW 3
-				$this->load->view('templates/header_view', $datah);
-				$this->load->view('content/installation3_view');
-				$this->load->view('templates/footer_view');
-			}
-		}
+			redirect('configure');
 	}
 }
