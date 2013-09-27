@@ -16,7 +16,7 @@
 // 
 // You should have received a copy of the GNU General Public License
 // along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
-
+/*
 class Api extends REST_Controller {
 
 	function Api(){ parent::__construct(); }
@@ -25,4 +25,4 @@ class Api extends REST_Controller {
 		$data = $this->db->query('SELECT * FROM analisis WHERE analisis_wiki_name = ' . $this->get('wiki') . ' AND analisis.analisis_date IN (SELECT `user-analisis`.analisis_date FROM `user-analisis` WHERE `user-analisis`.user_username = ' . $this->logged_user . ')')->result();
 		$this->response($data);
 	}
-}
+}*/

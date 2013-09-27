@@ -4,8 +4,12 @@
 ## This script should always be allocated in ../scripts/
 
 ## Database connection credentials
-MYSQLUSER=
-MYSQLPASSWORD=
+echo "Welcome! This script will clean your Cleverfigures installation, leaving it blank as freshly installed."
+echo "Please type your mysql credentials..."
+echo "User: "
+read MYSQLUSER
+echo "Password: "
+read MYSQLPASSWORD
 
 ## Sets content folders
 ANALYSIS_FOLDER='../analisis'
