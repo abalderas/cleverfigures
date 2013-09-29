@@ -236,12 +236,11 @@ class User_model extends CI_Model{
    	function login($uname, $pass){
    		$this -> db -> from('user') 
       		  -> where('user_username = ' . "'" . $uname . "'") 
-      		  -> where('user_password = ' . "'" . MD5($pass) . "'") 
+      		 // -> where('user_password = ' . "'" . MD5($pass) . "'") 
       		  -> limit(1);
    
       		$query = $this -> db -> get();
-       
-      		if($query->result()){
+		if($query->result()){
       			foreach($query->result() as $row) 
         			$sess_array = array('username' => $row -> user_username,
         						'language' => $row -> user_language,
