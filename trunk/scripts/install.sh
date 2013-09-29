@@ -19,22 +19,29 @@ echo "Please, type some necessary data to continue the installation."
 
 ## Sets variables
 echo "Installation path: "
-read CLEVERFIGURES_INSTALLATION_PATH
+CLEVERFIGURES_INSTALLATION_PATH='/opt/lampp/htdocs/cleverfigures-prueba-scripts'
 echo "Downloaded folder path: "
-read CLEVERFIGURES_DOWNLOADED_FOLDER
+CLEVERFIGURES_DOWNLOADED_FOLDER='/opt/lampp/htdocs/cleverfigures/trunk'
 
 echo "Mysql command: "
-read MYSQL_COMMAND
+MYSQL_COMMAND='/opt/lampp/bin/mysql'
 echo "Mysql user: "
-read MYSQLUSER
+MYSQLUSER='root'
 echo "Mysql password: "
-read MYSQLPASSWORD
+MYSQLPASSWORD='Ornitorrinco1?!'
 echo "Mysql server: "
-read MYSQLSERVER
+MYSQLSERVER='localhost'
 echo "Cleverfigures database name (will be created): "
-read MYSQLDBNAME
+MYSQLDBNAME='cleverfigures'
 
-SQLFOLDER='./resources'
+echo "Cleverfigures administrator name: "
+CLEVADMIN='sirfocus'
+echo "Cleverfigures administrator password: "
+CLEVADMINPASS='ornitorrinco'
+echo "Cleverfigures administrator email: "
+CLEVADMINMAIL='prueba@prueba.com'
+
+SQLFOLDER='/opt/lampp/htdocs/cleverfigures/trunk/scripts/resources'
 
 
 ## ----------------------------------------------------------------------- ##
@@ -65,9 +72,16 @@ hash $MYSQL_COMMAND 2>/dev/null || {
 echo "Creating database..."
 $MYSQL_COMMAND -u$MYSQLUSER -p$MYSQLPASSWORD < $SQLFOLDER/dbcreate.sql
 
+## Create first user
+$MYSQL_COMMAND -u$MYSQLUSER -p$MYSQLPASSWORD -e "
+use $MYSQLDBNAME;
+INSERT INTO user
+  (user_username, user_password, user_last_session, user_realname, user_email, user_language, user_is_admin, user_high_contrast)
+  VALUES ('$CLEVADMIN', '$(echo -n $CLEVADMINPASS | md5sum)', '$(date +%s)', 'Alvaro Almagro', 'prueba@prueba.com', 'english', true, false)"
+
 ## Install cleverfigures
 echo "Copying files..."
-cp -r $CLEVERFIGURES_DOWNLOADED_FOLDER/* $CLEVERFIGURES_INSTALLATION_PATH
+cp -ru $CLEVERFIGURES_DOWNLOADED_FOLDER/. $CLEVERFIGURES_INSTALLATION_PATH
 
 echo "Configuring database..."
 mv $CLEVERFIGURES_INSTALLATION_PATH/application/config/database.php $CLEVERFIGURES_INSTALLATION_PATH/application/config/database.php.old
