@@ -17,23 +17,25 @@
 // along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 ?>
 
-<?
-echo img('images/logo/logotrans.png');
-echo br();
-?>
 
-<table width = "500px" align = "center">
 
-<tr><th>Copyright 2013 Alvaro Almagro Doello</th></tr>
+<table style="width:80%;" align = "center">
+<tr>
+<td>
+	<? echo img('images/logo/logotrans.png');?>
+</td>
+<td>
+<h2>Copyright 2013 Alvaro Almagro Doello</h2>
 
-<tr><td>CleverFigures is free software: you can redistribute it and/or modify
+<p>CleverFigures is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.</td></tr>
+(at your option) any later version.</p>
 
-<tr><td>CleverFigures is distributed in the hope that it will be useful,
+<p>CleverFigures is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.</td></tr>
-
+GNU General Public License for more details.</p>
+</td>
+</tr>
 </table>
