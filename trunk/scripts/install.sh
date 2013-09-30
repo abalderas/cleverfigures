@@ -68,6 +68,10 @@ hash $MYSQL_COMMAND 2>/dev/null || {
   exit 1
 }
 
+## Checking if database exists
+echo "Checking databases..."
+$MYSQL_COMMAND -u$MYSQLUSER -p$MYSQLPASSWORD < $SQLFOLDER/dbdelete.sql
+
 ## Create database
 echo "Creating database..."
 $MYSQL_COMMAND -u$MYSQLUSER -p$MYSQLPASSWORD < $SQLFOLDER/dbcreate.sql
