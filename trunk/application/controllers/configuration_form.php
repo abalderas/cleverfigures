@@ -68,7 +68,7 @@ class Configuration_form extends CI_Controller {
 				
 				//LOAD USER CREATION FORM
 				$this->load->view('templates/header_view', $datah);
-				$this->load->view('content/add_user_view');
+				$this->load->view('content/create_user_view');
 				$this->load->view('templates/footer_view');
 			}
 			
