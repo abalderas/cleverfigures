@@ -17,79 +17,85 @@
 // You should have received a copy of the GNU General Public License
 // along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
-
-
-//AVAILABLE METHODS
-// 	new_connection($server, $name, $user, $password)
-//    	connect($id)
-//    	get_query($link, $query_string)
-//    	delete_connection($id)
-   	
 class Connection_model extends CI_Model{
-	
-	//constructor
-   	function Connection_model(){
-   	   	parent::__construct();
-   	   	$this->load->database();
-   	}
-   	
-   	function new_connection($server, $name, $user, $password){
-   	   	$check = $this->db->query("select * from connection where connection_server = '$server' and connection_name = '$name' and connection_user = '$user'");
-   		if($check->result())
-   			foreach($check->result() as $row)
-				return $row->connection_id;
-   		else{
-   			$sql = array('connection_id' => "",
-   				'connection_name' => "$name",
-   				'connection_server' => "$server",
-   				'connection_user' => "$user",
-   				'connection_password' => "$password"
-   			);
-			
-			$this->db->insert('connection', $sql);
-		}
-		
-		return  $this->db->insert_id();
-	}
-	
-	function connect($id){
-		$query = $this->db->query("select * from connection where connection_id = '$id'");
-   		if(!$query->result())
-   			return false;
-   		else{
-   			$result = $query->result();
-   			foreach($result as $row){
-   				$dba['hostname'] = $row->connection_server;
-				$dba['username'] = $row->connection_user;
-				$dba['password'] = $row->connection_password;
-				$dba['database'] = $row->connection_name;
-				$dba['dbdriver'] = 'mysql';
-				$dba['dbprefix'] = '';
-				$dba['pconnect'] = FALSE;
-				$dba['db_debug'] = TRUE;
-				$dba['cache_on'] = FALSE;
-				$dba['cachedir'] = '';
-				$dba['char_set'] = 'utf8';
-				$dba['dbcollat'] = 'utf8_general_ci';
-				$dba['swap_pre'] = '';
-				$dba['autoinit'] = TRUE;
-				$dba['stricton'] = FALSE;
-			
-   				return $this->load->database($dba, TRUE);
-   			}
-   				
-		}
-	}
-   	
-   	function delete_connection($id){
-   		$check = $this->db->query("select * from connection where connection_id = '$id'");
-   		if(!$check->result())
-   			return "delete_connection(): ERR_NONEXISTENT";
-   		else
-   		 	$this->db->delete('connection', array('connection_id' => $id)); 
-   		 	if($this->db->affected_rows() != 1) 
-				return "delete_connection(): ERR_AFFECTED_ROWS (".$this->db->affected_rows().")";
-			else 
-				return  true;
-   	}
+
+  //Constructor
+  function Connection_model() {
+    parent::__construct();
+    $this->load->database();
+  }
+
+  function new_connection($server, $name, $user, $password) {
+    $check = $this->db->query("select * from connection where connection_server = '$server' and connection_name = '$name' and connection_user = '$user'");
+
+    if($check->result()) {
+      foreach($check->result() as $row) {
+        return $row->connection_id;
+      }
+    }
+    else {
+
+      $sql = array('connection_id' => "",
+        'connection_name' => "$name",
+        'connection_server' => "$server",
+        'connection_user' => "$user",
+        'connection_password' => "$password"
+      );
+
+      $this->db->insert('connection', $sql);
+    }
+
+    return  $this->db->insert_id();
+  }
+
+  function connect($id) {
+
+    $query = $this->db->query("select * from connection where connection_id = '$id'");
+
+    if(!$query->result()) {
+      return false;
+    }
+    else {
+      $result = $query->result();
+
+      foreach($result as $row) {
+        $dba['hostname'] = $row->connection_server;
+        $dba['username'] = $row->connection_user;
+        $dba['password'] = $row->connection_password;
+        $dba['database'] = $row->connection_name;
+        $dba['dbdriver'] = 'mysql';
+        $dba['dbprefix'] = '';
+        $dba['pconnect'] = FALSE;
+        $dba['db_debug'] = TRUE;
+        $dba['cache_on'] = FALSE;
+        $dba['cachedir'] = '';
+        $dba['char_set'] = 'utf8';
+        $dba['dbcollat'] = 'utf8_general_ci';
+        $dba['swap_pre'] = '';
+        $dba['autoinit'] = TRUE;
+        $dba['stricton'] = FALSE;
+
+        return $this->load->database($dba, TRUE);
+      }
+    }
+  }
+
+  function delete_connection($id) {
+
+    $check = $this->db->query("select * from connection where connection_id = '$id'");
+
+    if(!$check->result()) {
+      return "delete_connection(): ERR_NONEXISTENT";
+    }
+    else {
+      $this->db->delete('connection', array('connection_id' => $id));
+    }
+
+    if($this->db->affected_rows() != 1) {
+      return "delete_connection(): ERR_AFFECTED_ROWS (".$this->db->affected_rows().")";
+    }
+    else {
+      return true;
+    }
+  }
 }
