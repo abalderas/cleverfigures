@@ -29,8 +29,7 @@ if($this->session->userdata('is_admin')){
 		"<table id = 'variabletable'>
 		<tr>
 		<th colspan = '" . $columns . "'>".lang('voc.i18n_users')."</th>
-		</tr>
-		<tr>";
+		</tr>";
 
 	foreach($users as $user){
 		echo "
@@ -41,10 +40,10 @@ if($this->session->userdata('is_admin')){
 			" </td>".
 			(($this->session->userdata('username') != $user) ? 
 			 "<td>" . anchor("delete_user/deleteuser/$user",lang('voc.i18n_delete'), 
-				 array('onClick' => "return confirm('".lang('voc.i18n_delete_user_confirmation')."');")) . "</td>" : "" )."<tr>";
+				 array('onClick' => "return confirm('".lang('voc.i18n_delete_user_confirmation')."');")) . "</td>" : "" )."</tr>";
 	}
 
-	echo "</tr></table><br>";
+	echo "</table><br>";
 }
 ?>
 
