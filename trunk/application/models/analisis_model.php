@@ -61,7 +61,7 @@ class Analisis_model extends CI_Model{
     //Deletes analysis and relations
     $this->db->query("DELETE FROM analisis WHERE analisis_date = '$analisis'");
     $this->db->query("DELETE FROM `user-analisis` WHERE analisis_date = '$analisis'");
-    $this->db->query("DELETE FROM `student-analysis` WHERE analysis_date = '$analisis'");
+    $this->db->query("DELETE FROM `student-analysis` WHERE analisis_date = '$analisis'");
 
     //Deletes analysis files
     delete_files("analisis/$analisis/");

@@ -45,7 +45,7 @@ class Teacher extends CI_Controller {
 			foreach($this->user_model->get_analisis_list($this->session->userdata('username')) as $analisis){
 				$adate[] = $analisis;
 				$awiki[] = $this->analisis_model->get_analisis_wiki($analisis);
-				$acolor[] = $this->analisis_model->get_analisis_color($analisis);
+				$acolor[] = ($this->analisis_model->get_analisis_color($analisis) != 'false') ? $this->analisis_model->get_analisis_color($analisis) : lang('voc.i18n_no_color');
 			}
 			
 			//IF THERE ARE ANALYSIS, CREATE VIEW ARRAY

@@ -125,7 +125,7 @@ class Analisis_form extends CI_Controller {
 		$assess_result = array();
 		
 		//GETTING DATA FROM THE WIKI
-		$wiki_result = $this->wiki_model->fetch($analisis_data['wiki'], $name);
+		$wiki_result = ($analisis_data['wiki'] != 'false') ? $this->wiki_model->fetch($analisis_data['wiki'], $name) : false;
 		
 		//IF NO DATA, END AND RETURN -1 ERROR
 		if(!$wiki_result)
@@ -135,7 +135,7 @@ class Analisis_form extends CI_Controller {
 		$groups = $this->group_model->get_groups($analisis_data['wiki']);
 		
 		//IF COLOR SET
-		if($analisis_data['color'] != lang('voc.i18n_no_color')){
+		if($analisis_data['color'] != 'false'){
 			
 			//GETTING COLOR DATA
 			$assess_result = $this->color_model->fetch($analisis_data['color'], $name);
