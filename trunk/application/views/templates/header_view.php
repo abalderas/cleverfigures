@@ -26,6 +26,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<link rel="shortcut icon" type="image/x-icon" href="images/icons/favicon.ico">
 	<link href='http://fonts.googleapis.com/css?family=Playball&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Titillium+Web&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Cinzel' rel='stylesheet' type='text/css'>
 	<link href='http://fonts.googleapis.com/css?family=Donegal+One' rel='stylesheet' type='text/css'>
     	<?=link_tag('css/ex.css');?>
@@ -42,22 +43,22 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 <body>
 	<?
 		if($this->session->userdata('username')){
-			echo "<table id = 'menu'><tr>";
-			
-			echo "<th class = \"user\">".$title."</th>";
+			echo "<table id = 'menu-left' class='menufonts'><tr><th>";	
 			if(!$this->session->userdata('is_student') == 1)
-				echo "<th>".anchor('configure', lang('voc.i18n_configuration'))."</th>";
+				echo anchor('configure', lang('voc.i18n_configuration'));
 			if(!$this->session->userdata('is_student') == 1)
-				echo "<th>".anchor('teacher', lang('voc.i18n_view_analisis'))."</th>";
+				echo " | " . anchor('teacher', lang('voc.i18n_view_analisis'));
 			else
-				echo "<th>".anchor('student', lang('voc.i18n_report_list'))."</th>";
+				echo " | " . anchor('student', lang('voc.i18n_report_list'));
 			if(!$this->session->userdata('is_student') == 1)
-				echo "<th>".anchor('analise', lang('voc.i18n_analise'))."</th>";
-			echo "<th>".anchor('close_session', lang('voc.i18n_close_session'));
-			
-			echo "</tr></table>";
+				echo " | " . anchor('analise', lang('voc.i18n_analise'));
+			echo "</th></tr></table>";
+			echo "<table id='menu-right' class='menufonts'><tr><th>";
+				echo anchor('close_session', lang('voc.i18n_close_session'));
+			echo "</th></tr></table>";
 		}
 	?>
 
+<div id="horizontal-line"></div>
 <div id = "wrap">
 <br>

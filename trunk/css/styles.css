@@ -21,10 +21,8 @@
 
 body
 {
-	/* font-family: 'Donegal One', serif; */
 	z-index:1;
 	height:100%;
-	font-family: 'Cinzel', serif;
 }
 
 h3
@@ -250,64 +248,36 @@ info{
 
 /* HEADER MENU */
 
-#menu
+#horizontal-line { width:100%; height:30px; border-bottom: 1px solid rgba(0, 0, 0, 0.6) }
+
+#menu-left
 {
-	width:100%;
-	min-width:800px;
-	height:25px;
-	table-layout: fixed;
-	text-align:center;
-	background: rgba(0, 0, 0, 0.8); 
-	position:fixed;
-	top:0px;
-	left:0px;
-	z-index:100;
-	-moz-box-shadow: 0 0 5px 5px #888;
-	-webkit-box-shadow: 0 0 5px 5px #888;
-	font-family: 'Playball', cursive;
-	font-size:20px;
-	box-shadow: 0 0 5px 5px #888;
-}
-
-#menu a:link {
-	color:white;
-	font-family: 'Playball', cursive;
-	font-size:20px;
-	text-decoration:none;
-}
-#menu a:visited {
-	color:white;
-	text-decoration:none;
-	font-family: 'Playball', cursive;
-	font-size:20px;
-}
-#menu a:hover {
-	color:white;
-	text-decoration:none;
-	font-family: 'Playball', cursive;
-	font-size:21px;
-}
-#menu a:active {
-	color:white;
-	font-family: 'Playball', cursive;
-	font-size:20px;
-	text-decoration:none;
-}
-
-#menu td, #menu th 
-{/*
-padding:2px 2px 2px 2px;*/
-}
-
-#menu th.user 
-{
-	text-shadow: 0.1em 0.1em 0.05em #333;
+	width: 70%;
 	padding-left:10px;
-	text-align:left;
-	font-family: 'Playball', cursive;
-	font-size:23px;
-	color:pink;
+	height: 30px;
+	text-align: left;
+	top: 0px;
+	left: 0px;
+	z-index: 100;
+	float:left;
 }
+
+#menu-right
+{
+	width: 30%;
+	height: 30px;
+	padding-right:10px;
+	text-align: right;
+	top: 0px;
+	right: 0px;
+	z-index: 100;
+	float:right;
+}
+
+html.yui3-js-enabled body table#menu-left.menufonts tbody tr th a:hover { font-size: 18px; font-family: 'Titillium Web', sans-serif; color:black; text-decoration:none }
+html.yui3-js-enabled body table#menu-left.menufonts tbody tr th a { font-size: 18px; font-family: 'Titillium Web', sans-serif; color:rgba(88, 172, 250, 0.8); text-decoration:none }
+html.yui3-js-enabled body table#menu-right.menufonts tbody tr th a:hover { font-size: 18px; font-family: 'Titillium Web', sans-serif; color:black; text-decoration:none }
+html.yui3-js-enabled body table#menu-right.menufonts tbody tr th a { font-size: 18px; font-family: 'Titillium Web', sans-serif; color:rgba(88, 172, 250, 0.8); text-decoration:none }
 
 /* FOOTER  */
 
