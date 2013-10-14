@@ -26,7 +26,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 </script>
 
 <?echo form_open('options_form');?>
-<table id = "bodytable">
+<table id = "variabletable">
 <tr>
 	<th class = 'leftside'><?=lang('voc.i18n_date_hour')?></th>
 	<th class = 'central'><?=lang('voc.i18n_wiki')?></th>

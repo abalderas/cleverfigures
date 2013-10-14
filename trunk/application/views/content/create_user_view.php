@@ -19,7 +19,7 @@
 ?>
 
 <?= form_open('create_user_form');?>
-<table id = "bodytable">
+<table id = "variabletable">
 <tr>
 	<th colspan = "2" ><?=lang('voc.i18n_create_user')?></th>
 </tr>

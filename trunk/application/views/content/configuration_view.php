@@ -57,9 +57,7 @@ $languages = array(
 		);
 ?>
 
-<table>
-<tr>
-  <td>
+  <div style="float:left; width:<?=(empty($wikilist) && empty($colorlist)) ? '100%' : '50%';?>">
     <table id = "variabletable">
     <tr>
       <th colspan = "2"><?=lang('voc.i18n_options');?></th>
@@ -76,7 +74,7 @@ $languages = array(
       <td><?=form_label(lang('voc.i18n_add_color'), 'add_color');?></td>
       <td><?=form_submit('add_color', lang('voc.i18n_add_color'));?></td>
     </tr>
-    <? if(!$this->session->userdata('is_admin')) { ?>
+    <? if($this->session->userdata('is_admin')) { ?>
     <tr>
       <td><?=form_label(lang('voc.i18n_add_user'), 'add_user');?></td>
       <td><?=form_submit('add_user', lang('voc.i18n_add_user'));?></td>
@@ -94,17 +92,19 @@ $languages = array(
       <th class = 'low' colspan = "2"><?=form_submit(array('name' => 'save_conf', 'value' => lang('voc.i18n_save_conf'), 'class' => 'next'));?></th>
     </tr>
     </table>
-  </td>
-  <td style = "vertical-align:top;">
+</div>
     <? 
-    if(!empty($wikilist)){
+    if(!empty($wikilist) || !empty($colorlist)) {
+      echo "<div style='float:right; width:50%'>";
+    }
+    if(!empty($wikilist)) {
       echo "<table id = 'variabletable'>";
       echo "<tr><th colspan = '2'>".lang('voc.i18n_your_wikis')."</th></tr>";
       foreach($wikilist as $wiki)
         echo "<tr><td>" . $wiki . "</td><td>" . anchor("groups/getgroups/$wiki", lang('voc.i18n_manage_groups')) . "  |  " .
-        anchor("delete_wiki/deletewiki/$wiki", lang('voc.i18n_delete'), 
+        anchor("delete_wiki/deletewiki/$wiki", lang('voc.i18n_delete'),
 	array('onClick' => "return confirm('" . lang('voc.i18n_delete_wiki_confirmation') . "');"))
-	."  |  " . anchor("parameters/openparameters/$wiki", lang('voc.i18n_parameters')) . "</td></tr>";
+	. "</td></tr>";
       echo "</table><br>";
     }
     if(!empty($colorlist)){
@@ -117,21 +117,21 @@ $languages = array(
         "</td></tr>";
       echo "</table>";
     }
+    if(!empty($wikilist) || !empty($colorlist)) {
+      echo "</div>";
+    }
     ?>
-  </td>
-</table>
 
 <?=form_close()?>
 
 <div id ="footer">
   <table>
   <tr>
-    <th style = 'color:white; width:95%; text-align:center;'>
+    <th>
       <?=safe_mailto('alvaro.almagrodoello@alum.uca.es', lang('voc.i18n_contact'))?> |
       <?=anchor('license/gpl.txt',lang('voc.i18n_license'))?> |
       <?=anchor('about',lang('voc.i18n_about'))?>
     </th>
-    <th style = 'color:white; font-size:25px;'>+</th>
   </tr>
   </table>
 </div>

@@ -23,7 +23,7 @@ echo form_open('add_wiki');
 
 </br>
 
-<table id = "bodytable">
+<table id = "variabletable">
 	<tr>
 		<th  class = 'only' colspan = "2" ><?=lang('voc.i18n_config_database')?></th>
 	</tr>

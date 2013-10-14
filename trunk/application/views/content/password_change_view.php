@@ -37,7 +37,7 @@
 echo form_open('password_change');
 ?>
 
-<table id = "bodytable">
+<table id = "variabletable">
 	<tr>
 		<th colspan = "2" class = 'only'><?=lang('voc.i18n_change_password');?></th>
 	</tr>

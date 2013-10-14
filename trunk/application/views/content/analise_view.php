@@ -29,7 +29,7 @@
 </script>
 
 <?=form_open('analisis_form')?>
-<table id = "bodytable">
+<table id = "variabletable">
 	<tr>
 		<th class = 'only' colspan = "2"><?=lang('voc.i18n_data_source')?></th>
 	</tr>

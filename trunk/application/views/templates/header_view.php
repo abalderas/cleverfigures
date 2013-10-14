@@ -22,7 +22,7 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
 <head>
 	<!--Title structure: CleverFigures | PageName-->
-	<title> CleverFigures | <?=$title?> </title>
+	<title><?=$title?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<link rel="shortcut icon" type="image/x-icon" href="images/icons/favicon.ico">
 	<link href='http://fonts.googleapis.com/css?family=Playball&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
@@ -56,9 +56,9 @@ along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 			echo "<table id='menu-right' class='menufonts'><tr><th>";
 				echo anchor('close_session', lang('voc.i18n_close_session'));
 			echo "</th></tr></table>";
+      echo "<div id='horizontal-line'></div>";
 		}
 	?>
 
-<div id="horizontal-line"></div>
 <div id = "wrap">
 <br>

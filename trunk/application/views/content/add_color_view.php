@@ -25,7 +25,7 @@ echo form_open('add_color');
 
 <?php if(isset($connection_error)) echo "<tr><td colspan = \"2\"><em>$connection_error</em></td></tr>"; ?>
 
-<table id = "bodytable">
+<table id = "variabletable">
 	<tr>
 		<th  class = 'only' colspan = "2" ><?=lang('voc.i18n_config_database')?></th>
 	</tr>
