@@ -215,38 +215,3 @@ html.yui3-js-enabled body table#menu-left.menufonts tbody tr th a:hover { font-s
 html.yui3-js-enabled body table#menu-left.menufonts tbody tr th a { font-size: 18px; font-family: 'Titillium Web', sans-serif; color:rgba(204, 228, 230, 0.8); text-decoration:none }
 html.yui3-js-enabled body table#menu-right.menufonts tbody tr th a:hover { font-size: 18px; font-family: 'Titillium Web', sans-serif; color:white; text-decoration:none }
 html.yui3-js-enabled body table#menu-right.menufonts tbody tr th a { font-size: 18px; font-family: 'Titillium Web', sans-serif; color:rgba(204, 228, 230, 0.8); text-decoration:none }
-
-/* FOOTER  */
-
-#footer
-{
-	width:100%;
-  font-size:18px;
-  font-family: 'Titillium Web', sans-serif;
-	text-align:left;
-	position:absolute;
-	bottom:0px;
-	left:0px;
-	background: rgba(204, 228, 230, 0.8);
-	z-index:10;
-}
-
-#footer a:link {
-	color:black;
-	text-decoration:none;
-}
-
-#footer a:visited {
-	color:black;
-	text-decoration:none;
-}
-
-#footer a:hover {
-	color:black;
-	text-decoration:underline;
-}
-
-#footer a:active {
-	color:black;
-	text-decoration:none;
-}

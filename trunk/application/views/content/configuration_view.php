@@ -124,14 +124,4 @@ $languages = array(
 
 <?=form_close()?>
 
-<div id ="footer">
-  <table>
-  <tr>
-    <th>
-      <?=safe_mailto('alvaro.almagrodoello@alum.uca.es', lang('voc.i18n_contact'))?> |
-      <?=anchor('license/gpl.txt',lang('voc.i18n_license'))?> |
-      <?=anchor('about',lang('voc.i18n_about'))?>
-    </th>
-  </tr>
-  </table>
-</div>
+<?if(isset($no_wikis)) { ?><div id="message_box" class="error"><p><?=$no_wikis?></p></div><? } ?>
