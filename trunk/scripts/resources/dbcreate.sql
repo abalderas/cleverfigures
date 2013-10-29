@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS `color` (
   `color_id` INT(9) UNSIGNED NOT NULL AUTO_INCREMENT,
   `color_name` VARCHAR(50) NOT NULL,
   `color_connection` INT(6) NOT NULL,
+  `color_wiki` VARCHAR(50) NOT NULL,
   KEY(`color_id`)
 );
 

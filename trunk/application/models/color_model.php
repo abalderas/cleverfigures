@@ -59,7 +59,7 @@ class Color_model extends CI_Model{
     }
   }
 
-  function new_color($colorname, $db_server, $db_name, $db_user, $db_password) {
+  function new_color($colorname, $db_server, $db_name, $db_user, $db_password, $related_wiki) {
     //If color exists, returns error
     $check = $this->db->query("select * from color where color_name = '$colorname'");
     if($check->result()) {
@@ -76,7 +76,8 @@ class Color_model extends CI_Model{
       //Creates and inserts color info
       $sql = array('color_id' => "",
         'color_name' => "$colorname",
-        'color_connection' => "$my_con"
+        'color_connection' => "$my_con",
+        'color_wiki' => "$related_wiki"
       );
 
       $this->db->insert('color', $sql);

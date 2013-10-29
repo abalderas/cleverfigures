@@ -80,7 +80,8 @@ class Add_color extends CI_Controller {
 				}
 				else{
 					//SAVING DATABASE
-					$this->color_model->new_color($_POST['color_name'], $_POST['dbserver'], $_POST['dbname'], $_POST['dbuser'], $_POST['dbpassword']);
+          $this->color_model->new_color($_POST['color_name'], $_POST['dbserver'], $_POST['dbname'],
+            $_POST['dbuser'], $_POST['dbpassword'], $_POST['related_wiki']);
 					
 					//RELATE COLOR TO THE USER
 					$this->user_model->relate_color($_POST['color_name']);

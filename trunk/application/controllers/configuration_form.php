@@ -54,10 +54,22 @@ class Configuration_form extends CI_Controller {
 				//CREATE HEADER ARRAY
 				$datah = array('title' => lang('voc.i18n_add_color'));
 				
-				//LOAD ADD COLOR VIEW
-				$this->load->view('templates/header_view', $datah);
-				$this->load->view('content/add_color_view');
-				$this->load->view('templates/footer_view');
+				//GET USER WIKIS
+				$wikis = $this->user_model->get_wiki_list($this->session->userdata('username'));
+				
+				if($wikis == array()) {
+					$datah = array('title' => lang('voc.i18n_configuration_view'));
+					$error = lang('voc.i18n_no_wikis');
+					$this->load->view('templates/header_view', $datah);
+					$this->load->view('content/configuration_view', array('no_wikis' => $error));
+					$this->load->view('templates/footer_view');
+				}
+				else {
+					//LOAD ADD COLOR VIEW
+					$this->load->view('templates/header_view', $datah);
+					$this->load->view('content/add_color_view', array('wikis' => $wikis));
+					$this->load->view('templates/footer_view');
+				}
 			}
 			
 			//IF USER ADDITION SELECTED
