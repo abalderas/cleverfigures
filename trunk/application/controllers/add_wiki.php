@@ -58,9 +58,12 @@ class Add_wiki extends CI_Controller {
 				//CREATE HEADER ARRAY
 				$datah = array('title' => lang('voc.i18n_add_wiki'));
 				
+				//CREATE ERROR ARRAY
+				$error = array('fields_error'=> lang('voc.i18n_fields_error'));
+					
 				//LOAD ADD WIKI VIEW
 				$this->load->view('templates/header_view', $datah);
-				$this->load->view('content/add_wiki_view');
+				$this->load->view('content/add_wiki_view', $error);
 				$this->load->view('templates/footer_view');
 			}
 			else{
@@ -78,7 +81,6 @@ class Add_wiki extends CI_Controller {
 					$this->load->view('templates/footer_view');
 				}
 				else{
-				
 					//SAVING DATABASE
 					$this->wiki_model->new_wiki($_POST['wiki_name'], $_POST['dbserver'], $_POST['dbname'], $_POST['dbuser'], $_POST['dbpassword'], $_POST['wiki_baseurl']);
 					

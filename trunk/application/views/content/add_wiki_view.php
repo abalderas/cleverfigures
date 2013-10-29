@@ -31,32 +31,22 @@ echo form_open('add_wiki');
 		<td class="fieldbox"><?=lang('voc.i18n_wiki_name')?>:</td>
 		<td><?= form_input('wiki_name') ?></td>
 	</tr>
-	<?php if(form_error('dbname')) echo "<tr><td colspan = \"2\"><em>".form_error('dbname')."</em></td></tr>"; ?>
 	<tr>
 		<td class="fieldbox"><?=lang('voc.i18n_dbname')?>:</td>
 		<td><?= form_input('dbname') ?></td>
 	</tr>
-	<?php if(form_error('dbname')) echo "<tr><td colspan = \"2\"><em>".form_error('dbname')."</em></td></tr>"; ?>
 	<tr>
 		<td class="fieldbox"><?=lang('voc.i18n_dbserver')?>:</td>
 		<td><?= form_input('dbserver') ?></td>
 	</tr>
-	<?php if(form_error('dbserver')) echo "<tr><td colspan = \"2\"><em>".form_error('dbserver')."</em></td></tr>"; ?>
 	<tr>
 		<td class="fieldbox"><?=lang('voc.i18n_dbuser')?>:</td>
 		<td><?= form_input('dbuser') ?></td>
 	</tr>
-	<?php if(form_error('dbuser')) echo "<tr><td colspan = \"2\"><em>".form_error('dbuser')."</em></td></tr>"; ?>
 	<tr>
 		<td class="fieldbox"><?=lang('voc.i18n_dbpassword')?>:</td>
 		<td><?= form_password('dbpassword') ?></td>
 	</tr>
-	<tr>
-		<td class="fieldbox"><?=lang('voc.i18n_wiki_baseurl')?>:</td>
-		<td><?= form_input('wiki_baseurl') ?></td>
-	</tr>
-	<?php if(form_error('dbpassword')) echo "<tr><td colspan = \"2\"><em>".form_error('dbpassword')."</em></td></tr>"; ?>
-	<?php if(isset($connection_error)) echo "<tr><td colspan = \"2\"><em>$connection_error</em></td></tr>"; ?>
 	<tr>
 		<th  class = 'low' colspan = "2"><?=form_submit(array('id' => 'submit', 'value' => lang('voc.i18n_save')));?></th>
 	</tr>
@@ -65,3 +55,6 @@ echo form_open('add_wiki');
 <?
 echo form_close();
 ?>
+
+<?if(isset($connection_error)) { ?><div id="message_box" class="error"><p><?=$connection_error?></p></div><? } ?>
+<?if(isset($fields_error)) { ?><div id="message_box" class="error"><p><?=$fields_error?></p></div><? } ?>

@@ -63,30 +63,9 @@ a:active {
 	text-decoration:none;
 }
 
-em{
-	color:white;
-	font-size:0.8em;
-	position:absolute;
-	right:5px;
-	bottom:5px;
-	font-weight:bold;
-	border:1px solid red;
-	border-radius:5px;
-	padding:20px;
-	background:red;
-}
-
-info{
-	color:white;
-	font-size:0.8em;
-	position:absolute;
-	right:5px;
-	bottom:5px;
-	border:1px solid green;
-	border-radius:5px;
-	padding:20px;
-	background:green;
-}
+#message_box { position:fixed; bottom:0px; width:100%; height:50px }
+#message_box.error { text-align:center; color:red; font-weight:bold; border-top:1px solid red; }
+#message_box.info { color:green; border-top:1px solid green; }
 
 #overlay{
 	position:absolute;
