@@ -27,7 +27,7 @@ class Add_wiki extends CI_Controller {
 		$this->load->model('user_model');
     $this->lang->load('voc', $this->session->userdata('language'));
   }
-   	
+
   //TEST_CONNECTION FUNCTION
   private function test_connection(){
 		$db = @mysqli_connect($_POST['dbserver'], $_POST['dbuser'], $_POST['dbpassword'], $_POST['dbname'], TRUE);
