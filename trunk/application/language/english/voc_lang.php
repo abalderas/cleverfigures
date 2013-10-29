@@ -35,6 +35,7 @@ $lang['voc.i18n_come_back'] = "Back";
 $lang['voc.i18n_confirm_delete'] = "Do you really want to delete this analisis?";
 $lang['voc.i18n_confirm'] = "Confirm";
 $lang['voc.i18n_delete_analisis'] = "Delete Analisis";
+$lang['voc.i18n_no_wikis'] = "You must add a wiki before adding a qualitative data source";
 $lang['voc.i18n_config_database'] = "Database Configuration";
 $lang['voc.i18n_configuration'] = "Configuration";
 $lang['voc.i18n_configuration_view'] = "Configuration View";

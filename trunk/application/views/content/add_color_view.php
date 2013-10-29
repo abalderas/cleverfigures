@@ -23,8 +23,6 @@ echo form_open('add_color');
 
 </br>
 
-<?php if(isset($connection_error)) echo "<tr><td colspan = \"2\"><em>$connection_error</em></td></tr>"; ?>
-
 <table id = "variabletable">
 	<tr>
 		<th  class = 'only' colspan = "2" ><?=lang('voc.i18n_config_database')?></th>
@@ -37,22 +35,22 @@ echo form_open('add_color');
 		<td class="fieldbox"><?=lang('voc.i18n_dbname')?>:</td>
 		<td><?= form_input('dbname') ?></td>
 	</tr>
-	<?php if(form_error('dbname')) echo "<tr><td colspan = \"2\"><em>".form_error('dbname')."</em></td></tr>"; ?>
 	<tr>
 		<td class="fieldbox"><?=lang('voc.i18n_dbserver')?>:</td>
 		<td><?= form_input('dbserver') ?></td>
 	</tr>
-	<?php if(form_error('dbserver')) echo "<tr><td colspan = \"2\"><em>".form_error('dbserver')."</em></td></tr>"; ?>
 	<tr>
 		<td class="fieldbox"><?=lang('voc.i18n_dbuser')?>:</td>
 		<td><?= form_input('dbuser') ?></td>
 	</tr>
-	<?php if(form_error('dbuser')) echo "<tr><td colspan = \"2\"><em>".form_error('dbuser')."</em></td></tr>"; ?>
 	<tr>
 		<td class="fieldbox"><?=lang('voc.i18n_dbpassword')?>:</td>
 		<td><?= form_password('dbpassword') ?></td>
 	</tr>
-	<?php if(form_error('dbpassword')) echo "<tr><td colspan = \"2\"><em>".form_error('dbpassword')."</em></td></tr>"; ?>
+	<tr>
+		<td class="fieldbox"><?=lang('voc.i18n_wiki')?>:</td>
+      		<td><?=form_dropdown('related_wiki', $wikis, 0);?></td>
+	</tr>
 	<tr>
 		<th  class = 'low' colspan = "2"><?=form_submit(array('id' => 'submit', 'value' => lang('voc.i18n_save')));?></th>
 	</tr>
@@ -61,3 +59,6 @@ echo form_open('add_color');
 <?
 echo form_close();
 ?>
+
+<?if(isset($connection_error)) { ?><div id="message_box" class="error"><p><?=$connection_error?></p></div><? } ?>
+<?if(isset($fields_error)) { ?><div id="message_box" class="error"><p><?=$fields_error?></p></div><? } ?>
