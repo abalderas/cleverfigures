@@ -59,9 +59,11 @@ class Add_color extends CI_Controller {
 				//CREATE HEADER ARRAY
 				$datah = array('title' => lang('voc.i18n_add_color'));
 				
-				//LOAD ADD COLOR VIEW
+			  $wikis = $this->user_model->get_wiki_list($this->session->userdata('username'));
+
+        //LOAD ADD COLOR VIEW
 				$this->load->view('templates/header_view', $datah);
-				$this->load->view('content/add_color_view');
+				$this->load->view('content/add_color_view', array('wikis' => $wikis));
 				$this->load->view('templates/footer_view');
 			}
 			else{
@@ -69,15 +71,15 @@ class Add_color extends CI_Controller {
 				if(!$this->test_connection()){
 					//CREATE HEADER ARRAY
 					$datah = array('title' => lang('voc.i18n_add_color'));
-					
-					//CREATE ERROR ARRAY
-					$error = array('connection_error'=> lang('voc.i18n_connection_error'));
-					
-					//LOAD ADD COLOR VIEW
+									
+			  	//GET USER WIKIS
+			  	$wikis = $this->user_model->get_wiki_list($this->session->userdata('username'));
+
+          //LOAD ADD COLOR VIEW
 					$this->load->view('templates/header_view', $datah);
-					$this->load->view('content/add_color_view', $error);
+					$this->load->view('content/add_color_view', array('wikis' => $wikis, 'connection_error' => lang('voc.i18n_connection_error')));
 					$this->load->view('templates/footer_view');
-				}
+        }
 				else{
 					//SAVING DATABASE
           $this->color_model->new_color($_POST['color_name'], $_POST['dbserver'], $_POST['dbname'],
