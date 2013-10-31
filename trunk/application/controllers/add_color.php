@@ -58,12 +58,12 @@ class Add_color extends CI_Controller {
 				
 				//CREATE HEADER ARRAY
 				$datah = array('title' => lang('voc.i18n_add_color'));
-				
+
 			  $wikis = $this->user_model->get_wiki_list($this->session->userdata('username'));
 
         //LOAD ADD COLOR VIEW
 				$this->load->view('templates/header_view', $datah);
-				$this->load->view('content/add_color_view', array('wikis' => $wikis));
+				$this->load->view('content/add_color_view', array('wikis' => $wikis, 'fields_error'=> lang('voc.i18n_fields_error')));
 				$this->load->view('templates/footer_view');
 			}
 			else{
