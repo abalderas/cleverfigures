@@ -18,18 +18,6 @@
 // along with CleverFigures.  If not, see <http://www.gnu.org/licenses/>.
 
 
-//AVAILABLE METHODS
-// 	new_wiki()
-// 	fetch_categories()
-// 	wconnection()
-// 	fetch_category_links()
-// 	fetch_general_stats()
-// 	fetch_images()
-// 	fetch_pages()
-// 	fetch_users()
-// 	delete_wiki()
-
-
 class Wiki_model extends CI_Model{
 
   function Wiki_model() {
@@ -87,16 +75,6 @@ class Wiki_model extends CI_Model{
       $res += end($pagebytes[$page])?end($pagebytes[$page]):0;
     }
     return $res;
-  }
-
-  private function get_base_url($wikiname) {
-    $result = $this->db->query("select wiki_baseurl from wiki where wiki_name = $wikiname")->result();
-
-    foreach($result as $row){
-      return $row->wiki_baseurl;
-    }
-
-    return false;
   }
 
   function wconnection($wikiname) {
@@ -282,8 +260,8 @@ class Wiki_model extends CI_Model{
     }
 
     for($i = 0; $i <12; $i++) {
-      $totalactivitymonth[$this->codemonth("$i")] = 0;
-      $totalactivitymonth_art[$this->codemonth("$i")] = 0;
+      $totalactivitymonth[intval("$i") + 1] = 0;
+      $totalactivitymonth_art[intval("$i") + 1] = 0;
     }
 
     //Initializing arrays for storing information
@@ -305,8 +283,8 @@ class Wiki_model extends CI_Model{
       }
 
       for($i = 0; $i <12; $i++) {
-        $useractivitymonth[$row->user_name][$this->codemonth($i)] = 0;
-        $pageactivitymonth[$row->page_title][$this->codemonth($i)] = 0;
+        $useractivitymonth[$row->user_name][intval($i) + 1] = 0;
+        $pageactivitymonth[$row->page_title][intval($i) + 1] = 0;
       }
 
       $usereditscount[$row->user_name] = 0;
@@ -318,6 +296,7 @@ class Wiki_model extends CI_Model{
       $pageeditscount_art[$row->page_title] = 0;
       $pagebytescount_art[$row->page_title] = 0;
       $usercreationcount[$row->user_name] = 0;
+
       $useractivityyear[$row->user_name][date('Y', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
       $pageactivityyear[$row->page_title][date('Y', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
       $totalactivityyear[date('Y', $this->mwtime_to_unix($row->rev_timestamp))] = 0;
@@ -421,7 +400,7 @@ class Wiki_model extends CI_Model{
       $useractivityhour[$row->user_name][date('G', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
       $useractivitywday[$row->user_name][$this->codewday(date('w', $this->mwtime_to_unix($row->rev_timestamp)))] += 1;
       $useractivityweek[$row->user_name][date('W', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-      $useractivitymonth[$row->user_name][$this->codemonth(date('n', $this->mwtime_to_unix($row->rev_timestamp)))] += 1;
+      $useractivitymonth[$row->user_name][intval(date('n', $this->mwtime_to_unix($row->rev_timestamp))) + 1] += 1;
       $useractivityyear[$row->user_name][date('Y', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
 
       $revisionuser[$row->rev_id] = $row->user_name;
@@ -448,7 +427,7 @@ class Wiki_model extends CI_Model{
       $pageactivityhour	[$row->page_title][date('G', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
       $pageactivitywday	[$row->page_title][$this->codewday(date('w', $this->mwtime_to_unix($row->rev_timestamp)))] += 1;
       $pageactivityweek	[$row->page_title][date('W', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-      $pageactivitymonth	[$row->page_title][$this->codemonth(date('n', $this->mwtime_to_unix($row->rev_timestamp)))] += 1;
+      $pageactivitymonth	[$row->page_title][intval(date('n', $this->mwtime_to_unix($row->rev_timestamp))) + 1] += 1;
       $pageactivityyear	[$row->page_title][date('Y', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
 
       $revisionpage	[$row->page_title][$row->rev_id] = true; 
@@ -527,7 +506,6 @@ class Wiki_model extends CI_Model{
       $totalusers[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_users);
       $totalusers_art[$this->mwtime_to_unix($row->rev_timestamp)] = array_sum($aux_users_art);
 
-
       $totalbytesdiff[$this->mwtime_to_unix($row->rev_timestamp)] = $row->rev_len;
 
       $totalbytescount += $row->rev_len;
@@ -581,9 +559,9 @@ class Wiki_model extends CI_Model{
         $totalactivityweek_art[date('W', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
       }
 
-      $totalactivitymonth[$this->codemonth(date('n', $this->mwtime_to_unix($row->rev_timestamp)))] += 1;
+      $totalactivitymonth[intval(date('n', $this->mwtime_to_unix($row->rev_timestamp))) + 1] += 1;
       if($row->page_namespace == 0) {
-        $totalactivitymonth_art[$this->codemonth(date('n', $this->mwtime_to_unix($row->rev_timestamp)))] += 1;
+        $totalactivitymonth_art[intval(date('n', $this->mwtime_to_unix($row->rev_timestamp))) + 1] += 1;
       }
 
       $totalactivityyear[date('Y', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
@@ -723,7 +701,7 @@ class Wiki_model extends CI_Model{
         }
 
         for($i = 0; $i <12; $i++) {
-          $catactivitymonth[$row->cl_to][$this->codemonth($i)] = 0;
+          $catactivitymonth[$row->cl_to][intval("$i") + 1] = 0;
         }
 
         $cateditscount[$row->cl_to] = 0;
@@ -783,7 +761,7 @@ class Wiki_model extends CI_Model{
         $catactivityhour[$row->cl_to][date('G', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
         $catactivitywday[$row->cl_to][$this->codewday(date('w', $this->mwtime_to_unix($row->rev_timestamp)))] += 1;
         $catactivityweek[$row->cl_to][date('W', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
-        $catactivitymonth[$row->cl_to][$this->codemonth(date('n', $this->mwtime_to_unix($row->rev_timestamp)))] += 1;
+        $catactivitymonth[$row->cl_to][intval(date('n', $this->mwtime_to_unix($row->rev_timestamp))) + 1] += 1;
         $catactivityyear[$row->cl_to][date('Y', $this->mwtime_to_unix($row->rev_timestamp))] += 1;
 
         $revisioncategory[$row->cl_to][$row->rev_id] = true; 
@@ -901,7 +879,8 @@ class Wiki_model extends CI_Model{
 
       echo "done.</br>";
 
-      $analisis_data = array_merge($analisis_data, array('useruploads' => $useruploads
+      $analisis_data = array_merge($analisis_data, array(
+        'useruploads' => $useruploads
         , 'useruploads_per' => $useruploads_per
         , 'userupsize' => $userupsize
         , 'userupsize_per' => $userupsize_per
@@ -982,19 +961,6 @@ class Wiki_model extends CI_Model{
 
     //Returning data
     return $analisis_data;
-  }
-
-  function get_page($title, $wikiname) {
-    $url = $this->get_base_url($wikiname)."/api.php?action=query&prop=revisions&rvlimit=1&rvprop=content&format=xml&action=parse&titles=".$title;
-
-    if($this->system_model->fopen_enabled()) {
-      return file_get_contents($url);
-    }
-    else {
-      $ch = curl_init($url);
-      curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
-      return curl_exec($ch);
-    }
   }
 
   function delete_wiki($wikiname) {
