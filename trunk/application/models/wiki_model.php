@@ -586,7 +586,8 @@ class Wiki_model extends CI_Model{
     }
 
     $analisis_data = array_merge($analisis_data, array(
-      'useredits' => $useredits
+        'analysis_name' => $analisis
+      , 'useredits' => $useredits
       , 'useredits_art' => $useredits_art
       , 'useredits_art_per' => $useredits_art_per
       , 'useredits_per' => $useredits_per
